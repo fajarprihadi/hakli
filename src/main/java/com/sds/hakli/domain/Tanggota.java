@@ -94,6 +94,16 @@ public class Tanggota {
 	
 	private String password;
 	
+	private Date periodekta;
+	
+	private String vareg;
+	
+	private int varegstatus;
+	
+	private String vaevent;
+	
+	private int vaeventstatus;
+	
 	@Id
 	@SequenceGenerator(name = "tanggota_seq", sequenceName = "tanggota_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tanggota_seq")
@@ -379,7 +389,7 @@ public class Tanggota {
 		this.regmemo = regmemo;
 	}
 	@Type(type = "com.sds.utils.usertype.TrimUserType")
-	public String getvano() {
+	public String getVano() {
 		return vano;
 	}
 	public void setVano(String vano) {
@@ -391,6 +401,36 @@ public class Tanggota {
 	}
 	public void setRegdecisiontime(Date regdecisiontime) {
 		this.regdecisiontime = regdecisiontime;
+	}
+	public Date getPeriodekta() {
+		return periodekta;
+	}
+	public void setPeriodekta(Date periodekta) {
+		this.periodekta = periodekta;
+	}
+	public String getVareg() {
+		return vareg;
+	}
+	public void setVareg(String vareg) {
+		this.vareg = vareg;
+	}
+	public int getVaregstatus() {
+		return varegstatus;
+	}
+	public void setVaregstatus(int varegstatus) {
+		this.varegstatus = varegstatus;
+	}
+	public String getVaevent() {
+		return vaevent;
+	}
+	public void setVaevent(String vaevent) {
+		this.vaevent = vaevent;
+	}
+	public int getVaeventstatus() {
+		return vaeventstatus;
+	}
+	public void setVaeventstatus(int vaeventstatus) {
+		this.vaeventstatus = vaeventstatus;
 	}
 	
 }

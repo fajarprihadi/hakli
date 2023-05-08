@@ -60,6 +60,7 @@ import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.TeventDAO;
 import com.sds.hakli.dao.TeventregDAO;
+import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.dao.TpekerjaanDAO;
 import com.sds.hakli.dao.TpendidikanDAO;
 import com.sds.hakli.domain.AnggotaReg;
@@ -75,12 +76,15 @@ import com.sds.hakli.domain.Muniversitas;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tevent;
 import com.sds.hakli.domain.Teventreg;
+import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.domain.Tpekerjaan;
 import com.sds.hakli.domain.Tpendidikan;
 import com.sds.hakli.extension.BriApiExt;
+import com.sds.hakli.extension.MailHandler;
 import com.sds.hakli.pojo.BriApiToken;
 import com.sds.hakli.pojo.BrivaCreateResp;
 import com.sds.hakli.pojo.BrivaData;
+import com.sds.hakli.utils.InvoiceGenerator;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.StringUtils;
@@ -110,7 +114,6 @@ public class EventRegVm {
 	private ListModelList<Mkepegawaiansub> kepegawaiansubModel;
 
 	public Boolean isInsert;
-	private byte[] photobyte;
 	private Media media;
 	private Media mediaIjazah;
 	private Date dob;
@@ -390,7 +393,6 @@ public class EventRegVm {
 			UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
 			media = event.getMedia();
 			if (media instanceof org.zkoss.image.Image) {
-				photobyte = media.getByteData();
 				photo.setContent((org.zkoss.image.Image) media);
 				photo.setVisible(true);
 				btDeletePhoto.setVisible(true);
@@ -420,7 +422,6 @@ public class EventRegVm {
 	@Command
 	public void doDeletePhoto() {
 		media = null;
-		photobyte = null;
 		photo.setSrc(null);
 		btDeletePhoto.setVisible(false);
 	}
@@ -516,8 +517,10 @@ public class EventRegVm {
 								BriapiBean bean = AppData.getBriapibean();
 								BriApiExt briapi = new BriApiExt(bean);
 								BriApiToken briapiToken = briapi.getToken();
+								
+								Date vaexpdate = null;
+								BrivaData briva = new BrivaData();
 								if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
-									BrivaData briva = new BrivaData();
 									briva.setAmount(tevent.getEventprice().toString());
 									briva.setInstitutionCode(bean.getBriva_institutioncode());
 									briva.setBrivaNo(bean.getBriva_cid());
@@ -529,7 +532,7 @@ public class EventRegVm {
 									briva.setNama(objForm.getPribadi().getNama());
 									Calendar cal = Calendar.getInstance();
 									cal.add(Calendar.DAY_OF_MONTH, 10);
-									Date vaexpdate = cal.getTime();
+									vaexpdate = cal.getTime();
 									briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 									
 									BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
@@ -541,9 +544,19 @@ public class EventRegVm {
 									eventreg.setVaamount(tevent.getEventprice());
 									eventreg.setVacreatedat(new Date());
 									eventreg.setVaexpdate(vaexpdate);
+									
 								}
 								eventregDao.save(session, eventreg);
+								
+								Tinvoice inv = new InvoiceGenerator().doInvoice(eventreg, eventreg.getVano(), AppUtils.INVOICETYPE_EVENT, tevent.getEventprice(), tevent.getEventname(), vaexpdate);
+								new TinvoiceDAO().save(session, inv);
+								
 								trx.commit();
+								
+								String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
+										.getRealPath("/themes/mail/mailinv.html");
+								new Thread(new MailHandler(inv, bodymail_path)).start();
+								
 							} catch (Exception e) {
 								trx.rollback();
 								e.printStackTrace();

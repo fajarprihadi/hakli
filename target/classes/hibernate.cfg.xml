@@ -96,10 +96,9 @@
 		<mapping class="com.sds.hakli.domain.Tp2kbe09" />
 		<mapping class="com.sds.hakli.domain.Tp2kbe10" />
 		<mapping class="com.sds.hakli.domain.Tp2kbe11" />
-		
 		<mapping class="com.sds.hakli.domain.Tevent" />
 		<mapping class="com.sds.hakli.domain.Teventreg" />
-		
+		<mapping class="com.sds.hakli.domain.Tscheduler" />
 		<mapping class="com.sds.hakli.domain.BranchTop" />
 		<mapping class="com.sds.hakli.domain.Veventamount" />
 		

@@ -11,6 +11,11 @@
 		<listener-class>com.sds.utils.db.HibernateListeners</listener-class>		
 	</listener>
 	
+	<listener>
+		<listener-class>com.sds.utils.scheduler.SchedulerService
+		</listener-class>
+	</listener>
+	
 	<library-property>
 		<name>org.zkoss.theme.preferred</name>
 		<value>iceblue_c</value>

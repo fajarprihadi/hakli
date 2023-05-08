@@ -1,0 +1,40 @@
+<?page title="${desktop.webApp.appName}"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?link rel="shortcut icon" type="image/x-icon" href="/images/app_icon.ico" ?>
+<zk xmlns:w="client" xmlns:n="native">
+	<window border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.TschedulerVm')"
+		validationMessages="@id('vmsgs')">
+
+		<div class="card">
+			<div class="card-header">
+				<n:h6>
+					<n:i class="fas fa-lg fa-cogs"></n:i>
+					Pengaturan Penjadwalan Sistem
+				</n:h6>
+			</div>
+			<div class="card-body pt-0 pb-0 pl-0 pr-0">
+				<grid id="grid" sizedByContent="true"
+					emptyMessage="${labels.common.emptymsg}">
+					<columns>
+						<column label="No" align="right" width="40px" />
+						<column
+							label="Nama Jadwal" align="left" />
+						<column
+							label="Grup Jadwal" align="left" />
+						<column label="Keterangan"
+							align="left" />
+						<column
+							label="Status" align="center" />
+						<column
+							label="Tipe Pengulangan" align="center" />
+						<column
+							label="Interval" align="center" />
+						<column label="${labels.common.action}"
+							align="center" width="150px" />
+					</columns>
+				</grid>
+			</div>
+		</div>
+	</window>
+</zk>

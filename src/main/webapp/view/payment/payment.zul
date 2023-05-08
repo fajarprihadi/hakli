@@ -34,17 +34,25 @@
 						<label value="@load(vm.anggota.mcabang.cabang)" />
 					</row>
 					<row>
-						<label value="Periode Aktif S/D" />
-						<label />
+						<label value="Periode Terakhir Pembayaran" />
+						<label value="@load(vm.anggota.periodekta) @converter('formatedDate', format='dd-MM-yyyy')" />
 					</row>
 					<row>
+						<label value="Periode Pembayaran Sampai Dengan" />
+						<label value="@load(vm.periode) @converter('formatedDate', format='dd-MM-yyyy')" />
+					</row>
+					<row>
+						<label value="Keterangan" />
+						<label value="@load(vm.keterangan)" />
+					</row>
+					<!-- <row>
 						<label
 							value="Jumlah Periode Bulan Yang Ingin Dibayar" />
 						<combobox id="cbCharge"
 							selectedItem="@bind(vm.qty)"
 							onChange="@command('doCal', qty=vm.qty)" readonly="true">
 						</combobox>
-					</row>
+					</row> -->
 					<row>
 						<label />
 						<grid id="gridCharge">
@@ -70,7 +78,7 @@
 					<footer />
 					<footer>
 						<button id="btSave" width="100%"
-							label="Generate Virtual Account" autodisable="self"
+							label="Generate Tagihan" autodisable="self"
 							sclass="btn btn-primary btn-sm" onClick="@command('doSave')" />
 					</footer>
 				</foot>
@@ -89,7 +97,7 @@
 			<caption>
 				<n:span class="h5 fw-bold mb-0">
 					<n:i class="fas fa-cog"></n:i>
-					Riwayat Pembayaran
+					Riwayat Tagihan
 				</n:span>
 			</caption>
 			<div class="row">
@@ -103,7 +111,7 @@
 						style="font-weight: bold" />
 				</div>
 			</div>
-			<grid id="gridHist"
+			<grid id="gridHist" sizedByContent="true"
 				emptyMessage="${labels.common.emptymsg}">
 				<columns>
 					<column label="No" align="right" width="40px" />

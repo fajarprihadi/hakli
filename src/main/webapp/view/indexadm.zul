@@ -152,6 +152,14 @@
 											</n:i>
 											<n:span>Parameter Sistem</n:span>
 										</a>
+										<a href="#"
+											onClick="@command('doRedirect', path='/view/admin/scheduler.zul', menu='admin', index=5)"
+											class="list-group-item list-group-item-action py-2 ripple">
+											<n:i
+												class="fas fa-cog fa-fw me-3">
+											</n:i>
+											<n:span>Penjadwalan Sistem</n:span>
+										</a>
 									</div>
 								</div>
 							</n:div>
