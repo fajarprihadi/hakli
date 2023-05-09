@@ -48,6 +48,7 @@ import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Tp2kba02;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -65,6 +66,7 @@ public class P2kbA02DetailVm {
 	private BigDecimal totalskp;
 	
 	private String action;
+	private boolean isApprove = false;
 
 	@Wire
 	private Window winP2kba02Detail;
@@ -86,6 +88,7 @@ public class P2kbA02DetailVm {
 			colCheck.setVisible(true);
 			colAksi.setVisible(false);
 			divApprove.setVisible(true);
+			this.isApprove = true;
 		}
 		
 		grid.setRowRenderer(new RowRenderer<Tp2kba02>() {
@@ -315,8 +318,7 @@ public class P2kbA02DetailVm {
 									trx.commit();
 									session.close();
 
-									Clients.showNotification("Submit data berhasil.", "info", null,
-											"middle_center", 3000);
+									Clients.showNotification(AppData.getLabel(action) + " data berhasil", "info", null, "middle_center", 1500);
 									Event closeEvent = new Event("onClose", winP2kba02Detail, null);
 									Events.postEvent(closeEvent);
 								} catch (Exception e) {
@@ -338,11 +340,12 @@ public class P2kbA02DetailVm {
 	public void doRefresh() {
 		try {
 			totalskp = new BigDecimal(0);
-			List<Tp2kba02> objList = oDao
-					.listByFilter(
-							"mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
-									+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk(),
-							"tp2kba02pk desc");
+			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
+					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
+
+			if (isApprove)
+				filter += " and status = 'WC'";
+			List<Tp2kba02> objList = oDao.listByFilter(filter, "tp2kba02pk desc");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();

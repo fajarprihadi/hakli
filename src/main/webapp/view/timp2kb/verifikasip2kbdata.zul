@@ -45,6 +45,23 @@
 				<column label="Total SKP" align="right" width="150px"/>
 				<column label="Action" align="center" width="100px"/>
 			</columns>
+			<foot>
+				<footer />
+				<footer>
+					<label value="Total Nilai SKP"
+						style="font-size: 18px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalkegiatan)"
+						format="#,##0.0" readonly="true"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalskp)"
+						format="#,##0.0" readonly="true"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+			</foot>
 		</grid>
 	</window>
 </zk>

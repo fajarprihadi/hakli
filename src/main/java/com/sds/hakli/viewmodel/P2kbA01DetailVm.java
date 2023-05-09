@@ -48,6 +48,7 @@ import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Tp2kba01;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -65,6 +66,7 @@ public class P2kbA01DetailVm {
 	private Integer totalselected = 0;
 
 	private String action;
+	private boolean isApprove = false;
 
 	@Wire
 	private Column colCheck, colAksi;
@@ -83,8 +85,9 @@ public class P2kbA01DetailVm {
 			colCheck.setVisible(true);
 			colAksi.setVisible(false);
 			divApprove.setVisible(true);
+			this.isApprove = true;
 		}
-		
+
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
 		this.p2kb = p2kb;
 
@@ -301,11 +304,12 @@ public class P2kbA01DetailVm {
 	public void doRefresh() {
 		try {
 			totalskp = new BigDecimal(0);
-			List<Tp2kba01> objList = oDao
-					.listByFilter(
-							"mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
-									+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk(),
-							"tp2kba01pk desc");
+			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
+					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
+
+			if (isApprove)
+				filter += " and status = 'WC'";
+			List<Tp2kba01> objList = oDao.listByFilter(filter, "tp2kba01pk desc");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -316,39 +320,38 @@ public class P2kbA01DetailVm {
 	@NotifyChange("*")
 	public void doSubmit() {
 		if (mapData.size() > 0) {
-			if (action != null && action.trim().length() >0) {
-			Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener<Event>() {
+			if (action != null && action.trim().length() > 0) {
+				Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
+						Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
 
-						@Override
-						public void onEvent(Event event) throws Exception {
-							if (event.getName().equals("onOK")) {
-								try {
-									Session session = StoreHibernateUtil.openSession();
-									Transaction trx = session.beginTransaction();
+							@Override
+							public void onEvent(Event event) throws Exception {
+								if (event.getName().equals("onOK")) {
+									try {
+										Session session = StoreHibernateUtil.openSession();
+										Transaction trx = session.beginTransaction();
 
-									p2kb.setTotalwaiting(p2kb.getTotalwaiting() - totalselected);
-									new Tp2kbDAO().save(session, p2kb);
+										p2kb.setTotalwaiting(p2kb.getTotalwaiting() - totalselected);
+										new Tp2kbDAO().save(session, p2kb);
 
-									for (Entry<Integer, Tp2kba01> entry : mapData.entrySet()) {
-										Tp2kba01 obj = entry.getValue();
-										obj.setStatus(action);
-										new Tp2kbA01DAO().save(session, obj);
+										for (Entry<Integer, Tp2kba01> entry : mapData.entrySet()) {
+											Tp2kba01 obj = entry.getValue();
+											obj.setStatus(action);
+											new Tp2kbA01DAO().save(session, obj);
+										}
+
+										trx.commit();
+										session.close();
+
+										Clients.showNotification(AppData.getLabel(action) + " data berhasil", "info", null, "middle_center", 1500);
+										Event closeEvent = new Event("onClose", winP2kba01Detail, null);
+										Events.postEvent(closeEvent);
+									} catch (Exception e) {
+										e.printStackTrace();
 									}
-
-									trx.commit();
-									session.close();
-
-									Clients.showNotification("Submit data berhasil.", "info", null,
-											"middle_center", 3000);
-									Event closeEvent = new Event("onClose", winP2kba01Detail, null);
-									Events.postEvent(closeEvent);
-								} catch (Exception e) {
-									e.printStackTrace();
 								}
 							}
-						}
-					});
+						});
 			} else {
 				Messagebox.show("Silahkan status terlebih dahulu.");
 			}

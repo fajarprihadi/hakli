@@ -1,5 +1,6 @@
 package com.sds.hakli.viewmodel;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +45,8 @@ public class VerifikasiP2kbDataVm {
 
 	private Vp2kb obj;
 	private Integer pageTotalSize;
+	private Integer totalkegiatan;
+	private BigDecimal totalskp;
 
 	@Wire
 	private Grid grid;
@@ -109,10 +112,16 @@ public class VerifikasiP2kbDataVm {
 
 	public void doRefresh() {
 		try {
-			filter = "tanggotafk = " + obj.getTanggotapk();
+			filter = "tanggotafk = " + obj.getTanggotapk() + " and totalwaiting > 0";
 			orderby = "tp2kbpk asc";
 
 			objList = new Tp2kbDAO().listByFilter(filter, orderby);
+			totalkegiatan = 0;
+			totalskp = new BigDecimal(0);
+			for(Tp2kb data: objList) {
+				totalkegiatan = totalkegiatan + data.getTotalkegiatan();
+				totalskp = totalskp.add(data.getTotalskp());
+			}
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
@@ -135,4 +144,21 @@ public class VerifikasiP2kbDataVm {
 	public void setPageTotalSize(Integer pageTotalSize) {
 		this.pageTotalSize = pageTotalSize;
 	}
+
+	public Integer getTotalkegiatan() {
+		return totalkegiatan;
+	}
+
+	public void setTotalkegiatan(Integer totalkegiatan) {
+		this.totalkegiatan = totalkegiatan;
+	}
+
+	public BigDecimal getTotalskp() {
+		return totalskp;
+	}
+
+	public void setTotalskp(BigDecimal totalskp) {
+		this.totalskp = totalskp;
+	}
+
 }

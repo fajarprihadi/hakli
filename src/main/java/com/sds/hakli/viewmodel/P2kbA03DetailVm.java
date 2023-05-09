@@ -48,6 +48,7 @@ import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Tp2kba03;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -65,6 +66,7 @@ public class P2kbA03DetailVm {
 	private Integer totalselected = 0;
 
 	private String action;
+	private boolean isApprove = false;
 
 	@Wire
 	private Column colCheck, colAksi;
@@ -83,6 +85,7 @@ public class P2kbA03DetailVm {
 			colCheck.setVisible(true);
 			colAksi.setVisible(false);
 			divApprove.setVisible(true);
+			this.isApprove = true;
 		}
 		
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
@@ -314,8 +317,7 @@ public class P2kbA03DetailVm {
 									trx.commit();
 									session.close();
 
-									Clients.showNotification("Submit data berhasil.", "info", null,
-											"middle_center", 3000);
+									Clients.showNotification(AppData.getLabel(action) + " data berhasil", "info", null, "middle_center", 1500);
 									Event closeEvent = new Event("onClose", winP2kba03Detail, null);
 									Events.postEvent(closeEvent);
 								} catch (Exception e) {
@@ -337,7 +339,12 @@ public class P2kbA03DetailVm {
 	public void doRefresh() {
 		try {
 			totalskp = new BigDecimal(0);
-			List<Tp2kba03> objList = oDao.listByFilter("mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk() + " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk(), "tp2kba03pk desc");
+			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
+					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
+
+			if (isApprove)
+				filter += " and status = 'WC'";
+			List<Tp2kba03> objList = oDao.listByFilter(filter, "tp2kba03pk desc");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -404,6 +411,14 @@ public class P2kbA03DetailVm {
 
 	public void setTotalskp(BigDecimal totalskp) {
 		this.totalskp = totalskp;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 	
 	
