@@ -57,6 +57,8 @@ public class AppData {
 		else if (code.equals(AppUtils.INVOICETYPE_EVENT))
 			name = "Event";
 		return name;
+	}
+	
 	public static String getLabel(String code) {
 		if (code.trim().equals(AppUtils.STATUS_APPROVED))
 			return "Approve";
