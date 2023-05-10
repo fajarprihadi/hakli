@@ -1,0 +1,11 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winCetakkta" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.CetakKtaVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Cetak KTA</n:span>
+		</caption>
+		<div id="div" width="100%" height="1000px" align="center" />
+	</window>
+</zk>

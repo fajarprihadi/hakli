@@ -28,6 +28,8 @@ public class Tp2kb {
 	
 	private Date lastupdated;
 	
+	private Integer totalwaiting;
+	
 	@Id
 	@SequenceGenerator(name = "tp2kb_seq", sequenceName = "tp2kb_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kb_seq")
@@ -82,6 +84,14 @@ public class Tp2kb {
 
 	public void setLastupdated(Date lastupdated) {
 		this.lastupdated = lastupdated;
+	}
+
+	public Integer getTotalwaiting() {
+		return totalwaiting;
+	}
+
+	public void setTotalwaiting(Integer totalwaiting) {
+		this.totalwaiting = totalwaiting;
 	}
 	
 }

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cetakkta" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1797a0a-6826-4e1a-877f-337eec26aa05">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CARD1" class="java.lang.String"/>
+	<parameter name="CARD2" class="java.lang.String"/>
+	<parameter name="FOTO" class="java.lang.String"/>
+	<field name="nama" class="java.lang.String"/>
+	<field name="tempatlahir" class="java.lang.String"/>
+	<field name="tgllahir" class="java.util.Date"/>
+	<field name="noanggota" class="java.lang.String"/>
+	<field name="agama" class="java.lang.String"/>
+	<field name="alamat" class="java.lang.String"/>
+	<field name="kota" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="441" splitType="Stretch">
+			<image scaleImage="RetainShape">
+				<reportElement mode="Transparent" x="54" y="23" width="302" height="188" uuid="d95edf3c-b4a5-4302-abd2-4e2b4b562dfd"/>
+				<imageExpression><![CDATA[$P{CARD1}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="144" y="67" width="58" height="11" uuid="d5cf7298-aa5e-4e77-922e-ef75dbd9e9d0"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + $F{noanggota}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="71" y="87" width="131" height="11" uuid="480671c8-f4ed-4c3e-8332-739b43e93727"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[ID Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="77" width="131" height="11" uuid="3faa9c48-20a2-441c-be1f-6f7103496d4f"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Registrasi]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="144" y="102" width="124" height="21" uuid="e011be9f-1dac-43d2-b34f-9b09f08920a8"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + $F{nama}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="71" y="112" width="74" height="11" uuid="3b62b17a-fa3e-4def-a9fe-1dca10bc7f04"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="144" y="127" width="125" height="11" uuid="32ba5be2-8257-4ac8-b934-ed35ab0e3179"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + $F{tempatlahir} + ", " + new SimpleDateFormat("dd MMMMM yyyy").format($F{tgllahir})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="71" y="137" width="141" height="11" uuid="a4781308-d604-4144-9d42-10b92ab61a1a"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Place/Date of Birth]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="144" y="152" width="125" height="21" uuid="a8e0d3c5-3197-4af2-97e5-28039aa7e653"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + $F{alamat}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="71" y="162" width="73" height="11" uuid="c9ff673d-3403-4a01-9116-bb371b3084cd"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="144" y="177" width="125" height="11" uuid="b2fd7e65-df7f-4c14-b137-8fd1bd9352e8"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + $F{noanggota}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="71" y="187" width="141" height="11" uuid="bc683499-d38f-466b-b4ef-19d359fab6ef"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Valid Until]]></text>
+			</staticText>
+			<image>
+				<reportElement x="270" y="102" width="78" height="86" uuid="c05053e4-19dd-4914-937b-45da4df1ab04"/>
+				<imageExpression><![CDATA[$P{FOTO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="255" y="67" width="101" height="21" uuid="6bce5f48-3208-4b3b-9509-aa2e605e28fb"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + $F{kota}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="207" y="77" width="49" height="11" uuid="ec2a9171-81a0-41ba-a313-2e09dde42d83"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Branch]]></text>
+			</staticText>
+			<image>
+				<reportElement x="54" y="229" width="302" height="188" uuid="5868da94-aa23-495d-8c00-5f48900667d7"/>
+				<imageExpression><![CDATA[$P{CARD2}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="235" y="336" width="100" height="13" uuid="8343c9a3-6370-4be3-8064-f651febbe01e"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="71" y="67" width="74" height="11" uuid="4792d192-c481-4174-9781-3f10a1f3bd05"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="102" width="74" height="11" uuid="ae64fa24-0182-4224-af9f-bfff8c000877"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="127" width="74" height="11" uuid="33ab2cac-b96e-479c-b280-2b7d18b59d70"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Tmp/Tgl Lahir]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="152" width="74" height="11" uuid="f7b9a337-6604-4a17-858d-56dc40aced0e"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Alamat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="177" width="74" height="11" uuid="fb2c5726-8218-44fc-97e3-eecc3339b7e7"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Berlaku s.d]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="207" y="67" width="49" height="11" uuid="afec08dc-e72e-4b99-82e7-54ad622d2bf5"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Cabang]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

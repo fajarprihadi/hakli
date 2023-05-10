@@ -1,0 +1,67 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winVerifikasidata" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.VerifikasiP2kbDataVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Verifikasi Kegiatan P2KB Anggota</n:span>
+		</caption>
+		<groupbox mold="3d">
+			<caption label="Informasi" iconSclass="z-icon-search" />
+			<div class="row">
+				<div class="col-2" align="center">
+					<image id="image" width="200" height="250px"
+						src="/images/no-image.jpg" />
+				</div>
+				<div class="col-10">
+					<vlayout>
+						<label value="@load(vm.obj.nama)"
+							style="font-weight: bold" />
+						<label value="@load(vm.obj.alamat)"
+							style="font-weight: bold" />
+						<label value="@load(vm.obj.noanggota)"
+							style="font-weight: bold" />
+						<label value="@load(vm.obj.cabang)"
+							style="font-weight: bold" />
+					</vlayout>
+				</div>
+			</div>
+		</groupbox>
+		<separator />
+		<div class="row">
+			<div class="col-md" />
+				<div class="col-md-2" align="right">
+					<label value="Total Data :"
+						style="font-weight: bold" />
+					<label value="@load(vm.pageTotalSize)"
+						style="font-weight: bold" />
+				</div>
+		</div>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
+			<columns>
+				<column label="${labels.common.no}" align="right" width="40px" />
+				<column label="Kegiatan" />
+				<column label="Total Kegiatan" align="right" width="150px"/>
+				<column label="Total SKP" align="right" width="150px"/>
+				<column label="Action" align="center" width="100px"/>
+			</columns>
+			<foot>
+				<footer />
+				<footer>
+					<label value="Total Nilai SKP"
+						style="font-size: 18px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalkegiatan)"
+						format="#,##0.0" readonly="true"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalskp)"
+						format="#,##0.0" readonly="true"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+			</foot>
+		</grid>
+	</window>
+</zk>

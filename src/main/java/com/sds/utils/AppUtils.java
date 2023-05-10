@@ -9,15 +9,18 @@ public class AppUtils {
 	public static final String PATH_P2KB = "/files/p2kb";
 	public static final String PATH_REPORT = "/files/report";
 	public static final String PATH_JASPER = "/jasper";
-	
+
 	public static final int PAGESIZE = 20;
 	public static final String USERS_PASSWORD_DEFAULT = "123456";
-	
+
 	public static final String STATUS_ANGGOTA_REG = "1";
 	public static final String STATUS_ANGGOTA_REG_PAYMENT = "2";
 	public static final String STATUS_ANGGOTA_REG_ACTIVE = "3";
 	public static final String STATUS_ANGGOTA_REG_DECLINE = "9";
-	
+
+	public static final String STATUS_APPROVED = "A";
+	public static final String STATUS_REJECTED = "R";
+
 	public static final String CHARGETYPE_REG = "01";
 	public static final String CHARGETYPE_IURAN = "02";
 	
@@ -25,6 +28,7 @@ public class AppUtils {
 	public static final String INVOICETYPE_IURAN = "02";
 	public static final String INVOICETYPE_EVENT = "03";
 	
+
 	public static final String SYSPARAM_GROUP_BRIAPI = "BRIAPI";
 	public static final String SYSPARAM_BRIAPI_URL = "BRIAPI_URL";
 	public static final String SYSPARAM_BRIAPI_CONSUMER_KEY = "BRIAPI_CONSUMER_KEY";
@@ -46,9 +50,13 @@ public class AppUtils {
 	public static final String SCHEDULER_REPEAT_ATHOUR = "AT HOUR";
 	public static final String SCHEDULER_REPEAT_ATDAY = "PER DAY";
 	
+
 	public static String getStatusLabel(String code) {
-		String label = "";
-		
-		return label;
+		if (code.trim().equals(AppUtils.STATUS_APPROVED))
+			return "APPROVED";
+		else if (code.trim().equals(AppUtils.STATUS_REJECTED))
+			return "REJECTED";
+		else
+			return code;
 	}
 }

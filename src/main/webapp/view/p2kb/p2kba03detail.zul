@@ -13,14 +13,15 @@
 					valign="top" />
 				<column label="Keterangan" valign="top" />
 				<column label="Data Kegiatan" valign="top" />
-				<column label="Aksi" align="center" width="110px"
+				<column id="colAksi"  label="Aksi" align="center" width="110px"
 					valign="top" />
 			</columns>
 			<rows />
 			<foot>
 				<footer />
 				<footer>
-					<label value="Total Nilai SKP" style="font-size: 18px" />
+					<label value="Total Nilai SKP"
+						style="font-size: 18px" />
 				</footer>
 				<footer>
 					<decimalbox value="@load(vm.totalskp)"

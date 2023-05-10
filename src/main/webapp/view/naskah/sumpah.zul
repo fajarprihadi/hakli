@@ -1,8 +1,7 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winPayment" border="normal"
-		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.NaskahVm')"
-		validationMessages="@id('vmsgs')">
+	<window id="winSumpah" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.NaskahVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
 			<n:span>Naskah</n:span>
