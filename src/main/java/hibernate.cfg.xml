@@ -101,6 +101,8 @@
 		<mapping class="com.sds.hakli.domain.Tscheduler" />
 		<mapping class="com.sds.hakli.domain.BranchTop" />
 		<mapping class="com.sds.hakli.domain.Veventamount" />
+		<mapping class="com.sds.hakli.domain.Vpaymentmon" />
+		<mapping class="com.sds.hakli.domain.Vpaymentbranch" />
 		
 	</session-factory>
 </hibernate-configuration>

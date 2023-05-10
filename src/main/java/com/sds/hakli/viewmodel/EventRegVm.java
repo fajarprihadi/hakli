@@ -224,7 +224,7 @@ public class EventRegVm {
 				provkantor = provDao.findByFilter("provcode = '" + objForm.getPekerjaan().getProvcode() + "'");
 				if (provkantor != null) {
 					cbProvkantor.setValue(provkantor.getProvname());
-					doLoadKab(provkantor);
+					doLoadKabPekerjaan(provkantor);
 				}
 				kabkantor = kabDao.findByFilter("provcode = '" + objForm.getPekerjaan().getProvcode() + "' and kabcode = '" + objForm.getPekerjaan().getKabcode() + "'");
 				cbKabkantor.setValue(objForm.getPekerjaan().getKabname());
@@ -514,6 +514,20 @@ public class EventRegVm {
 								eventreg.setTanggota(objForm.getPribadi());
 								eventreg.setIspaid("N");
 								
+								boolean isVaCreate = false;
+								boolean isVaUpdate = false;
+								if (objForm.getPribadi().getVaevent() == null || objForm.getPribadi().getVaevent().trim().length() == 0) {
+									isVaCreate = true;
+									isVaUpdate = true;
+								} else {
+									if (objForm.getPribadi().getVaeventstatus() == 1) {
+										isVaCreate = true;
+										isVaUpdate = false;
+									} else {
+										isVaCreate = false;
+									}
+								}
+								
 								BriapiBean bean = AppData.getBriapibean();
 								BriApiExt briapi = new BriApiExt(bean);
 								BriApiToken briapiToken = briapi.getToken();
@@ -527,7 +541,9 @@ public class EventRegVm {
 									
 									String custcode_prov = "00" + objForm.getPribadi().getMcabang().getMprovinsi().getProvcode();
 									String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
-									briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
+									if (isVaCreate)
+										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode + "013"));
+									else briva.setCustCode(objForm.getPribadi().getVaevent().substring(5));
 									briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
 									briva.setNama(objForm.getPribadi().getNama());
 									Calendar cal = Calendar.getInstance();
@@ -535,20 +551,34 @@ public class EventRegVm {
 									vaexpdate = cal.getTime();
 									briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 									
-									BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
-									if (brivaCreated.getStatus()) {
-										
+									BrivaCreateResp brivaCreated = null;
+									if (isVaCreate) {
+										brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+										if (brivaCreated != null && brivaCreated.getStatus() && isVaUpdate) {
+											objForm.getPribadi().setVaevent(briva.getBrivaNo() + briva.getCustCode());
+											objForm.getPribadi().setVaeventstatus(1);
+											anggotaDao.save(session, objForm.getPribadi());
+										}
+									} else {
+										brivaCreated = briapi.updateDataBriva(briapiToken.getAccess_token(), briva);
+										if (brivaCreated != null && brivaCreated.getStatus()) {
+											objForm.getPribadi().setVaeventstatus(1);
+											anggotaDao.save(session, objForm.getPribadi());
+										}
 									}
 									
-									eventreg.setVano(briva.getBrivaNo() + briva.getCustCode());
-									eventreg.setVaamount(tevent.getEventprice());
-									eventreg.setVacreatedat(new Date());
-									eventreg.setVaexpdate(vaexpdate);
+									if (brivaCreated != null && brivaCreated.getStatus()) {
+										eventreg.setVano(briva.getBrivaNo() + briva.getCustCode());
+										eventreg.setVaamount(tevent.getEventprice());
+										eventreg.setVacreatedat(new Date());
+										eventreg.setVaexpdate(vaexpdate);
+									}
 									
 								}
 								eventregDao.save(session, eventreg);
 								
 								Tinvoice inv = new InvoiceGenerator().doInvoice(eventreg, eventreg.getVano(), AppUtils.INVOICETYPE_EVENT, tevent.getEventprice(), tevent.getEventname(), vaexpdate);
+								inv.setTanggota(objForm.getPribadi());
 								new TinvoiceDAO().save(session, inv);
 								
 								trx.commit();

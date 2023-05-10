@@ -83,8 +83,8 @@
 							<vlayout>
 								<radiogroup
 									selectedItem="@bind(e.pribadi.gender)">
-									<radio value="L" label="Pria" />
-									<radio value="P" label="Wanita" />
+									<radio value="L" label="Laki-Laki" />
+									<radio value="P" label="Perempuan" />
 								</radiogroup>
 								<label style="color:gray"
 									value="@load(vmsgs['gender'])" />

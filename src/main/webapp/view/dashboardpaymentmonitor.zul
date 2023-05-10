@@ -1,0 +1,22 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winP{aymentmon" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardPaymentMonitorVm')">
+		<caption>
+			<n:i class="fas fa-chart-line"></n:i>
+			<n:span>Dashboard Monitoring Pembayaran</n:span>
+		</caption>
+		<div class="row">
+			<div class="col">
+				<charts id="chart" title="Monitoring Pembayaran" />
+				<popup id="anchor" width="0" height="0">
+					<window id="msgBox" closable="true" sizable="true"
+						border="normal" position="parent" width="250px" mode="popup">
+						<label id="msg" multiline="true" />
+					</window>
+				</popup>
+			</div>
+		</div>
+	</window>
+	<separator />
+</zk>

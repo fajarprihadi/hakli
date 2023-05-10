@@ -31,9 +31,31 @@ public class AppData {
 				bean.setBriva_pathget(obj.getParamvalue());
 			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIVA_PATH_UPDATE))
 				bean.setBriva_pathupdate(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIVA_PATH_UPDATEVA))
+				bean.setBriva_pathupdateva(obj.getParamvalue());
 			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIVA_PATH_REPORT))
 				bean.setBriva_pathreport(obj.getParamvalue());
 		}
 		return bean;
+	}
+	
+	public static String getBankName(String code) {
+		String name = "";
+		if (code.equals("BRINIDJA"))
+			name = "Bank Rakyat Indonesia";
+		else if (code.equals("DJARIDJ1"))
+			name = "Bank Syariah Indonesia";
+		return name;
+	}
+	
+	public static String getInvoiceType(String code) {
+		String name = "";
+		if (code.equals(AppUtils.INVOICETYPE_REG))
+			name = "Pendaftaran";
+		else if (code.equals(AppUtils.INVOICETYPE_IURAN))
+			name = "Iuran";
+		else if (code.equals(AppUtils.INVOICETYPE_EVENT))
+			name = "Event";
+		return name;
 	}
 }

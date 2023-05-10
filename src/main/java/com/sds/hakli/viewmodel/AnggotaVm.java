@@ -194,7 +194,7 @@ public class AnggotaVm {
 			if (prov != null) {
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "cabang"));
+						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

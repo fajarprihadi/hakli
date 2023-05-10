@@ -8,9 +8,12 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.quartz.DisallowConcurrentExecution;
+import org.quartz.InterruptableJob;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.UnableToInterruptJobException;
 
 import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.TanggotaDAO;
@@ -26,7 +29,8 @@ import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
-public class BriapiRekonHandler implements Job {
+@DisallowConcurrentExecution
+public class BriapiRekonHandler implements InterruptableJob  {
 	
 	private BriapiBean bean;
 	private BriApiToken briapiToken;
@@ -34,6 +38,8 @@ public class BriapiRekonHandler implements Job {
 	private TinvoiceDAO invDao = new TinvoiceDAO();
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
 	private TeventregDAO eventregDao = new TeventregDAO();
+	
+	private Thread thread;
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -67,8 +73,10 @@ public class BriapiRekonHandler implements Job {
 								
 								if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_REG) || inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)) {
 									Tanggota anggota = inv.getTanggota();
-									anggota.setVaregstatus(0);
-									anggotaDao.save(session, anggota);
+									if (anggota.getVareg().equals(inv.getVano()) || inv.getInvoiceduedate().compareTo(new Date()) < 0) {
+										anggota.setVaregstatus(0);
+										anggotaDao.save(session, anggota);
+									} 
 								} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_EVENT)) {
 									Teventreg eventreg = inv.getTeventreg();
 									eventreg.setIspaid("Y");
@@ -77,6 +85,12 @@ public class BriapiRekonHandler implements Job {
 									eventreg.setVaterminalid(inv.getVaterminalid());
 									eventreg.setVanotiftime(new Date());
 									eventregDao.save(session, eventreg);
+									
+									Tanggota anggota = inv.getTanggota();
+									if (anggota.getVaevent().equals(inv.getVano()) || inv.getInvoiceduedate().compareTo(new Date()) < 0) {
+										anggota.setVaeventstatus(0);
+										anggotaDao.save(session, anggota);
+									} 
 								}
 								
 								trx.commit();
@@ -93,6 +107,19 @@ public class BriapiRekonHandler implements Job {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void interrupt() throws UnableToInterruptJobException {
+		thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            throw new UnableToInterruptJobException(e);
+        } finally {
+            // ... do cleanup
+        }
+		
 	}
 
 }

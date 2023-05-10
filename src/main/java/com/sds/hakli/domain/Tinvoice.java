@@ -198,7 +198,7 @@ public class Tinvoice {
 		this.paidamount = paidamount;
 	}
 
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getVanotiftime() {
 		return vanotiftime;
 	}

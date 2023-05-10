@@ -160,6 +160,7 @@ public class Tanggota {
 		this.tgllahir = tgllahir;
 	}
 	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getGender() {
 		return gender;
 	}
@@ -408,6 +409,8 @@ public class Tanggota {
 	public void setPeriodekta(Date periodekta) {
 		this.periodekta = periodekta;
 	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getVareg() {
 		return vareg;
 	}
@@ -420,6 +423,8 @@ public class Tanggota {
 	public void setVaregstatus(int varegstatus) {
 		this.varegstatus = varegstatus;
 	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getVaevent() {
 		return vaevent;
 	}

@@ -35,6 +35,7 @@ public class AppUtils {
 	public static final String SYSPARAM_BRIVA_PATH_CREATE = "BRIVA_PATH_CREATE";
 	public static final String SYSPARAM_BRIVA_PATH_GET = "BRIVA_PATH_GET";
 	public static final String SYSPARAM_BRIVA_PATH_UPDATE = "BRIVA_PATH_UPDATE";
+	public static final String SYSPARAM_BRIVA_PATH_UPDATEVA = "BRIVA_PATH_UPDATEVA";
 	public static final String SYSPARAM_BRIVA_PATH_REPORT = "BRIVA_PATH_REPORT";
 	
 	public static final String SCHEDULER_ENABLE_LABEL = "ENABLE";

@@ -11,6 +11,7 @@ public class BriapiBean {
 	private String briva_pathcreate;
 	private String briva_pathget;
 	private String briva_pathupdate;
+	private String briva_pathupdateva;
 	private String briva_pathreport;
 	
 	public String getUrl() {
@@ -66,6 +67,12 @@ public class BriapiBean {
 	}
 	public void setBriva_pathupdate(String briva_pathupdate) {
 		this.briva_pathupdate = briva_pathupdate;
+	}
+	public String getBriva_pathupdateva() {
+		return briva_pathupdateva;
+	}
+	public void setBriva_pathupdateva(String briva_pathupdateva) {
+		this.briva_pathupdateva = briva_pathupdateva;
 	}
 	public String getBriva_pathreport() {
 		return briva_pathreport;

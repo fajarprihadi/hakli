@@ -49,6 +49,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Separator;
+import org.zkoss.zul.Vlayout;
 
 import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MjenjangDAO;
@@ -184,6 +185,9 @@ public class AnggotaFormVm {
 	
 	@Wire
 	private Div divProcessinfo;
+	
+	@Wire
+	private Vlayout vlayNation;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -220,8 +224,11 @@ public class AnggotaFormVm {
 			kabrumah = kabDao.findByFilter("provcode = '" + pribadi.getProvcode() + "' and kabcode = '" + pribadi.getKabcode() + "'");
 			cbKabrumah.setValue(pribadi.getKabname());
 			
+			doLoadNegara(pribadi.getWarganegara());
+			
 			if (pribadi.getMcabang() != null) {
-				region = provDao.findByFilter("provcode = '" + pribadi.getMcabang().getProvcode() + "'");
+				//region = provDao.findByFilter("provcode = '" + pribadi.getMcabang().getProvcode() + "'");
+				region = pribadi.getMcabang().getMprovinsi();
 				if (region != null) {
 					cbRegion.setValue(region.getProvname());
 					doLoadCabang(region);
@@ -412,9 +419,9 @@ public class AnggotaFormVm {
 					cbNegara.setValue(null);
 					negaraModel = new ListModelList<>(new MnegaraDAO().listAll());
 				}
-				//rowNegara.setVisible(true);
+				vlayNation.setVisible(true);
 			} else {
-				//rowNegara.setVisible(false);
+				vlayNation.setVisible(false);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -470,7 +477,7 @@ public class AnggotaFormVm {
 			if (prov != null) {
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "cabang"));
+						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

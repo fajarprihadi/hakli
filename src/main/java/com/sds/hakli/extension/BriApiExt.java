@@ -429,7 +429,7 @@ public class BriApiExt {
 			String jsonReq = mapper.writeValueAsString(data);
 			
 			StringBuffer payload = new StringBuffer();
-			payload.append("path=" + bean.getBriva_pathcreate());
+			payload.append("path=" + bean.getBriva_pathupdateva());
 			payload.append("&");
 			payload.append("verb=PUT");
 			payload.append("&");
@@ -448,13 +448,13 @@ public class BriApiExt {
 			System.out.println("Request body : " + jsonReq);
 			System.out.println("Payload : " + payload.toString());
 			
-			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathcreate());
+			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathupdateva());
 			ClientResponse response = webResource.header("Authorization", auth)
 					.header("BRI-Timestamp", xtimestamp)
 					.header("BRI-Signature", signature)
 					.type(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class, jsonReq);
+					.put(ClientResponse.class, jsonReq);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);

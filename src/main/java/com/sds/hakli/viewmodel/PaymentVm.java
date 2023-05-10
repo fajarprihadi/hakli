@@ -199,7 +199,8 @@ public class PaymentVm {
 	@NotifyChange("pageTotalSize")
 	public void refreshModel(int activePage) {
 		paging.setPageSize(AppUtils.PAGESIZE);
-		model = new TinvoiceListModel(activePage, AppUtils.PAGESIZE, "tanggotafk = " + anggota.getTanggotapk(), "tinvoicepk desc");
+		filter = "tanggotafk = " + anggota.getTanggotapk();
+		model = new TinvoiceListModel(activePage, AppUtils.PAGESIZE, filter, "tinvoicepk desc");
 		pageTotalSize = model.getTotalSize(filter);
 		paging.setTotalSize(pageTotalSize);
 		gridHist.setModel(model);
@@ -258,9 +259,16 @@ public class PaymentVm {
 									String custcode_prov = "00" + anggota.getMcabang().getMprovinsi().getProvcode();
 									String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
 									briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
-									briva.setKeterangan("Pembayaran Iuran");
-									briva.setNama(anggota.getNama());
+									
+									Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
 									Calendar cal = Calendar.getInstance();
+									cal.setTime(startperiod);
+									cal.add(Calendar.MONTH, 6);
+									String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(cal.getTime());
+									
+									briva.setKeterangan(invdesc);
+									briva.setNama(anggota.getNama());
+									cal.setTime(new Date());
 									cal.add(Calendar.DAY_OF_MONTH, 10);
 									vaexpdate = cal.getTime();
 									briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
@@ -269,7 +277,7 @@ public class PaymentVm {
 									if (brivaCreated.getStatus()) {
 										trx = session.beginTransaction();
 										
-										Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, "Pembayaran Iuran", vaexpdate);
+										Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
 										invDao.save(session, inv);
 										
 										anggota.setVareg(briva.getBrivaNo() + briva.getCustCode());

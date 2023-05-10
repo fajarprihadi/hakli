@@ -138,8 +138,8 @@
 								<n:td>
 									<radiogroup
 										selectedItem="@bind(e.gender)">
-										<radio value="P" label="Pria" />
-										<radio value="W" label="Wanita" />
+										<radio value="L" label="Laki-Laki" />
+										<radio value="P" label="Perempuan" />
 									</radiogroup>
 								</n:td>
 							</n:tr>
@@ -172,7 +172,7 @@
 								<n:td>
 									<vlayout>
 										<radiogroup
-											selectedItem="@bind(e.warganegara)">
+											selectedItem="@bind(e.warganegara)" onCheck="@command('doLoadNegara', item=e.warganegara)">
 											<radio value="WNI"
 												label="WNI" />
 											<radio value="WNA"
@@ -181,17 +181,10 @@
 										<label style="color:gray"
 											value="@load(vmsgs['warganegara'])" />
 									</vlayout>
-								</n:td>
-							</n:tr>
-							<n:tr>
-								<n:td>
-									<label value="${labels.area.negara}" />
-								</n:td>
-								<n:td>
-									<vlayout>
-										<combobox id="cbNation"
-											model="@load(vm.negaraModel)" selectedItem="@bind(e.mnegara)"
-											readonly="true" width="100%">
+									
+									<vlayout id="vlayNation">
+										<combobox id="cbNegara" placeholder="Pilih Negara"
+											model="@load(vm.negaraModel)" selectedItem="@bind(e.mnegara)" width="100%">
 											<template name="model"
 												var="mnegara">
 												<comboitem
@@ -238,8 +231,7 @@
 										<combobox id="cbProvrumah"
 											model="@load(vm.provrumahModel)"
 											selectedItem="@bind(vm.provrumah)"
-											onSelect="@command('doLoadKabrumah', prov=vm.provrumah)"
-											readonly="true" width="100%">
+											onSelect="@command('doLoadKabrumah', prov=vm.provrumah)" width="100%">
 											<template name="model"
 												var="provinsi">
 												<comboitem
@@ -259,8 +251,7 @@
 									<vlayout>
 										<combobox id="cbKabrumah"
 											model="@load(vm.kabrumahModel)"
-											selectedItem="@bind(vm.kabrumah)" readonly="true"
-											width="100%">
+											selectedItem="@bind(vm.kabrumah)" width="100%">
 											<template name="model"
 												var="kabupaten">
 												<comboitem
@@ -353,8 +344,7 @@
 									<vlayout>
 										<combobox id="cbRegion"
 											model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
-											onSelect="@command('doLoadCabang', prov=vm.region)"
-											readonly="true" width="100%">
+											onSelect="@command('doLoadCabang', prov=vm.region)" width="100%">
 											<template name="model"
 												var="provinsi">
 												<comboitem
@@ -373,8 +363,7 @@
 								<n:td>
 									<vlayout>
 										<combobox id="cbCabang"
-											selectedItem="@bind(e.mcabang)" model="@load(vm.cabangModel)"
-											readonly="true" width="100%">
+											selectedItem="@bind(e.mcabang)" model="@load(vm.cabangModel)" width="100%">
 											<template name="model"
 												var="cabang">
 												<comboitem
@@ -402,7 +391,7 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-3"
 					role="tabpanel" aria-labelledby="ex1-tab-3">
-					<grid id="gridPekerjaan">
+					<grid id="gridPekerjaan" sizedByContent="true">
 						<columns>
 							<column label="${labels.pekerjaan.namakantor}" />
 							<column label="${labels.area.prov}" />
@@ -417,7 +406,7 @@
 							<column label="${labels.pekerjaan.keterangan}" />
 							<column label="${labels.pekerjaan.notelp}" />
 							<column label="${labels.pekerjaan.nofax}" />
-							<column label="${labels.common.action}" align="center" />
+							<column label="${labels.common.action}" align="center" width="120px" />
 						</columns>
 					</grid>
 					<separator />
@@ -619,7 +608,7 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-4"
 					role="tabpanel" aria-labelledby="ex1-tab-4">
-					<grid id="gridPendidikan">
+					<grid id="gridPendidikan" sizedByContent="true">
 						<columns>
 							<column label="${labels.pendidikan.universitas}" />
 							<column label="${labels.pendidikan.jenjang}" />
@@ -627,7 +616,7 @@
 							<column label="${labels.pendidikan.minat2}" />
 							<column label="${labels.pendidikan.period}" />
 							<column label="${labels.pendidikan.noijazah}" />
-							<column label="${labels.common.action}" align="center" />
+							<column label="${labels.common.action}" align="center" width="120px"  />
 						</columns>
 					</grid>
 					<separator />
