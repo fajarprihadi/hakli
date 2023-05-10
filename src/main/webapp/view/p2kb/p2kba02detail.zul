@@ -11,8 +11,6 @@
 			<columns>
 				<column label="No" align="right" width="40px"
 					valign="top" />
-				<column id="colCheck" label="Pilih" align="center"
-					width="80px" valign="top" visible="false" />
 				<column label="Keterangan" valign="top" />
 				<column label="Data Kegiatan" valign="top" />
 				<column id="colAksi" label="Aksi" align="center" width="110px"
@@ -32,19 +30,5 @@
 				</footer>
 			</foot>
 		</grid>
-		<separator />
-		<div id="divApprove" align="right" visible="false">
-			<vlayout>
-				<combobox selectedItem="@bind(vm.action)"
-					readonly="true" cols="10">
-					<comboitem label="Approve" value="A" />
-					<comboitem label="Reject" value="R" />
-				</combobox>
-				<separator />
-				<button autodisable="self" width="250px"
-					iconSclass="z-icon-check" label="Submit"
-					sclass="btn btn-primary btn-sm" onClick="@command('doSubmit')" />
-			</vlayout>
-		</div>
 	</window>
 </zk>

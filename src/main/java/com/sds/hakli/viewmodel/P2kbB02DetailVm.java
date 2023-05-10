@@ -31,8 +31,11 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Column;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Iframe;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
@@ -40,13 +43,16 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Separator;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Vlayout;
 import org.zkoss.zul.Window;
 
+import com.sds.hakli.dao.Tp2kbB01DAO;
 import com.sds.hakli.dao.Tp2kbB02DAO;
 import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
+import com.sds.hakli.domain.Tp2kbb01;
 import com.sds.hakli.domain.Tp2kbb02;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
@@ -62,16 +68,10 @@ public class P2kbB02DetailVm {
 	private Tp2kb p2kb;
 	private BigDecimal totalskp;
 	
-	private Map<Integer, Tp2kbb02> mapData = new HashMap<>();
-	private Integer totalselected = 0;
-
-	private String action;
-	private boolean isApprove = false;
+	private boolean isApproved = false;
 
 	@Wire
-	private Column colCheck, colAksi;
-	@Wire
-	private Div divApprove;
+	private Column colAksi;
 	@Wire
 	private Window winP2kbb02Detail;
 	@Wire
@@ -82,10 +82,8 @@ public class P2kbB02DetailVm {
 			@ExecutionArgParam("isApprove") String isApprove) {
 		Selectors.wireComponents(view, this, false);
 		if (isApprove != null && isApprove.equals("Y")) {
-			colCheck.setVisible(true);
+			isApproved = true;
 			colAksi.setVisible(false);
-			divApprove.setVisible(true);
-			this.isApprove = true;
 		}
 		
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
@@ -97,44 +95,53 @@ public class P2kbB02DetailVm {
 			public void render(Row row, Tp2kbb02 data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index+1)));
 				
-				Checkbox check = new Checkbox();
-				check.setAttribute("obj", data);
-				check.addEventListener(Events.ON_CHECK, new EventListener<Event>() {
-					@Override
-					public void onEvent(Event event) throws Exception {
-						Checkbox checked = (Checkbox) event.getTarget();
-						if (checked.isChecked()) {
-							mapData.put(data.getTp2kbb02pk(), data);
-						} else {
-							mapData.remove(data.getTp2kbb02pk());
-						}
-						totalselected = mapData.size();
-					}
-				});
-				if (mapData.get(data.getTp2kbb02pk()) != null)
-					check.setChecked(true);
-
-				row.getChildren().add(check);
 				Vlayout vlayoutKet = new Vlayout();
-				
+
 				Div divKet0 = new Div();
-				divKet0.setSclass("note note-light");
+				Hlayout hlayout = new Hlayout();
+				divKet0.setSclass("rows note note-light");
 				Label lblStatus = new Label("Status Pemeriksaan :");
 				lblStatus.setStyle("font-weight: bold");
-				divKet0.appendChild(lblStatus);
+				hlayout.appendChild(lblStatus);
+
+				Separator separator = new Separator();
+				hlayout.appendChild(separator);
+
+				Combobox combobox = new Combobox();
+				combobox.setReadonly(true);
+				combobox.setCols(15);
+
+				Comboitem cbItem = new Comboitem();
+				cbItem.setLabel("Approve");
+				cbItem.setValue("A");
+				combobox.appendChild(cbItem);
+
+				cbItem = new Comboitem();
+				cbItem.setLabel("Reject");
+				cbItem.setValue("R");
+				combobox.appendChild(cbItem);
+
 				Label lblStatusVal = new Label(AppUtils.getStatusLabel(data.getStatus()));
-				divKet0.appendChild(lblStatusVal);
+
+				if (isApproved)
+					hlayout.appendChild(combobox);
+				else
+					hlayout.appendChild(lblStatusVal);
+
+				divKet0.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet0);
-				
+
 				Div divKet1 = new Div();
 				divKet1.setSclass("note note-light");
 				Label lblCheckdate = new Label("Tanggal Pemeriksaan :");
 				lblCheckdate.setStyle("font-weight: bold");
 				divKet1.appendChild(lblCheckdate);
-				Label lblCheckdateVal = new Label(data.getChecktime() != null ? new SimpleDateFormat("dd MMM yyyy").format(data.getChecktime()) : "");
+				Label lblCheckdateVal = new Label(
+						data.getChecktime() != null ? new SimpleDateFormat("dd MMM yyyy").format(data.getChecktime())
+								: "");
 				divKet1.appendChild(lblCheckdateVal);
 				vlayoutKet.appendChild(divKet1);
-				
+
 				Div divKet2 = new Div();
 				divKet2.setSclass("note note-light");
 				Label lblCheckedby = new Label("Pemeriksa :");
@@ -143,16 +150,32 @@ public class P2kbB02DetailVm {
 				Label lblCheckedbyVal = new Label(data.getCheckedby());
 				divKet2.appendChild(lblCheckedbyVal);
 				vlayoutKet.appendChild(divKet2);
-				
+
 				Div divKet3 = new Div();
+				hlayout = new Hlayout();
+
 				divKet3.setSclass("note note-light");
 				Label lblMemoTim = new Label("Catatan Tim P2KB :");
 				lblMemoTim.setStyle("font-weight: bold");
-				divKet3.appendChild(lblMemoTim);
+				hlayout.appendChild(lblMemoTim);
+
+				separator = new Separator();
+				hlayout.appendChild(separator);
+
 				Label lblMemoTimVal = new Label(data.getMemo());
-				divKet3.appendChild(lblMemoTimVal);
+
+				Textbox tb1 = new Textbox();
+				tb1.setRows(2);
+				tb1.setCols(30);
+
+				if (!isApproved)
+					hlayout.appendChild(lblMemoTimVal);
+				else
+					hlayout.appendChild(tb1);
+
+				divKet3.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet3);
-				
+
 				Div divKet4 = new Div();
 				divKet4.setSclass("note note-light");
 				Label lblMemoKomisi = new Label("Catatan Komisi P2KB :");
@@ -161,7 +184,77 @@ public class P2kbB02DetailVm {
 				Label lblMemoKomisiVal = new Label();
 				divKet4.appendChild(lblMemoKomisiVal);
 				vlayoutKet.appendChild(divKet4);
-				
+
+				Button btApproved = new Button("Approve");
+				btApproved.setIconSclass("z-icon-check");
+				btApproved.setSclass("btn btn-primary btn-sm");
+				btApproved.setAutodisable("self");
+				btApproved.setTooltiptext("Approved");
+				btApproved.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						if ((combobox.getSelectedItem().getLabel() != null)
+								&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
+							Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
+									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+										@Override
+										public void onEvent(Event event) throws Exception {
+											if (event.getName().equals("onOK")) {
+												doSubmit(data, combobox.getSelectedItem().getValue(), tb1.getValue());
+												BindUtils.postNotifyChange(P2kbB02DetailVm.this, "totalskp");
+											}
+										}
+									});
+						} else {
+							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
+						}
+					}
+				});
+
+				Button btReject = new Button("Reject");
+				btReject.setIconSclass("z-icon-close");
+				btReject.setSclass("btn btn-danger btn-sm");
+				btReject.setAutodisable("self");
+				btReject.setTooltiptext("Reject");
+				btReject.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						if (combobox.getSelectedItem().getValue() != null
+								&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
+							Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
+									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+										@Override
+										public void onEvent(Event event) throws Exception {
+											if (event.getName().equals("onOK")) {
+												doSubmit(data, combobox.getSelectedItem().getValue(), tb1.getValue());
+												BindUtils.postNotifyChange(P2kbB02DetailVm.this, "totalskp");
+											}
+										}
+									});
+						} else {
+							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
+						}
+					}
+				});
+
+				separator = new Separator();
+				vlayoutKet.appendChild(separator);
+
+				Div divBtn = new Div();
+				hlayout = new Hlayout();
+
+				hlayout.appendChild(btApproved);
+				separator = new Separator();
+				hlayout.appendChild(separator);
+				hlayout.appendChild(btReject);
+
+				if (isApproved) {
+					divBtn.appendChild(hlayout);
+					vlayoutKet.appendChild(divBtn);
+				}
+
 				row.getChildren().add(vlayoutKet);
 				
 				Vlayout vlayoutKegiatan = new Vlayout();
@@ -298,49 +391,32 @@ public class P2kbB02DetailVm {
 		doRefresh();
 	}
 	
-	@Command()
 	@NotifyChange("*")
-	public void doSubmit() {
-		if (mapData.size() > 0) {
-			if (action != null && action.trim().length() >0) {
-			Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener<Event>() {
+	public void doSubmit(Tp2kbb02 obj, String action, String memotim) {
+		try {
+			Session session = StoreHibernateUtil.openSession();
+			Transaction trx = session.beginTransaction();
 
-						@Override
-						public void onEvent(Event event) throws Exception {
-							if (event.getName().equals("onOK")) {
-								try {
-									Session session = StoreHibernateUtil.openSession();
-									Transaction trx = session.beginTransaction();
+			p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
+			new Tp2kbDAO().save(session, p2kb);
 
-									p2kb.setTotalwaiting(p2kb.getTotalwaiting() - totalselected);
-									new Tp2kbDAO().save(session, p2kb);
+			obj.setStatus(action);
+			obj.setMemo(memotim);
+			obj.setCheckedby(anggota.getNama());
+			obj.setChecktime(new Date());
+			new Tp2kbB02DAO().save(session, obj);
+			
+			totalskp = totalskp.subtract(obj.getNilaiskp());
 
-									for (Entry<Integer, Tp2kbb02> entry : mapData.entrySet()) {
-										Tp2kbb02 obj = entry.getValue();
-										obj.setStatus(action);
-										new Tp2kbB02DAO().save(session, obj);
-									}
+			trx.commit();
+			session.close();
 
-									trx.commit();
-									session.close();
+			doRefresh();
+			Clients.showNotification(AppData.getLabel(action) + " data berhasil", "info", null, "middle_center", 1500);
 
-									Clients.showNotification(AppData.getLabel(action) + " data berhasil", "info", null, "middle_center", 1500);
-									Event closeEvent = new Event("onClose", winP2kbb02Detail, null);
-									Events.postEvent(closeEvent);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						}
-					});
-			} else {
-				Messagebox.show("Silahkan status terlebih dahulu.");
-			}
-		} else {
-			Messagebox.show("Silahkan pilih data terlebih dahulu.");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 	}
 	
 	@NotifyChange("totalskp")
@@ -350,7 +426,7 @@ public class P2kbB02DetailVm {
 			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
 					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
 
-			if (isApprove)
+			if (isApproved)
 				filter += " and status = 'WC'";
 			List<Tp2kbb02> objList = oDao.listByFilter(filter, "tp2kbb02pk desc");
 			grid.setModel(new ListModelList<>(objList));
@@ -420,14 +496,5 @@ public class P2kbB02DetailVm {
 	public void setTotalskp(BigDecimal totalskp) {
 		this.totalskp = totalskp;
 	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
-	
 	
 }
