@@ -16,7 +16,6 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Html;
 import org.zkoss.zul.Separator;
 
-import com.sds.hakli.domain.Tevent;
 import com.sds.hakli.domain.Teventreg;
 import com.sds.utils.AppUtils;
 

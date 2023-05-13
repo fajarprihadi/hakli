@@ -43,8 +43,7 @@
 							<label value="Provinsi (*)" />
 							<vlayout>
 								<combobox id="cbRegion"
-									selectedItem="@bind(e.mprovinsi)" model="@load(vm.provModel)"
-									readonly="true" width="100%">
+									selectedItem="@bind(e.mprovinsi)" model="@load(vm.provModel)" width="100%">
 									<template name="model"
 										var="mprovinsi">
 										<comboitem
@@ -53,6 +52,42 @@
 								</combobox>
 								<label style="color:gray"
 									value="@load(vmsgs['mprovinsi'])" />
+							</vlayout>
+						</row>
+						<row spans="2">
+						<vlayout>
+							<n:hr/>
+							<n:p><n:em>Data Rekening</n:em></n:p>
+						</vlayout>
+						</row>
+						<row>
+							<label value="Bank (*)" />
+							<vlayout>
+								<combobox id="cbBank" selectedItem="@bind(e.bankcode)"
+									width="100%" maxlength="40">
+									<comboitem value="BRINIDJA" label="Bank Rakyat Indonesia" />
+									<comboitem value="DJARIDJ1" label="Bank Syariah Indonesia" />
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['bankcode'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="Nomor Rekening (*)" />
+							<vlayout>
+								<textbox value="@bind(e.accno)"
+									width="100%" maxlength="20" />
+								<label style="color:gray"
+									value="@load(vmsgs['accno'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="Nama Rekening (*)" />
+							<vlayout>
+								<textbox value="@bind(e.accname)"
+									width="100%" maxlength="40" />
+								<label style="color:gray"
+									value="@load(vmsgs['accname'])" />
 							</vlayout>
 						</row>
 					</rows>
@@ -75,9 +110,9 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top">
+		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true">
 			<columns>
-				<column label="No" align="right" width="50px" />
+				<column label="No" align="right" width="40px" />
 				<column>
 					<textbox inplace="true" value="@bind(vm.cabang)"
 						width="100%" maxlength="100" placeholder="Cabang"
@@ -90,7 +125,10 @@
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />
 				</column>
-				<column label="Aksi" align="center" />
+				<column label="Bank" align="center" />
+				<column label="Nomor Rekening" align="center" />
+				<column label="Nama Rekening" />
+				<column label="Aksi" align="center" width="120px" />
 			</columns>
 		</grid>
 

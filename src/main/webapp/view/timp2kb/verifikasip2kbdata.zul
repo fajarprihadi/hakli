@@ -7,10 +7,10 @@
 			<n:span>Verifikasi Kegiatan P2KB Anggota</n:span>
 		</caption>
 		<groupbox mold="3d">
-			<caption label="Informasi" iconSclass="z-icon-search" />
+			<caption label="Informasi Anggota" iconSclass="z-icon-info" />
 			<div class="row">
 				<div class="col-2" align="center">
-					<image id="image" width="200" height="250px"
+					<image id="image" height="250px"
 						src="/images/no-image.jpg" />
 				</div>
 				<div class="col-10">

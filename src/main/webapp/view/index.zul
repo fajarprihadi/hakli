@@ -177,17 +177,17 @@
 						
 						<div class="accordion-item">
 							<n:h2 class="accordion-header"
-								id="flush-headingThree">
+								id="flush-headingFour">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseThree"
-									aria-expanded="false" aria-controls="flush-collapseThree">
+									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseFour"
+									aria-expanded="false" aria-controls="flush-collapseFour">
 									Naskah
 								</n:button>
 							</n:h2>
-							<n:div id="flush-collapseThree"
+							<n:div id="flush-collapseFour"
 								class="accordion-collapse collapse"
-								aria-labelledby="flush-headingThree"
+								aria-labelledby="flush-headingFour"
 								data-mdb-parent="#divAccord">
 								<div class="accordion-body">
 									<div id="divMenuNaskah"

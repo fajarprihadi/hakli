@@ -37,6 +37,8 @@ public class AdmInitializationVm {
 	@Wire
 	private Div divMenuVa;
 	@Wire
+	private Div divMenuDashboard;
+	@Wire
 	private Div divContent;
 	
 	@AfterCompose
@@ -44,7 +46,7 @@ public class AdmInitializationVm {
 		Selectors.wireComponents(view, this, false);
 		oUser = (Muser) session.getAttribute("oUser");
 		currentmenuidx = 0;
-		currentmenu = "anggota";
+		currentmenu = "dashboard";
 		//doRedirect("/view/dashboard.zul", 0);
 		Executions.createComponents("/view/dashboard.zul", divContent, null);
 	}
@@ -63,6 +65,8 @@ public class AdmInitializationVm {
 				divMenu = divMenuEvent;
 			else if (menu.equals("va"))
 				divMenu = divMenuVa;
+			else if (menu.equals("dashboard"))
+				divMenu = divMenuDashboard;
 			
 			((A) divMenu.getChildren().get(index)).setSclass("list-group-item list-group-item-action py-2 ripple active");
 			if (currentmenuidx != null && (currentmenuidx.compareTo(index) != 0 || 
@@ -76,6 +80,8 @@ public class AdmInitializationVm {
 					divMenuPrev = divMenuEvent;
 				else if (currentmenu.equals("va"))
 					divMenuPrev = divMenuVa;
+				else if (currentmenu.equals("dashboard"))
+					divMenuPrev = divMenuDashboard;
 				
 				((A) divMenuPrev.getChildren().get(currentmenuidx)).setSclass("list-group-item list-group-item-action py-2 ripple");
 			}

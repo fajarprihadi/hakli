@@ -7,6 +7,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import com.sds.hakli.domain.Tinvoice;
+import com.sds.hakli.domain.Vpaymentbranch;
+import com.sds.hakli.domain.Vpaymentmon;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class TinvoiceDAO {
@@ -78,6 +80,29 @@ public class TinvoiceDAO {
 	
 	public void delete(Session session, Tinvoice oForm) throws HibernateException, Exception {
 		session.delete(oForm);    
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Vpaymentmon> listPaymentMonitor(String filter) throws Exception {		
+    	List<Vpaymentmon> oList = null;
+    	if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT INVOICETYPE, DATE(PAIDTIME) AS PAIDTIME, SUM(PAIDAMOUNT) AS PAIDAMOUNT "
+				+ "FROM TINVOICE WHERE ISPAID = 'Y' GROUP BY INVOICETYPE, DATE(PAIDTIME)").addEntity(Vpaymentmon.class).list();
+		session.close();
+        return oList;
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Vpaymentbranch> listPaymentBranch(String date) throws Exception {		
+    	List<Vpaymentbranch> oList = null;
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT MCABANGPK, CABANG, MPROVINSI.PROVNAME AS PROVNAME, DATE(PAIDTIME) AS PAIDTIME, SUM(PAIDAMOUNT) AS PAIDAMOUNT "
+				+ "FROM TINVOICE JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROVINSI ON MPROVINSIFK = MPROVINSIPK "
+				+ "WHERE ISPAID = 'Y' AND DATE(PAIDTIME) = '" + date + "' GROUP BY MCABANGPK, CABANG, MPROVINSI.PROVNAME, DATE(PAIDTIME) ORDER BY MPROVINSI.PROVNAME, CABANG").addEntity(Vpaymentbranch.class).list();
+		session.close();
+        return oList;
     }
 
 }

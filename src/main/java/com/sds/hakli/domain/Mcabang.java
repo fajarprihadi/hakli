@@ -13,6 +13,16 @@ public class Mcabang {
 	
 	private String cabang;
 	
+	private String kodecabang;
+	
+	private String accno;
+	
+	private String accname;
+	
+	private String bankcode;
+	
+	private String bankname;
+	
 	private String provcode;
 	
 	private Date createtime;
@@ -43,6 +53,51 @@ public class Mcabang {
 
 	public void setCabang(String cabang) {
 		this.cabang = cabang;
+	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getKodecabang() {
+		return kodecabang;
+	}
+
+	public void setKodecabang(String kodecabang) {
+		this.kodecabang = kodecabang;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getAccno() {
+		return accno;
+	}
+
+	public void setAccno(String accno) {
+		this.accno = accno;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getAccname() {
+		return accname;
+	}
+
+	public void setAccname(String accname) {
+		this.accname = accname;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getBankcode() {
+		return bankcode;
+	}
+
+	public void setBankcode(String bankcode) {
+		this.bankcode = bankcode;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getBankname() {
+		return bankname;
+	}
+
+	public void setBankname(String bankname) {
+		this.bankname = bankname;
 	}
 
 	@Type(type = "com.sds.utils.usertype.TrimUserType")

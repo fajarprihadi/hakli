@@ -25,8 +25,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
@@ -38,15 +36,22 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.event.PagingEvent;
 
+import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.MchargeDAO;
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.domain.Mcharge;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
+import com.sds.hakli.extension.BriApiExt;
 import com.sds.hakli.extension.MailHandler;
-import com.sds.hakli.model.TanggotaListModel;
 import com.sds.hakli.model.TinvoiceListModel;
+import com.sds.hakli.pojo.BriApiToken;
+import com.sds.hakli.pojo.BrivaCreateResp;
+import com.sds.hakli.pojo.BrivaData;
+import com.sds.hakli.utils.InvoiceGenerator;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -69,14 +74,17 @@ public class PaymentVm {
 	private int pageTotalSize;
 	private String filter;
 	
+	private Date periode;
+	private String keterangan;
+	
 	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Wire
 	private Groupbox gbForm;
 	@Wire
 	private Grid gridCharge;
-	@Wire
-	private Combobox cbCharge;
+//	@Wire
+//	private Combobox cbCharge;
 	@Wire
 	private Button btSave;
 	@Wire
@@ -112,18 +120,40 @@ public class PaymentVm {
 					break;
 				}
 			}
-
-			for (int i = 1; i <= 12; i++) {
-				Comboitem item = new Comboitem();
-				item.setValue(i);
-				item.setLabel(i + " Bulan / Rp. "
-						+ (NumberFormat.getInstance().format(amountbase.multiply(new BigDecimal(i)))));
-				cbCharge.appendChild(item);
-
-				if (i == 1)
-					cbCharge.setSelectedItem(item);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(anggota.getPeriodekta());
+			
+			oList = new ArrayList<>();
+			for (Mcharge obj : objList) {
+				if (obj.getIsbase().equals("Y")) {
+					qty = 0;
+					BigDecimal totalbase = new BigDecimal(0);
+					while (cal.getTime().compareTo(new Date()) == -1) {
+						qty++;
+						totalbase = amountbase.multiply(new BigDecimal(qty));
+						cal.add(Calendar.MONTH, 6);
+					}
+					periode = cal.getTime();
+					keterangan = "Pembayaran Iuran Untuk " + (6 * qty) + " Bulan";
+					obj.setChargeamount(totalbase);
+					obj.setChargedesc(keterangan);
+				}
+				
+				oList.add(obj);
 			}
-			qty = 1;
+
+//			for (int i = 1; i <= 12; i++) {
+//				Comboitem item = new Comboitem();
+//				item.setValue(i);
+//				item.setLabel(i + " Bulan / Rp. "
+//						+ (NumberFormat.getInstance().format(amountbase.multiply(new BigDecimal(i)))));
+//				cbCharge.appendChild(item);
+//
+//				if (i == 1)
+//					cbCharge.setSelectedItem(item);
+//			}
+//			qty = 1;
 
 			gridCharge.setModel(new ListModelList<>(objList));
 			
@@ -156,6 +186,11 @@ public class PaymentVm {
 			
 			refreshModel(pageStartNumber);
 			
+			if (anggota.getVaregstatus() == 1) {
+				keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar. \n Silahkan lihat di tabel riwayat tagihan dihalaman bawah.";
+				btSave.setDisabled(true);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -164,10 +199,17 @@ public class PaymentVm {
 	@NotifyChange("pageTotalSize")
 	public void refreshModel(int activePage) {
 		paging.setPageSize(AppUtils.PAGESIZE);
-		model = new TinvoiceListModel(activePage, AppUtils.PAGESIZE, "tanggotafk = " + anggota.getTanggotapk(), "tinvoicepk desc");
+		filter = "tanggotafk = " + anggota.getTanggotapk();
+		model = new TinvoiceListModel(activePage, AppUtils.PAGESIZE, filter, "tinvoicepk desc");
 		pageTotalSize = model.getTotalSize(filter);
 		paging.setTotalSize(pageTotalSize);
 		gridHist.setModel(model);
+	}
+	
+	public void doCountPayment() {
+		do {
+			
+		} while (true);
 	}
 
 	@Command
@@ -203,42 +245,65 @@ public class PaymentVm {
 							Session session = StoreHibernateUtil.openSession();
 							Transaction trx = null;
 							try {
-								String vano = "998100102000035";
-								trx = session.beginTransaction();
-								Tinvoice inv = new Tinvoice();
-								inv.setTanggota(anggota);
-								inv.setCreatedby(anggota.getCreatedby());
-								inv.setCreatetime(new Date());
-								inv.setInvoiceamount(totalpayment);
-								inv.setInvoicedate(new Date());
-								inv.setInvoicedesc("Pembayaran Iuran " + qty + " bulan");
-								Calendar cal = Calendar.getInstance();
-								cal.setTime(new Date());
-								cal.add(Calendar.DAY_OF_MONTH, 14);
-								inv.setInvoiceduedate(cal.getTime());
-								inv.setInvoicetype("02");
-								inv.setInvoiceno(new TcounterengineDAO().getInvoiceCounter());
-								inv.setVano(vano);
-								inv.setIspaid("N");
-								invDao.save(session, inv);
-								trx.commit();
+								BriapiBean bean = AppData.getBriapibean();
+								BriApiExt briapi = new BriApiExt(bean);
+								BriApiToken briapiToken = briapi.getToken();
+								
+								Date vaexpdate = null;
+								BrivaData briva = new BrivaData();
+								if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+									briva.setAmount(totalpayment.toString());
+									briva.setInstitutionCode(bean.getBriva_institutioncode());
+									briva.setBrivaNo(bean.getBriva_cid());
+									
+									String custcode_prov = "00" + anggota.getMcabang().getMprovinsi().getProvcode();
+									String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
+									briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
+									
+									Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
+									Calendar cal = Calendar.getInstance();
+									cal.setTime(startperiod);
+									cal.add(Calendar.MONTH, 6);
+									String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(cal.getTime());
+									
+									briva.setKeterangan(invdesc);
+									briva.setNama(anggota.getNama());
+									cal.setTime(new Date());
+									cal.add(Calendar.DAY_OF_MONTH, 10);
+									vaexpdate = cal.getTime();
+									briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
+									
+									BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+									if (brivaCreated.getStatus()) {
+										trx = session.beginTransaction();
+										
+										Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
+										invDao.save(session, inv);
+										
+										anggota.setVareg(briva.getBrivaNo() + briva.getCustCode());
+										anggota.setVaregstatus(1);
+										new TanggotaDAO().save(session, anggota);
+										
+										trx.commit();
+										
+										btSave.setDisabled(true);
+										
+										String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
+												.getRealPath("/themes/mail/mailinv.html");
+										new Thread(new MailHandler(inv, bodymail_path)).start();
 
-								btSave.setDisabled(true);
-								
-								String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
-										.getRealPath("/themes/mail/mailinv.html");
-								new Thread(new MailHandler(inv, bodymail_path)).start();
-
-								processinfo = "Proses generate pembayaran berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
-										+ vano;
-								divProcessinfo.setVisible(true);
-								
-								pageStartNumber = 0;
-								refreshModel(pageStartNumber);
-								
-								BindUtils.postNotifyChange(PaymentVm.this, "*");
-								
-								gbForm.setOpen(false);
+										processinfo = "Proses generate pembayaran berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
+												+ briva.getBrivaNo() + briva.getCustCode();
+										divProcessinfo.setVisible(true);
+										
+										pageStartNumber = 0;
+										refreshModel(pageStartNumber);
+										
+										BindUtils.postNotifyChange(PaymentVm.this, "*");
+										
+										gbForm.setOpen(false);
+									}
+								}
 							} catch (Exception e) {
 								e.printStackTrace();
 							} finally {
@@ -250,13 +315,13 @@ public class PaymentVm {
 
 	}
 
-	public Integer getQty() {
-		return qty;
-	}
-
-	public void setQty(Integer qty) {
-		this.qty = qty;
-	}
+//	public Integer getQty() {
+//		return qty;
+//	}
+//
+//	public void setQty(Integer qty) {
+//		this.qty = qty;
+//	}
 
 	public BigDecimal getTotalpayment() {
 		return totalpayment;
@@ -288,6 +353,22 @@ public class PaymentVm {
 
 	public void setPageTotalSize(int pageTotalSize) {
 		this.pageTotalSize = pageTotalSize;
+	}
+
+	public Date getPeriode() {
+		return periode;
+	}
+
+	public void setPeriode(Date periode) {
+		this.periode = periode;
+	}
+
+	public String getKeterangan() {
+		return keterangan;
+	}
+
+	public void setKeterangan(String keterangan) {
+		this.keterangan = keterangan;
 	}
 	
 	

@@ -22,6 +22,8 @@ public class Tinvoice {
 	
 	private Tanggota tanggota;
 	
+	private Teventreg teventreg;
+	
 	private Date createtime;
 	
 	private String createdby;
@@ -46,6 +48,12 @@ public class Tinvoice {
 	
 	private String paidrefno;
 	
+	private BigDecimal paidamount;
+	
+	private Date vanotiftime;
+
+	private String vaterminalid;
+	
 	
 	@Id
 	@SequenceGenerator(name = "tinvoice_seq", sequenceName = "tinvoice_seq", allocationSize = 1)
@@ -66,6 +74,16 @@ public class Tinvoice {
 
 	public void setTanggota(Tanggota tanggota) {
 		this.tanggota = tanggota;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "teventregfk")
+	public Teventreg getTeventreg() {
+		return teventreg;
+	}
+
+	public void setTeventreg(Teventreg teventreg) {
+		this.teventreg = teventreg;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -170,6 +188,31 @@ public class Tinvoice {
 
 	public void setPaidrefno(String paidrefno) {
 		this.paidrefno = paidrefno;
+	}
+
+	public BigDecimal getPaidamount() {
+		return paidamount;
+	}
+
+	public void setPaidamount(BigDecimal paidamount) {
+		this.paidamount = paidamount;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getVanotiftime() {
+		return vanotiftime;
+	}
+
+	public void setVanotiftime(Date vanotiftime) {
+		this.vanotiftime = vanotiftime;
+	}
+
+	public String getVaterminalid() {
+		return vaterminalid;
+	}
+
+	public void setVaterminalid(String vaterminalid) {
+		this.vaterminalid = vaterminalid;
 	}
 
 }

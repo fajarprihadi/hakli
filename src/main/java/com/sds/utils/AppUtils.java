@@ -23,6 +23,11 @@ public class AppUtils {
 
 	public static final String CHARGETYPE_REG = "01";
 	public static final String CHARGETYPE_IURAN = "02";
+	
+	public static final String INVOICETYPE_REG = "01";
+	public static final String INVOICETYPE_IURAN = "02";
+	public static final String INVOICETYPE_EVENT = "03";
+	
 
 	public static final String SYSPARAM_GROUP_BRIAPI = "BRIAPI";
 	public static final String SYSPARAM_BRIAPI_URL = "BRIAPI_URL";
@@ -34,7 +39,17 @@ public class AppUtils {
 	public static final String SYSPARAM_BRIVA_PATH_CREATE = "BRIVA_PATH_CREATE";
 	public static final String SYSPARAM_BRIVA_PATH_GET = "BRIVA_PATH_GET";
 	public static final String SYSPARAM_BRIVA_PATH_UPDATE = "BRIVA_PATH_UPDATE";
+	public static final String SYSPARAM_BRIVA_PATH_UPDATEVA = "BRIVA_PATH_UPDATEVA";
 	public static final String SYSPARAM_BRIVA_PATH_REPORT = "BRIVA_PATH_REPORT";
+	
+	public static final String SCHEDULER_ENABLE_LABEL = "ENABLE";
+	public static final String SCHEDULER_ENABLE_VALUE = "1";
+	public static final String SCHEDULER_DISABLE_LABEL = "DISABLE";
+	public static final String SCHEDULER_DISABLE_VALUE = "0";
+	public static final String SCHEDULER_REPEAT_PERMINUTE = "PER MINUTE";
+	public static final String SCHEDULER_REPEAT_ATHOUR = "AT HOUR";
+	public static final String SCHEDULER_REPEAT_ATDAY = "PER DAY";
+	
 
 	public static String getStatusLabel(String code) {
 		if (code.trim().equals(AppUtils.STATUS_APPROVED))

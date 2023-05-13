@@ -89,13 +89,13 @@ public class VaUpdateVm {
 	public void doSubmit() {
 		if (date != null && vano != null && vano.trim().length() > 5) {
 			try {
-				objForm = eventregDao.findByFilter("vano = '" + vano.trim() + "'");
+				objForm = eventregDao.findByFilter("vano = '" + vano.trim() + "' and ispaid = 'N'");
 				if (objForm == null) {
 					Messagebox.show("Nomor VA " + vano.trim() + " tidak ditemukan pada sistem" , WebApps.getCurrent().getAppName(), Messagebox.OK,
 							Messagebox.EXCLAMATION);
-				} else if (objForm.getIspaid().equals("Y")) {
-					Messagebox.show("Nomor VA " + vano + " tidak dapat dilakukan update status dikarenakan status sudah terbayar pada tanggal " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(objForm.getPaidat()), WebApps.getCurrent().getAppName(), Messagebox.OK,
-							Messagebox.EXCLAMATION);
+//				} else if (objForm.getIspaid().equals("Y")) {
+//					Messagebox.show("Nomor VA " + vano + " tidak dapat dilakukan update status dikarenakan status sudah terbayar pada tanggal " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(objForm.getPaidat()), WebApps.getCurrent().getAppName(), Messagebox.OK,
+//							Messagebox.EXCLAMATION);
 				} else {
 					BriApiExt briapi = new BriApiExt(bean);
 					briapiToken = briapi.getToken();

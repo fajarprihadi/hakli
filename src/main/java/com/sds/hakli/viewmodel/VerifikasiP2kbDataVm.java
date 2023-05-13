@@ -62,7 +62,6 @@ public class VerifikasiP2kbDataVm {
 		if (obj != null) {
 			this.obj = obj;
 			image.setSrc(AppUtils.PATH_PHOTO + "/" + objAnggota.getPhotolink());
-			image.setWidth("90px");
 			image.setHeight("100px");
 		}
 

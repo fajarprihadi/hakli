@@ -42,6 +42,7 @@ import com.sds.hakli.dao.MprovinsiDAO;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprovinsi;
 import com.sds.hakli.domain.Muser;
+import com.sds.utils.AppData;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class BranchVm {
@@ -59,8 +60,6 @@ public class BranchVm {
 	private Integer totalrecords;
 	private boolean isInsert;
 	
-	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-	
 	@Wire
 	private Window winBranch;
 	@Wire
@@ -73,6 +72,8 @@ public class BranchVm {
 	private Div divForm;
 	@Wire
 	private Combobox cbRegion;
+	@Wire
+	private Combobox cbBank;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -86,6 +87,9 @@ public class BranchVm {
 				row.getChildren().add(new Label(String.valueOf(index+1)));
 				row.getChildren().add(new Label(data.getCabang()));
 				row.getChildren().add(new Label(data.getMprovinsi() != null ? data.getMprovinsi().getProvname() : ""));
+				row.getChildren().add(new Label(data.getBankname()));
+				row.getChildren().add(new Label(data.getAccno()));
+				row.getChildren().add(new Label(data.getAccname()));
 				Button btEdit = new Button();
 				btEdit.setIconSclass("z-icon-edit");
 				btEdit.setSclass("btn btn-primary btn-sm");
@@ -196,6 +200,7 @@ public class BranchVm {
 			btSave.setLabel("Perbarui");
 			
 			cbRegion.setValue(objForm.getMprovinsi().getProvname());
+			cbBank.setValue(objForm.getBankname());
 		} else if (btAdd.getLabel().equals("Tambah Cabang")) {
 			isInsert = true;
 			objForm = new Mcabang();
@@ -225,6 +230,8 @@ public class BranchVm {
 				objForm.setLastupdated(new Date());
 				objForm.setUpdatedby(oUser.getUserid());
 			}
+			objForm.setBankname(AppData.getBankName(objForm.getBankcode()));
+			oDao.save(session, objForm);
 			trx.commit();
 			if (isInsert) {
 				Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
@@ -250,6 +257,18 @@ public class BranchVm {
 				Mprovinsi mprovinsi = (Mprovinsi) ctx.getProperties("mprovinsi")[0].getValue();
 				if (mprovinsi == null)
 					this.addInvalidMessage(ctx, "mprovinsi", Labels.getLabel("common.validator.empty"));
+				
+				String bankcode = (String) ctx.getProperties("bankcode")[0].getValue();
+				if (bankcode == null || "".equals(bankcode.trim()))
+					this.addInvalidMessage(ctx, "bankcode", Labels.getLabel("common.validator.empty"));
+				
+				String accno = (String) ctx.getProperties("accno")[0].getValue();
+				if (accno == null || "".equals(accno.trim()))
+					this.addInvalidMessage(ctx, "accno", Labels.getLabel("common.validator.empty"));
+				
+				String accname = (String) ctx.getProperties("accname")[0].getValue();
+				if (accname == null || "".equals(accname.trim()))
+					this.addInvalidMessage(ctx, "accname", Labels.getLabel("common.validator.empty"));
 			
 			}
 		};

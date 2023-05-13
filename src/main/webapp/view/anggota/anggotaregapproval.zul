@@ -116,8 +116,8 @@
 							<n:td>
 								<radiogroup
 									selectedItem="@bind(e.gender)" disabled="true">
-									<radio value="P" label="Pria" />
-									<radio value="W" label="Wanita" />
+									<radio value="L" label="Laki-Laki" />
+									<radio value="P" label="Perempuan" />
 								</radiogroup>
 							</n:td>
 						</n:tr>

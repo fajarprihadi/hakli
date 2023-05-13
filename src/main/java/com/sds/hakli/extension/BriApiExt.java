@@ -330,7 +330,7 @@ public class BriApiExt {
 		    // Install the all-trusting host verifier
 		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 		    
-		    System.out.println("***Begin Update BRIVA***");
+		    System.out.println("***Begin Update Status BRIVA***");
 			
 		    Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
@@ -375,7 +375,93 @@ public class BriApiExt {
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, BrivaUpdateResp.class);
 			client.destroy();
-			System.out.println("***End Update BRIVA***");
+			System.out.println("***End Update Status BRIVA***");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
+	
+	public BrivaCreateResp updateDataBriva(String token, BrivaData data) throws Exception {
+		BrivaCreateResp obj = null;
+		ObjectMapper mapper = new ObjectMapper();
+		String output = null;
+		try {
+			 // Create a trust manager that does not validate certificate chains
+		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+		            return null;
+		        }
+		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+		        }
+		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+		        }
+		    }
+		    };
+
+		    // Install the all-trusting trust manager
+		    SSLContext sc = SSLContext.getInstance("SSL");
+		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+		    // Create all-trusting host name verifier
+		    HostnameVerifier allHostsValid = new HostnameVerifier() {
+				
+				@Override
+				public boolean verify(String hostname, SSLSession session) {
+					return false;
+				}
+			};
+
+		    // Install the all-trusting host verifier
+		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+		    
+		    System.out.println("***Begin Update Data BRIVA***");
+	
+		    Client client = Client.create();
+			client.setConnectTimeout(60 * 1000);
+			client.setReadTimeout(60 * 1000);
+			
+			String auth = "Bearer " + token;
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+			String xtimestamp = dateFormatter.format(new Date());
+			String jsonReq = mapper.writeValueAsString(data);
+			
+			StringBuffer payload = new StringBuffer();
+			payload.append("path=" + bean.getBriva_pathupdateva());
+			payload.append("&");
+			payload.append("verb=PUT");
+			payload.append("&");
+			payload.append("token=" + auth);
+			payload.append("&");
+			payload.append("timestamp=" + xtimestamp);
+			payload.append("&");
+			payload.append("body=" + jsonReq);
+			
+			String signature = encode(bean.getConsumersecret(), payload.toString());
+			
+			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			System.out.println("Header - Authorization : " + auth);
+			System.out.println("Header - BRI-Signature : " + signature);
+			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
+			System.out.println("Request body : " + jsonReq);
+			System.out.println("Payload : " + payload.toString());
+			
+			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathupdateva());
+			ClientResponse response = webResource.header("Authorization", auth)
+					.header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature)
+					.type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON)
+					.put(ClientResponse.class, jsonReq);
+
+			output = response.getEntity(String.class);
+			System.out.println("Response : " + output);
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			obj = mapper.readValue(output, BrivaCreateResp.class);
+			client.destroy();
+			System.out.println("***End Update Data BRIVA***");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
