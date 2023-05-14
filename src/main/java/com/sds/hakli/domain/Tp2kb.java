@@ -30,6 +30,8 @@ public class Tp2kb {
 	
 	private Integer totalwaiting;
 	
+	private Integer totaltimapprove;
+	
 	@Id
 	@SequenceGenerator(name = "tp2kb_seq", sequenceName = "tp2kb_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kb_seq")
@@ -92,6 +94,14 @@ public class Tp2kb {
 
 	public void setTotalwaiting(Integer totalwaiting) {
 		this.totalwaiting = totalwaiting;
+	}
+
+	public Integer getTotaltimapprove() {
+		return totaltimapprove;
+	}
+
+	public void setTotaltimapprove(Integer totaltimapprove) {
+		this.totaltimapprove = totaltimapprove;
 	}
 	
 }

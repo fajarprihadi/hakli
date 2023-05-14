@@ -75,14 +75,17 @@ public class P2kbA01DetailVm {
 	@Wire
 	private Grid grid;
 
+	private String approvetype;
+
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tp2kb p2kb,
 			@ExecutionArgParam("isApprove") String isApprove) {
 		Selectors.wireComponents(view, this, false);
 
-		if (isApprove != null && isApprove.equals("Y")) {
+		if (isApprove != null && isApprove.length() > 0) {
 			isApproved = true;
 			colAksi.setVisible(false);
+			approvetype = isApprove;
 		}
 
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
@@ -167,7 +170,7 @@ public class P2kbA01DetailVm {
 				tb1.setRows(2);
 				tb1.setCols(30);
 
-				if (!isApproved)
+				if (approvetype.equals("K"))
 					hlayout.appendChild(lblMemoTimVal);
 				else
 					hlayout.appendChild(tb1);
@@ -176,12 +179,24 @@ public class P2kbA01DetailVm {
 				vlayoutKet.appendChild(divKet3);
 
 				Div divKet4 = new Div();
+				hlayout = new Hlayout();
+				
 				divKet4.setSclass("note note-light");
 				Label lblMemoKomisi = new Label("Catatan Komisi P2KB :");
 				lblMemoKomisi.setStyle("font-weight: bold");
-				divKet4.appendChild(lblMemoKomisi);
-				Label lblMemoKomisiVal = new Label();
-				divKet4.appendChild(lblMemoKomisiVal);
+				hlayout.appendChild(lblMemoKomisi);
+				
+				separator = new Separator();
+				hlayout.appendChild(separator);
+				
+				Label lblMemoKomisiVal = new Label(data.getMemokomisi());
+				
+				if (approvetype.equals("T"))
+					hlayout.appendChild(lblMemoKomisiVal);
+				else
+					hlayout.appendChild(tb1);
+				
+				divKet4.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet4);
 
 				Button btApproved = new Button("Submit");
@@ -368,8 +383,11 @@ public class P2kbA01DetailVm {
 			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
 					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
 
-			if (isApproved)
+			if (approvetype.equals("T"))
 				filter += " and status = 'WC'";
+			else
+				filter += " and status = '" + AppUtils.STATUS_APPROVEDTIM + "'";
+			
 			List<Tp2kba01> objList = oDao.listByFilter(filter, "tp2kba01pk desc");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
@@ -383,11 +401,29 @@ public class P2kbA01DetailVm {
 			Session session = StoreHibernateUtil.openSession();
 			Transaction trx = session.beginTransaction();
 
-			p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
+			if(approvetype.equals("T")) {
+				p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
+				
+				if(action.equals("A")) {
+					p2kb.setTotaltimapprove(p2kb.getTotaltimapprove() + 1);
+					obj.setStatus(AppUtils.STATUS_APPROVEDTIM);
+				}else {
+					obj.setStatus(AppUtils.STATUS_REJECTEDTIM);
+				}
+				
+				obj.setMemo(memotim);
+			} else {
+				p2kb.setTotaltimapprove(p2kb.getTotaltimapprove() - 1);
+				
+				if(action.equals("A"))
+					obj.setStatus(AppUtils.STATUS_APPROVEDKOMISI);
+				else
+					obj.setStatus(AppUtils.STATUS_REJECTEDKOMISI);
+				
+				obj.setMemokomisi(memotim);
+			}
 			new Tp2kbDAO().save(session, p2kb);
 
-			obj.setStatus(action);
-			obj.setMemo(memotim);
 			obj.setCheckedby(anggota.getNama());
 			obj.setChecktime(new Date());
 			new Tp2kbA01DAO().save(session, obj);

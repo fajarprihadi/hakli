@@ -31,7 +31,7 @@ import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Mprovinsi;
 import com.sds.hakli.domain.Vp2kb;
 
-public class VerifikasiP2kbVm {
+public class VerifikasiKomisiVm {
 	
 	private List<Vp2kb> objList = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class VerifikasiP2kbVm {
 						Map<String, Object> map = new HashMap<>();
 						Window win = new Window();
 						map.put("obj", data);
-						win = (Window) Executions.createComponents("/view/timp2kb/verifikasip2kbdata.zul", null, map);
+						win = (Window) Executions.createComponents("/view/komisip2kb/verifikasikomisidata.zul", null, map);
 						win.setWidth("70%");
 						win.setClosable(true);
 						win.doModal();
@@ -81,7 +81,7 @@ public class VerifikasiP2kbVm {
 				});
 				row.getChildren().add(a);
 				row.getChildren().add(new Label(data.getAlamat()));
-				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalwaiting())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotaltimapprove())));
 			}
 		});
 	}
@@ -99,7 +99,7 @@ public class VerifikasiP2kbVm {
 			if(region != null)
 				filter += " ";
 			
-			objList = new Tp2kbDAO().listVerifikasiTim(filter, orderby);
+			objList = new Tp2kbDAO().listVerifikasiKomisi(filter, orderby);
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {

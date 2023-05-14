@@ -34,7 +34,9 @@ public class UserInitializationVm {
 	@Wire
 	private Div divMenuNaskah;
 	@Wire
-	private Div divMenuTimP2KB;
+	private Div divMenuTimP2KB; 
+	@Wire
+	private Div divMenuKomisiP2KB;
 	@Wire
 	private Div divContent;
 	
@@ -63,6 +65,8 @@ public class UserInitializationVm {
 				divMenu = divMenuNaskah;
 			else if (menu.equals("timp2kb"))
 				divMenu = divMenuTimP2KB;
+			else if (menu.equals("komisip2kb"))
+				divMenu = divMenuKomisiP2KB;
 			
 			((A) divMenu.getChildren().get(index)).setSclass("list-group-item list-group-item-action py-2 ripple active");
 			if (currentmenuidx != null && (currentmenuidx.compareTo(index) != 0 || 
@@ -74,8 +78,10 @@ public class UserInitializationVm {
 					divMenuPrev = divMenuP2KB;
 				else if (currentmenu.equals("naskah"))
 					divMenuPrev = divMenuNaskah;
-				else if (menu.equals("timp2kb"))
+				else if (currentmenu.equals("timp2kb"))
 					divMenuPrev = divMenuTimP2KB;
+				else if (currentmenu.equals("komisip2kb"))
+					divMenuPrev = divMenuKomisiP2KB;
 				
 				((A) divMenuPrev.getChildren().get(currentmenuidx)).setSclass("list-group-item list-group-item-action py-2 ripple");
 			}
