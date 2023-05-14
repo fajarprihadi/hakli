@@ -110,7 +110,7 @@ public class P2kbE04DetailVm {
 				combobox.setCols(15);
 
 				Comboitem cbItem = new Comboitem();
-				cbItem.setLabel("Approve");
+				cbItem.setLabel("Submit");
 				cbItem.setValue("A");
 				combobox.appendChild(cbItem);
 

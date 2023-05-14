@@ -183,43 +183,16 @@ public class P2kbB16DetailVm {
 				divKet4.appendChild(lblMemoKomisiVal);
 				vlayoutKet.appendChild(divKet4);
 
-				Button btApproved = new Button("Approve");
+				Button btApproved = new Button("Submit");
 				btApproved.setIconSclass("z-icon-check");
 				btApproved.setSclass("btn btn-primary btn-sm");
 				btApproved.setAutodisable("self");
-				btApproved.setTooltiptext("Approved");
+				btApproved.setTooltiptext("Submit");
 				btApproved.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event event) throws Exception {
 						if ((combobox.getSelectedItem().getLabel() != null)
-								&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
-							Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
-									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
-										@Override
-										public void onEvent(Event event) throws Exception {
-											if (event.getName().equals("onOK")) {
-												doSubmit(data, combobox.getSelectedItem().getValue(), tb1.getValue());
-												BindUtils.postNotifyChange(P2kbB16DetailVm.this, "totalskp");
-											}
-										}
-									});
-						} else {
-							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
-						}
-					}
-				});
-
-				Button btReject = new Button("Reject");
-				btReject.setIconSclass("z-icon-close");
-				btReject.setSclass("btn btn-danger btn-sm");
-				btReject.setAutodisable("self");
-				btReject.setTooltiptext("Reject");
-				btReject.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						if (combobox.getSelectedItem().getValue() != null
 								&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
 							Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
 									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
@@ -246,7 +219,6 @@ public class P2kbB16DetailVm {
 				hlayout.appendChild(btApproved);
 				separator = new Separator();
 				hlayout.appendChild(separator);
-				hlayout.appendChild(btReject);
 
 				if (isApproved) {
 					divBtn.appendChild(hlayout);

@@ -189,7 +189,7 @@ public class P2kbB02DetailVm {
 				btApproved.setIconSclass("z-icon-check");
 				btApproved.setSclass("btn btn-primary btn-sm");
 				btApproved.setAutodisable("self");
-				btApproved.setTooltiptext("Approved");
+				btApproved.setTooltiptext("Submit");
 				btApproved.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
