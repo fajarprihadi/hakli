@@ -41,6 +41,8 @@ public class Tp2kbb10 {
 	private String status;
 	
 	private String memo;
+
+	private String memokomisi;
 	
 	private String createdby;
 	
@@ -191,6 +193,15 @@ public class Tp2kbb10 {
 
 	public void setChecktime(Date checktime) {
 		this.checktime = checktime;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getMemokomisi() {
+		return memokomisi;
+	}
+
+	public void setMemokomisi(String memokomisi) {
+		this.memokomisi = memokomisi;
 	}
 
 	

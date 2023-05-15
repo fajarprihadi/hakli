@@ -13,6 +13,7 @@ public class Vp2kb implements Serializable {
 	private String nama;
 	private String alamat;
 	private Integer totalwaiting;
+	private Integer totaltimapprove;
 	private Integer tanggotapk;
 	
 	@Id
@@ -60,6 +61,12 @@ public class Vp2kb implements Serializable {
 	}
 	public void setTanggotapk(Integer tanggotapk) {
 		this.tanggotapk = tanggotapk;
+	}
+	public Integer getTotaltimapprove() {
+		return totaltimapprove;
+	}
+	public void setTotaltimapprove(Integer totaltimapprove) {
+		this.totaltimapprove = totaltimapprove;
 	}
 	
 	

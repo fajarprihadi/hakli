@@ -80,16 +80,17 @@ public class P2kbA02DetailVm {
 	@Wire
 	private Grid grid;
 
+	private String approvetype;
+
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tp2kb p2kb,
 			@ExecutionArgParam("isApprove") String isApprove) {
 		Selectors.wireComponents(view, this, false);
-		anggota = (Tanggota) zkSession.getAttribute("anggota");
-		this.p2kb = p2kb;
 
-		if (isApprove != null && isApprove.equals("Y")) {
+		if (isApprove != null && isApprove.length() > 0) {
 			isApproved = true;
 			colAksi.setVisible(false);
+			approvetype = isApprove;
 		}
 		
 		grid.setRowRenderer(new RowRenderer<Tp2kba02>() {
@@ -171,60 +172,45 @@ public class P2kbA02DetailVm {
 				tb1.setRows(2);
 				tb1.setCols(30);
 
-				if (!isApproved)
-					hlayout.appendChild(lblMemoTimVal);
-				else
+				if (approvetype != null && approvetype.equals("T"))
 					hlayout.appendChild(tb1);
+				else
+					hlayout.appendChild(lblMemoTimVal);
 
 				divKet3.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet3);
 
 				Div divKet4 = new Div();
+				hlayout = new Hlayout();
+				
 				divKet4.setSclass("note note-light");
 				Label lblMemoKomisi = new Label("Catatan Komisi P2KB :");
 				lblMemoKomisi.setStyle("font-weight: bold");
-				divKet4.appendChild(lblMemoKomisi);
-				Label lblMemoKomisiVal = new Label();
-				divKet4.appendChild(lblMemoKomisiVal);
+				hlayout.appendChild(lblMemoKomisi);
+				
+				separator = new Separator();
+				hlayout.appendChild(separator);
+				
+				Label lblMemoKomisiVal = new Label(data.getMemokomisi());
+				
+				if (approvetype != null && approvetype.equals("K"))
+					hlayout.appendChild(tb1);
+				else
+					hlayout.appendChild(lblMemoKomisiVal);
+				
+				divKet4.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet4);
 
-				Button btApproved = new Button("Approve");
+				Button btApproved = new Button("Submit");
 				btApproved.setIconSclass("z-icon-check");
 				btApproved.setSclass("btn btn-primary btn-sm");
 				btApproved.setAutodisable("self");
-				btApproved.setTooltiptext("Approved");
+				btApproved.setTooltiptext("Submit");
 				btApproved.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event event) throws Exception {
 						if ((combobox.getSelectedItem().getLabel() != null)
-								&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
-							Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
-									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
-										@Override
-										public void onEvent(Event event) throws Exception {
-											if (event.getName().equals("onOK")) {
-												doSubmit(data, combobox.getSelectedItem().getValue(), tb1.getValue());
-												BindUtils.postNotifyChange(P2kbA02DetailVm.this, "totalskp");
-											}
-										}
-									});
-						} else {
-							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
-						}
-					}
-				});
-
-				Button btReject = new Button("Reject");
-				btReject.setIconSclass("z-icon-close");
-				btReject.setSclass("btn btn-danger btn-sm");
-				btReject.setAutodisable("self");
-				btReject.setTooltiptext("Reject");
-				btReject.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						if (combobox.getSelectedItem().getValue() != null
 								&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
 							Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
 									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
@@ -251,7 +237,6 @@ public class P2kbA02DetailVm {
 				hlayout.appendChild(btApproved);
 				separator = new Separator();
 				hlayout.appendChild(separator);
-				hlayout.appendChild(btReject);
 
 				if (isApproved) {
 					divBtn.appendChild(hlayout);
@@ -389,12 +374,32 @@ public class P2kbA02DetailVm {
 		try {
 			Session session = StoreHibernateUtil.openSession();
 			Transaction trx = session.beginTransaction();
-
-			p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
+			
+			if(approvetype.equals("T")) {
+				p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
+				
+				if(action.equals("A")) {
+					p2kb.setTotaltimapprove(p2kb.getTotaltimapprove() + 1);
+					obj.setStatus(AppUtils.STATUS_APPROVEDTIM);
+				}else {
+					obj.setStatus(AppUtils.STATUS_REJECTEDTIM);
+				}
+				
+				obj.setMemo(memotim);
+			} else {
+				p2kb.setTotaltimapprove(p2kb.getTotaltimapprove() - 1);
+				
+				if(action.equals("A"))
+					obj.setStatus(AppUtils.STATUS_APPROVEDKOMISI);
+				else
+					obj.setStatus(AppUtils.STATUS_REJECTEDKOMISI);
+				
+				obj.setMemokomisi(memotim);
+			}
 			new Tp2kbDAO().save(session, p2kb);
 
-			obj.setStatus(action);
-			obj.setMemo(memotim);
+			obj.setCheckedby(anggota.getNama());
+			obj.setChecktime(new Date());
 			new Tp2kbA02DAO().save(session, obj);
 			
 			totalskp = totalskp.subtract(obj.getNilaiskp());
@@ -417,8 +422,11 @@ public class P2kbA02DetailVm {
 			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
 					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
 
-			if (isApproved)
+			if (approvetype != null && approvetype.equals("T"))
 				filter += " and status = 'WC'";
+			else if (approvetype != null && approvetype.equals("K"))
+				filter += " and status = '" + AppUtils.STATUS_APPROVEDTIM + "'";
+			
 			List<Tp2kba02> objList = oDao.listByFilter(filter, "tp2kba02pk desc");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {

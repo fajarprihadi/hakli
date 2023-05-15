@@ -34,7 +34,7 @@ import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Vp2kb;
 import com.sds.utils.AppUtils;
 
-public class VerifikasiP2kbDataVm {
+public class VerifikasiKomisiDataVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private Tanggota objAnggota;
 
@@ -85,7 +85,7 @@ public class VerifikasiP2kbDataVm {
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("obj", data);
-						map.put("isApprove", "T");
+						map.put("isApprove", "K");
 						Window win = (Window) Executions.createComponents("/view/p2kb/p2kb"
 								+ data.getMp2kbkegiatan().getIdkegiatan().trim().toLowerCase() + "detail.zul", null,
 								map);
@@ -111,7 +111,7 @@ public class VerifikasiP2kbDataVm {
 
 	public void doRefresh() {
 		try {
-			filter = "tanggotafk = " + obj.getTanggotapk() + " and totalwaiting > 0";
+			filter = "tanggotafk = " + obj.getTanggotapk() + " and totaltimapprove > 0";
 			orderby = "tp2kbpk asc";
 
 			objList = new Tp2kbDAO().listByFilter(filter, orderby);

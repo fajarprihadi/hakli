@@ -8,6 +8,7 @@ import org.hibernate.Session;
 
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Vp2kb;
+import com.sds.hakli.domain.Vrecp2kb;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class Tp2kbDAO {
@@ -73,17 +74,49 @@ public class Tp2kbDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Vp2kb> listVerifikasi(String filter, String orderby) throws Exception {
+	public List<Vp2kb> listVerifikasiTim(String filter, String orderby) throws Exception {
 		List<Vp2kb> oList = null;
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
 		oList = session
-				.createSQLQuery("SELECT CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, SUM(TOTALWAITING) AS TOTALWAITING "
+				.createSQLQuery("SELECT CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, SUM(TOTALWAITING) AS TOTALWAITING, SUM(TOTALTIMAPPROVE) AS TOTALTIMAPPROVE "
 						+ "FROM TP2KB JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK "
 						+ "JOIN MP2KBKEGIATAN ON MP2KBKEGIATANFK = MP2KBKEGIATANPK WHERE " + filter
 						+ " GROUP BY CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT HAVING SUM(TOTALWAITING) > 0 ORDER BY " + orderby)
 				.addEntity(Vp2kb.class).list();
+
+		session.close();
+		return oList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Vp2kb> listVerifikasiKomisi(String filter, String orderby) throws Exception {
+		List<Vp2kb> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session
+				.createSQLQuery("SELECT CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, SUM(TOTALWAITING) AS TOTALWAITING, SUM(TOTALTIMAPPROVE) AS TOTALTIMAPPROVE "
+						+ "FROM TP2KB JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK "
+						+ "JOIN MP2KBKEGIATAN ON MP2KBKEGIATANFK = MP2KBKEGIATANPK WHERE " + filter
+						+ " GROUP BY CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT HAVING SUM(TOTALTIMAPPROVE) > 0 ORDER BY " + orderby)
+				.addEntity(Vp2kb.class).list();
+
+		session.close();
+		return oList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Vrecp2kb> listRecLetter(String filter, String orderby) throws Exception {
+		List<Vrecp2kb> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session
+				.createSQLQuery("SELECT TANGGOTAPK, NOANGGOTA, NAMA, SUM(TOTALSKP) AS TOTALSKP FROM TP2KB JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK "
+						+ "WHERE " + filter + " GROUP BY TANGGOTAPK, NOANGGOTA, NAMA HAVING SUM(TOTALSKP) > 5 ORDER BY " + orderby)
+				.addEntity(Vrecp2kb.class).list();
 
 		session.close();
 		return oList;

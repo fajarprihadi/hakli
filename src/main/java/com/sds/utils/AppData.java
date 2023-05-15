@@ -60,20 +60,12 @@ public class AppData {
 	}
 	
 	public static String getLabel(String code) {
-		if (code.trim().equals(AppUtils.STATUS_APPROVED))
-			return "Approve";
-		else if (code.trim().equals(AppUtils.STATUS_REJECTED))
-			return "Reject";
+		if (code.trim().equals("A"))
+			return "APPROVE";
+		else if (code.trim().equals("R"))
+			return "REJECT";
 		else
 			return code;
 	}
 	
-	public static String getStatusLabel(String code) {
-		if (code.trim().equals(AppUtils.STATUS_APPROVED))
-			return "APPROVED";
-		else if (code.trim().equals(AppUtils.STATUS_REJECTED))
-			return "REJECTED";
-		else
-			return code;
-	}
 }

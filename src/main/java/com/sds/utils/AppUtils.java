@@ -18,8 +18,11 @@ public class AppUtils {
 	public static final String STATUS_ANGGOTA_REG_ACTIVE = "3";
 	public static final String STATUS_ANGGOTA_REG_DECLINE = "9";
 
-	public static final String STATUS_APPROVED = "A";
-	public static final String STATUS_REJECTED = "R";
+	public static final String STATUS_APPROVEDTIM = "AT";
+	public static final String STATUS_REJECTEDTIM = "RT";
+	
+	public static final String STATUS_APPROVEDKOMISI = "AK";
+	public static final String STATUS_REJECTEDKOMISI = "RK";
 
 	public static final String CHARGETYPE_REG = "01";
 	public static final String CHARGETYPE_IURAN = "02";
@@ -52,11 +55,17 @@ public class AppUtils {
 	
 
 	public static String getStatusLabel(String code) {
-		if (code.trim().equals(AppUtils.STATUS_APPROVED))
-			return "APPROVED";
-		else if (code.trim().equals(AppUtils.STATUS_REJECTED))
-			return "REJECTED";
+		if (code.trim().equals(AppUtils.STATUS_APPROVEDTIM))
+			return "APPROVED TIMP2KB";
+		else if (code.trim().equals(AppUtils.STATUS_REJECTEDTIM))
+			return "REJECTED TIMP2KB";
+		else if (code.trim().equals(AppUtils.STATUS_APPROVEDKOMISI))
+			return "APPROVED KOMISI";
+		else if (code.trim().equals(AppUtils.STATUS_REJECTEDKOMISI))
+			return "REJECTED KOMISI";
 		else
 			return code;
 	}
+	
+	
 }
