@@ -168,10 +168,10 @@ public class P2kbA03DetailVm {
 				tb1.setRows(2);
 				tb1.setCols(30);
 
-				if (approvetype.equals("K"))
-					hlayout.appendChild(lblMemoTimVal);
-				else
+				if (approvetype != null && approvetype.equals("T"))
 					hlayout.appendChild(tb1);
+				else
+					hlayout.appendChild(lblMemoTimVal);
 
 				divKet3.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet3);
@@ -189,10 +189,10 @@ public class P2kbA03DetailVm {
 				
 				Label lblMemoKomisiVal = new Label(data.getMemokomisi());
 				
-				if (approvetype.equals("T"))
-					hlayout.appendChild(lblMemoKomisiVal);
-				else
+				if (approvetype != null && approvetype.equals("K"))
 					hlayout.appendChild(tb1);
+				else
+					hlayout.appendChild(lblMemoKomisiVal);
 				
 				divKet4.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet4);
@@ -419,8 +419,11 @@ public class P2kbA03DetailVm {
 			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
 					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
 
-			if (isApproved)
+			if (approvetype != null && approvetype.equals("T"))
 				filter += " and status = 'WC'";
+			else if (approvetype != null && approvetype.equals("K"))
+				filter += " and status = '" + AppUtils.STATUS_APPROVEDTIM + "'";
+			
 			List<Tp2kba03> objList = oDao.listByFilter(filter, "tp2kba03pk desc");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {

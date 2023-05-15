@@ -8,6 +8,7 @@ import org.hibernate.Session;
 
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Vp2kb;
+import com.sds.hakli.domain.Vrecp2kb;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class Tp2kbDAO {
@@ -101,6 +102,21 @@ public class Tp2kbDAO {
 						+ "JOIN MP2KBKEGIATAN ON MP2KBKEGIATANFK = MP2KBKEGIATANPK WHERE " + filter
 						+ " GROUP BY CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT HAVING SUM(TOTALTIMAPPROVE) > 0 ORDER BY " + orderby)
 				.addEntity(Vp2kb.class).list();
+
+		session.close();
+		return oList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Vrecp2kb> listRecLetter(String filter, String orderby) throws Exception {
+		List<Vrecp2kb> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session
+				.createSQLQuery("SELECT TANGGOTAPK, NOANGGOTA, NAMA, SUM(TOTALSKP) AS TOTALSKP FROM TP2KB JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK "
+						+ "WHERE " + filter + " GROUP BY TANGGOTAPK, NOANGGOTA, NAMA HAVING SUM(TOTALSKP) > 5 ORDER BY " + orderby)
+				.addEntity(Vrecp2kb.class).list();
 
 		session.close();
 		return oList;

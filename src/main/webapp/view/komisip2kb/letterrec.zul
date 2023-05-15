@@ -1,0 +1,52 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winAnggotaRegList" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.LetterRecVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Surat Rekomendasi Kegiatan P2KB</n:span>
+		</caption>
+		<groupbox mold="3d">
+			<caption label="Pencarian" iconSclass="z-icon-search" />
+			<div class="row">
+				<div class="col">
+					<textbox placeholder="Nama" value="@bind(vm.nama)" onOK="@command('doSearch')"
+						width="100%" maxlength="40" />
+				</div>
+				<div class="col">
+					<div class="row">
+						<div class="col">
+							<button label="Telusuri" autodisable="self"
+								iconSclass="z-icon-search" width="100%"
+								sclass="btn btn-success btn-sm" onClick="@command('doSearch')" />
+						</div>
+						<div class="col">
+							<button label="Reset" autodisable="self"
+								iconSclass="z-icon-retweet" width="100%"
+								sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</groupbox>
+		<separator />
+		<div class="row">
+			<div class="col-md" />
+				<div class="col-md-2" align="right">
+					<label value="Total Data :"
+						style="font-weight: bold" />
+					<label value="@load(vm.pageTotalSize)"
+						style="font-weight: bold" />
+				</div>
+		</div>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
+			<columns>
+				<column label="${labels.common.no}" align="right" width="40px" />
+				<column label="${labels.anggota.noanggota}" align="center" width="150px"/>
+				<column label="${labels.anggota.nama}" />
+				<column label="Total SKP" align="right" width="150px"/>
+			</columns>
+		</grid>
+
+	</window>
+</zk>
