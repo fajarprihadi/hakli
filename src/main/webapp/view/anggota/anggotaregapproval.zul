@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winAnggotaRegApproval" border="normal" width="90%"
+	<window id="winAnggotaRegApproval" border="normal" width="97%"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaRegApprovalVm')"
 		validationMessages="@id('vmsgs')">
 		<caption>
@@ -233,7 +233,7 @@
 				<n:div class="tab-pane fade" id="ex1-tabs-3"
 					role="tabpanel" aria-labelledby="ex1-tab-3">
 					<grid id="gridPekerjaan">
-						<columns>
+						<columns sizable="true">
 							<column
 								label="${labels.pekerjaan.namakantor}" />
 							<column label="${labels.area.prov}" />
@@ -256,7 +256,7 @@
 				<n:div class="tab-pane fade" id="ex1-tabs-4"
 					role="tabpanel" aria-labelledby="ex1-tab-4">
 					<grid id="gridPendidikan">
-						<columns>
+						<columns sizable="true">
 							<column
 								label="${labels.pendidikan.universitas}" />
 							<column
@@ -266,6 +266,7 @@
 							<column label="${labels.pendidikan.period}" />
 							<column
 								label="${labels.pendidikan.noijazah}" />
+							<column label="${labels.common.action}" align="center" width="120px"  />
 						</columns>
 					</grid>
 				</n:div>

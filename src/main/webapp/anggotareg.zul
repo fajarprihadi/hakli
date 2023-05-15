@@ -101,7 +101,7 @@
 						<row>
 							<label value="${labels.anggota.agama}" />
 							<combobox id="cbAgama"
-								selectedItem="@bind(e.pribadi.agama)" readonly="true">
+								selectedItem="@bind(e.pribadi.agama)">
 								<comboitem value="Islam"
 									label="Islam" />
 								<comboitem value="Protestan"
@@ -135,7 +135,7 @@
 							<vlayout>
 								<combobox id="cbNegara"
 									model="@load(vm.negaraModel)"
-									selectedItem="@bind(e.pribadi.mnegara)" readonly="true"
+									selectedItem="@bind(e.pribadi.mnegara)"
 									width="100%">
 									<template name="model"
 										var="negara">
@@ -195,7 +195,7 @@
 									model="@load(vm.provrumahModel)"
 									selectedItem="@bind(vm.provrumah)"
 									onChange="@command('doLoadKab', prov=vm.provrumah)"
-									readonly="true" width="100%">
+									width="100%">
 									<template name="model"
 										var="provinsi">
 										<comboitem
@@ -211,7 +211,7 @@
 							<vlayout>
 								<combobox id="cbKabrumah"
 									model="@load(vm.kabrumahModel)"
-									selectedItem="@bind(vm.kabrumah)" readonly="true"
+									selectedItem="@bind(vm.kabrumah)"
 									width="100%">
 									<template name="model"
 										var="kabupaten">
@@ -276,7 +276,7 @@
 									model="@load(vm.provkantorModel)"
 									selectedItem="@bind(vm.provkantor)"
 									onSelect="@command('doLoadKabPekerjaan', prov=vm.provkantor)"
-									readonly="true" width="100%">
+									width="100%">
 									<template name="model"
 										var="provinsi">
 										<comboitem
@@ -292,7 +292,7 @@
 							<vlayout>
 								<combobox id="cbKabkantor"
 									model="@load(vm.kabkantorModel)"
-									selectedItem="@bind(vm.kabkantor)" readonly="true"
+									selectedItem="@bind(vm.kabkantor)"
 									width="100%">
 									<template name="model"
 										var="kabupaten">
@@ -310,7 +310,7 @@
 							<vlayout>
 								<combobox id="cbRumpun"
 									selectedItem="@bind(e.pekerjaan.mrumpun)"
-									model="@load(vm.rumpunModel)" width="100%" readonly="true">
+									model="@load(vm.rumpunModel)" width="100%">
 									<template name="model"
 										var="rumpun">
 										<comboitem
@@ -329,7 +329,7 @@
 									selectedItem="@bind(e.pekerjaan.mkepegawaian)"
 									model="@load(vm.kepegawaianModel)"
 									onSelect="@command('doLoadKepegawaiansub', kepegawaian=e.pekerjaan.mkepegawaian)"
-									width="100%" readonly="true">
+									width="100%">
 									<template name="model"
 										var="kepegawaian">
 										<comboitem
@@ -346,8 +346,7 @@
 							<vlayout>
 								<combobox id="cbKepegawaiansub"
 									selectedItem="@bind(e.pekerjaan.mkepegawaiansub)"
-									model="@load(vm.kepegawaiansubModel)" width="100%"
-									readonly="true">
+									model="@load(vm.kepegawaiansubModel)" width="100%">
 									<template name="model"
 										var="kepegawaiansub">
 										<comboitem
@@ -449,8 +448,7 @@
 							<vlayout>
 								<combobox id="cbUniversitas"
 									selectedItem="@bind(e.pendidikan.muniversitas)"
-									model="@load(vm.universitasModel)" width="100%"
-									readonly="true">
+									model="@load(vm.universitasModel)" width="100%">
 									<template name="model"
 										var="universitas">
 										<comboitem
@@ -467,7 +465,7 @@
 							<vlayout>
 								<combobox id="cbJenjang"
 									selectedItem="@bind(e.pendidikan.mjenjang)"
-									model="@load(vm.jenjangModel)" width="100%" readonly="true">
+									model="@load(vm.jenjangModel)" width="100%">
 									<template name="model"
 										var="jenjang">
 										<comboitem
@@ -560,7 +558,7 @@
 								<combobox id="cbRegion"
 									model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
 									onSelect="@command('doLoadCabang', prov=vm.region)"
-									readonly="true" width="100%">
+									width="100%">
 									<template name="model"
 										var="provinsi">
 										<comboitem
@@ -576,7 +574,7 @@
 							<vlayout>
 								<combobox id="cbCabang"
 									selectedItem="@bind(e.pribadi.mcabang)"
-									model="@load(vm.cabangModel)" readonly="true" width="100%">
+									model="@load(vm.cabangModel)" width="100%">
 									<template name="model"
 										var="cabang">
 										<comboitem
@@ -620,7 +618,7 @@
 								value="${labels.anggota.hubungandarurat} (*)" />
 							<vlayout>
 								<combobox id="cbHubungan"
-									selectedItem="@bind(e.pribadi.hubungan)" readonly="true">
+									selectedItem="@bind(e.pribadi.hubungan)">
 									<comboitem value="Suami"
 										label="Suami" />
 									<comboitem value="Istri"

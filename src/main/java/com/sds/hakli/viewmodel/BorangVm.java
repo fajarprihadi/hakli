@@ -88,7 +88,7 @@ public class BorangVm {
 	
 	public void refreshModel() {
 		try {
-			grid.setModel(new ListModelList<>(kegiatanDao.listByFilter(filter, "mp2kbranah.ranah")));
+			grid.setModel(new ListModelList<>(kegiatanDao.listByFilter(filter, "idkegiatan")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

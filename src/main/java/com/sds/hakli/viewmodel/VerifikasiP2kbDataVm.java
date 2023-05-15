@@ -86,8 +86,10 @@ public class VerifikasiP2kbDataVm {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("obj", data);
 						map.put("isApprove", "Y");
-						Window win = (Window) Executions.createComponents("/view/p2kb/p2kb"
-								+ data.getMp2kbkegiatan().getIdkegiatan().trim().toLowerCase() + "detail.zul", null,
+//						Window win = (Window) Executions.createComponents("/view/p2kb/p2kb"
+//								+ data.getMp2kbkegiatan().getIdkegiatan().trim().toLowerCase() + "detail.zul", null,
+//								map);
+						Window win = (Window) Executions.createComponents("/view/timp2kb/vertest.zul", null,
 								map);
 						win.setWidth("90%");
 						win.setClosable(true);

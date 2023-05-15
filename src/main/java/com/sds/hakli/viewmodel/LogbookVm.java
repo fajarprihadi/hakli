@@ -98,7 +98,7 @@ public class LogbookVm {
 		try {
 			totalkegiatan = 0;
 			totalskp = new BigDecimal(0);
-			objList = oDao.listByFilter(filter, "mp2kbkegiatan.mp2kbranah.ranah");
+			objList = oDao.listByFilter(filter, "mp2kbkegiatan.idkegiatan");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();

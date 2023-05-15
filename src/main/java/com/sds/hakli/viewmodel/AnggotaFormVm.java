@@ -3,8 +3,10 @@ package com.sds.hakli.viewmodel;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,11 +22,13 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.io.Files;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zhtml.Li;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
@@ -46,12 +50,18 @@ import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Separator;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Vlayout;
+import org.zkoss.zul.Window;
 
+import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.McabangDAO;
+import com.sds.hakli.dao.MchargeDAO;
 import com.sds.hakli.dao.MjenjangDAO;
 import com.sds.hakli.dao.MkabupatenDAO;
 import com.sds.hakli.dao.MkepegawaianDAO;
@@ -61,10 +71,12 @@ import com.sds.hakli.dao.MprovinsiDAO;
 import com.sds.hakli.dao.MrumpunDAO;
 import com.sds.hakli.dao.MuniversitasDAO;
 import com.sds.hakli.dao.TanggotaDAO;
+import com.sds.hakli.dao.TcounterengineDAO;
+import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.dao.TpekerjaanDAO;
 import com.sds.hakli.dao.TpendidikanDAO;
-import com.sds.hakli.domain.GenericResp;
 import com.sds.hakli.domain.Mcabang;
+import com.sds.hakli.domain.Mcharge;
 import com.sds.hakli.domain.Mjenjang;
 import com.sds.hakli.domain.Mkabupaten;
 import com.sds.hakli.domain.Mkepegawaian;
@@ -73,59 +85,69 @@ import com.sds.hakli.domain.Mnegara;
 import com.sds.hakli.domain.Mprovinsi;
 import com.sds.hakli.domain.Mrumpun;
 import com.sds.hakli.domain.Muniversitas;
-import com.sds.hakli.domain.Pekerjaan;
 import com.sds.hakli.domain.Tanggota;
+import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.domain.Tpekerjaan;
 import com.sds.hakli.domain.Tpendidikan;
-import com.sds.hakli.extension.ExtensionServices;
+import com.sds.hakli.extension.BriApiExt;
+import com.sds.hakli.extension.MailHandler;
+import com.sds.hakli.pojo.BriApiToken;
+import com.sds.hakli.pojo.BrivaCreateResp;
+import com.sds.hakli.pojo.BrivaData;
+import com.sds.hakli.utils.InvoiceGenerator;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
+import com.sds.utils.CompUtils;
 import com.sds.utils.StringUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class AnggotaFormVm {
-	
+
 	private org.zkoss.zk.ui.Session session = Sessions.getCurrent();
-	
+
+	private String acttype;
+
 	private TanggotaDAO oDao = new TanggotaDAO();
 	private TpendidikanDAO pendidikanDao = new TpendidikanDAO();
 	private TpekerjaanDAO pekerjaanDao = new TpekerjaanDAO();
 	private MprovinsiDAO provDao = new MprovinsiDAO();
 	private MkabupatenDAO kabDao = new MkabupatenDAO();
-	
+
 	private Tanggota pribadi;
 	private Tpendidikan pendidikan;
 	private Tpekerjaan pekerjaan;
-	
+
 	private Date dob;
 	private Mprovinsi region;
 	private Mprovinsi provrumah;
 	private Mkabupaten kabrumah;
 	private Mprovinsi provkantor;
 	private Mkabupaten kabkantor;
-	
+
 	private ListModelList<Mnegara> negaraModel;
 	private ListModelList<Mkabupaten> kabrumahModel;
 	private ListModelList<Mkabupaten> kabkantorModel;
 	private ListModelList<Mcabang> cabangModel;
 	private ListModelList<Mkepegawaiansub> kepegawaiansubModel;
-	
+
 	private List<Tpendidikan> pendidikans;
 	private List<Tpekerjaan> pekerjaans;
 	private String processinfo;
-	
+
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	private SimpleDateFormat datetimeFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-	
-	private byte[] photobyte;
+
 	private Media media;
-	
+
+	@Wire
+	private Window winAnggotaForm;
 	@Wire
 	private Grid gridPendidikan;
 	@Wire
 	private Grid gridPekerjaan;
 	@Wire
 	private Button btSave;
-	
+
 	@Wire
 	private Combobox cbDobDay;
 	@Wire
@@ -164,12 +186,12 @@ public class AnggotaFormVm {
 	private Combobox cbPendidikanThAkhir;
 	@Wire
 	private Combobox cbPendidikanBlAkhir;
-	
+
 	@Wire
 	private Image photo;
 	@Wire
 	private Button btDeletePhoto;
-	
+
 	@Wire
 	private Button btAddPekerjaan;
 	@Wire
@@ -182,52 +204,70 @@ public class AnggotaFormVm {
 	private Button btSavePekerjaan;
 	@Wire
 	private Button btSavePendidikan;
-	
+
 	@Wire
 	private Div divProcessinfo;
-	
+
 	@Wire
 	private Vlayout vlayNation;
 
+	@Wire
+	private Li tabApproval;
+	@Wire
+	private Radiogroup rgDecision;
+	@Wire
+	private Radio rdVerDecYes;
+	@Wire
+	private Radio rdVerDecNo;
+	@Wire
+	private Textbox tbMemo;
+	@Wire
+	private Button btSaveApproval;
+
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
+			@ExecutionArgParam("acttype") String acttype) {
 		Selectors.wireComponents(view, this, false);
-		
 		try {
+			this.acttype = acttype;
 			Tanggota anggota = (Tanggota) session.getAttribute("anggota");
 			if (anggota == null)
 				anggota = new Tanggota();
-			
-			pribadi = oDao.findByPk(anggota.getTanggotapk());
-			if (pribadi == null)
-				pribadi = new Tanggota();
-			
+
+			if (obj != null)
+				pribadi = obj;
+			else {
+				pribadi = oDao.findByPk(anggota.getTanggotapk());
+				if (pribadi == null)
+					pribadi = new Tanggota();
+			}
+
 			init();
-			
+
 			if (pribadi.getPhotolink() != null) {
 				photo.setSrc(AppUtils.PATH_PHOTO + "/" + pribadi.getPhotolink());
 				photo.setVisible(true);
 			}
-			
+
 			dob = pribadi.getTgllahir();
 			if (dob != null) {
 				cbDobDay.setValue(new SimpleDateFormat("dd").format(dob));
 				cbDobMonth.setSelectedIndex(Integer.parseInt(new SimpleDateFormat("MM").format(dob)) - 1);
 				cbDobYear.setValue(new SimpleDateFormat("yyyy").format(dob));
 			}
-			
+
 			provrumah = provDao.findByFilter("provcode = '" + pribadi.getProvcode() + "'");
 			if (provrumah != null) {
 				cbProvrumah.setValue(provrumah.getProvname());
 				doLoadKabrumah(provrumah);
 			}
-			kabrumah = kabDao.findByFilter("provcode = '" + pribadi.getProvcode() + "' and kabcode = '" + pribadi.getKabcode() + "'");
+			kabrumah = kabDao.findByFilter(
+					"provcode = '" + pribadi.getProvcode() + "' and kabcode = '" + pribadi.getKabcode() + "'");
 			cbKabrumah.setValue(pribadi.getKabname());
-			
+
 			doLoadNegara(pribadi.getWarganegara());
-			
+
 			if (pribadi.getMcabang() != null) {
-				//region = provDao.findByFilter("provcode = '" + pribadi.getMcabang().getProvcode() + "'");
 				region = pribadi.getMcabang().getMprovinsi();
 				if (region != null) {
 					cbRegion.setValue(region.getProvname());
@@ -235,20 +275,22 @@ public class AnggotaFormVm {
 				}
 				cbCabang.setValue(pribadi.getMcabang().getCabang());
 			}
-			
+
 			gridPendidikan.setRowRenderer(new RowRenderer<Tpendidikan>() {
 
 				@Override
 				public void render(Row row, Tpendidikan data, int index) throws Exception {
-					row.getChildren().add(new Label(data.getMuniversitas() != null ? data.getMuniversitas().getUniversitas() : ""));
+					row.getChildren().add(
+							new Label(data.getMuniversitas() != null ? data.getMuniversitas().getUniversitas() : ""));
 					row.getChildren().add(new Label(data.getMjenjang() != null ? data.getMjenjang().getJenjang() : ""));
 					row.getChildren().add(new Label(data.getPeminatan1()));
 					row.getChildren().add(new Label(data.getPeminatan2()));
 					String periode = "";
-					periode = data.getPeriodeblawal() + " " + data.getPeriodethawal() + " s/d " + data.getPeriodeblakhir() + " " + data.getPeriodethakhir();
+					periode = data.getPeriodeblawal() + " " + data.getPeriodethawal() + " s/d "
+							+ data.getPeriodeblakhir() + " " + data.getPeriodethakhir();
 					row.getChildren().add(new Label(periode));
 					row.getChildren().add(new Label(data.getNoijazah()));
-					
+
 					Button btEdit = new Button();
 					btEdit.setIconSclass("z-icon-edit");
 					btEdit.setSclass("btn btn-primary btn-sm");
@@ -268,30 +310,31 @@ public class AnggotaFormVm {
 					btDel.setSclass("btn btn-danger btn-sm");
 					btDel.setAutodisable("self");
 					btDel.setTooltiptext("Hapus");
-					
+
 					btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 						@Override
 						public void onEvent(Event event) throws Exception {
-							Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+							Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
+									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
 
-								@Override
-								public void onEvent(Event event)
-										throws Exception {
-									if (event.getName().equals("onOK")) {
-										try {
-											
-										} catch (Exception e) {	
-											Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
-											e.printStackTrace();
-										}																													
-									} 									
-								}
-								
-							});
+										@Override
+										public void onEvent(Event event) throws Exception {
+											if (event.getName().equals("onOK")) {
+												try {
+
+												} catch (Exception e) {
+													Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
+															Messagebox.OK, Messagebox.ERROR);
+													e.printStackTrace();
+												}
+											}
+										}
+
+									});
 						}
 					});
-					
+
 					Div div = new Div();
 					div.appendChild(btEdit);
 					div.appendChild(new Separator("vertical"));
@@ -300,7 +343,7 @@ public class AnggotaFormVm {
 					row.getChildren().add(div);
 				}
 			});
-			
+
 			gridPekerjaan.setRowRenderer(new RowRenderer<Tpekerjaan>() {
 
 				@Override
@@ -310,15 +353,17 @@ public class AnggotaFormVm {
 					row.getChildren().add(new Label(data.getKabname()));
 					row.getChildren().add(new Label(data.getAlamatkantor()));
 					row.getChildren().add(new Label(data.getMrumpun() != null ? data.getMrumpun().getRumpun() : ""));
-					row.getChildren().add(new Label(data.getMkepegawaian() != null ? data.getMkepegawaian().getKepegawaian() : ""));
+					row.getChildren().add(
+							new Label(data.getMkepegawaian() != null ? data.getMkepegawaian().getKepegawaian() : ""));
 					row.getChildren().add(new Label(data.getJabatankantor()));
 					row.getChildren().add(new Label(data.getNip()));
-					row.getChildren().add(new Label(data.getTglmulai() != null ? dateFormatter.format(data.getTglmulai()) : ""));
+					row.getChildren()
+							.add(new Label(data.getTglmulai() != null ? dateFormatter.format(data.getTglmulai()) : ""));
 					row.getChildren().add(new Label(data.getNoskkantor()));
 					row.getChildren().add(new Label(data.getKeterangankerja()));
 					row.getChildren().add(new Label(data.getTelpkantor()));
 					row.getChildren().add(new Label(data.getFaxkantor()));
-					
+
 					Button btEdit = new Button();
 					btEdit.setIconSclass("z-icon-edit");
 					btEdit.setSclass("btn btn-primary btn-sm");
@@ -338,30 +383,31 @@ public class AnggotaFormVm {
 					btDel.setSclass("btn btn-danger btn-sm");
 					btDel.setAutodisable("self");
 					btDel.setTooltiptext("Hapus");
-					
+
 					btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 						@Override
 						public void onEvent(Event event) throws Exception {
-							Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+							Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
+									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
 
-								@Override
-								public void onEvent(Event event)
-										throws Exception {
-									if (event.getName().equals("onOK")) {
-										try {
-											
-										} catch (Exception e) {	
-											Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
-											e.printStackTrace();
-										}																													
-									} 									
-								}
-								
-							});
+										@Override
+										public void onEvent(Event event) throws Exception {
+											if (event.getName().equals("onOK")) {
+												try {
+
+												} catch (Exception e) {
+													Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
+															Messagebox.OK, Messagebox.ERROR);
+													e.printStackTrace();
+												}
+											}
+										}
+
+									});
 						}
 					});
-					
+
 					Div div = new Div();
 					div.appendChild(btEdit);
 					div.appendChild(new Separator("vertical"));
@@ -370,14 +416,32 @@ public class AnggotaFormVm {
 					row.getChildren().add(div);
 				}
 			});
-			
+
 			refreshModel();
+
+			if (acttype != null && acttype.equals("approval")) {
+				tabApproval.setVisible(true);
+				List<Component> compExclude = new ArrayList<>();
+				compExclude.add(rgDecision);
+				compExclude.add(rdVerDecYes);
+				compExclude.add(rdVerDecNo);
+				compExclude.add(tbMemo);
+				compExclude.add(btSaveApproval);
+				CompUtils.doDisableComponent(winAnggotaForm, true, compExclude);
+			} else if (acttype != null && acttype.equals("decided")) {
+				CompUtils.doDisableComponent(winAnggotaForm, true, null);
+			} else if (acttype != null && acttype.equals("view")) {
+				tabApproval.setVisible(false);
+				CompUtils.doDisableComponent(winAnggotaForm, true, null);
+			} else if (acttype != null && acttype.equals("edit")) {
+				tabApproval.setVisible(false);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void init() {
 		try {
 			for (int i = 1; i <= 31; i++) {
@@ -409,7 +473,7 @@ public class AnggotaFormVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("negaraModel")
 	public void doLoadNegara(@BindingParam("item") String item) {
@@ -427,7 +491,7 @@ public class AnggotaFormVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("kabrumahModel")
 	public void doLoadKabrumah(@BindingParam("prov") Mprovinsi prov) {
@@ -483,18 +547,20 @@ public class AnggotaFormVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void refreshModel() {
 		try {
-			pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(), "tpendidikanpk desc");
-			pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(), "tpekerjaanpk desc");
+			pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+					"tpendidikanpk desc");
+			pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+					"tpekerjaanpk desc");
 			gridPendidikan.setModel(new ListModelList<>(pendidikans));
 			gridPekerjaan.setModel(new ListModelList<>(pekerjaans));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("pendidikan")
 	public void doAddPendidikan(Tpendidikan obj) {
@@ -505,8 +571,9 @@ public class AnggotaFormVm {
 				btAddPendidikan.setLabel("Cancel");
 				btAddPendidikan.setIconSclass("z-icon-reply");
 				btSavePendidikan.setLabel("Perbarui");
-				
-				cbUniversitas.setValue(pendidikan.getMuniversitas() != null ? pendidikan.getMuniversitas().getUniversitas() : "");
+
+				cbUniversitas.setValue(
+						pendidikan.getMuniversitas() != null ? pendidikan.getMuniversitas().getUniversitas() : "");
 				cbJenjang.setValue(pendidikan.getMjenjang() != null ? pendidikan.getMjenjang().getJenjang() : "");
 				cbPendidikanBlAwal.setValue(pendidikan.getPeriodeblawal());
 				cbPendidikanThAwal.setValue(pendidikan.getPeriodethawal());
@@ -534,7 +601,7 @@ public class AnggotaFormVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("pekerjaan")
 	public void doAddPekerjaan(Tpekerjaan obj) {
@@ -545,16 +612,20 @@ public class AnggotaFormVm {
 				btAddPekerjaan.setLabel("Cancel");
 				btAddPekerjaan.setIconSclass("z-icon-reply");
 				btSavePekerjaan.setLabel("Perbarui");
-				
+
 				provkantor = provDao.findByFilter("provcode = '" + pekerjaan.getProvcode() + "'");
-				kabkantor = kabDao.findByFilter("provcode = '" + pekerjaan.getProvcode() + "' and kabcode = '" + pekerjaan.getKabcode() + "'");
+				kabkantor = kabDao.findByFilter(
+						"provcode = '" + pekerjaan.getProvcode() + "' and kabcode = '" + pekerjaan.getKabcode() + "'");
 				doLoadKabkantor(provkantor);
 				cbProvkantor.setValue(pekerjaan.getProvname());
 				cbKabkantor.setValue(pekerjaan.getKabname());
 				cbRumpun.setValue(pekerjaan.getMrumpun() != null ? pekerjaan.getMrumpun().getRumpun() : "");
-				cbKepegawaian.setValue(pekerjaan.getMkepegawaian() != null ? pekerjaan.getMkepegawaian().getKepegawaian() : "");
-				cbKepegawaiansub.setValue(pekerjaan.getMkepegawaiansub() != null ? pekerjaan.getMkepegawaiansub().getKepegawaiansub() : "");
-				
+				cbKepegawaian.setValue(
+						pekerjaan.getMkepegawaian() != null ? pekerjaan.getMkepegawaian().getKepegawaian() : "");
+				cbKepegawaiansub.setValue(
+						pekerjaan.getMkepegawaiansub() != null ? pekerjaan.getMkepegawaiansub().getKepegawaiansub()
+								: "");
+
 			} else if (btAddPekerjaan.getLabel().equals("Tambah Pekerjaan")) {
 				pekerjaan = new Tpekerjaan();
 				provkantor = null;
@@ -578,14 +649,13 @@ public class AnggotaFormVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	public void doUploadPhoto(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx) {
 		try {
 			UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
 			media = event.getMedia();
 			if (media instanceof org.zkoss.image.Image) {
-				photobyte = media.getByteData();
 				photo.setContent((org.zkoss.image.Image) media);
 				photo.setVisible(true);
 				btDeletePhoto.setVisible(true);
@@ -600,14 +670,6 @@ public class AnggotaFormVm {
 	}
 
 	@Command
-	public void doDeletePhoto() {
-		media = null;
-		photobyte = null;
-		photo.setSrc(null);
-		btDeletePhoto.setVisible(false);
-	}
-	
-	@Command
 	@NotifyChange("*")
 	public void doSave() {
 		Session session = StoreHibernateUtil.openSession();
@@ -615,13 +677,11 @@ public class AnggotaFormVm {
 		try {
 			if (media != null) {
 				try {
-					String folder = Executions.getCurrent().getDesktop().getWebApp()
-							.getRealPath(AppUtils.PATH_PHOTO);
+					String folder = Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_PHOTO);
 					if (media.isBinary()) {
 						Files.copy(new File(folder + "/" + media.getName()), media.getStreamData());
 					} else {
-						BufferedWriter writer = new BufferedWriter(
-								new FileWriter(folder + "/" + media.getName()));
+						BufferedWriter writer = new BufferedWriter(new FileWriter(folder + "/" + media.getName()));
 						Files.copy(writer, media.getReaderData());
 						writer.close();
 					}
@@ -631,7 +691,7 @@ public class AnggotaFormVm {
 					e.printStackTrace();
 				}
 			}
-			
+
 			trx = session.beginTransaction();
 			pribadi.setLastupdated(new Date());
 			pribadi.setUpdatedby(pribadi.getNoanggota());
@@ -642,21 +702,14 @@ public class AnggotaFormVm {
 			pribadi.setKabname(kabrumah.getKabname());
 			oDao.save(session, pribadi);
 			trx.commit();
-			
+
 			Clients.showNotification("Proses pembaruan data pribadi berhasil", "info", null, "middle_center", 1500);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-					Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 		} finally {
 			session.close();
 		}
-	}
-	
-	@Command
-	@NotifyChange("*")
-	public void doSaveKeanggotaan() {
-		
 	}
 	
 	@Command
@@ -670,7 +723,7 @@ public class AnggotaFormVm {
 				isInsert = true;
 				pendidikan.setTanggota(pribadi);
 			}
-			
+
 			trx = session.beginTransaction();
 			pendidikan.setLastupdated(new Date());
 			pendidikan.setUpdatedby(pribadi.getNoanggota());
@@ -680,29 +733,31 @@ public class AnggotaFormVm {
 			pendidikan.setPeriodethakhir(cbPendidikanThAkhir.getValue());
 			pendidikanDao.save(session, pendidikan);
 			trx.commit();
-			
+
 			if (isInsert) {
 				Clients.showNotification("Proses tambah data pendidikan berhasil", "info", null, "middle_center", 1500);
-				pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(), "tpendidikanpk desc");
+				pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+						"tpendidikanpk desc");
 				gridPendidikan.setModel(new ListModelList<>(pendidikans));
 				pendidikan = null;
 				gbPendidikan.setVisible(false);
 				btAddPendidikan.setLabel("Tambah Pendidikan");
 				btAddPendidikan.setIconSclass("z-icon-plus-square");
 			} else {
-				Clients.showNotification("Proses pembaruan data pendidikan berhasil", "info", null, "middle_center", 1500);
-				pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(), "tpendidikanpk desc");
+				Clients.showNotification("Proses pembaruan data pendidikan berhasil", "info", null, "middle_center",
+						1500);
+				pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+						"tpendidikanpk desc");
 				gridPendidikan.setModel(new ListModelList<>(pendidikans));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-					Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 		} finally {
 			session.close();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSavePekerjaan() {
@@ -714,7 +769,7 @@ public class AnggotaFormVm {
 				isInsert = true;
 				pekerjaan.setTanggota(pribadi);
 			}
-					
+
 			trx = session.beginTransaction();
 			pekerjaan.setLastupdated(new Date());
 			pekerjaan.setUpdatedby(pribadi.getNoanggota());
@@ -724,29 +779,31 @@ public class AnggotaFormVm {
 			pekerjaan.setKabname(kabkantor.getKabname());
 			pekerjaanDao.save(session, pekerjaan);
 			trx.commit();
-			
+
 			if (isInsert) {
 				Clients.showNotification("Proses tambah data pekerjaan berhasil", "info", null, "middle_center", 1500);
-				pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(), "tpekerjaanpk desc");
+				pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+						"tpekerjaanpk desc");
 				gridPekerjaan.setModel(new ListModelList<>(pekerjaans));
 				pekerjaan = null;
 				gbPekerjaan.setVisible(false);
 				btAddPekerjaan.setLabel("Tambah Pekerjaan");
 				btAddPekerjaan.setIconSclass("z-icon-plus-square");
 			} else {
-				Clients.showNotification("Proses pembaruan data pekerjaan berhasil", "info", null, "middle_center", 1500);
-				pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(), "tpekerjaanpk desc");
+				Clients.showNotification("Proses pembaruan data pekerjaan berhasil", "info", null, "middle_center",
+						1500);
+				pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+						"tpekerjaanpk desc");
 				gridPekerjaan.setModel(new ListModelList<>(pekerjaans));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-					Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 		} finally {
 			session.close();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSaveKontak() {
@@ -758,17 +815,115 @@ public class AnggotaFormVm {
 			pribadi.setUpdatedby(pribadi.getNoanggota());
 			oDao.save(session, pribadi);
 			trx.commit();
-			
+
 			Clients.showNotification("Proses pembaruan data kontak berhasil", "info", null, "middle_center", 1500);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-					Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 		} finally {
 			session.close();
 		}
 	}
-	
+
+	@Command
+	@NotifyChange("*")
+	public void doSaveApproval() {
+		try {
+			if (pribadi.getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_PAYMENT)) {
+				try {
+					BigDecimal invamount = new BigDecimal(0);
+					for (Mcharge charge : new MchargeDAO().listByFilter("chargetype = '" + AppUtils.CHARGETYPE_REG + "'",
+							"isbase desc")) {
+						invamount = invamount.add(charge.getChargeamount());
+					}
+
+					BriapiBean bean = AppData.getBriapibean();
+					BriApiExt briapi = new BriApiExt(bean);
+					BriApiToken briapiToken = briapi.getToken();
+
+					Date vaexpdate = null;
+					BrivaData briva = new BrivaData();
+					if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+						briva.setAmount(invamount.toString());
+						briva.setInstitutionCode(bean.getBriva_institutioncode());
+						briva.setBrivaNo(bean.getBriva_cid());
+
+						String custcode_prov = "00" + pribadi.getMcabang().getMprovinsi().getProvcode();
+						String custcode = custcode_prov.substring(custcode_prov.length() - 2, custcode_prov.length());
+						briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode + "013"));
+						briva.setKeterangan("Pendaftaran Anggota HAKLI");
+						briva.setNama(pribadi.getNama());
+						Calendar cal = Calendar.getInstance();
+						cal.add(Calendar.DAY_OF_MONTH, 10);
+						vaexpdate = cal.getTime();
+						briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
+
+						BrivaCreateResp brivaCreated = null;
+						brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+						if (brivaCreated != null && brivaCreated.getStatus()) {
+							Session session = StoreHibernateUtil.openSession();
+							Transaction trx = session.beginTransaction();
+							try {
+								pribadi.setVareg(briva.getBrivaNo() + briva.getCustCode());
+								pribadi.setVaregstatus(1);
+								pribadi.setRegdecisiontime(new Date());
+								oDao.save(session, pribadi);
+
+								Tinvoice inv = new InvoiceGenerator().doInvoice(pribadi,
+										briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_REG, invamount,
+										"Pendaftararan Anggota HAKLI", vaexpdate);
+								new TinvoiceDAO().save(session, inv);
+
+								trx.commit();
+
+								String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
+										.getRealPath("/themes/mail/mailinv.html");
+								new Thread(new MailHandler(inv, bodymail_path)).start();
+
+								processinfo = "Proses persetujuan pendaftaran anggota berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
+										+ pribadi.getVareg();
+								divProcessinfo.setVisible(true);
+							} catch (Exception e) {
+								e.printStackTrace();
+								trx.rollback();
+								Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
+										Messagebox.ERROR);
+							} finally {
+								session.close();
+							}
+
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
+							Messagebox.ERROR);
+				} 
+			} else if (pribadi.getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE)) {
+				Session session = StoreHibernateUtil.openSession();
+				Transaction trx = session.beginTransaction();
+				try {
+					pribadi.setRegdecisiontime(new Date());
+					oDao.save(session, pribadi);
+					trx.commit();
+					processinfo = "Proses penolakan pendaftaran anggota berhasil diproses.";
+					divProcessinfo.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+					trx.rollback();
+					Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
+							Messagebox.ERROR);
+				} finally {
+					session.close();
+				}
+			}
+			btSaveApproval.setDisabled(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+		}
+	}
+
 	public Validator getValidator() {
 		return new AbstractValidator() {
 
@@ -816,17 +971,17 @@ public class AnggotaFormVm {
 			}
 		};
 	}
-	
+
 	public Validator getValidatorKeanggotaan() {
 		return new AbstractValidator() {
 
 			@Override
 			public void validate(ValidationContext ctx) {
-				
+
 			}
 		};
 	}
-	
+
 	public Validator getValidatorPendidikan() {
 		return new AbstractValidator() {
 
@@ -841,7 +996,7 @@ public class AnggotaFormVm {
 			}
 		};
 	}
-	
+
 	public Validator getValidatorPekerjaan() {
 		return new AbstractValidator() {
 
@@ -853,8 +1008,7 @@ public class AnggotaFormVm {
 				Mkepegawaian mkepegawaian = (Mkepegawaian) ctx.getProperties("mkepegawaian")[0].getValue();
 				if (mkepegawaian == null)
 					this.addInvalidMessage(ctx, "mkepegawaian", Labels.getLabel("common.validator.empty"));
-				Mkepegawaiansub mkepegawaiansub = (Mkepegawaiansub) ctx.getProperties("mkepegawaiansub")[0]
-						.getValue();
+				Mkepegawaiansub mkepegawaiansub = (Mkepegawaiansub) ctx.getProperties("mkepegawaiansub")[0].getValue();
 				if (mkepegawaiansub == null)
 					this.addInvalidMessage(ctx, "mkepegawaiansub", Labels.getLabel("common.validator.empty"));
 				if (provkantor == null)
@@ -876,7 +1030,7 @@ public class AnggotaFormVm {
 			}
 		};
 	}
-	
+
 	public Validator getValidatorKontak() {
 		return new AbstractValidator() {
 
@@ -904,6 +1058,27 @@ public class AnggotaFormVm {
 		};
 	}
 	
+	public Validator getValidatorApproval() {
+		return new AbstractValidator() {
+
+			@Override
+			public void validate(ValidationContext ctx) {
+				String statusreg = (String) ctx.getProperties("statusreg")[0].getValue();
+				if (statusreg == null || "".equals(statusreg.trim()))
+					this.addInvalidMessage(ctx, "statusreg", Labels.getLabel("common.validator.empty"));
+				else {
+					if (!statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_PAYMENT) && !statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE))
+						this.addInvalidMessage(ctx, "statusreg", Labels.getLabel("common.validator.empty"));
+					else if (statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE)) {
+						String regmemo = (String) ctx.getProperties("regmemo")[0].getValue();
+						if (regmemo == null || "".equals(regmemo.trim()))
+							this.addInvalidMessage(ctx, "regmemo", Labels.getLabel("common.validator.empty"));
+					}
+				}
+			}
+		};
+	}
+
 	public ListModelList<Mprovinsi> getProvrumahModel() {
 		ListModelList<Mprovinsi> oList = null;
 		try {
@@ -1085,5 +1260,5 @@ public class AnggotaFormVm {
 	public void setKabkantor(Mkabupaten kabkantor) {
 		this.kabkantor = kabkantor;
 	}
-	
+
 }

@@ -78,11 +78,11 @@ public class MailSender {
 		message.setContent(multipart);
 		message.addHeader("appid", String.valueOf(mailbean.getAppid()));
 
-		Transport t = session.getTransport("smtp");
+		//Transport t = session.getTransport("smtp");
 		//t.connect(mailbean.getSmtpname(), mailbean.getSmtpport(), mailbean.getMailid(), mailbean.getMailpassword());
-		t.connect("mail.sdd.co.id", 465, "fajar.prihadi@swadharma.com", "fprihadi3458");
-		t.sendMessage(message, message.getAllRecipients());
-		t.close();
+		//t.connect("mail.sdd.co.id", 465, "fajar.prihadi@swadharma.com", "fprihadi3458");
+		//t.sendMessage(message, message.getAllRecipients());
+		//t.close();
 
 //		Transport t = session.getTransport("smtp");
 //		t.connect();

@@ -58,7 +58,7 @@
 							onUpload="@command('doUploadPhoto', upEvent=event)"
 							autodisable="self" />
 						<vlayout>
-							<image id="photo" width="90px" />
+							<image id="photo" width="100%" />
 							<label style="color:gray"
 								value="@load(vmsgs['eventimg'])" />
 						</vlayout>

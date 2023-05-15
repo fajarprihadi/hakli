@@ -89,7 +89,7 @@ public class TinvoiceDAO {
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
 		oList = session.createSQLQuery("SELECT INVOICETYPE, DATE(PAIDTIME) AS PAIDTIME, SUM(PAIDAMOUNT) AS PAIDAMOUNT "
-				+ "FROM TINVOICE WHERE ISPAID = 'Y' GROUP BY INVOICETYPE, DATE(PAIDTIME)").addEntity(Vpaymentmon.class).list();
+				+ "FROM TINVOICE WHERE ISPAID = 'Y' AND " + filter + " GROUP BY INVOICETYPE, DATE(PAIDTIME)").addEntity(Vpaymentmon.class).list();
 		session.close();
         return oList;
     }

@@ -1,0 +1,673 @@
+<?link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" ?>
+<?link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" ?>
+<!-- MDB -->
+<?link rel="stylesheet" href="/mdb/css/mdb.min.css" ?>
+<!-- Custom styles -->
+<?link rel="stylesheet" href="/mdb/css/admin.css" ?>
+
+<?meta charset="UTF-8" ?>
+<?meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" ?>
+<?meta http-equiv="x-ua-compatible" content="ie=edge" ?>
+
+<zk xmlns:n="native">
+	<window id="winAnggotaAdd" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaAddVm')"
+		validationMessages="@id('vmsgs')">
+		<caption>
+			<n:i class="fas fa-user-graduate"></n:i>
+			<n:span>Registrasi Anggota</n:span>
+		</caption>
+		
+		<image id="imgEvent" width="100%" visible="false" />
+		
+		<div id="divForm"
+			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')
+			@validator(vm.validator) ">
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-user-tag"></n:i>
+						Data Pribadi
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="${labels.anggota.nama} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.nama)"
+									maxlength="70" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['nama'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.noktp} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.noktp)"
+									maxlength="20" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['noktp'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.anggota.tempatlahir} (*)" />
+							<vlayout>
+								<textbox
+									value="@bind(e.pribadi.tempatlahir)" maxlength="40"
+									width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['tempatlahir'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.anggota.tgllahir} (*)" />
+							<vlayout>
+								<hlayout>
+									<combobox id="cbDobDay" cols="2" />
+									<combobox id="cbDobMonth" cols="10" />
+									<combobox id="cbDobYear" cols="4" />
+								</hlayout>
+								<label style="color:gray"
+									value="@load(vmsgs['tgllahir'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.gender} (*)" />
+							<vlayout>
+								<radiogroup
+									selectedItem="@bind(e.pribadi.gender)">
+									<radio value="L" label="Laki-Laki" />
+									<radio value="P" label="Perempuan" />
+								</radiogroup>
+								<label style="color:gray"
+									value="@load(vmsgs['gender'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.gelardepan}" />
+							<textbox value="@bind(e.pribadi.gelardepan)"
+								maxlength="20" width="100%" />
+						</row>
+						<row>
+							<label value="${labels.anggota.gelarblkg}" />
+							<textbox
+								value="@bind(e.pribadi.gelarbelakang)" maxlength="20"
+								width="100%" />
+						</row>
+						<row>
+							<label value="${labels.anggota.agama}" />
+							<combobox id="cbAgama"
+								selectedItem="@bind(e.pribadi.agama)">
+								<comboitem value="Islam"
+									label="Islam" />
+								<comboitem value="Protestan"
+									label="Protestan" />
+								<comboitem value="Katolik"
+									label="Katolik" />
+								<comboitem value="Hindu"
+									label="Hindu" />
+								<comboitem value="Buddha"
+									label="Buddha" />
+								<comboitem value="Konghucu"
+									label="Konghucu" />
+							</combobox>
+						</row>
+						<row>
+							<label
+								value="${labels.anggota.warganegara} (*)" />
+							<vlayout>
+								<radiogroup
+									onCheck="@command('doLoadNegara', item=e.pribadi.warganegara)"
+									selectedItem="@bind(e.pribadi.warganegara)">
+									<radio value="WNI" label="WNI" />
+									<radio value="WNA" label="WNA" />
+								</radiogroup>
+								<label style="color:gray"
+									value="@load(vmsgs['warganegara'])" />
+							</vlayout>
+						</row>
+						<row id="rowNegara" visible="false">
+							<label value="${labels.area.negara} (*)" />
+							<vlayout>
+								<combobox id="cbNegara"
+									model="@load(vm.negaraModel)"
+									selectedItem="@bind(e.pribadi.mnegara)"
+									width="100%">
+									<template name="model"
+										var="negara">
+										<comboitem
+											label="@load(negara.negara)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['negara'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.email} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.email)"
+									maxlength="100" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['email'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.photo}" />
+							<hlayout>
+								<button sclass="btn btn-info btn-sm"
+									label="Browse..." upload="true,maxsize=1000"
+									onUpload="@command('doUploadPhoto', upEvent=event)"
+									autodisable="self" />
+								<separator />
+								<image id="photo" width="120px" />
+							</hlayout>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-home"></n:i>
+						Alamat Tinggal
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="${labels.area.prov} (*)" />
+							<vlayout>
+								<combobox id="cbProvrumah"
+									model="@load(vm.provrumahModel)"
+									selectedItem="@bind(vm.provrumah)"
+									onChange="@command('doLoadKab', prov=vm.provrumah)"
+									width="100%">
+									<template name="model"
+										var="provinsi">
+										<comboitem
+											label="@load(provinsi.provname)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['provrumah'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.kab} (*)" />
+							<vlayout>
+								<combobox id="cbKabrumah"
+									model="@load(vm.kabrumahModel)"
+									selectedItem="@bind(vm.kabrumah)"
+									width="100%">
+									<template name="model"
+										var="kabupaten">
+										<comboitem
+											label="@load(kabupaten.kabname)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['kabrumah'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.alamat} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.alamat)"
+									maxlength="200" width="100%" rows="5" />
+								<label style="color:gray"
+									value="@load(vmsgs['alamat'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.kodepos}" />
+							<textbox value="@bind(e.pribadi.kodepos)"
+								maxlength="5" width="100%" />
+						</row>
+						<row>
+							<label value="${labels.anggota.telp}" />
+							<textbox value="@bind(e.pribadi.telp)"
+								maxlength="20" width="100%" />
+						</row>
+						<row>
+							<label value="${labels.anggota.hp} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.hp)"
+									maxlength="20" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['hp'])" />
+							</vlayout>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<separator />
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-building"></n:i>
+						Pekerjaan
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="${labels.area.prov} (*)" />
+							<vlayout>
+								<combobox id="cbProvkantor"
+									model="@load(vm.provkantorModel)"
+									selectedItem="@bind(vm.provkantor)"
+									onSelect="@command('doLoadKabPekerjaan', prov=vm.provkantor)"
+									width="100%">
+									<template name="model"
+										var="provinsi">
+										<comboitem
+											label="@load(provinsi.provname)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['provkantor'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.kab} (*)" />
+							<vlayout>
+								<combobox id="cbKabkantor"
+									model="@load(vm.kabkantorModel)"
+									selectedItem="@bind(vm.kabkantor)"
+									width="100%">
+									<template name="model"
+										var="kabupaten">
+										<comboitem
+											label="@load(kabupaten.kabname)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['kabkantor'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pekerjaan.rumpun} (*)" />
+							<vlayout>
+								<combobox id="cbRumpun"
+									selectedItem="@bind(e.pekerjaan.mrumpun)"
+									model="@load(vm.rumpunModel)" width="100%">
+									<template name="model"
+										var="rumpun">
+										<comboitem
+											label="@load(rumpun.rumpun)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['mrumpun'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pekerjaan.kepegawaian} (*)" />
+							<vlayout>
+								<combobox id="cbKepegawaian"
+									selectedItem="@bind(e.pekerjaan.mkepegawaian)"
+									model="@load(vm.kepegawaianModel)"
+									onSelect="@command('doLoadKepegawaiansub', kepegawaian=e.pekerjaan.mkepegawaian)"
+									width="100%">
+									<template name="model"
+										var="kepegawaian">
+										<comboitem
+											label="@load(kepegawaian.kepegawaian)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['mkepegawaian'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pekerjaan.kepegawaiansub} (*)" />
+							<vlayout>
+								<combobox id="cbKepegawaiansub"
+									selectedItem="@bind(e.pekerjaan.mkepegawaiansub)"
+									model="@load(vm.kepegawaiansubModel)" width="100%">
+									<template name="model"
+										var="kepegawaiansub">
+										<comboitem
+											label="@load(kepegawaiansub.kepegawaiansub)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['mkepegawaiansub'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pekerjaan.namakantor} (*)" />
+							<vlayout>
+								<textbox
+									value="@bind(e.pekerjaan.namakantor)" maxlength="50"
+									width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['namakantor'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.pekerjaan.nip} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pekerjaan.nip)"
+									maxlength="20" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['nip'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pekerjaan.jabatan} (*)" />
+							<vlayout>
+								<textbox
+									value="@bind(e.pekerjaan.jabatankantor)" maxlength="50"
+									width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['jabatan'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.pekerjaan.nosk}" />
+							<textbox
+								value="@bind(e.pekerjaan.noskkantor)" maxlength="25"
+								width="100%" />
+						</row>
+						<row>
+							<label
+								value="${labels.pekerjaan.tglmulai} (*)" />
+							<vlayout>
+								<datebox
+									value="@bind(e.pekerjaan.tglmulai)" maxlength="10" cols="12"
+									format="dd-MM-yyyy" />
+								<label style="color:gray"
+									value="@load(vmsgs['tglmulai'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pekerjaan.keterangan}" />
+							<textbox
+								value="@bind(e.pekerjaan.keterangankerja)" maxlength="100"
+								width="100%" />
+						</row>
+						<row>
+							<label value="${labels.pekerjaan.notelp}" />
+							<textbox
+								value="@bind(e.pekerjaan.telpkantor)" maxlength="20"
+								width="100%" />
+						</row>
+						<row>
+							<label value="${labels.pekerjaan.nofax}" />
+							<textbox
+								value="@bind(e.pekerjaan.faxkantor)" maxlength="20"
+								width="100%" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<separator />
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-school"></n:i>
+						Pendidikan
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label
+								value="${labels.pendidikan.universitas} (*)" />
+							<vlayout>
+								<combobox id="cbUniversitas"
+									selectedItem="@bind(e.pendidikan.muniversitas)"
+									model="@load(vm.universitasModel)" width="100%">
+									<template name="model"
+										var="universitas">
+										<comboitem
+											label="@load(universitas.universitas)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['muniversitas'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pendidikan.jenjang} (*)" />
+							<vlayout>
+								<combobox id="cbJenjang"
+									selectedItem="@bind(e.pendidikan.mjenjang)"
+									model="@load(vm.jenjangModel)" width="100%">
+									<template name="model"
+										var="jenjang">
+										<comboitem
+											label="@load(jenjang.jenjang)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['mjenjang'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.pendidikan.minat1}" />
+							<textbox
+								value="@bind(e.pendidikan.peminatan1)" maxlength="30"
+								width="100%" />
+						</row>
+						<row>
+							<label value="${labels.pendidikan.minat2}" />
+							<textbox
+								value="@bind(e.pendidikan.peminatan2)" maxlength="30"
+								width="100%" />
+						</row>
+						<row>
+							<label
+								value="${labels.pendidikan.periodeawal}" />
+							<hlayout>
+								<combobox id="cbPendidikanBlAwal"
+									cols="10" />
+								<combobox id="cbPendidikanThAwal"
+									cols="4" />
+							</hlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pendidikan.periodeakhir}" />
+							<hlayout>
+								<combobox id="cbPendidikanBlAkhir"
+									cols="10" />
+								<combobox id="cbPendidikanThAkhir"
+									cols="4" />
+							</hlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.pendidikan.noijazah}" />
+							<textbox
+								value="@bind(e.pendidikan.noijazah)" maxlength="20"
+								width="100%" />
+						</row>
+						<row>
+							<label value="Dokumen Ijazah" />
+							<hlayout>
+								<button sclass="btn btn-info btn-sm"
+									label="Browse..." upload="true,maxsize=1000"
+									onUpload="@command('doUploadIjazah', upEvent=event)"
+									autodisable="self" />
+								<separator />
+								<label value="@load(vm.ijazahfilename)" />
+							</hlayout>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+
+			<separator />
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="far fa-address-card"></n:i>
+						Keanggotaan
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label
+								value="${labels.anggota.statusanggota} (*)" />
+							<vlayout>
+								<combobox id="cbStatusanggota"
+									selectedItem="@bind(e.pribadi.statusanggota)"
+									readonly="true">
+									<comboitem value="Anggota Biasa"
+										label="Anggota Biasa" />
+									<comboitem value="Anggota Muda"
+										label="Anggota Muda" />
+									<comboitem value="Pengurus Pusat"
+										label="Pengurus Pusat" />
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['statusanggota'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.prov} (*)" />
+							<vlayout>
+								<combobox id="cbRegion"
+									model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
+									onSelect="@command('doLoadCabang', prov=vm.region)"
+									width="100%">
+									<template name="model"
+										var="provinsi">
+										<comboitem
+											label="@load(provinsi.provname)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['region'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.kab} (*)" />
+							<vlayout>
+								<combobox id="cbCabang"
+									selectedItem="@bind(e.pribadi.mcabang)"
+									model="@load(vm.cabangModel)" width="100%">
+									<template name="model"
+										var="cabang">
+										<comboitem
+											label="@load(cabang.cabang)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['mcabang'])" />
+							</vlayout>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-address-book"></n:i>
+						Kontak Darurat
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label
+								value="${labels.anggota.namadarurat} (*)" />
+							<vlayout>
+								<textbox
+									value="@bind(e.pribadi.namadarurat)" maxlength="40"
+									width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['namadarurat'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.anggota.hubungandarurat} (*)" />
+							<vlayout>
+								<combobox id="cbHubungan"
+									selectedItem="@bind(e.pribadi.hubungan)">
+									<comboitem value="Suami"
+										label="Suami" />
+									<comboitem value="Istri"
+										label="Istri" />
+									<comboitem value="Orang Tua"
+										label="Orang Tua" />
+									<comboitem value="Saudara Kandung"
+										label="Saudara Kandung" />
+									<comboitem value="Teman"
+										label="Teman" />
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['hubungan'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.anggota.hpdarurat} (*)" />
+							<vlayout>
+								<textbox
+									value="@bind(e.pribadi.nohpdarurat)" maxlength="20"
+									width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['nohpdarurat'])" />
+							</vlayout>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+
+			<div align="center">
+				<button label="Submit" autodisable="self" width="50%"
+					iconSclass="z-icon-save" sclass="btn btn-primary btn-sm"
+					onClick="@command('doSave')" />
+			</div>
+		</div>
+		
+		<n:br/>
+		<include src="/footer.zul" />
+	</window>
+</zk>

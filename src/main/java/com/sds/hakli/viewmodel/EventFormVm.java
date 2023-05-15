@@ -16,6 +16,7 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.io.Files;
@@ -44,6 +45,7 @@ public class EventFormVm {
 	
 	private TeventDAO dao = new TeventDAO();
 	private Tevent objForm;
+	private boolean isInsert;
 	
 	private Media media;
 
@@ -53,12 +55,18 @@ public class EventFormVm {
 	private Image photo;
 	
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tevent obj) {
 		Selectors.wireComponents(view, this, false);
 		doReset();
+		if (obj != null) {
+			isInsert = false;
+			objForm = obj;
+			photo.setSrc(AppUtils.PATH_EVENT + "/" + objForm.getEventimg());
+		}
 	}
 	
 	public void doReset() {
+		isInsert = true;
 		objForm = new Tevent();
 	}
 	
@@ -109,8 +117,9 @@ public class EventFormVm {
 			dao.save(session, objForm);
 			trx.commit();
 			
-			Clients.showNotification("Event berhasil dibuat", "info", null, "middle_center", 1500);
-			
+			if (isInsert)
+				Clients.showNotification("Pembuatan data event berhasil", "info", null, "middle_center", 1500);
+			else Clients.showNotification("Pembaruan data event berhasil", "info", null, "middle_center", 1500);
 			doClose();
 		} catch (Exception e) {
 			e.printStackTrace();

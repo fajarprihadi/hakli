@@ -1,4 +1,5 @@
 <?link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" ?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/app_icon.ico" ?>
 <?link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" ?>
 <!-- MDB -->
 <?link rel="stylesheet" href="/mdb/css/mdb.min.css" ?>
@@ -24,22 +25,23 @@
 
 				<div class="position-sticky">
 					<n:br />
+					
 					<div class="accordion accordion-flush"
 						id="divAccord">
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
-								id="flush-headingOne">
+							<n:h2 class="accordion-header administrasi"
+								id="flush-administrasi">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseOne"
-									aria-expanded="false" aria-controls="flush-collapseOne">
+									data-mdb-toggle="collapse" data-mdb-target=".colapse-administrasi"
+									aria-expanded="false" aria-controls="administrasi">
 									Administrasi
 								</n:button>
 							</n:h2>
-							<n:div id="flush-collapseOne"
-								class="accordion-collapse collapse"
+							<n:div id="#flush-administrasi"
+								class="accordion-collapse collapse colapse-administrasi"
 								aria-labelledby="flush-headingOne"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".administrasi">
 								<div class="accordion-body">
 									<div id="divMenuAdmin"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -80,77 +82,79 @@
 											<n:span>Biaya/Fee</n:span>
 										</a>
 										<!-- 
-										<a href="#"
+											<a href="#"
 											onClick="@command('doRedirect', path='/view/rumpun.zul', menu='admin', index=2)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-object-group fa-fw me-3">
+											class="fas fa-object-group fa-fw me-3">
 											</n:i>
 											<n:span>Rumpun</n:span>
-										</a>
-
-										<a href="#"
+											</a>
+											
+											<a href="#"
 											onClick="@command('doRedirect', path='/view/kepegawaian.zul', menu='admin', index=3)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-user-md fa-fw me-3">
+											class="fas fa-user-md fa-fw me-3">
 											</n:i>
 											<n:span>Kepegawaian</n:span>
-										</a>
-										<a href="#"
+											</a>
+											<a href="#"
 											onClick="@command('doRedirect', path='/view/kepegawaiansdmk.zul', menu='admin', index=4)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-user-md fa-fw me-3">
+											class="fas fa-user-md fa-fw me-3">
 											</n:i>
 											<n:span>
-												Kepegawaian SDMK
+											Kepegawaian SDMK
 											</n:span>
-										</a>
-										<a href="#"
+											</a>
+											<a href="#"
 											onClick="@command('doRedirect', path='/view/jenjang.zul', menu='admin', index=6)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-location-arrow fa-fw me-3">
+											class="fas fa-location-arrow fa-fw me-3">
 											</n:i>
 											<n:span>Jenjang</n:span>
-										</a>
-										<a href="#"
+											</a>
+											<a href="#"
 											onClick="@command('doRedirect', path='/view/prodi.zul', menu='admin', index=7)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-graduation-cap fa-fw me-3">
+											class="fas fa-graduation-cap fa-fw me-3">
 											</n:i>
 											<n:span>Prodi</n:span>
-										</a>
-										<a href="#"
+											</a>
+											<a href="#"
 											onClick="@command('doRedirect', path='/view/rumpundiklat.zul', menu='admin', index=8)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-object-group fa-fw me-3">
+											class="fas fa-object-group fa-fw me-3">
 											</n:i>
 											<n:span>
-												Rumpun Diklat
+											Rumpun Diklat
 											</n:span>
-										</a>
-										<a href="#"
+											</a>
+											<a href="#"
 											onClick="@command('doRedirect', path='/view/jenisdiklat.zul', menu='admin', index=9)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-book fa-fw me-3">
+											class="fas fa-book fa-fw me-3">
 											</n:i>
 											<n:span>
-												Jenis Diklat
+											Jenis Diklat
 											</n:span>
-										</a>
-										 -->
-										 <a href="#"
+											</a>
+										-->
+										<a href="#"
 											onClick="@command('doRedirect', path='/view/admin/sysparam.zul', menu='admin', index=4)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
 												class="fas fa-cog fa-fw me-3">
 											</n:i>
-											<n:span>Parameter Sistem</n:span>
+											<n:span>
+												Parameter Sistem
+											</n:span>
 										</a>
 										<a href="#"
 											onClick="@command('doRedirect', path='/view/admin/scheduler.zul', menu='admin', index=5)"
@@ -158,26 +162,29 @@
 											<n:i
 												class="fas fa-cog fa-fw me-3">
 											</n:i>
-											<n:span>Penjadwalan Sistem</n:span>
+											<n:span>
+												Penjadwalan Sistem
+											</n:span>
 										</a>
 									</div>
 								</div>
 							</n:div>
 						</div>
+						
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header anggota"
 								id="flush-headingTwo">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseTwo"
+									data-mdb-toggle="collapse" data-mdb-target=".colapse-anggota"
 									aria-expanded="false" aria-controls="flush-collapseTwo">
 									Anggota
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseTwo"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse colapse-anggota"
 								aria-labelledby="flush-headingTwo"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".anggota">
 								<div class="accordion-body">
 									<div id="divMenuAnggota"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -185,10 +192,10 @@
 											onClick="@command('doRedirect', path='/view/dashboard.zul', menu='anggota', index=0)"
 											class="list-group-item list-group-item-action py-2 ripple active">
 											<n:i
-												class="fas fa-tachometer-alt fa-fw me-3">
+											class="fas fa-tachometer-alt fa-fw me-3">
 											</n:i>
 											<n:span>Dashboard</n:span>
-										</a> -->
+											</a> -->
 										<a href="#"
 											onClick="@command('doRedirect', path='/view/anggota/anggotareglist.zul', menu='anggota', index=0)"
 											class="list-group-item list-group-item-action py-2 ripple">
@@ -216,7 +223,8 @@
 												class="fas fa-times fa-fw me-3">
 											</n:i>
 											<n:span>
-												Daftar Penolakan Registrasi
+												Daftar Penolakan
+												Registrasi
 											</n:span>
 										</a>
 										<a href="#"
@@ -235,19 +243,20 @@
 						</div>
 
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header event"
 								id="flush-headingThree">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseThree"
-									aria-expanded="false" aria-controls="flush-collapseThree">
+									data-mdb-toggle="collapse"
+									data-mdb-target=".colapse-event" aria-expanded="false"
+									aria-controls="flush-collapseThree">
 									Event
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseThree"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse colapse-event"
 								aria-labelledby="flush-headingThree"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".event">
 								<div class="accordion-body">
 									<div id="divMenuEvent"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -263,21 +272,22 @@
 								</div>
 							</n:div>
 						</div>
-						
+
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header va"
 								id="flush-headingFour">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseFour"
-									aria-expanded="false" aria-controls="flush-collapseFour">
+									data-mdb-toggle="collapse"
+									data-mdb-target=".colapse-va" aria-expanded="false"
+									aria-controls="flush-collapseFour">
 									Virtual Account
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseFour"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse colapse-va"
 								aria-labelledby="flush-headingFour"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".va">
 								<div class="accordion-body">
 									<div id="divMenuVa"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -287,7 +297,9 @@
 											<n:i
 												class="fas fa-file-invoice fa-fw me-3">
 											</n:i>
-											<n:span>Cek Status VA</n:span>
+											<n:span>
+												Cek Status VA
+											</n:span>
 										</a>
 										<a href="#"
 											onClick="@command('doRedirect', path='/view/va/vaupdate.zul', menu='va', index=1)"
@@ -309,21 +321,22 @@
 								</div>
 							</n:div>
 						</div>
-						
+
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header dashboard"
 								id="flush-headingFive">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseFive"
-									aria-expanded="false" aria-controls="flush-collapseFive">
+									data-mdb-toggle="collapse"
+									data-mdb-target=".colapse-dashboard" aria-expanded="false"
+									aria-controls="flush-collapseFive">
 									Dashboard
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseFive"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse colapse-dashboard"
 								aria-labelledby="flush-headingFive"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".dashboard">
 								<div class="accordion-body">
 									<div id="divMenuDashboard"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -331,17 +344,21 @@
 											onClick="@command('doRedirect', path='/view/dashboard.zul', menu='dashboard', index=0)"
 											class="list-group-item list-group-item-action py-2 ripple active">
 											<n:i
-												class="fas fa-file-invoice fa-fw me-3">
+												class="fas fa-tachometer-alt fa-fw me-3">
 											</n:i>
-											<n:span>Main Dashboard</n:span>
+											<n:span>
+												Main Dashboard
+											</n:span>
 										</a>
 										<a href="#"
 											onClick="@command('doRedirect', path='/view/dashboardpaymentmonitor.zul', menu='dashboard', index=1)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-file-invoice fa-fw me-3">
+												class="fas fa-tachometer-alt fa-fw me-3">
 											</n:i>
-											<n:span>Monitoring Pembayaran</n:span>
+											<n:span>
+												Monitoring Pembayaran
+											</n:span>
 										</a>
 									</div>
 								</div>
@@ -358,7 +375,8 @@
 			<n:nav id="main-navbar"
 				class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 				<!-- Container wrapper -->
-				<n:div class="container-fluid" style="background-color: #262626">
+				<n:div class="container-fluid"
+					style="background-color: #262626">
 					<!-- Toggle button -->
 					<n:button class="navbar-toggler tombolmenu"
 						type="button" data-mdb-toggle="collapse"
@@ -368,10 +386,7 @@
 					</n:button>
 
 					<!-- Brand -->
-					<n:a class="navbar-brand"
-						href="/hakli/view/index.zul">
-						<image src="/img/logo_hakli.png" height="50px" />
-					</n:a>
+					<image src="/img/logo_hakli.png" height="50px" />
 
 					<!-- Right links -->
 					<n:ul class="navbar-nav ms-auto d-flex flex-row">
@@ -410,9 +425,9 @@
 
 			</n:div>
 		</n:main>
-		
+
 	</div>
-	
+
 	<script type="text/javascript" src="/mdb/js/mdb.min.js"></script>
 	<!-- Custom scripts -->
 	<script type="text/javascript" src="/mdb/js/admin.js"></script>
@@ -435,6 +450,28 @@
 		document.getElementsByTagName('body')[0].style.overflow = '' }
 
 		}
+	</script>
+	
+	
+	<script>
+	
+	      function menuHide(){
+        let i_sidebar = document.getElementsByClassName("i-sidebar")[0];
+        let i_main = document.getElementsByClassName("i-main")[0];
+        i_sidebar.style.transition = "width 0.5s ease-in-out";
+        if(i_sidebar.clientWidth > 0){
+
+        i_sidebar.style.width = "0px"
+        i_main.style.paddingLeft = "0px";
+
+        }else{
+        i_sidebar.style.transition = "width 0.5s ease-in-out";
+        i_sidebar.style.width = "240px"
+        i_main.style.paddingLeft = "240px";
+
+        }
+        }
+        
 	</script>
 
 

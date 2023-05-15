@@ -3,6 +3,8 @@ package com.sds.hakli.viewmodel;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,12 @@ public class DashboardPaymentMonitorVm {
 	private TinvoiceDAO oDao = new TinvoiceDAO();
 
 	private List<Vpaymentmon> objList = new ArrayList<>();
+	
+	private Date begindate;
+	private Date enddate;
+	private String filter;
+	
+	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Wire
     private Popup anchor;
@@ -131,10 +139,22 @@ public class DashboardPaymentMonitorVm {
 		
 		doChart();
 	}
+	
+	public void doDefaultPeriod() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+		begindate = cal.getTime();
+		enddate = new Date();
+	}
 
+	@Command
 	public void doChart() {
 		try {
-			objList = oDao.listPaymentMonitor(null);
+			if (begindate == null || enddate == null) {
+				doDefaultPeriod();
+			}
+			filter = "date(paidtime) between '" + datelocalFormatter.format(begindate) + "' and '" + datelocalFormatter.format(enddate) + "'";
+			objList = oDao.listPaymentMonitor(filter);
 			XYModel model = new DefaultXYModel();
 			for (Vpaymentmon obj: objList) {
 				model.addValue(AppData.getInvoiceType(obj.getInvoicetype()), TimeUtil.parse(new SimpleDateFormat("MM-dd-yyyy").format(obj.getPaidtime())), obj.getPaidamount());
@@ -196,6 +216,22 @@ public class DashboardPaymentMonitorVm {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Date getBegindate() {
+		return begindate;
+	}
+
+	public void setBegindate(Date begindate) {
+		this.begindate = begindate;
+	}
+
+	public Date getEnddate() {
+		return enddate;
+	}
+
+	public void setEnddate(Date enddate) {
+		this.enddate = enddate;
 	}
 	
 }

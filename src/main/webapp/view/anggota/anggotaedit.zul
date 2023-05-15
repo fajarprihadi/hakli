@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk xmlns:n="native">
-	<window id="winAnggotaForm" border="normal"
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<window id="winAnggotaForm" border="normal" width="100%"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaFormVm')"
 		validationMessages="@id('vmsgs')">
 		<caption>
@@ -50,7 +50,15 @@
 						Info Kontak
 					</n:a>
 				</n:li>
-
+				<x:li class="nav-item" role="presentation"
+					id="tabApproval">
+					<n:a class="nav-link" id="ex1-tab-6"
+						data-mdb-toggle="tab" href="#ex1-tabs-6" role="tab"
+						aria-controls="ex1-tabs-7" aria-selected="false">
+						<n:i class="fas fa-check"></n:i>
+						Approval
+					</n:a>
+				</x:li>
 			</n:ul>
 			<!-- Tabs navs -->
 
@@ -79,7 +87,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.nostr}" />
+									<label
+										value="${labels.anggota.nostr}" />
 								</n:td>
 								<n:td>
 									<textbox value="@bind(e.nostr)"
@@ -88,7 +97,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.noktp} (*)" />
+									<label
+										value="${labels.anggota.noktp} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -101,7 +111,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.tempatlahir} (*)" />
+									<label
+										value="${labels.anggota.tempatlahir} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -114,7 +125,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.tgllahir} (*)" />
+									<label
+										value="${labels.anggota.tgllahir} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -133,19 +145,23 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.gender} (*)" />
+									<label
+										value="${labels.anggota.gender} (*)" />
 								</n:td>
 								<n:td>
 									<radiogroup
 										selectedItem="@bind(e.gender)">
-										<radio value="L" label="Laki-Laki" />
-										<radio value="P" label="Perempuan" />
+										<radio value="L"
+											label="Laki-Laki" />
+										<radio value="P"
+											label="Perempuan" />
 									</radiogroup>
 								</n:td>
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.agama}" />
+									<label
+										value="${labels.anggota.agama}" />
 								</n:td>
 								<n:td>
 									<combobox id="cbAgama"
@@ -167,12 +183,14 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.warganegara} (*)" />
+									<label
+										value="${labels.anggota.warganegara} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
 										<radiogroup
-											selectedItem="@bind(e.warganegara)" onCheck="@command('doLoadNegara', item=e.warganegara)">
+											selectedItem="@bind(e.warganegara)"
+											onCheck="@command('doLoadNegara', item=e.warganegara)">
 											<radio value="WNI"
 												label="WNI" />
 											<radio value="WNA"
@@ -181,10 +199,11 @@
 										<label style="color:gray"
 											value="@load(vmsgs['warganegara'])" />
 									</vlayout>
-									
+
 									<vlayout id="vlayNation">
-										<combobox id="cbNegara" placeholder="Pilih Negara"
-											model="@load(vm.negaraModel)" selectedItem="@bind(e.mnegara)" width="100%">
+										<combobox id="cbNegara"
+											placeholder="Pilih Negara" model="@load(vm.negaraModel)"
+											selectedItem="@bind(e.mnegara)" width="100%">
 											<template name="model"
 												var="mnegara">
 												<comboitem
@@ -198,7 +217,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.photo}" />
+									<label
+										value="${labels.anggota.photo}" />
 								</n:td>
 								<n:td>
 									<hlayout>
@@ -224,14 +244,16 @@
 							class="table table-sm table-striped mb-0">
 							<n:tr>
 								<n:td width="30%">
-									<label value="${labels.area.prov} (*)" />
+									<label
+										value="${labels.area.prov} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
 										<combobox id="cbProvrumah"
 											model="@load(vm.provrumahModel)"
 											selectedItem="@bind(vm.provrumah)"
-											onSelect="@command('doLoadKabrumah', prov=vm.provrumah)" width="100%">
+											onSelect="@command('doLoadKabrumah', prov=vm.provrumah)"
+											width="100%">
 											<template name="model"
 												var="provinsi">
 												<comboitem
@@ -245,7 +267,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.area.kab} (*)" />
+									<label
+										value="${labels.area.kab} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -265,7 +288,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.area.alamat} (*)" />
+									<label
+										value="${labels.area.alamat} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -278,7 +302,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.area.kodepos}" />
+									<label
+										value="${labels.area.kodepos}" />
 								</n:td>
 								<n:td>
 									<textbox value="@bind(e.kodepos)"
@@ -308,7 +333,8 @@
 							class="table table-sm table-striped mb-0">
 							<n:tr>
 								<n:td width="30%">
-									<label value="${labels.anggota.noanggota} (*)" />
+									<label
+										value="${labels.anggota.noanggota} (*)" />
 								</n:td>
 								<n:td>
 									<textbox value="@load(k.noanggota)"
@@ -338,13 +364,15 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.area.prov} (*)" />
+									<label
+										value="${labels.area.prov} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
 										<combobox id="cbRegion"
 											model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
-											onSelect="@command('doLoadCabang', prov=vm.region)" width="100%">
+											onSelect="@command('doLoadCabang', prov=vm.region)"
+											width="100%">
 											<template name="model"
 												var="provinsi">
 												<comboitem
@@ -358,12 +386,14 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.cabang} (*)" />
+									<label
+										value="${labels.anggota.cabang} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
 										<combobox id="cbCabang"
-											selectedItem="@bind(e.mcabang)" model="@load(vm.cabangModel)" width="100%">
+											selectedItem="@bind(e.mcabang)" model="@load(vm.cabangModel)"
+											width="100%">
 											<template name="model"
 												var="cabang">
 												<comboitem
@@ -377,15 +407,15 @@
 							</n:tr>
 							<!-- <n:tr>
 								<n:td>
-									<label />
+								<label />
 								</n:td>
 								<n:td>
-									<button width="100%"
-										label="Perbarui" autodisable="self"
-										sclass="btn btn-primary btn-sm" iconSclass="z-icon-save"
-										onClick="@command('doSaveKeanggotaan')" />
+								<button width="100%"
+								label="Perbarui" autodisable="self"
+								sclass="btn btn-primary btn-sm" iconSclass="z-icon-save"
+								onClick="@command('doSaveKeanggotaan')" />
 								</n:td>
-							</n:tr> -->
+								</n:tr> -->
 						</n:table>
 					</div>
 				</n:div>
@@ -393,20 +423,24 @@
 					role="tabpanel" aria-labelledby="ex1-tab-3">
 					<grid id="gridPekerjaan" sizedByContent="true">
 						<columns>
-							<column label="${labels.pekerjaan.namakantor}" />
+							<column
+								label="${labels.pekerjaan.namakantor}" />
 							<column label="${labels.area.prov}" />
 							<column label="${labels.area.kab}" />
 							<column label="${labels.area.alamat}" />
 							<column label="${labels.pekerjaan.rumpun}" />
-							<column label="${labels.pekerjaan.kepegawaian}" />
+							<column
+								label="${labels.pekerjaan.kepegawaian}" />
 							<column label="${labels.pekerjaan.jabatan}" />
 							<column label="${labels.pekerjaan.nip}" />
 							<column label="${labels.pekerjaan.period}" />
 							<column label="${labels.pekerjaan.nosk}" />
-							<column label="${labels.pekerjaan.keterangan}" />
+							<column
+								label="${labels.pekerjaan.keterangan}" />
 							<column label="${labels.pekerjaan.notelp}" />
 							<column label="${labels.pekerjaan.nofax}" />
-							<column label="${labels.common.action}" align="center" width="120px" />
+							<column label="${labels.common.action}"
+								align="center" width="120px" />
 						</columns>
 					</grid>
 					<separator />
@@ -431,7 +465,8 @@
 							</columns>
 							<rows>
 								<row>
-									<label value="${labels.area.prov} (*)" />
+									<label
+										value="${labels.area.prov} (*)" />
 									<vlayout>
 										<combobox id="cbProvkantor"
 											model="@load(vm.provkantorModel)"
@@ -449,7 +484,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.area.kab} (*)" />
+									<label
+										value="${labels.area.kab} (*)" />
 									<vlayout>
 										<combobox id="cbKabkantor"
 											model="@load(vm.kabkantorModel)"
@@ -466,7 +502,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.area.alamat} (*)" />
+									<label
+										value="${labels.area.alamat} (*)" />
 									<vlayout>
 										<textbox
 											value="@bind(f.alamatkantor)" maxlength="200" width="100%"
@@ -476,7 +513,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.area.rumpun} (*)" />
+									<label
+										value="${labels.area.rumpun} (*)" />
 									<vlayout>
 										<combobox id="cbRumpun"
 											selectedItem="@bind(f.mrumpun)" model="@load(vm.rumpunModel)"
@@ -492,7 +530,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.kepegawaian} (*)" />
+									<label
+										value="${labels.pekerjaan.kepegawaian} (*)" />
 									<vlayout>
 										<combobox id="cbKepegawaian"
 											selectedItem="@bind(f.mkepegawaian)"
@@ -510,7 +549,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.kepegawaiansub} (*)" />
+									<label
+										value="${labels.pekerjaan.kepegawaiansub} (*)" />
 									<vlayout>
 										<combobox id="cbKepegawaiansub"
 											selectedItem="@bind(f.mkepegawaiansub)"
@@ -527,7 +567,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.namakantor} (*)" />
+									<label
+										value="${labels.pekerjaan.namakantor} (*)" />
 									<vlayout>
 										<textbox
 											value="@bind(f.namakantor)" maxlength="50" width="100%" />
@@ -536,7 +577,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.nip} (*)" />
+									<label
+										value="${labels.pekerjaan.nip} (*)" />
 									<vlayout>
 										<textbox value="@bind(f.nip)"
 											maxlength="20" width="100%" />
@@ -545,7 +587,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.jabatan} (*)" />
+									<label
+										value="${labels.pekerjaan.jabatan} (*)" />
 									<vlayout>
 										<textbox
 											value="@bind(f.jabatankantor)" maxlength="50" width="100%" />
@@ -554,12 +597,14 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.nosk}" />
+									<label
+										value="${labels.pekerjaan.nosk}" />
 									<textbox value="@bind(f.noskkantor)"
 										maxlength="25" width="100%" />
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.tglmulai} (*)" />
+									<label
+										value="${labels.pekerjaan.tglmulai} (*)" />
 									<vlayout>
 										<datebox
 											value="@bind(f.tglmulai)" maxlength="10" cols="12"
@@ -569,7 +614,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.tglakhir} (*)" />
+									<label
+										value="${labels.pekerjaan.tglakhir} (*)" />
 									<vlayout>
 										<datebox
 											value="@bind(f.tglmulai)" maxlength="10" cols="12"
@@ -579,17 +625,20 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.keterangan}" />
+									<label
+										value="${labels.pekerjaan.keterangan}" />
 									<textbox
 										value="@bind(f.keterangankerja)" maxlength="100" width="100%" />
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.notelp}" />
+									<label
+										value="${labels.pekerjaan.notelp}" />
 									<textbox value="@bind(f.telpkantor)"
 										maxlength="20" width="100%" />
 								</row>
 								<row>
-									<label value="${labels.pekerjaan.nofax}" />
+									<label
+										value="${labels.pekerjaan.nofax}" />
 									<textbox value="@bind(f.faxkantor)"
 										maxlength="20" width="100%" />
 								</row>
@@ -610,13 +659,17 @@
 					role="tabpanel" aria-labelledby="ex1-tab-4">
 					<grid id="gridPendidikan" sizedByContent="true">
 						<columns>
-							<column label="${labels.pendidikan.universitas}" />
-							<column label="${labels.pendidikan.jenjang}" />
+							<column
+								label="${labels.pendidikan.universitas}" />
+							<column
+								label="${labels.pendidikan.jenjang}" />
 							<column label="${labels.pendidikan.minat1}" />
 							<column label="${labels.pendidikan.minat2}" />
 							<column label="${labels.pendidikan.period}" />
-							<column label="${labels.pendidikan.noijazah}" />
-							<column label="${labels.common.action}" align="center" width="120px"  />
+							<column
+								label="${labels.pendidikan.noijazah}" />
+							<column label="${labels.common.action}"
+								align="center" width="120px" />
 						</columns>
 					</grid>
 					<separator />
@@ -642,7 +695,8 @@
 							</columns>
 							<rows>
 								<row>
-									<label value="${labels.pendidikan.universitas} (*)" />
+									<label
+										value="${labels.pendidikan.universitas} (*)" />
 									<vlayout>
 										<combobox id="cbUniversitas"
 											selectedItem="@bind(g.muniversitas)"
@@ -659,7 +713,8 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pendidikan.jenjang} (*)" />
+									<label
+										value="${labels.pendidikan.jenjang} (*)" />
 									<vlayout>
 										<combobox id="cbJenjang"
 											selectedItem="@bind(g.mjenjang)"
@@ -676,17 +731,20 @@
 									</vlayout>
 								</row>
 								<row>
-									<label value="${labels.pendidikan.minat1}" />
+									<label
+										value="${labels.pendidikan.minat1}" />
 									<textbox value="@bind(g.peminatan1)"
 										maxlength="30" width="100%" />
 								</row>
 								<row>
-									<label value="${labels.pendidikan.minat1}" />
+									<label
+										value="${labels.pendidikan.minat1}" />
 									<textbox value="@bind(g.peminatan2)"
 										maxlength="30" width="100%" />
 								</row>
 								<row>
-									<label value="${labels.pendidikan.periodeawal}" />
+									<label
+										value="${labels.pendidikan.periodeawal}" />
 									<hlayout>
 										<combobox
 											id="cbPendidikanBlAwal" cols="10" />
@@ -695,7 +753,8 @@
 									</hlayout>
 								</row>
 								<row>
-									<label value="${labels.pendidikan.periodeakhir}" />
+									<label
+										value="${labels.pendidikan.periodeakhir}" />
 									<hlayout>
 										<combobox
 											id="cbPendidikanBlAkhir" cols="10" />
@@ -704,7 +763,8 @@
 									</hlayout>
 								</row>
 								<row>
-									<label value="${labels.pendidikan.noijazah}" />
+									<label
+										value="${labels.pendidikan.noijazah}" />
 									<textbox value="@bind(g.noijazah)"
 										maxlength="20" width="100%" />
 								</row>
@@ -730,7 +790,8 @@
 							class="table table-sm table-striped mb-0">
 							<n:tr>
 								<n:td width="30%">
-									<label value="${labels.anggota.email} (*)" />
+									<label
+										value="${labels.anggota.email} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -743,7 +804,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.telp}" />
+									<label
+										value="${labels.anggota.telp}" />
 								</n:td>
 								<n:td>
 									<textbox value="@bind(d.telp)"
@@ -752,7 +814,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.hp} (*)" />
+									<label
+										value="${labels.anggota.hp} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -770,7 +833,8 @@
 							class="table table-sm table-striped mb-0">
 							<n:tr>
 								<n:td width="30%">
-									<label value="${labels.anggota.email} (*)" />
+									<label
+										value="${labels.anggota.email} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -783,7 +847,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.hubungandarurat} (*)" />
+									<label
+										value="${labels.anggota.hubungandarurat} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -807,7 +872,8 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
-									<label value="${labels.anggota.hpdarurat} (*)" />
+									<label
+										value="${labels.anggota.hpdarurat} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
@@ -830,6 +896,63 @@
 								</n:td>
 							</n:tr>
 						</n:table>
+					</div>
+				</n:div>
+
+				<n:div class="tab-pane fade" id="ex1-tabs-6"
+					role="tabpanel" aria-labelledby="ex1-tab-6">
+					<div
+						form="@id('v') @load(vm.pribadi) @save(vm.pribadi, before='doSaveApproval')
+			@validator(vm.validatorApproval) ">
+						<n:table
+							class="table table-sm table-striped mb-0">
+							<n:tr>
+								<n:td width="30%">
+									<label value="Hasil Verifikasi" />
+								</n:td>
+								<n:td>
+									<vlayout>
+										<radiogroup id="rgDecision"
+											selectedItem="@bind(v.statusreg)" orient="vertical">
+											<radio id="rdVerDecYes" value="2"
+												label="Setujui dan Generate Pembayaran VA" />
+											<radio id="rdVerDecNo" value="9"
+												label="Tolak" />
+										</radiogroup>
+										<label style="color:gray"
+											value="@load(vmsgs['statusreg'])" />
+									</vlayout>
+									<vlayout>
+										<textbox id="tbMemo"
+											value="@bind(v.regmemo)"
+											placeholder="Alasan Penolakan (Maks 100 Karakter)"
+											maxlength="100" rows="5" width="100%" />
+										<label style="color:gray"
+											value="@load(vmsgs['regmemo'])" />
+									</vlayout>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label />
+								</n:td>
+								<n:td>
+									<button id="btSaveApproval"
+										iconSclass="z-icon-save"
+										label="Submit Keputusan Hasil Verifikasi" autodisable="self"
+										sclass="btn btn-primary btn-sm"
+										onClick="@command('doSaveApproval')" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</div>
+					<separator />
+					<div id="divProcessinfo"
+						class="note note-warning mb-3" visible="false">
+						<n:strong>
+							Status Hasil Proses Verifikasi :
+						</n:strong>
+						<label value="@load(vm.processinfo)" />
 					</div>
 				</n:div>
 			</div>

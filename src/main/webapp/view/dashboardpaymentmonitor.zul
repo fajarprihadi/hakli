@@ -6,6 +6,32 @@
 			<n:i class="fas fa-chart-line"></n:i>
 			<n:span>Dashboard Monitoring Pembayaran</n:span>
 		</caption>
+		<groupbox mold="3d">
+			<caption label="Pencarian" iconSclass="z-icon-search" />
+			<grid sizedByContent="true">
+				<columns>
+					<column />
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						Periode
+						<hlayout>
+							<datebox value="@bind(vm.begindate)"
+								format="dd-MM-yyyy" />
+							S/D
+							<datebox value="@bind(vm.enddate)"
+								format="dd-MM-yyyy" />
+						</hlayout>
+						<button label="Telusuri" autodisable="self"
+							iconSclass="z-icon-search" width="100%"
+							sclass="btn btn-success btn-sm" onClick="@command('doChart')" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+		<n:hr/>
 		<div class="row">
 			<div class="col">
 				<charts id="chart" title="Monitoring Pembayaran" />

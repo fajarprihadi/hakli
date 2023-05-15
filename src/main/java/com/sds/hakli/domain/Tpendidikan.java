@@ -39,6 +39,8 @@ public class Tpendidikan {
 	
 	private String noijazah;
 	
+	private String ijazahfilename;
+	
 	private String ijazahlink;
 	
 	private Date lastupdated;
@@ -88,6 +90,15 @@ public class Tpendidikan {
 	}
 
 	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getIjazahfilename() {
+		return ijazahfilename;
+	}
+
+	public void setIjazahfilename(String ijazahfilename) {
+		this.ijazahfilename = ijazahfilename;
+	}
+
 	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getIjazahlink() {
 		return ijazahlink;

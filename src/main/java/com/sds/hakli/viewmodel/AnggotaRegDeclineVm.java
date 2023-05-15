@@ -98,8 +98,9 @@ public class AnggotaRegDeclineVm {
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("obj", data);
+						map.put("acttype", "decided");
 						Window win = (Window) Executions
-								.createComponents("/view/anggota/anggotaregapproval.zul", null, map);
+								.createComponents("/view/anggota/anggotaedit.zul", null, map);
 						win.setClosable(true);
 						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 
@@ -168,7 +169,7 @@ public class AnggotaRegDeclineVm {
 			if (prov != null) {
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "cabang"));
+						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

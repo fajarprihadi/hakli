@@ -1,0 +1,73 @@
+<?page title="${desktop.webApp.appName}" contentType="text/html;charset=UTF-8"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/app_icon.ico" ?>
+<?link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" ?>
+<?link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" ?>
+<?link rel="stylesheet" type="text/css"	href="/mdb/css/mdb.min.css" ?>
+<zk xmlns:n="native">
+	<window id="winRegInit"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.RegInitVm')">
+		<!-- Section: Design Block -->
+		<n:section class="text-center">
+			<!-- Background image -->
+			<!-- 
+			<div class="p-5 bg-image"
+				style="
+        background-image: url('/hakli/img/sumpahprofesi.png');
+        height: 300px;
+        ">
+			</div>
+			 -->
+			<!-- Background image -->
+			<n:br />
+			<n:br />
+			<n:br />
+			<n:br />
+			<n:br />
+			<div class="card mx-0 mx-md-0 shadow-5-strong"
+				style="
+        margin-top: -100px;
+        background: hsla(0, 0%, 100%, 0.8);
+        backdrop-filter: blur(30px);
+        ">
+        
+        	
+
+				<div class="card-body py-5 px-md-5">
+
+					<div class="row d-flex justify-content-center">
+						<div class="col-lg-8">
+							<n:h2 class="fw-bold mb-5">
+								Pendaftaran Anggota HAKLI
+							</n:h2>
+							<n:form>
+
+								<!-- Email input -->
+								<div class="form mb-4">
+									<!-- <textbox value="@bind(vm.email)"
+										placeholder="Input alamat E-Mail Anda untuk memulai pendaftaran"
+										sclass="form-control form-control-lg" /> -->
+									<textbox value="@bind(vm.nik)"
+										placeholder="Input NIK Anda untuk memulai pendaftaran"
+										sclass="form-control form-control-lg" />
+								</div>
+
+								<!-- Submit button -->
+								<button label="Submit"
+									onClick="@command('doSubmit')" autodisable="self"
+									class="btn btn-primary btn-block mb-4">
+								</button>
+
+							</n:form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</n:section>
+		<!-- Section: Design Block -->
+		
+		<n:br/>
+		
+		<include src="/footer.zul" />
+
+	</window>
+</zk>

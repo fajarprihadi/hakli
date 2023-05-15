@@ -66,7 +66,8 @@ public class EventInitVm {
 			try {
 				Map<String, Object> map = new HashMap<>();
 				map.put("event", obj);
-				String page = "/view/event/eventreg.zul";
+				//String page = "/view/event/eventreg.zul";
+				String page = "/view/anggota/anggotaadd.zul";
 				Tanggota obj = null;
 				List<Tanggota> objList = oDao.listByFilter("email = '" + email.trim() + "'", "tanggotapk desc");
 				if (objList.size() > 0) {

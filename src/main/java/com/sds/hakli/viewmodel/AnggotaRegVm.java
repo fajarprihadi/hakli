@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
@@ -21,6 +22,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.io.Files;
@@ -79,6 +81,8 @@ public class AnggotaRegVm {
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
 	private TpekerjaanDAO pekerjaanDao = new TpekerjaanDAO();
 	private TpendidikanDAO pendidikanDao = new TpendidikanDAO();
+	private MprovinsiDAO provDao = new MprovinsiDAO();
+	private MkabupatenDAO kabDao = new MkabupatenDAO();
 
 	private AnggotaReg objForm;
 	private Mprovinsi region;
@@ -108,6 +112,8 @@ public class AnggotaRegVm {
 	@Wire
 	private Combobox cbNegara;
 	@Wire
+	private Combobox cbRegion;
+	@Wire
 	private Combobox cbCabang;
 	@Wire
 	private Combobox cbProvrumah;
@@ -119,6 +125,8 @@ public class AnggotaRegVm {
 	private Combobox cbKabkantor;
 	@Wire
 	private Combobox cbStatusanggota;
+	@Wire
+	private Combobox cbRumpun;
 	@Wire
 	private Combobox cbKepegawaian;
 	@Wire
@@ -149,11 +157,85 @@ public class AnggotaRegVm {
 	private Row rowNegara;
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj) {
 		Selectors.wireComponents(view, this, false);
 		try {
 			init();
 			doReset();
+			objForm.setPribadi(obj);
+			List<Tpekerjaan> pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + obj.getTanggotapk(), "tpekerjaanpk desc");
+			if (pekerjaans.size() > 0)
+				objForm.setPekerjaan(pekerjaans.get(0));
+			List<Tpendidikan> pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + obj.getTanggotapk(), "tpendidikanpk desc");
+			if (pendidikans.size() > 0)
+				objForm.setPendidikan(pendidikans.get(0));
+			
+			if (obj.getPhotolink() != null) {
+				photo.setSrc(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink());
+				photo.setVisible(true);
+			}
+			
+			dob = obj.getTgllahir();
+			if (dob != null) {
+				cbDobDay.setValue(new SimpleDateFormat("dd").format(dob));
+				cbDobMonth.setSelectedIndex(Integer.parseInt(new SimpleDateFormat("MM").format(dob)) - 1);
+				cbDobYear.setValue(new SimpleDateFormat("yyyy").format(dob));
+			}
+			
+			provrumah = provDao.findByFilter("provcode = '" + obj.getProvcode() + "'");
+			if (provrumah != null) {
+				cbProvrumah.setValue(provrumah.getProvname());
+				doLoadKab(provrumah);
+			}
+			kabrumah = kabDao.findByFilter("provcode = '" + obj.getProvcode() + "' and kabcode = '" + obj.getKabcode() + "'");
+			cbKabrumah.setValue(obj.getKabname());
+			
+			doLoadNegara(obj.getWarganegara());
+			
+			if (objForm.getPekerjaan().getTpekerjaanpk() != null) {
+				provkantor = provDao.findByFilter("provcode = '" + objForm.getPekerjaan().getProvcode() + "'");
+				if (provkantor != null) {
+					cbProvkantor.setValue(provkantor.getProvname());
+					doLoadKabPekerjaan(provkantor);
+				}
+				kabkantor = kabDao.findByFilter("provcode = '" + objForm.getPekerjaan().getProvcode() + "' and kabcode = '" + objForm.getPekerjaan().getKabcode() + "'");
+				cbKabkantor.setValue(objForm.getPekerjaan().getKabname());
+				
+				if (objForm.getPekerjaan().getMrumpun() != null)
+					cbRumpun.setValue(objForm.getPekerjaan().getMrumpun().getRumpun());
+				if (objForm.getPekerjaan().getMkepegawaian() != null) {
+					cbKepegawaian.setValue(objForm.getPekerjaan().getMkepegawaian().getKepegawaian());
+					doLoadKepegawaiansub(objForm.getPekerjaan().getMkepegawaian());
+				}
+				if (objForm.getPekerjaan().getMkepegawaiansub() != null)
+					cbKepegawaiansub.setValue(objForm.getPekerjaan().getMkepegawaiansub().getKepegawaiansub());
+			}
+			
+			
+			if (objForm.getPendidikan().getTpendidikanpk() != null) {
+				if (objForm.getPendidikan().getMuniversitas() != null) {
+					cbUniversitas.setValue(objForm.getPendidikan().getMuniversitas().getUniversitas());
+				}
+				if (objForm.getPendidikan().getMjenjang() != null) {
+					cbJenjang.setValue(objForm.getPendidikan().getMjenjang().getJenjang());
+				}
+				
+				cbPendidikanThAwal.setValue(objForm.getPendidikan().getPeriodethawal());
+				cbPendidikanThAkhir.setValue(objForm.getPendidikan().getPeriodethakhir());
+				if (objForm.getPendidikan().getPeriodeblawal() != null && objForm.getPendidikan().getPeriodeblawal().trim().length() > 0)
+					cbPendidikanBlAwal.setSelectedIndex(Integer.parseInt(objForm.getPendidikan().getPeriodeblawal()) - 1);
+				if (objForm.getPendidikan().getPeriodeblakhir() != null && objForm.getPendidikan().getPeriodeblakhir().trim().length() > 0)
+					cbPendidikanBlAkhir.setSelectedIndex(Integer.parseInt(objForm.getPendidikan().getPeriodeblakhir()) - 1);
+			}
+			
+			if (obj.getMcabang() != null) {
+				region = obj.getMcabang().getMprovinsi();
+				if (region != null) {
+					cbRegion.setValue(region.getProvname());
+					doLoadCabang(region);
+				}
+				cbCabang.setValue(obj.getMcabang().getCabang());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -257,7 +339,7 @@ public class AnggotaRegVm {
 			if (prov != null) {
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "cabang"));
+						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

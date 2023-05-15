@@ -6,10 +6,49 @@
 			<n:i class="fas fa-list"></n:i>
 			<n:span>Daftar Events</n:span>
 		</caption>
+		<style>.d-flex { display:flex; }</style>
 		<button label="Buat Event" autodisable="self"
 			sclass="btn btn-primary btn-sm" iconSclass="z-icon-plus-square"
 			onClick="@command('doAdd')" />
+		<separator />
+		<groupbox mold="3d">
+			<caption label="Pencarian" iconSclass="z-icon-search" />
+			<grid>
+				<columns>
+					<column width="25%" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						Nama Event
+						<textbox value="@bind(vm.eventname)" width="100%" />
+					</row>
+					<row>
+						Tanggal Event
+						<hlayout>
+							<datebox value="@bind(vm.begindate)"
+								format="dd-MM-yyyy" />
+							S/D
+							<datebox value="@bind(vm.enddate)"
+								format="dd-MM-yyyy" />
+						</hlayout>
+					</row>
+				</rows>
+				<foot>
+					<footer />
+					<footer>
+						<button label="Telusuri" autodisable="self"
+							iconSclass="z-icon-search" width="100%"
+							sclass="btn btn-success btn-sm" onClick="@command('doRender')" />
+					</footer>
+				</foot>
+			</grid>
+		</groupbox>
 		<n:hr />
+		<div align="right">
+			<label value="Total Events : " style="font-weight: bold" />
+			<label value="@load(vm.totalrecord)" style="font-weight: bold" />
+		</div>
 		<div id="divCards" />
 	</window>
 </zk>

@@ -86,7 +86,7 @@ public class AnggotaWaitPayVm {
 				row.getChildren().add(new Label(data.getNoktp()));
 				row.getChildren().add(new Label(data.getMcabang().getCabang()));
 				row.getChildren().add(new Label(datetimeFormatter.format(data.getCreatetime())));
-				row.getChildren().add(new Label(data.getvano()));
+				row.getChildren().add(new Label(data.getVareg()));
 				Button btProcess = new Button();
 				btProcess.setIconSclass("z-icon-eye");
 				btProcess.setSclass("btn btn-primary btn-sm");
@@ -98,8 +98,9 @@ public class AnggotaWaitPayVm {
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("obj", data);
+						map.put("acttype", "decided");
 						Window win = (Window) Executions
-								.createComponents("/view/anggota/anggotaregapproval.zul", null, map);
+								.createComponents("/view/anggota/anggotaedit.zul", null, map);
 						win.setClosable(true);
 						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 
@@ -168,7 +169,7 @@ public class AnggotaWaitPayVm {
 			if (prov != null) {
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "cabang"));
+						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

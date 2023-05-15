@@ -124,8 +124,9 @@ public class AnggotaVm {
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("obj", data);
+						map.put("acttype", "view");
 						Window win = (Window) Executions
-								.createComponents("/view/anggota/anggotaview.zul", null, map);
+								.createComponents("/view/anggota/anggotaedit.zul", null, map);
 						win.setClosable(true);
 						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 
@@ -167,7 +168,7 @@ public class AnggotaVm {
 		if (region != null) {
 			if (cabang != null)
 				filter += " and mcabangfk = " + cabang.getMcabangpk();
-			else filter += " and mcabang.provcode = '" + region.getProvcode() + "'";
+			else filter += " and mcabang.mprovinsifk = " + region.getMprovinsipk();
 		}
 			
 
