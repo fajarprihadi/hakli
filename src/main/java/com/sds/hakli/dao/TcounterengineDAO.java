@@ -146,4 +146,36 @@ public class TcounterengineDAO {
 		}
 		return finalCounter;
 	}
+	
+	public String generateSeqnum() throws Exception {
+		Integer lastCounter = 0;
+		String strCounter = "";
+		String finalCounter = "";
+		int len = 3;
+		char[] fillUploadid = new char[len];
+		Session session = StoreHibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			String counterName = new SimpleDateFormat("YY").format(new Date()) + new SimpleDateFormat("MM").format(new Date());
+			
+			Query q = session.createQuery("select lastcounter from Tcounterengine where countername = '" + counterName + "'");
+			lastCounter = (Integer) q.uniqueResult();
+			if (lastCounter != null) {
+				lastCounter++;
+				session.createSQLQuery("update Tcounterengine set lastcounter = lastcounter + 1 where countername = '" + counterName + "'").executeUpdate();				
+			} else {
+				lastCounter = 1;
+				session.createSQLQuery("insert into Tcounterengine values ('" + counterName + "', " + lastCounter + ")").executeUpdate();
+			}			
+			transaction.commit();
+			session.close();
+			Arrays.fill(fillUploadid, '0');
+			strCounter = new String(fillUploadid) + lastCounter;
+			finalCounter = counterName + strCounter.substring(strCounter.length()-len, strCounter.length());			
+		} catch (Exception e) {
+			transaction.rollback();
+			e.printStackTrace();
+		}		
+		return finalCounter;
+	}
 }

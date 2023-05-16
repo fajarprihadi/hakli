@@ -2,9 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suratrekomendasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ca554310-f762-46dd-96b5-0dbd7c939898">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="490"/>
+	<property name="ireport.y" value="58"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
+	<parameter name="NOSURAT" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="noanggota" class="java.lang.String"/>
 	<field name="nostr" class="java.lang.String"/>
@@ -45,12 +46,11 @@ Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 				<text><![CDATA[SURAT REKOMENDASI RE-REGISTRASI]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="144" width="554" height="39" uuid="8e159104-d7e9-41ce-84d6-d5ed6d39e4e1"/>
+				<reportElement x="1" y="151" width="554" height="26" uuid="8e159104-d7e9-41ce-84d6-d5ed6d39e4e1"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[No : 01862 / REKOM/PP-HAKLI / II / 2022
-Hal : Re Registrasi STR
+				<text><![CDATA[Hal : Re Registrasi STR
 Lampiran : -]]></text>
 			</staticText>
 			<staticText>
@@ -123,6 +123,10 @@ NPWP : 66.863.590.7-013.000, Bank Mandiri no Rek : 126-00-0656146-7]]></text>
 				<reportElement x="314" y="491" width="181" height="103" uuid="b466b4bb-d523-4d8b-a313-1e7b0fdf901b"/>
 				<imageExpression><![CDATA[$P{TTD_KETUAUMUM}]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="0" y="137" width="553" height="15" uuid="917a317d-2b3a-48e3-bc54-31682035354d"/>
+				<textFieldExpression><![CDATA["No : " + $P{NOSURAT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

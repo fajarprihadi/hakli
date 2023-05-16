@@ -2,6 +2,7 @@ package com.sds.hakli.viewmodel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,24 +27,26 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 
+import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Vrecp2kb;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
 public class LetterRecVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private List<Vrecp2kb> objList = new ArrayList<>();
-	
+
 	private String filter;
 	private String orderby;
-	
+
 	private String nama;
-	
+
 	private Integer pageTotalSize;
-	
+
 	@Wire
 	private Grid grid;
-	
+
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
@@ -69,9 +72,18 @@ public class LetterRecVm {
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> parameters = new HashMap<>();
 						List<Vrecp2kb>dataList = new ArrayList<>();
+						
+						Map<Integer, String> mapRomawi = new HashMap<>();
+						
+						int year = Calendar.getInstance().get(Calendar.YEAR);
+						int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+						mapRomawi = AppData.getAngkaRomawi();
+						
+						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM/PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
 						dataList.add(data);
 						zkSession.setAttribute("objList", dataList);
 						
+						parameters.put("NOSURAT", nosurat);
 						parameters.put("TTD_KETUAUMUM",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
 						parameters.put("LOGO",
@@ -89,17 +101,17 @@ public class LetterRecVm {
 			}
 		});
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
 			filter = "totalwaiting = 0 and totaltimapprove = 0";
 			orderby = "nama";
-			
-			if(nama != null && nama.trim().length() > 0)
+
+			if (nama != null && nama.trim().length() > 0)
 				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
-			
+
 			objList = new Tp2kbDAO().listRecLetter(filter, orderby);
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
@@ -107,7 +119,7 @@ public class LetterRecVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doReset() {
