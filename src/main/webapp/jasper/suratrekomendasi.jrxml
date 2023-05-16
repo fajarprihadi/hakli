@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suratrekomendasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ca554310-f762-46dd-96b5-0dbd7c939898">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="58"/>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
+	<parameter name="NOSURAT" class="java.lang.String"/>
+	<field name="nama" class="java.lang.String"/>
+	<field name="noanggota" class="java.lang.String"/>
+	<field name="nostr" class="java.lang.String"/>
+	<field name="cabang" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="753" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="90" width="555" height="1" uuid="dd62f399-ae65-4d3b-aa68-d8d423d8a3df"/>
+			</line>
+			<line>
+				<reportElement x="0" y="92" width="555" height="1" uuid="74e657f3-c73e-4e91-a375-011ad958d0f5"/>
+			</line>
+			<staticText>
+				<reportElement x="102" y="0" width="340" height="90" uuid="a9f6e72c-ab84-4717-a3e6-c260d1ed288a"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[PENGURUS PUSAT
+HIMPUNAN AHLI KESEHATAN LINGKUNGAN INDONESIA
+(INDONESIAN ASSOCIATION OF ENVIRONMENTAL HEALTH)
+Sekretariat : Equity Tower 49 Floor Jalan Jenderal Sudirman
+Kavling 52 – 53 SCBD Jakarta 12190 Indonesia
+Phone +62 21 2965 1162 Fax +62 21 2965 1222 WA : +62 812 8379 9257
+Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="93" width="555" height="1" uuid="9b5f76a2-640e-447f-a053-17af4391eeeb"/>
+			</line>
+			<line>
+				<reportElement x="0" y="95" width="555" height="1" uuid="c689510b-23a5-4cd2-89b3-c0a63ae921ef"/>
+			</line>
+			<staticText>
+				<reportElement x="1" y="107" width="554" height="15" uuid="39980fff-4547-4593-aa38-7254833b4f2c"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[SURAT REKOMENDASI RE-REGISTRASI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="151" width="554" height="26" uuid="8e159104-d7e9-41ce-84d6-d5ed6d39e4e1"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Hal : Re Registrasi STR
+Lampiran : -]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="204" width="554" height="39" uuid="b5445179-05a3-4c7d-8f84-1cf488233354"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Kepada Yth,
+Ketua Konsil Tenaga Kesehatan Indonesia
+Di - Jakarta
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="263" width="554" height="14" uuid="3ffcd286-eb61-4de1-a13f-437dad2e40a8"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Bersamaan ini kami sampaikan rekomendasi terhadap permohonan Surat Tanda Registrasi (STR) baru/perpanjang STR ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="293" width="555" height="15" uuid="882ebdc6-67af-4a25-b9f0-058652cd5353"/>
+				<textFieldExpression><![CDATA["Nama                       	: " + $F{nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="307" width="555" height="15" uuid="e15911ee-56b5-43f8-bc2a-c165140d5b51"/>
+				<textFieldExpression><![CDATA["Nomor STR                  	: " + $F{nostr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="321" width="555" height="15" uuid="100a20a0-234e-4c89-9d3e-9bb6c05b1dbd"/>
+				<textFieldExpression><![CDATA["Nomor KTA                  	: " + $F{noanggota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="335" width="555" height="15" uuid="c5b3e5d0-fdb8-4415-bd04-11d611b21269"/>
+				<textFieldExpression><![CDATA["Tempat Kerja                   	: " + $F{cabang}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="372" width="554" height="67" uuid="b6c438ce-9b0c-4e67-a14f-f0d3c8483c65"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Berkas tersebut setelah diverifikasi oleh Tim Virifikasi telah memenuhi persayaratan untuk diajukan guna memperoleh
+STR baru/perpanjangan STR. Demikian surat rekomendasi kami sampaikan untuk diproses lebih lanjut sesuai dengan
+ketentuan yang berlaku.
+
+Atas perhatian dan kerja sama yang baik diucapkan terima kasih]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="453" width="296" height="38" uuid="82922c29-7c9c-4126-be4b-728ef57ef5ce"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Jakarta, 03 Februari 2022
+Ketua Umum
+Himpunan Ahli Kesehatan Lingkungan Indonesia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="594" width="296" height="15" uuid="b14e8646-78ae-468e-98a3-6e4ccb8b7365"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Prof. DR. H. Arif Sumantri SKM. M.Kes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="655" width="555" height="41" uuid="efdbb532-aa56-4b0e-b7d6-0ae15e3c2599"/>
+				<text><![CDATA[HAKLI adalah Organisasi Profesi Kesehatan Lingkungan di Indonesia berdasar Pengesahan Kepmenkumham
+No : AHU – 0000560.10 3014 – dan pembaruan Surat Kepmenkumham No : AHU = 0001169.AH.01.08. Tahun 2019
+NPWP : 66.863.590.7-013.000, Bank Mandiri no Rek : 126-00-0656146-7]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="10" width="81" height="71" uuid="1732fd96-4752-4680-96b8-64b5b3c3be7a"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="314" y="491" width="181" height="103" uuid="b466b4bb-d523-4d8b-a313-1e7b0fdf901b"/>
+				<imageExpression><![CDATA[$P{TTD_KETUAUMUM}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="0" y="137" width="553" height="15" uuid="917a317d-2b3a-48e3-bc54-31682035354d"/>
+				<textFieldExpression><![CDATA["No : " + $P{NOSURAT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
