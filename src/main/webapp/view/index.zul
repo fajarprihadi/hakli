@@ -200,6 +200,14 @@
 											</n:i>
 											<n:span>Pemeriksaan P2KB Anggota</n:span>
 										</a>
+										<a href="#"
+											onClick="@command('doRedirect', path='/view/komisip2kb/letterrec.zul', menu='komisip2kb', index=1)"
+											class="list-group-item list-group-item-action py-2 ripple">
+											<n:i
+												class="fas fa-book fa-fw me-3">
+											</n:i>
+											<n:span>Surat Rekomendasi P2KB</n:span>
+										</a>
 									</div>
 								</div>
 							</n:div>

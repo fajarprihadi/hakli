@@ -2,7 +2,9 @@ package com.sds.hakli.viewmodel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
@@ -10,6 +12,8 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -24,9 +28,10 @@ import org.zkoss.zul.RowRenderer;
 
 import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Vrecp2kb;
+import com.sds.utils.AppUtils;
 
 public class LetterRecVm {
-
+	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private List<Vrecp2kb> objList = new ArrayList<>();
 	
 	private String filter;
@@ -53,18 +58,34 @@ public class LetterRecVm {
 				row.getChildren().add(new Label(data.getNama()));
 				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
 				
-				Button btEdit = new Button();
-				btEdit.setIconSclass("z-icon-edit");
-				btEdit.setSclass("btn btn-primary btn-sm");
-				btEdit.setAutodisable("self");
-				btEdit.setTooltiptext("Edit");
-				btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+				Button btLetter = new Button("Download");
+				btLetter.setIconSclass("z-icon-download");
+				btLetter.setSclass("btn btn-primary btn-sm");
+				btLetter.setAutodisable("self");
+				btLetter.setTooltiptext("Download surat rekomendasi");
+				btLetter.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event event) throws Exception {
+						Map<String, Object> parameters = new HashMap<>();
+						List<Vrecp2kb>dataList = new ArrayList<>();
+						dataList.add(data);
+						zkSession.setAttribute("objList", dataList);
 						
+						parameters.put("TTD_KETUAUMUM",
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
+						parameters.put("LOGO",
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
+						
+						zkSession.setAttribute("parameters", parameters);
+						zkSession.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+								.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi.jasper"));
+						
+						Executions.getCurrent().sendRedirect("/view/jasperviewer.zul", "_blank");
 					}
 				});
+				
+				row.getChildren().add(btLetter);
 			}
 		});
 	}
@@ -73,7 +94,7 @@ public class LetterRecVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "0=0";
+			filter = "totalwaiting = 0 and totaltimapprove = 0";
 			orderby = "nama";
 			
 			if(nama != null && nama.trim().length() > 0)

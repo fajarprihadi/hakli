@@ -69,7 +69,7 @@ public class NaskahVm {
 
 			parameters.put("FOTO",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink()));
-			parameters.put("TTD_MENGANGKATSUMPAH",
+			parameters.put("TTD_KETUAUMUM",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
 			parameters.put("TTD_SAKSI",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_saksi.jpg"));
