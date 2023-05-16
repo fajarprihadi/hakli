@@ -45,6 +45,16 @@ public class Tpekerjaan {
 	
 	private String noskkantor;
 	
+	private String nostr;
+	
+	private Date tglstr;
+	
+	private String nosip;
+	
+	private Date tglsipmulai;
+	
+	private Date tglsipakhir;
+	
 	private String provcode;
 	
 	private String provname;
@@ -64,6 +74,10 @@ public class Tpekerjaan {
 	private Mkepegawaian mkepegawaian;
 	
 	private Mkepegawaiansub mkepegawaiansub;
+	
+	private String issisdmk;
+	
+	private Date sisdmklastupdated;
 	
 	
 	@Id
@@ -281,6 +295,63 @@ public class Tpekerjaan {
 
 	public void setMkepegawaiansub(Mkepegawaiansub mkepegawaiansub) {
 		this.mkepegawaiansub = mkepegawaiansub;
+	}
+
+	public String getNostr() {
+		return nostr;
+	}
+
+	public void setNostr(String nostr) {
+		this.nostr = nostr;
+	}
+
+	public Date getTglstr() {
+		return tglstr;
+	}
+
+	public void setTglstr(Date tglstr) {
+		this.tglstr = tglstr;
+	}
+
+	public String getNosip() {
+		return nosip;
+	}
+
+	public void setNosip(String nosip) {
+		this.nosip = nosip;
+	}
+
+	public Date getTglsipmulai() {
+		return tglsipmulai;
+	}
+
+	public void setTglsipmulai(Date tglsipmulai) {
+		this.tglsipmulai = tglsipmulai;
+	}
+
+	public Date getTglsipakhir() {
+		return tglsipakhir;
+	}
+
+	public void setTglsipakhir(Date tglsipakhir) {
+		this.tglsipakhir = tglsipakhir;
+	}
+
+	public String getIssisdmk() {
+		return issisdmk;
+	}
+
+	public void setIssisdmk(String issisdmk) {
+		this.issisdmk = issisdmk;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getSisdmklastupdated() {
+		return sisdmklastupdated;
+	}
+
+	public void setSisdmklastupdated(Date sisdmklastupdated) {
+		this.sisdmklastupdated = sisdmklastupdated;
 	}
 
 	

@@ -208,7 +208,7 @@ public class AnggotaAddVm {
 					photo.setVisible(true);
 				}
 				
-				dob = obj.getTgllahir();
+				dob = objForm.getPribadi().getTgllahir();
 				if (dob != null) {
 					cbDobDay.setValue(new SimpleDateFormat("dd").format(dob));
 					cbDobMonth.setSelectedIndex(Integer.parseInt(new SimpleDateFormat("MM").format(dob)) - 1);
@@ -323,13 +323,30 @@ public class AnggotaAddVm {
 					anggota.setNoktp(data.getData().getNik());
 					anggota.setTgllahir(data.getData().getTanggal_lahir());
 					anggota.setTempatlahir(data.getData().getTempat_lahir());
-					objForm.setPribadi(anggota);
+					
 					if (data.getData().getPekerjaan() != null && data.getData().getPekerjaan().size() > 0) {
 						SisdmkPekerjaan sisdmkPekerjaan = data.getData().getPekerjaan().get(0);
 						Tpekerjaan pekerjaan = new Tpekerjaan();
 						pekerjaan.setAlamatkantor(sisdmkPekerjaan.getAlamat());
 						pekerjaan.setNip(sisdmkPekerjaan.getNip());
 						pekerjaan.setNamakantor(sisdmkPekerjaan.getUnit());
+						anggota.setNostr(sisdmkPekerjaan.getStr());
+						
+						if (sisdmkPekerjaan.getProvinsi() != null) {
+							provkantor = provDao.findByFilter("upper(provname) = '" + sisdmkPekerjaan.getProvinsi().trim().toUpperCase() + "'");
+							if (provkantor != null) {
+								cbProvkantor.setValue(provkantor.getProvname());
+								doLoadKabPekerjaan(provkantor);
+							}
+							
+							if (sisdmkPekerjaan.getKabkot() != null) {
+								kabkantor = kabDao.findByFilter("provcode = '" + provkantor.getProvcode() + "' and upper(kabname) = '" + sisdmkPekerjaan.getKabkot().trim().toUpperCase() + "'");
+								if (kabkantor != null) {
+									cbKabkantor.setValue(kabkantor.getKabname());
+								}
+							}
+						}
+						
 						objForm.setPekerjaan(pekerjaan);
 					}
 					
@@ -338,8 +355,28 @@ public class AnggotaAddVm {
 						Tpendidikan pendidikan = new Tpendidikan();
 						pendidikan.setPeminatan1(sisdmkPendidikan.getProdi());
 						pendidikan.setPeriodethakhir(sisdmkPendidikan.getTahun_lulus());
+						if (sisdmkPendidikan.getTahun_lulus() != null)
+							cbPendidikanThAkhir.setValue(sisdmkPendidikan.getTahun_lulus());
+						
+						if (sisdmkPendidikan.getPerguruan_tinggi() != null) {
+							Muniversitas universitas = new MuniversitasDAO().findByFilter("upper(universitas) = '" + sisdmkPendidikan.getPerguruan_tinggi().trim().toUpperCase() + "'");
+							if (universitas != null) {
+								pendidikan.setMuniversitas(universitas);
+								cbUniversitas.setValue(universitas.getUniversitas());
+							}
+						}
+						if (sisdmkPendidikan.getJenjang() != null) {
+							Mjenjang jenjang = new MjenjangDAO().findByFilter("upper(trim(jenjang)) = '" + sisdmkPendidikan.getJenjang().trim().toUpperCase() + "'");
+							if (jenjang != null) {
+								pendidikan.setMjenjang(jenjang);
+								cbJenjang.setValue(jenjang.getJenjang());
+							}
+						}
+						
 						objForm.setPendidikan(pendidikan);
 					}
+					
+					objForm.setPribadi(anggota);
 					
 					isValid = true;
 				} 
@@ -758,6 +795,9 @@ public class AnggotaAddVm {
 				String namakantor = (String) ctx.getProperties("pekerjaan.namakantor")[0].getValue();
 				if (namakantor == null || "".equals(namakantor.trim()))
 					this.addInvalidMessage(ctx, "namakantor", Labels.getLabel("common.validator.empty"));
+				String alamatkantor = (String) ctx.getProperties("pekerjaan.alamatkantor")[0].getValue();
+				if (alamatkantor == null || "".equals(alamatkantor.trim()))
+					this.addInvalidMessage(ctx, "alamatkantor", Labels.getLabel("common.validator.empty"));
 				String jabatan = (String) ctx.getProperties("pekerjaan.jabatankantor")[0].getValue();
 				if (jabatan == null || "".equals(jabatan.trim()))
 					this.addInvalidMessage(ctx, "jabatan", Labels.getLabel("common.validator.empty"));

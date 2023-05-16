@@ -226,7 +226,8 @@ public class AnggotaFormVm {
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
-			@ExecutionArgParam("acttype") String acttype) {
+			@ExecutionArgParam("pekerjaans") List<Tpekerjaan> pekerjaans, 
+			@ExecutionArgParam("pendidikans") List<Tpendidikan> pendidikans, @ExecutionArgParam("acttype") String acttype) {
 		Selectors.wireComponents(view, this, false);
 		try {
 			this.acttype = acttype;
@@ -290,57 +291,61 @@ public class AnggotaFormVm {
 							+ data.getPeriodeblakhir() + " " + data.getPeriodethakhir();
 					row.getChildren().add(new Label(periode));
 					row.getChildren().add(new Label(data.getNoijazah()));
+					
+					if (acttype != null && acttype.equals("edit")) {
+						Button btEdit = new Button();
+						btEdit.setIconSclass("z-icon-edit");
+						btEdit.setSclass("btn btn-primary btn-sm");
+						btEdit.setAutodisable("self");
+						btEdit.setTooltiptext("Edit");
+						btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-					Button btEdit = new Button();
-					btEdit.setIconSclass("z-icon-edit");
-					btEdit.setSclass("btn btn-primary btn-sm");
-					btEdit.setAutodisable("self");
-					btEdit.setTooltiptext("Edit");
-					btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+							@Override
+							public void onEvent(Event event) throws Exception {
+								doAddPendidikan(data);
+								BindUtils.postNotifyChange(AnggotaFormVm.this, "pendidikan");
+							}
+						});
 
-						@Override
-						public void onEvent(Event event) throws Exception {
-							doAddPendidikan(data);
-							BindUtils.postNotifyChange(AnggotaFormVm.this, "pendidikan");
-						}
-					});
+						Button btDel = new Button();
+						btDel.setIconSclass("z-icon-trash-o");
+						btDel.setSclass("btn btn-danger btn-sm");
+						btDel.setAutodisable("self");
+						btDel.setTooltiptext("Hapus");
 
-					Button btDel = new Button();
-					btDel.setIconSclass("z-icon-trash-o");
-					btDel.setSclass("btn btn-danger btn-sm");
-					btDel.setAutodisable("self");
-					btDel.setTooltiptext("Hapus");
+						btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-					btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+							@Override
+							public void onEvent(Event event) throws Exception {
+								Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
+										Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
 
-						@Override
-						public void onEvent(Event event) throws Exception {
-							Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
-									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+											@Override
+											public void onEvent(Event event) throws Exception {
+												if (event.getName().equals("onOK")) {
+													try {
 
-										@Override
-										public void onEvent(Event event) throws Exception {
-											if (event.getName().equals("onOK")) {
-												try {
-
-												} catch (Exception e) {
-													Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-															Messagebox.OK, Messagebox.ERROR);
-													e.printStackTrace();
+													} catch (Exception e) {
+														Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
+																Messagebox.OK, Messagebox.ERROR);
+														e.printStackTrace();
+													}
 												}
 											}
-										}
 
-									});
-						}
-					});
+										});
+							}
+						});
 
-					Div div = new Div();
-					div.appendChild(btEdit);
-					div.appendChild(new Separator("vertical"));
-					div.appendChild(btDel);
+						Div div = new Div();
+						div.appendChild(btEdit);
+						div.appendChild(new Separator("vertical"));
+						div.appendChild(btDel);
 
-					row.getChildren().add(div);
+						row.getChildren().add(div);
+					} else {
+						row.getChildren().add(new Label());
+					}
 				}
 			});
 
@@ -363,62 +368,80 @@ public class AnggotaFormVm {
 					row.getChildren().add(new Label(data.getKeterangankerja()));
 					row.getChildren().add(new Label(data.getTelpkantor()));
 					row.getChildren().add(new Label(data.getFaxkantor()));
+					
+					if (acttype != null && acttype.equals("edit")) {
+						Button btEdit = new Button();
+						btEdit.setIconSclass("z-icon-edit");
+						btEdit.setSclass("btn btn-primary btn-sm");
+						btEdit.setAutodisable("self");
+						btEdit.setTooltiptext("Edit");
+						btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-					Button btEdit = new Button();
-					btEdit.setIconSclass("z-icon-edit");
-					btEdit.setSclass("btn btn-primary btn-sm");
-					btEdit.setAutodisable("self");
-					btEdit.setTooltiptext("Edit");
-					btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+							@Override
+							public void onEvent(Event event) throws Exception {
+								doAddPekerjaan(data);
+								BindUtils.postNotifyChange(AnggotaFormVm.this, "pekerjaan");
+							}
+						});
 
-						@Override
-						public void onEvent(Event event) throws Exception {
-							doAddPekerjaan(data);
-							BindUtils.postNotifyChange(AnggotaFormVm.this, "pekerjaan");
-						}
-					});
+						Button btDel = new Button();
+						btDel.setIconSclass("z-icon-trash-o");
+						btDel.setSclass("btn btn-danger btn-sm");
+						btDel.setAutodisable("self");
+						btDel.setTooltiptext("Hapus");
 
-					Button btDel = new Button();
-					btDel.setIconSclass("z-icon-trash-o");
-					btDel.setSclass("btn btn-danger btn-sm");
-					btDel.setAutodisable("self");
-					btDel.setTooltiptext("Hapus");
+						btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-					btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+							@Override
+							public void onEvent(Event event) throws Exception {
+								Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
+										Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
 
-						@Override
-						public void onEvent(Event event) throws Exception {
-							Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
-									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+											@Override
+											public void onEvent(Event event) throws Exception {
+												if (event.getName().equals("onOK")) {
+													try {
 
-										@Override
-										public void onEvent(Event event) throws Exception {
-											if (event.getName().equals("onOK")) {
-												try {
-
-												} catch (Exception e) {
-													Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-															Messagebox.OK, Messagebox.ERROR);
-													e.printStackTrace();
+													} catch (Exception e) {
+														Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
+																Messagebox.OK, Messagebox.ERROR);
+														e.printStackTrace();
+													}
 												}
 											}
-										}
 
-									});
-						}
-					});
+										});
+							}
+						});
 
-					Div div = new Div();
-					div.appendChild(btEdit);
-					div.appendChild(new Separator("vertical"));
-					div.appendChild(btDel);
+						Div div = new Div();
+						div.appendChild(btEdit);
+						div.appendChild(new Separator("vertical"));
+						div.appendChild(btDel);
 
-					row.getChildren().add(div);
+						row.getChildren().add(div);
+					} else {
+						row.getChildren().add(new Label());
+					}
 				}
 			});
 
-			refreshModel();
-
+			if (pekerjaans != null) {
+				this.pekerjaans = pekerjaans;
+			} else {
+				this.pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+						"tpekerjaanpk desc");
+			}
+			gridPekerjaan.setModel(new ListModelList<>(this.pekerjaans));
+			
+			if (pendidikans != null) {
+				this.pendidikans = pendidikans;
+			} else {
+				this.pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+						"tpendidikanpk desc");
+			}
+			gridPendidikan.setModel(new ListModelList<>(this.pendidikans));
+			
 			if (acttype != null && acttype.equals("approval")) {
 				tabApproval.setVisible(true);
 				List<Component> compExclude = new ArrayList<>();
@@ -435,7 +458,7 @@ public class AnggotaFormVm {
 				CompUtils.doDisableComponent(winAnggotaForm, true, null);
 			} else if (acttype != null && acttype.equals("edit")) {
 				tabApproval.setVisible(false);
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -543,19 +566,6 @@ public class AnggotaFormVm {
 				cabangModel = new ListModelList<>(
 						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void refreshModel() {
-		try {
-			pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
-					"tpendidikanpk desc");
-			pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + pribadi.getTanggotapk(),
-					"tpekerjaanpk desc");
-			gridPendidikan.setModel(new ListModelList<>(pendidikans));
-			gridPekerjaan.setModel(new ListModelList<>(pekerjaans));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

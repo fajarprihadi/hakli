@@ -51,6 +51,10 @@ public class Tpendidikan {
 	
 	private Mjenjang mjenjang;
 	
+	private String issisdmk;
+	
+	private Date sisdmklastupdated;
+	
 	@Id
 	@SequenceGenerator(name = "tpendidikan_seq", sequenceName = "tpendidikan_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tpendidikan_seq")
@@ -206,6 +210,22 @@ public class Tpendidikan {
 
 	public void setMjenjang(Mjenjang mjenjang) {
 		this.mjenjang = mjenjang;
+	}
+
+	public String getIssisdmk() {
+		return issisdmk;
+	}
+
+	public void setIssisdmk(String issisdmk) {
+		this.issisdmk = issisdmk;
+	}
+
+	public Date getSisdmklastupdated() {
+		return sisdmklastupdated;
+	}
+
+	public void setSisdmklastupdated(Date sisdmklastupdated) {
+		this.sisdmklastupdated = sisdmklastupdated;
 	}	
 	
 }

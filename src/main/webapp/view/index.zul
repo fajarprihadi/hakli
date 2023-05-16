@@ -28,19 +28,19 @@
 					<div class="accordion accordion-flush"
 						id="divAccord">
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header profil"
 								id="flush-headingOne">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseOne"
+									data-mdb-toggle="collapse" data-mdb-target=".colapse-profil"
 									aria-expanded="false" aria-controls="flush-collapseOne">
 									Profil
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseOne"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse colapse-profil"
 								aria-labelledby="flush-headingOne"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".profil">
 								<div class="accordion-body">
 									<div id="divMenuAnggota"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -87,19 +87,19 @@
 							</n:div>
 						</div>
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header p2kb"
 								id="flush-headingTwo">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseTwo"
+									data-mdb-toggle="collapse" data-mdb-target=".collapse-p2kb"
 									aria-expanded="false" aria-controls="flush-collapseTwo">
 									P2KB
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseTwo"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse collapse-p2kb"
 								aria-labelledby="flush-headingTwo"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".p2kb">
 								<div class="accordion-body">
 									<div id="divMenuP2KB"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -147,19 +147,19 @@
 						</div>
 						
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header timp2kb"
 								id="flush-headingThree">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseThree"
+									data-mdb-toggle="collapse" data-mdb-target=".collapse-timp2kb"
 									aria-expanded="false" aria-controls="flush-collapseThree">
 									Tim P2KB
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseThree"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse collapse-timp2kb"
 								aria-labelledby="flush-headingThree"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".timp2kb">
 								<div class="accordion-body">
 									<div id="divMenuTimP2KB"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -177,19 +177,19 @@
 						</div>
 						
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header komisip2kb"
 								id="flush-headingFive">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseFive"
+									data-mdb-toggle="collapse" data-mdb-target=".collapse-komisip2kb"
 									aria-expanded="false" aria-controls="flush-collapseFive">
 									Komisi P2KB
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseFive"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse collapse-komisip2kb"
 								aria-labelledby="flush-headingFive"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".komisip2kb">
 								<div class="accordion-body">
 									<div id="divMenuKomisiP2KB"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -207,19 +207,19 @@
 						</div>
 						
 						<div class="accordion-item">
-							<n:h2 class="accordion-header"
+							<n:h2 class="accordion-header naskah"
 								id="flush-headingFour">
 								<n:button
 									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target="#flush-collapseFour"
+									data-mdb-toggle="collapse" data-mdb-target=".colapse-naskah"
 									aria-expanded="false" aria-controls="flush-collapseFour">
 									Naskah
 								</n:button>
 							</n:h2>
 							<n:div id="flush-collapseFour"
-								class="accordion-collapse collapse"
+								class="accordion-collapse collapse colapse-naskah"
 								aria-labelledby="flush-headingFour"
-								data-mdb-parent="#divAccord">
+								data-mdb-parent=".naskah">
 								<div class="accordion-body">
 									<div id="divMenuNaskah"
 										class="list-group list-group-flush mx-3 mt-4">
@@ -230,6 +230,36 @@
 												class="fas fa-book fa-fw me-3">
 											</n:i>
 											<n:span>Naskah Sumpah</n:span>
+										</a>
+									</div>
+								</div>
+							</n:div>
+						</div>
+						
+						<div class="accordion-item">
+							<n:h2 class="accordion-header sisdmk"
+								id="flush-headingNine">
+								<n:button
+									class="accordion-button collapsed" type="button"
+									data-mdb-toggle="collapse" data-mdb-target=".collapse-sisdmk"
+									aria-expanded="false" aria-controls="flush-collapseNine">
+									SISDMK
+								</n:button>
+							</n:h2>
+							<n:div id="flush-collapseNine"
+								class="accordion-collapse collapse collapse-sisdmk"
+								aria-labelledby="flush-headingNine"
+								data-mdb-parent=".sisdmk">
+								<div class="accordion-body">
+									<div id="divMenuSisdmk"
+										class="list-group list-group-flush mx-3 mt-4">
+										<a href="#"
+											onClick="@command('doRedirect', path='/view/sisdmk/sisdmk.zul', menu='sisdmk', index=0)"
+											class="list-group-item list-group-item-action py-2 ripple">
+											<n:i
+												class="fas fa-book fa-fw me-3">
+											</n:i>
+											<n:span>Cek SISDMK</n:span>
 										</a>
 									</div>
 								</div>

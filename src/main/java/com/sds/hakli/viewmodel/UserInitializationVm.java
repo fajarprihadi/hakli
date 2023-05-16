@@ -18,12 +18,13 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Div;
 
+import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.User;
 
 public class UserInitializationVm {
 	
 	private Session session = Sessions.getCurrent();
-	private User oUser;
+	private Tanggota anggota;
 	private String currentmenu;
 	private Integer currentmenuidx;
 	
@@ -38,17 +39,22 @@ public class UserInitializationVm {
 	@Wire
 	private Div divMenuKomisiP2KB;
 	@Wire
+	private Div divMenuSisdmk;
+	@Wire
 	private Div divContent;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
-		oUser = (User) session.getAttribute("oUser");
+		anggota = (Tanggota) session.getAttribute("anggota");
 		currentmenuidx = 0;
 		currentmenu = "anggota";
-		//doRedirect("/view/dashboard.zul", 0);
-		//Executions.createComponents("/view/dashboard.zul", divContent, null);
-		Executions.createComponents("/view/anggota/anggotaedit.zul", divContent, null);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("obj", anggota);
+		map.put("acttype", "edit");
+		
+		Executions.createComponents("/view/anggota/anggotaedit.zul", divContent, map);
 	}
 	
 	@Command
@@ -67,6 +73,8 @@ public class UserInitializationVm {
 				divMenu = divMenuNaskah;
 			else if (menu.equals("komisip2kb"))
 				divMenu = divMenuKomisiP2KB;
+			else if (menu.equals("sisdmk"))
+				divMenu = divMenuSisdmk;
 			
 			((A) divMenu.getChildren().get(index)).setSclass("list-group-item list-group-item-action py-2 ripple active");
 			if (currentmenuidx != null && (currentmenuidx.compareTo(index) != 0 || 
@@ -82,6 +90,8 @@ public class UserInitializationVm {
 					divMenuPrev = divMenuNaskah;
 				else if (currentmenu.equals("komisip2kb"))
 					divMenuPrev = divMenuKomisiP2KB;
+				else if (currentmenu.equals("sisdmk"))
+					divMenuPrev = divMenuSisdmk;
 				
 				((A) divMenuPrev.getChildren().get(currentmenuidx)).setSclass("list-group-item list-group-item-action py-2 ripple");
 			}

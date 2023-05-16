@@ -28,6 +28,8 @@ public class Tanggota {
 	
 	private String nostr;
 	
+	private Date tglstr;
+	
 	private String tempatlahir;
 	
 	private Date tgllahir;
@@ -105,6 +107,10 @@ public class Tanggota {
 	private String vaevent;
 	
 	private int vaeventstatus;
+	
+	private String issisdmk;
+	
+	private Date sisdmklastupdated;
 	
 	@Id
 	@SequenceGenerator(name = "tanggota_seq", sequenceName = "tanggota_seq", allocationSize = 1)
@@ -446,6 +452,25 @@ public class Tanggota {
 	}
 	public void setKota(String kota) {
 		this.kota = kota;
+	}
+	public Date getTglstr() {
+		return tglstr;
+	}
+	public void setTglstr(Date tglstr) {
+		this.tglstr = tglstr;
+	}
+	public String getIssisdmk() {
+		return issisdmk;
+	}
+	public void setIssisdmk(String issisdmk) {
+		this.issisdmk = issisdmk;
+	}
+	@Temporal(TemporalType.TIME)
+	public Date getSisdmklastupdated() {
+		return sisdmklastupdated;
+	}
+	public void setSisdmklastupdated(Date sisdmklastupdated) {
+		this.sisdmklastupdated = sisdmklastupdated;
 	}
 	
 }

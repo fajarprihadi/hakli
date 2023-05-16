@@ -56,7 +56,9 @@
 									onClick="@command('doSubmit')" autodisable="self"
 									class="btn btn-primary btn-block mb-4">
 								</button>
-
+								
+								<n:p><n:em>(*) Jika data Anda sudah terdaftar di SISDMK, maka sistem HAKLI akan secara otomatis mengambil data Anda dari SISDMK untuk membantu Anda melengkapi data pendaftaran pada sistem HAKLI.</n:em></n:p>
+								
 							</n:form>
 						</div>
 					</div>

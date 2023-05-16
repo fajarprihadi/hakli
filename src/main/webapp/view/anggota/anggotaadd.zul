@@ -102,6 +102,12 @@
 								width="100%" />
 						</row>
 						<row>
+							<label value="${labels.anggota.nostr}" />
+							<textbox
+								value="@bind(e.pribadi.nostr)" maxlength="40"
+								width="100%" />
+						</row>
+						<row>
 							<label value="${labels.anggota.agama}" />
 							<combobox id="cbAgama"
 								selectedItem="@bind(e.pribadi.agama)">
@@ -301,6 +307,15 @@
 								</combobox>
 								<label style="color:gray"
 									value="@load(vmsgs['kabkantor'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.alamat} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pekerjaan.alamatkantor)"
+									maxlength="200" width="100%" rows="5" />
+								<label style="color:gray"
+									value="@load(vmsgs['alamatkantor'])" />
 							</vlayout>
 						</row>
 						<row>
