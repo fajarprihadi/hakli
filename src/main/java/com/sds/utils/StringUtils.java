@@ -32,6 +32,32 @@ public class StringUtils {
 		Matcher matcher = pattern.matcher(email.trim());
 		return matcher.matches();
 	}
+	
+	public static boolean digitKtpValidator(String noktp) {
+		boolean digitValid = true;
+		if(noktp.trim().length() != 16 ) {
+			digitValid = false;
+		}
+		return digitValid;
+	}
+	
+	public static boolean ktpValidator(String noktp, String wilayah, String tgllahir) {
+		boolean isValid = false;
+		String checkWilcode = noktp.substring(0, 6);
+		String checkTgllahir = noktp.substring(6, 12);
+		
+		if(wilayah.equals(checkWilcode)) {
+			if(tgllahir.equals(checkTgllahir)) {
+				isValid = true;
+			} else {
+				isValid = false;
+			}
+		} else {
+			isValid = false;
+		}
+		
+		return isValid;
+	}
 
 	public static String randomKey() {
 		Random rn = new Random();
@@ -410,4 +436,6 @@ public class StringUtils {
 		}
 		return res;
 	}
+	
+	
 }
