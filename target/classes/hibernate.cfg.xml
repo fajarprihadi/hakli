@@ -5,10 +5,10 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/haklidb4</property>
-		<!-- <property name="hibernate.connection.url">jdbc:postgresql://10.12.4.164:5432/haklidb2</property> -->		
+		<!-- <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/haklidb4</property> -->
+		<property name="hibernate.connection.url">jdbc:postgresql://10.12.4.164:5432/haklidb4</property>		
 		<property name="hibernate.connection.username">postgres</property>
-		<property name="hibernate.connection.password">prihadi</property>
+		<property name="hibernate.connection.password">postgres</property>
 		<!-- <property name="hibernate.connection.password">SDS@dmindepok</property> -->
 		
 		<property name="hibernate.jdbc.batch_size">20</property>
@@ -37,8 +37,8 @@
 		<mapping class="com.sds.hakli.domain.Mcharge" />
 		<mapping class="com.sds.hakli.domain.Mfee" />
 		<mapping class="com.sds.hakli.domain.Mnegara" />
-		<mapping class="com.sds.hakli.domain.Mprovinsi" />
-		<mapping class="com.sds.hakli.domain.Mkabupaten" />
+		<mapping class="com.sds.hakli.domain.Mprov" />
+		<mapping class="com.sds.hakli.domain.Mkab" />
 		<mapping class="com.sds.hakli.domain.Muniversitas" />
 		<mapping class="com.sds.hakli.domain.Mjenjang" />
 		<mapping class="com.sds.hakli.domain.Mkepegawaian" />

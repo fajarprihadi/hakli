@@ -5,23 +5,23 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class Mprovinsi {
+public class Mprov {
 
-	private Integer mprovinsipk;
+	private Integer mprovpk;
 	
 	private String provcode;
 	
 	private String provname;
 
 	@Id
-	@SequenceGenerator(name = "mprovinsi_seq", sequenceName = "mprovinsi_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mprovinsi_seq")
-	public Integer getMprovinsipk() {
-		return mprovinsipk;
+	@SequenceGenerator(name = "mprov_seq", sequenceName = "mprov_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mprov_seq")
+	public Integer getMprovpk() {
+		return mprovpk;
 	}
 
-	public void setMprovinsipk(Integer mprovinsipk) {
-		this.mprovinsipk = mprovinsipk;
+	public void setMprovpk(Integer mprovpk) {
+		this.mprovpk = mprovpk;
 	}
 
 	@Type(type = "com.sds.utils.usertype.TrimUserType")

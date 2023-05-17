@@ -6,22 +6,22 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
-import com.sds.hakli.domain.Mkabupaten;
+import com.sds.hakli.domain.Mkab;
 import com.sds.utils.db.StoreHibernateUtil;
 
-public class MkabupatenDAO {
+public class MkabDAO {
 	
 	private Session session;
 
 	@SuppressWarnings("unchecked")
-	public List<Mkabupaten> listPaging(int first, int second, String filter, String orderby) throws Exception {		
-    	List<Mkabupaten> oList = null;
+	public List<Mkab> listPaging(int first, int second, String filter, String orderby) throws Exception {		
+    	List<Mkab> oList = null;
     	if (filter == null || "".equals(filter))
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
-    	oList = session.createSQLQuery("select * from mkabupaten  "
+    	oList = session.createSQLQuery("select * from mkab  "
 				+ "where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
-				.addEntity(Mkabupaten.class).list();		
+				.addEntity(Mkab.class).list();		
 
 		session.close();
         return oList;
@@ -32,26 +32,26 @@ public class MkabupatenDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Mkabupaten "
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Mkab "
 				+ "where " + filter).uniqueResult().toString());
 		session.close();
         return count;
     }
 	
 	@SuppressWarnings("unchecked")
-	public List<Mkabupaten> listByFilter(String filter, String orderby) throws Exception {		
-    	List<Mkabupaten> oList = null;
+	public List<Mkab> listByFilter(String filter, String orderby) throws Exception {		
+    	List<Mkab> oList = null;
     	if (filter == null || "".equals(filter))
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
-		oList = session.createQuery("from Mkabupaten where " + filter + " order by " + orderby).list();
+		oList = session.createQuery("from Mkab where " + filter + " order by " + orderby).list();
 		session.close();
         return oList;
     }	
 	
-	public Mkabupaten findByPk(Integer pk) throws Exception {
+	public Mkab findByPk(Integer pk) throws Exception {
 		session = StoreHibernateUtil.openSession();
-		Mkabupaten oForm = (Mkabupaten) session.createQuery("from Mkabupaten where mkabupatenpk = " + pk).uniqueResult();
+		Mkab oForm = (Mkab) session.createQuery("from Mkab where mkabpk = " + pk).uniqueResult();
 		session.close();
 		return oForm;
 	}
@@ -60,23 +60,23 @@ public class MkabupatenDAO {
 	public List listStr(String fieldname) throws Exception {
 		List oList = new ArrayList();
        	session = StoreHibernateUtil.openSession();
-       	oList = session.createQuery("select " + fieldname + " from Mkabupaten order by " + fieldname).list();   
+       	oList = session.createQuery("select " + fieldname + " from Mkab order by " + fieldname).list();   
         session.close();
         return oList;
 	}
 	
-	public Mkabupaten findByFilter(String filter) throws Exception {
+	public Mkab findByFilter(String filter) throws Exception {
 		session = StoreHibernateUtil.openSession();
-		Mkabupaten oForm = (Mkabupaten) session.createQuery("from Mkabupaten where " + filter).uniqueResult();
+		Mkab oForm = (Mkab) session.createQuery("from Mkab where " + filter).uniqueResult();
 		session.close();
 		return oForm;
 	}
 		
-	public void save(Session session, Mkabupaten oForm) throws HibernateException, Exception {
+	public void save(Session session, Mkab oForm) throws HibernateException, Exception {
 		session.saveOrUpdate(oForm);
 	}
 	
-	public void delete(Session session, Mkabupaten oForm) throws HibernateException, Exception {
+	public void delete(Session session, Mkab oForm) throws HibernateException, Exception {
 		session.delete(oForm);    
     }
 

@@ -84,11 +84,11 @@ public class TanggotaDAO {
 	@SuppressWarnings("unchecked")
 	public List<BranchTop> listBranchTop() {
 		session = StoreHibernateUtil.openSession();
-		List<BranchTop> oList = session.createSQLQuery("SELECT MPROVINSIPK AS ID, MPROVINSI.PROVNAME AS NAME, COUNT(MPROVINSIPK) AS TOTAL \r\n"
-				+ "FROM MPROVINSI LEFT JOIN MCABANG ON MPROVINSI.MPROVINSIPK = MCABANG.MPROVINSIFK \r\n"
+		List<BranchTop> oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, COUNT(MPROVPK) AS TOTAL \r\n"
+				+ "FROM MPROV LEFT JOIN MCABANG ON MPROV.MPROVPK = MCABANG.MPROVFK \r\n"
 				+ "LEFT JOIN TANGGOTA ON MCABANGPK = MCABANGFK \r\n"
-				+ "WHERE STATUSREG = '3' GROUP BY MPROVINSIPK, MPROVINSI.PROVNAME \r\n"
-				+ "ORDER BY COUNT(MPROVINSIPK) DESC, MPROVINSI.PROVNAME").addEntity(BranchTop.class).list();
+				+ "WHERE STATUSREG = '3' GROUP BY MPROVPK, MPROV.PROVNAME \r\n"
+				+ "ORDER BY COUNT(MPROVPK) DESC, MPROV.PROVNAME").addEntity(BranchTop.class).list();
 		session.close();
 		return oList;
 	}
@@ -98,7 +98,7 @@ public class TanggotaDAO {
 		session = StoreHibernateUtil.openSession();
 		List<BranchTop> oList = session.createSQLQuery("SELECT MCABANGPK AS ID, CABANG AS NAME, COUNT(MCABANGPK) AS TOTAL \r\n"
 				+ "FROM MCABANG LEFT JOIN TANGGOTA ON MCABANGPK = MCABANGFK \r\n"
-				+ "WHERE STATUSREG = '3' AND MPROVINSIFK = " + provid + " GROUP BY MCABANGPK, CABANG \r\n"
+				+ "WHERE STATUSREG = '3' AND MPROVFK = " + provid + " GROUP BY MCABANGPK, CABANG \r\n"
 				+ "ORDER BY COUNT(MCABANGPK) DESC, CABANG").addEntity(BranchTop.class).list();
 		session.close();
 		return oList;

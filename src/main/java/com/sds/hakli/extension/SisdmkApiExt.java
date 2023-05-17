@@ -145,7 +145,7 @@ public class SisdmkApiExt {
 			System.out.println(output);
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, SisdmkData.class);
-			System.out.println("NIK : " + obj.getData().getNik());
+			//System.out.println("NIK : " + obj.getData().getNik());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

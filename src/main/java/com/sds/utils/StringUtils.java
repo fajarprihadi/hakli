@@ -44,6 +44,8 @@ public class StringUtils {
 		}
 		lastdigit = Integer.parseInt((String.valueOf(chars)).substring(String.valueOf(chars).length() - 1));
 		return lastdigit;
+	}
+	
 	public static boolean digitKtpValidator(String noktp) {
 		boolean digitValid = true;
 		if(noktp.trim().length() != 16 ) {

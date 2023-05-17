@@ -38,9 +38,9 @@ import org.zkoss.zul.Separator;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.McabangDAO;
-import com.sds.hakli.dao.MprovinsiDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.domain.Mcabang;
-import com.sds.hakli.domain.Mprovinsi;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Muser;
 import com.sds.utils.AppData;
 import com.sds.utils.db.StoreHibernateUtil;
@@ -56,7 +56,7 @@ public class BranchVm {
 	private List<Mcabang> objList;
 	private String filter;
 	private String cabang;
-	private String provinsi;
+	private String prov;
 	private Integer totalrecords;
 	private boolean isInsert;
 	
@@ -86,7 +86,7 @@ public class BranchVm {
 			public void render(Row row, Mcabang data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index+1)));
 				row.getChildren().add(new Label(data.getCabang()));
-				row.getChildren().add(new Label(data.getMprovinsi() != null ? data.getMprovinsi().getProvname() : ""));
+				row.getChildren().add(new Label(data.getMprov() != null ? data.getMprov().getProvname() : ""));
 				row.getChildren().add(new Label(data.getBankname()));
 				row.getChildren().add(new Label(data.getAccno()));
 				row.getChildren().add(new Label(data.getAccname()));
@@ -157,7 +157,7 @@ public class BranchVm {
 	@NotifyChange("*")
 	public void doReset() {
 		cabang = null;
-		provinsi = null;
+		prov = null;
 		doSearch();
 		divForm.setVisible(false);
 		btAdd.setLabel("Tambah Cabang");
@@ -183,8 +183,8 @@ public class BranchVm {
 		filter = "0=0";
 		if (cabang != null && cabang.trim().length() > 0)
 			filter += " and upper(cabang) like '%" + cabang.trim().toUpperCase() + "%'";
-		if (provinsi != null && provinsi.trim().length() > 0)
-			filter += " and upper(mprovinsi.provname) like '%" + provinsi.trim().toUpperCase() + "%'";
+		if (prov != null && prov.trim().length() > 0)
+			filter += " and upper(mprov.provname) like '%" + prov.trim().toUpperCase() + "%'";
 		doRefresh();
 	}
 	
@@ -199,7 +199,7 @@ public class BranchVm {
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Perbarui");
 			
-			cbRegion.setValue(objForm.getMprovinsi().getProvname());
+			cbRegion.setValue(objForm.getMprov().getProvname());
 			cbBank.setValue(objForm.getBankname());
 		} else if (btAdd.getLabel().equals("Tambah Cabang")) {
 			isInsert = true;
@@ -254,9 +254,9 @@ public class BranchVm {
 				if (cabang == null || "".equals(cabang.trim()))
 					this.addInvalidMessage(ctx, "cabang", Labels.getLabel("common.validator.empty"));
 				
-				Mprovinsi mprovinsi = (Mprovinsi) ctx.getProperties("mprovinsi")[0].getValue();
-				if (mprovinsi == null)
-					this.addInvalidMessage(ctx, "mprovinsi", Labels.getLabel("common.validator.empty"));
+				Mprov mprov = (Mprov) ctx.getProperties("mprov")[0].getValue();
+				if (mprov == null)
+					this.addInvalidMessage(ctx, "mprov", Labels.getLabel("common.validator.empty"));
 				
 				String bankcode = (String) ctx.getProperties("bankcode")[0].getValue();
 				if (bankcode == null || "".equals(bankcode.trim()))
@@ -274,10 +274,10 @@ public class BranchVm {
 		};
 	}
 	
-	public ListModelList<Mprovinsi> getProvModel() {
-		ListModelList<Mprovinsi> oList = null;
+	public ListModelList<Mprov> getProvModel() {
+		ListModelList<Mprov> oList = null;
 		try {
-			oList = new ListModelList<>(new MprovinsiDAO().listAll());
+			oList = new ListModelList<>(new MprovDAO().listAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -309,11 +309,11 @@ public class BranchVm {
 	}
 
 	public String getProvinsi() {
-		return provinsi;
+		return prov;
 	}
 
-	public void setProvinsi(String provinsi) {
-		this.provinsi = provinsi;
+	public void setProvinsi(String prov) {
+		this.prov = prov;
 	}
 
 }

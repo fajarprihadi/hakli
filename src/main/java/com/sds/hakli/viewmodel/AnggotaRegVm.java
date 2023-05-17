@@ -48,11 +48,11 @@ import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MjenjangDAO;
-import com.sds.hakli.dao.MkabupatenDAO;
+import com.sds.hakli.dao.MkabDAO;
 import com.sds.hakli.dao.MkepegawaianDAO;
 import com.sds.hakli.dao.MkepegawaiansubDAO;
 import com.sds.hakli.dao.MnegaraDAO;
-import com.sds.hakli.dao.MprovinsiDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.MrumpunDAO;
 import com.sds.hakli.dao.MuniversitasDAO;
 import com.sds.hakli.dao.TanggotaDAO;
@@ -61,11 +61,11 @@ import com.sds.hakli.dao.TpendidikanDAO;
 import com.sds.hakli.domain.AnggotaReg;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mjenjang;
-import com.sds.hakli.domain.Mkabupaten;
+import com.sds.hakli.domain.Mkab;
 import com.sds.hakli.domain.Mkepegawaian;
 import com.sds.hakli.domain.Mkepegawaiansub;
 import com.sds.hakli.domain.Mnegara;
-import com.sds.hakli.domain.Mprovinsi;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Mrumpun;
 import com.sds.hakli.domain.Muniversitas;
 import com.sds.hakli.domain.Provinsi;
@@ -81,19 +81,19 @@ public class AnggotaRegVm {
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
 	private TpekerjaanDAO pekerjaanDao = new TpekerjaanDAO();
 	private TpendidikanDAO pendidikanDao = new TpendidikanDAO();
-	private MprovinsiDAO provDao = new MprovinsiDAO();
-	private MkabupatenDAO kabDao = new MkabupatenDAO();
+	private MprovDAO provDao = new MprovDAO();
+	private MkabDAO kabDao = new MkabDAO();
 
 	private AnggotaReg objForm;
-	private Mprovinsi region;
-	private Mprovinsi provrumah;
-	private Mkabupaten kabrumah;
-	private Mprovinsi provkantor;
-	private Mkabupaten kabkantor;
+	private Mprov region;
+	private Mprov provrumah;
+	private Mkab kabrumah;
+	private Mprov provkantor;
+	private Mkab kabkantor;
 
 	private ListModelList<Mnegara> negaraModel;
-	private ListModelList<Mkabupaten> kabrumahModel;
-	private ListModelList<Mkabupaten> kabkantorModel;
+	private ListModelList<Mkab> kabrumahModel;
+	private ListModelList<Mkab> kabkantorModel;
 	private ListModelList<Mcabang> cabangModel;
 	private ListModelList<Mkepegawaiansub> kepegawaiansubModel;
 
@@ -229,7 +229,7 @@ public class AnggotaRegVm {
 			}
 			
 			if (obj.getMcabang() != null) {
-				region = obj.getMcabang().getMprovinsi();
+				region = obj.getMcabang().getMprov();
 				if (region != null) {
 					cbRegion.setValue(region.getProvname());
 					doLoadCabang(region);
@@ -292,12 +292,12 @@ public class AnggotaRegVm {
 
 	@Command
 	@NotifyChange("kabrumahModel")
-	public void doLoadKab(@BindingParam("prov") Mprovinsi prov) {
+	public void doLoadKab(@BindingParam("prov") Mprov prov) {
 		try {
 			if (prov != null) {
 				cbKabrumah.setValue(null);
 				kabrumahModel = new ListModelList<>(
-						new MkabupatenDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "kabname"));
+						new MkabDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "kabname"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -306,12 +306,12 @@ public class AnggotaRegVm {
 
 	@Command
 	@NotifyChange("kabkantorModel")
-	public void doLoadKabPekerjaan(@BindingParam("prov") Mprovinsi prov) {
+	public void doLoadKabPekerjaan(@BindingParam("prov") Mprov prov) {
 		try {
 			if (prov != null) {
 				cbKabkantor.setValue(null);
 				kabkantorModel = new ListModelList<>(
-						new MkabupatenDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "kabname"));
+						new MkabDAO().listByFilter("provcode = '" + prov.getProvcode() + "'", "kabname"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -334,12 +334,12 @@ public class AnggotaRegVm {
 
 	@Command
 	@NotifyChange("cabangModel")
-	public void doLoadCabang(@BindingParam("prov") Mprovinsi prov) {
+	public void doLoadCabang(@BindingParam("prov") Mprov prov) {
 		try {
 			if (prov != null) {
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
+						new McabangDAO().listByFilter("mprov.mprovpk = " + prov.getMprovpk(), "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -585,30 +585,30 @@ public class AnggotaRegVm {
 		};
 	}
 
-	public ListModelList<Mprovinsi> getProvrumahModel() {
-		ListModelList<Mprovinsi> oList = null;
+	public ListModelList<Mprov> getProvrumahModel() {
+		ListModelList<Mprov> oList = null;
 		try {
-			oList = new ListModelList<>(new MprovinsiDAO().listAll());
+			oList = new ListModelList<>(new MprovDAO().listAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return oList;
 	}
 
-	public ListModelList<Mprovinsi> getProvkantorModel() {
-		ListModelList<Mprovinsi> oList = null;
+	public ListModelList<Mprov> getProvkantorModel() {
+		ListModelList<Mprov> oList = null;
 		try {
-			oList = new ListModelList<>(new MprovinsiDAO().listAll());
+			oList = new ListModelList<>(new MprovDAO().listAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return oList;
 	}
 
-	public ListModelList<Mprovinsi> getRegionModel() {
-		ListModelList<Mprovinsi> oList = null;
+	public ListModelList<Mprov> getRegionModel() {
+		ListModelList<Mprov> oList = null;
 		try {
-			oList = new ListModelList<>(new MprovinsiDAO().listAll());
+			oList = new ListModelList<>(new MprovDAO().listAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -663,35 +663,35 @@ public class AnggotaRegVm {
 		this.objForm = objForm;
 	}
 
-	public Mprovinsi getProvrumah() {
+	public Mprov getProvrumah() {
 		return provrumah;
 	}
 
-	public void setProvrumah(Mprovinsi provrumah) {
+	public void setProvrumah(Mprov provrumah) {
 		this.provrumah = provrumah;
 	}
 
-	public Mkabupaten getKabrumah() {
+	public Mkab getKabrumah() {
 		return kabrumah;
 	}
 
-	public void setKabrumah(Mkabupaten kabrumah) {
+	public void setKabrumah(Mkab kabrumah) {
 		this.kabrumah = kabrumah;
 	}
 
-	public Mprovinsi getProvkantor() {
+	public Mprov getProvkantor() {
 		return provkantor;
 	}
 
-	public void setProvkantor(Mprovinsi provkantor) {
+	public void setProvkantor(Mprov provkantor) {
 		this.provkantor = provkantor;
 	}
 
-	public Mkabupaten getKabkantor() {
+	public Mkab getKabkantor() {
 		return kabkantor;
 	}
 
-	public void setKabkantor(Mkabupaten kabkantor) {
+	public void setKabkantor(Mkab kabkantor) {
 		this.kabkantor = kabkantor;
 	}
 
@@ -703,19 +703,19 @@ public class AnggotaRegVm {
 		this.negaraModel = negaraModel;
 	}
 
-	public ListModelList<Mkabupaten> getKabrumahModel() {
+	public ListModelList<Mkab> getKabrumahModel() {
 		return kabrumahModel;
 	}
 
-	public void setKabrumahModel(ListModelList<Mkabupaten> kabrumahModel) {
+	public void setKabrumahModel(ListModelList<Mkab> kabrumahModel) {
 		this.kabrumahModel = kabrumahModel;
 	}
 
-	public ListModelList<Mkabupaten> getKabkantorModel() {
+	public ListModelList<Mkab> getKabkantorModel() {
 		return kabkantorModel;
 	}
 
-	public void setKabkantorModel(ListModelList<Mkabupaten> kabkantorModel) {
+	public void setKabkantorModel(ListModelList<Mkab> kabkantorModel) {
 		this.kabkantorModel = kabkantorModel;
 	}
 
@@ -735,11 +735,11 @@ public class AnggotaRegVm {
 		this.kepegawaiansubModel = kepegawaiansubModel;
 	}
 
-	public Mprovinsi getRegion() {
+	public Mprov getRegion() {
 		return region;
 	}
 
-	public void setRegion(Mprovinsi region) {
+	public void setRegion(Mprov region) {
 		this.region = region;
 	}
 

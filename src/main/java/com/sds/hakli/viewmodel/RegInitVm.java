@@ -20,6 +20,7 @@ import org.zkoss.zul.Window;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tevent;
+import com.sds.utils.StringUtils;
 
 public class RegInitVm {
 	
@@ -42,7 +43,10 @@ public class RegInitVm {
 	public void doSubmit(@BindingParam("type") String type) {
 		if (nik == null || nik.trim().length() == 0) {
 			Messagebox.show("Silahkan masukkan NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
-					Messagebox.INFORMATION);
+					Messagebox.EXCLAMATION);
+		} else if (!StringUtils.digitKtpValidator(nik)) { 
+			Messagebox.show("Data NIK tidak sesuai. Periksa kembali data input NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
+					Messagebox.EXCLAMATION);
 		} else {
 			try {
 				Map<String, Object> map = new HashMap<>();

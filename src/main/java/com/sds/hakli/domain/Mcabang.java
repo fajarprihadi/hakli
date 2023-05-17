@@ -33,7 +33,7 @@ public class Mcabang {
 	
 	private String updatedby;
 	
-	private Mprovinsi mprovinsi;
+	private Mprov mprov;
 
 	@Id
 	@SequenceGenerator(name = "mcabang_seq", sequenceName = "mcabang_seq", allocationSize = 1)
@@ -144,13 +144,13 @@ public class Mcabang {
 	}
 
 	@ManyToOne
-	@JoinColumn(name="mprovinsifk")
-	public Mprovinsi getMprovinsi() {
-		return mprovinsi;
+	@JoinColumn(name="mprovfk")
+	public Mprov getMprov() {
+		return mprov;
 	}
 
-	public void setMprovinsi(Mprovinsi mprovinsi) {
-		this.mprovinsi = mprovinsi;
+	public void setMprov(Mprov mprov) {
+		this.mprov = mprov;
 	}
 
 }

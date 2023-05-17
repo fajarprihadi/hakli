@@ -26,6 +26,7 @@ import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tevent;
 import com.sds.hakli.domain.Teventreg;
 import com.sds.utils.AppUtils;
+import com.sds.utils.StringUtils;
 
 public class EventInitVm {
 	
@@ -68,6 +69,9 @@ public class EventInitVm {
 		if (nik == null || nik.trim().length() == 0) {
 			Messagebox.show("Silahkan masukkan NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
 					Messagebox.INFORMATION);
+		} else if (!StringUtils.digitKtpValidator(nik)) { 
+			Messagebox.show("Data NIK tidak sesuai. Periksa kembali data input NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
+					Messagebox.EXCLAMATION);
 		} else {
 			try {
 				Map<String, Object> map = new HashMap<>();
