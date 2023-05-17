@@ -201,7 +201,8 @@ public class AnggotaAddVm {
 				if (pendidikans.size() > 0)
 					objForm.setPendidikan(pendidikans.get(0));
 				
-				doSisdmk();
+				if (obj.getTanggotapk() == null)
+					doSisdmk();
 				
 				if (obj.getPhotolink() != null) {
 					photo.setSrc(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink());

@@ -20,6 +20,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.Selectors;
@@ -122,7 +123,7 @@ public class PaymentVm {
 			}
 			
 			Calendar cal = Calendar.getInstance();
-			cal.setTime(anggota.getPeriodekta());
+			cal.setTime(anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date());
 			
 			oList = new ArrayList<>();
 			for (Mcharge obj : objList) {
@@ -235,93 +236,91 @@ public class PaymentVm {
 	@Command
 	@NotifyChange("*")
 	public void doSave() {
-		Messagebox.show(
-				"Apakah data pembayaran yang anda input sudah benar? Jika sudah benar silahkan pilih OK untuk mengirim data tagihan ke email anda",
-				"Konfirmasi", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+		if (totalpayment == null || totalpayment.compareTo(new BigDecimal(0)) <= 0) {
+			Messagebox.show("Tidak ada data tagihan yang dapat di generate.", WebApps.getCurrent().getAppName(), Messagebox.OK,
+					Messagebox.INFORMATION);
+		} else {
+			Messagebox.show(
+					"Apakah data pembayaran yang anda input sudah benar? Jika sudah benar silahkan pilih OK untuk mengirim data tagihan ke email anda",
+					"Konfirmasi", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
 
-					@Override
-					public void onEvent(Event event) throws Exception {
-						if (event.getName().equals("onOK")) {
-							Session session = StoreHibernateUtil.openSession();
-							Transaction trx = null;
-							try {
-								BriapiBean bean = AppData.getBriapibean();
-								BriApiExt briapi = new BriApiExt(bean);
-								BriApiToken briapiToken = briapi.getToken();
-								
-								Date vaexpdate = null;
-								BrivaData briva = new BrivaData();
-								if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
-									briva.setAmount(totalpayment.toString());
-									briva.setInstitutionCode(bean.getBriva_institutioncode());
-									briva.setBrivaNo(bean.getBriva_cid());
+						@Override
+						public void onEvent(Event event) throws Exception {
+							if (event.getName().equals("onOK")) {
+								Session session = StoreHibernateUtil.openSession();
+								Transaction trx = null;
+								try {
+									BriapiBean bean = AppData.getBriapibean();
+									BriApiExt briapi = new BriApiExt(bean);
+									BriApiToken briapiToken = briapi.getToken();
 									
-									String custcode_prov = "00" + anggota.getMcabang().getMprovinsi().getProvcode();
-									String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
-									briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
-									
-									Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
-									Calendar cal = Calendar.getInstance();
-									cal.setTime(startperiod);
-									cal.add(Calendar.MONTH, 6);
-									String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(cal.getTime());
-									
-									briva.setKeterangan(invdesc);
-									briva.setNama(anggota.getNama());
-									cal.setTime(new Date());
-									cal.add(Calendar.DAY_OF_MONTH, 10);
-									vaexpdate = cal.getTime();
-									briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
-									
-									BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
-									if (brivaCreated.getStatus()) {
-										trx = session.beginTransaction();
+									Date vaexpdate = null;
+									BrivaData briva = new BrivaData();
+									if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+										briva.setAmount(totalpayment.toString());
+										briva.setInstitutionCode(bean.getBriva_institutioncode());
+										briva.setBrivaNo(bean.getBriva_cid());
 										
-										Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
-										invDao.save(session, inv);
+										String custcode_prov = "00" + anggota.getMcabang().getMprovinsi().getProvcode();
+										String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
+										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 										
-										anggota.setVareg(briva.getBrivaNo() + briva.getCustCode());
-										anggota.setVaregstatus(1);
-										new TanggotaDAO().save(session, anggota);
+										Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
+										Calendar cal = Calendar.getInstance();
+										cal.setTime(startperiod);
+										cal.add(Calendar.MONTH, 6);
+										String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(cal.getTime());
 										
-										trx.commit();
+										briva.setKeterangan(invdesc);
+										briva.setNama(anggota.getNama());
+										cal.setTime(new Date());
+										cal.add(Calendar.DAY_OF_MONTH, 10);
+										vaexpdate = cal.getTime();
+										briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 										
-										btSave.setDisabled(true);
-										
-										String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
-												.getRealPath("/themes/mail/mailinv.html");
-										new Thread(new MailHandler(inv, bodymail_path)).start();
+										BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+										if (brivaCreated.getStatus()) {
+											trx = session.beginTransaction();
+											
+											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
+											invDao.save(session, inv);
+											
+											anggota.setVareg(briva.getBrivaNo() + briva.getCustCode());
+											anggota.setVaregstatus(1);
+											new TanggotaDAO().save(session, anggota);
+											
+											trx.commit();
+											
+											btSave.setDisabled(true);
+											
+											String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
+													.getRealPath("/themes/mail/mailinv.html");
+											new Thread(new MailHandler(inv, bodymail_path)).start();
 
-										processinfo = "Proses generate pembayaran berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
-												+ briva.getBrivaNo() + briva.getCustCode();
-										divProcessinfo.setVisible(true);
-										
-										pageStartNumber = 0;
-										refreshModel(pageStartNumber);
-										
-										BindUtils.postNotifyChange(PaymentVm.this, "*");
-										
-										gbForm.setOpen(false);
+											processinfo = "Proses generate pembayaran berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
+													+ briva.getBrivaNo() + briva.getCustCode();
+											divProcessinfo.setVisible(true);
+											
+											pageStartNumber = 0;
+											refreshModel(pageStartNumber);
+											
+											BindUtils.postNotifyChange(PaymentVm.this, "*");
+											
+											gbForm.setOpen(false);
+										}
 									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
+											Messagebox.ERROR);
+								} finally {
+									session.close();
 								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								session.close();
 							}
 						}
-					}
-				});
-
+					});
+		}
 	}
-
-//	public Integer getQty() {
-//		return qty;
-//	}
-//
-//	public void setQty(Integer qty) {
-//		this.qty = qty;
-//	}
 
 	public BigDecimal getTotalpayment() {
 		return totalpayment;

@@ -876,7 +876,15 @@ public class AnggotaFormVm {
 							try {
 								pribadi.setVareg(briva.getBrivaNo() + briva.getCustCode());
 								pribadi.setVaregstatus(1);
+								String provcode = pribadi.getMcabang().getMprovinsi().getProvcode();
+								provcode = "00" + provcode;
+								provcode = provcode.substring(provcode.length() - 2, provcode.length());
+								String noanggota = new TcounterengineDAO().generateNoAnggota(provcode);
+								noanggota = noanggota + StringUtils.checkDigit(Integer.parseInt(noanggota));
+								pribadi.setNoanggota(noanggota);
+								pribadi.setPassword(AppUtils.USERS_PASSWORD_DEFAULT);
 								pribadi.setRegdecisiontime(new Date());
+								pribadi.setPeriodekta(new Date());
 								oDao.save(session, pribadi);
 
 								Tinvoice inv = new InvoiceGenerator().doInvoice(pribadi,
@@ -902,6 +910,12 @@ public class AnggotaFormVm {
 								session.close();
 							}
 
+						} else {
+							if (brivaCreated != null) {
+								processinfo = "Proses generate virtual account gagal : " + brivaCreated.getErrDesc();
+								divProcessinfo.setVisible(true);
+							}
+								
 						}
 					}
 				} catch (Exception e) {

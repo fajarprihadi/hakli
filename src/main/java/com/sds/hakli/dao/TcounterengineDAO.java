@@ -11,7 +11,43 @@ import org.hibernate.Transaction;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class TcounterengineDAO {
-
+	
+	public String generateNoAnggota(String counterName) throws Exception {
+		Integer lastCounter = 0;
+		String strCounter = "";
+		String finalCounter = "";
+		String counterCode = "NOANGGOTA" + counterName;
+		int counter = 4;
+		char[] fillUploadid = new char[counter];
+		Session session = StoreHibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query q = session
+					.createQuery("select lastcounter from Tcounterengine where countername = '" + counterCode + "'");
+			lastCounter = (Integer) q.uniqueResult();
+			if (lastCounter != null) {
+				lastCounter++;
+				session.createSQLQuery("update Tcounterengine set lastcounter = lastcounter + 1 where countername = '"
+						+ counterCode + "'").executeUpdate();
+			} else {
+				lastCounter = 1;
+				session.createSQLQuery("insert into Tcounterengine values ('" + counterCode + "', " + lastCounter + ")")
+						.executeUpdate();
+			}
+			transaction.commit();
+			session.close();
+			Arrays.fill(fillUploadid, '0');
+			strCounter = new String(fillUploadid) + lastCounter;
+			finalCounter = counterName
+					+ strCounter.substring(strCounter.length()-counter, strCounter.length());
+			System.out.println("finalCounter : " + finalCounter);
+		} catch (Exception e) {
+			transaction.rollback();
+			e.printStackTrace();
+		}
+		return finalCounter;
+	}
+	
 	public String getLastCounter(String counterName, int counter) throws Exception {
 		Integer lastCounter = 0;
 		String strCounter = "";

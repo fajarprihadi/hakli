@@ -32,6 +32,19 @@ public class StringUtils {
 		Matcher matcher = pattern.matcher(email.trim());
 		return matcher.matches();
 	}
+	
+	public static Integer checkDigit(Integer number) throws Exception {
+		Integer lastdigit = 0;
+		String[] results = String.valueOf(number).split("(?<=\\G.{1})");
+		Integer chars = 0;
+		for (String s: results) {
+			if (StringUtils.isNumeric(s) ) {
+				chars = chars + Integer.parseInt(s);
+			}
+		}
+		lastdigit = Integer.parseInt((String.valueOf(chars)).substring(String.valueOf(chars).length() - 1));
+		return lastdigit;
+	}
 
 	public static String randomKey() {
 		Random rn = new Random();

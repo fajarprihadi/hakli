@@ -8,12 +8,14 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.zhtml.H2;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Html;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -34,9 +36,12 @@ public class EventInitVm {
 	private Tevent obj;
 	private String eventimg;
 	private String email;
+	private String nik;
 	
 	@Wire
 	private Window winInit;
+	@Wire
+	private H2 title;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -46,9 +51,10 @@ public class EventInitVm {
 		    String id = exec.getParameter("id");
 		    if (id != null) {
 		    	obj = eventDao.findByFilter("eventid = '" + id + "'");
-		    	if (obj != null)
+		    	if (obj != null) {
 		    		eventimg = AppUtils.PATH_EVENT + "/" + obj.getEventimg();
-		    	else Executions.sendRedirect("/timeout.zul");
+		    		title.appendChild(new Html("Pendaftaran " + obj.getEventname()));
+		    	} else Executions.sendRedirect("/timeout.zul");
 		    } else {
 		    	Executions.sendRedirect("/timeout.zul");
 		    }
@@ -59,8 +65,8 @@ public class EventInitVm {
 	
 	@Command
 	public void doSubmit() {
-		if (email == null || email.trim().length() == 0) {
-			Messagebox.show("Silahkan masukkan alamat e-mail Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
+		if (nik == null || nik.trim().length() == 0) {
+			Messagebox.show("Silahkan masukkan NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
 					Messagebox.INFORMATION);
 		} else {
 			try {
@@ -69,7 +75,7 @@ public class EventInitVm {
 				//String page = "/view/event/eventreg.zul";
 				String page = "/view/anggota/anggotaadd.zul";
 				Tanggota obj = null;
-				List<Tanggota> objList = oDao.listByFilter("email = '" + email.trim() + "'", "tanggotapk desc");
+				List<Tanggota> objList = oDao.listByFilter("noktp = '" + nik.trim() + "'", "tanggotapk desc");
 				if (objList.size() > 0) {
 					obj = objList.get(0);
 					
@@ -105,5 +111,13 @@ public class EventInitVm {
 
 	public void setEventimg(String eventimg) {
 		this.eventimg = eventimg;
+	}
+
+	public String getNik() {
+		return nik;
+	}
+
+	public void setNik(String nik) {
+		this.nik = nik;
 	}
 }

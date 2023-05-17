@@ -104,7 +104,7 @@
 		<mapping class="com.sds.hakli.domain.Vpaymentmon" />
 		<mapping class="com.sds.hakli.domain.Vpaymentbranch" />
 		<mapping class="com.sds.hakli.domain.Vp2kb" />
-		<!-- <mapping class="com.sds.hakli.domain.Vrecp2kb" /> -->
+		<mapping class="com.sds.hakli.domain.Vrecp2kb" />
 		
 	</session-factory>
 </hibernate-configuration>
