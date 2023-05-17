@@ -41,7 +41,7 @@ public class StringUtils {
 		return digitValid;
 	}
 	
-	public static boolean ktpValidator(String noktp, String wilayah, String tgllahir) {
+	public static boolean ktpValidator(String noktp, String wilayah, String tgllahir, String gender) {
 		boolean isValid = false;
 		String checkWilcode = noktp.substring(0, 6);
 		String checkTgllahir = noktp.substring(6, 12);
