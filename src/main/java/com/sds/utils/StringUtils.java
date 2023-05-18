@@ -46,6 +46,14 @@ public class StringUtils {
 		String checkWilcode = noktp.substring(0, 6);
 		String checkTgllahir = noktp.substring(6, 12);
 		
+		if(gender.equals("P")) {
+			int tgl = Integer.parseInt(tgllahir.substring(0, 2));
+			System.out.println(tgl);
+			tgl = tgl + 40;
+			tgllahir = tgl + tgllahir.substring(2, tgllahir.length());
+			System.out.println(tgllahir);
+		}
+		
 		if(wilayah.equals(checkWilcode)) {
 			if(tgllahir.equals(checkTgllahir)) {
 				isValid = true;
