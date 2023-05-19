@@ -25,6 +25,11 @@ public class MailHandler implements Runnable {
 		this.bodymail = bodymail;
 	}
 	
+	public static void main(String[] args) {
+		MailHandler mail = new MailHandler(null, null);
+		mail.run();
+	}
+	
 	@Override
 	public void run() {
 		String errormsg = "";
@@ -41,25 +46,30 @@ public class MailHandler implements Runnable {
 			mailbean.setFrom("HAKLI <fajar.prihadi@swadharma.com>");
 			
 			try {
-				File file = new File(bodymail);
+				if (obj != null) {
+					File file = new File(bodymail);
 
-				BufferedReader br = new BufferedReader(new FileReader(file));
-				StringBuilder template = new StringBuilder();
-				String st;
-				while ((st = br.readLine()) != null) {
-					template.append(st);
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					StringBuilder template = new StringBuilder();
+					String st;
+					while ((st = br.readLine()) != null) {
+						template.append(st);
+					}
+					br.close();
+					String bodymsg = template.toString();
+					bodymsg = bodymsg.replaceAll("%nama%", obj.getTanggota().getNama());
+					bodymsg = bodymsg.replaceAll("%email%", obj.getTanggota().getEmail());
+					bodymsg = bodymsg.replaceAll("%vano%", obj.getVano());
+					bodymsg = bodymsg.replaceAll("%invoiceno%", obj.getInvoiceno());
+					bodymsg = bodymsg.replaceAll("%invoiceamount%", NumberFormat.getInstance().format(obj.getInvoiceamount()));
+					bodymsg = bodymsg.replaceAll("%invoicedesc%", obj.getInvoicedesc());
+					bodymsg = bodymsg.replaceAll("%invoicedate%", dateLocalFormatter.format(obj.getInvoicedate()));
+					bodymsg = bodymsg.replaceAll("%invoiceduedate%", dateLocalFormatter.format(obj.getInvoiceduedate()));
+					mailbean.setBodymsg(bodymsg);
+				} else {
+					mailbean.setBodymsg("Test");
 				}
-				br.close();
-				String bodymsg = template.toString();
-				bodymsg = bodymsg.replaceAll("%nama%", obj.getTanggota().getNama());
-				bodymsg = bodymsg.replaceAll("%email%", obj.getTanggota().getEmail());
-				bodymsg = bodymsg.replaceAll("%vano%", obj.getVano());
-				bodymsg = bodymsg.replaceAll("%invoiceno%", obj.getInvoiceno());
-				bodymsg = bodymsg.replaceAll("%invoiceamount%", NumberFormat.getInstance().format(obj.getInvoiceamount()));
-				bodymsg = bodymsg.replaceAll("%invoicedesc%", obj.getInvoicedesc());
-				bodymsg = bodymsg.replaceAll("%invoicedate%", dateLocalFormatter.format(obj.getInvoicedate()));
-				bodymsg = bodymsg.replaceAll("%invoiceduedate%", dateLocalFormatter.format(obj.getInvoiceduedate()));
-				mailbean.setBodymsg(bodymsg);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

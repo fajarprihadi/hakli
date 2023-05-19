@@ -21,12 +21,12 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.MjenjangDAO;
-import com.sds.hakli.dao.MkabupatenDAO;
-import com.sds.hakli.dao.MprovinsiDAO;
+import com.sds.hakli.dao.MkabDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.MuniversitasDAO;
 import com.sds.hakli.domain.Mjenjang;
-import com.sds.hakli.domain.Mkabupaten;
-import com.sds.hakli.domain.Mprovinsi;
+import com.sds.hakli.domain.Mkab;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Muniversitas;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tpekerjaan;
@@ -87,14 +87,14 @@ public class SisdmkVm {
 						anggota.setNostr(sisdmkPekerjaan.getStr());
 						
 						if (sisdmkPekerjaan.getProvinsi() != null) {
-							Mprovinsi provkantor = new MprovinsiDAO().findByFilter("upper(provname) = '" + sisdmkPekerjaan.getProvinsi().trim().toUpperCase() + "'");
+							Mprov provkantor = new MprovDAO().findByFilter("upper(provname) = '" + sisdmkPekerjaan.getProvinsi().trim().toUpperCase() + "'");
 							if (provkantor != null) {
 								pekerjaan.setProvcode(provkantor.getProvcode());
 								pekerjaan.setProvname(provkantor.getProvname());
 							}
 							
 							if (sisdmkPekerjaan.getKabkot() != null) {
-								Mkabupaten kabkantor = new MkabupatenDAO().findByFilter("provcode = '" + provkantor.getProvcode() + "' and upper(kabname) = '" + sisdmkPekerjaan.getKabkot().trim().toUpperCase() + "'");
+								Mkab kabkantor = new MkabDAO().findByFilter("provcode = '" + provkantor.getProvcode() + "' and upper(kabname) = '" + sisdmkPekerjaan.getKabkot().trim().toUpperCase() + "'");
 								if (kabkantor != null) {
 									pekerjaan.setKabcode(kabkantor.getKabcode());
 									pekerjaan.setKabname(kabkantor.getKabname());

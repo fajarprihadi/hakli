@@ -31,10 +31,10 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
-import com.sds.hakli.dao.MprovinsiDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Mp2kbkegiatan;
-import com.sds.hakli.domain.Mprovinsi;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 
@@ -298,10 +298,10 @@ public class LogbookVm {
 		doSearch();
 	}
 	
-	public ListModelList<Mprovinsi> getRegionModel() {
-		ListModelList<Mprovinsi> oList = null;
+	public ListModelList<Mprov> getRegionModel() {
+		ListModelList<Mprov> oList = null;
 		try {
-			oList = new ListModelList<>(new MprovinsiDAO().listAll());
+			oList = new ListModelList<>(new MprovDAO().listAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -26,9 +26,9 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
-import com.sds.hakli.dao.MprovinsiDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.Tp2kbDAO;
-import com.sds.hakli.domain.Mprovinsi;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Vp2kb;
 
 public class VerifikasiKomisiVm {
@@ -39,7 +39,7 @@ public class VerifikasiKomisiVm {
 	private String orderby;
 
 	private String nama;
-	private Mprovinsi region;
+	private Mprov region;
 	
 	private Integer pageTotalSize;
 	
@@ -117,10 +117,10 @@ public class VerifikasiKomisiVm {
 		doSearch();
 	}
 	
-	public ListModelList<Mprovinsi> getRegionmodel(){
-		ListModelList<Mprovinsi> lm = null;
+	public ListModelList<Mprov> getRegionmodel(){
+		ListModelList<Mprov> lm = null;
 		try {
-			lm = new ListModelList<Mprovinsi>(new MprovinsiDAO().listAll());
+			lm = new ListModelList<Mprov>(new MprovDAO().listAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -135,11 +135,11 @@ public class VerifikasiKomisiVm {
 		this.nama = nama;
 	}
 
-	public Mprovinsi getRegion() {
+	public Mprov getRegion() {
 		return region;
 	}
 
-	public void setRegion(Mprovinsi region) {
+	public void setRegion(Mprov region) {
 		this.region = region;
 	}
 

@@ -33,10 +33,10 @@ import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.McabangDAO;
-import com.sds.hakli.dao.MprovinsiDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.domain.Mcabang;
-import com.sds.hakli.domain.Mprovinsi;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.model.TanggotaListModel;
 import com.sds.utils.AppUtils;
@@ -53,7 +53,7 @@ public class AnggotaVm {
 	private String filter;
 	
 	private String nama;
-	private Mprovinsi region;
+	private Mprov region;
 	private Mcabang cabang;
 	
 	private SimpleDateFormat datetimeFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
@@ -168,7 +168,7 @@ public class AnggotaVm {
 		if (region != null) {
 			if (cabang != null)
 				filter += " and mcabangfk = " + cabang.getMcabangpk();
-			else filter += " and mcabang.mprovinsifk = " + region.getMprovinsipk();
+			else filter += " and mcabang.mprovfk = " + region.getMprovpk();
 		}
 			
 
@@ -190,22 +190,22 @@ public class AnggotaVm {
 	
 	@Command
 	@NotifyChange("cabangModel")
-	public void doLoadCabang(@BindingParam("prov") Mprovinsi prov) {
+	public void doLoadCabang(@BindingParam("prov") Mprov prov) {
 		try {
 			if (prov != null) {
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("mprovinsi.mprovinsipk = " + prov.getMprovinsipk(), "cabang"));
+						new McabangDAO().listByFilter("mprov.mprovpk = " + prov.getMprovpk(), "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public ListModelList<Mprovinsi> getRegionModel() {
-		ListModelList<Mprovinsi> oList = null;
+	public ListModelList<Mprov> getRegionModel() {
+		ListModelList<Mprov> oList = null;
 		try {
-			oList = new ListModelList<>(new MprovinsiDAO().listAll());
+			oList = new ListModelList<>(new MprovDAO().listAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -228,11 +228,11 @@ public class AnggotaVm {
 		this.cabangModel = cabangModel;
 	}
 
-	public Mprovinsi getRegion() {
+	public Mprov getRegion() {
 		return region;
 	}
 
-	public void setRegion(Mprovinsi region) {
+	public void setRegion(Mprov region) {
 		this.region = region;
 	}
 

@@ -41,24 +41,26 @@ public class AuthenticationVm {
 				try {
 					Tanggota anggota = anggotaDao.findByFilter("upper(noanggota) = '" + userid.trim().toUpperCase() + "'");
 					if (anggota != null) {
-						if (anggota.getPassword().equals(password)) {
-							Session session = StoreHibernateUtil.openSession();
-							Transaction trx = session.beginTransaction();
-							try {
-								anggota.setLastlogin(new Date());
-								anggotaDao.save(session, anggota);
-								trx.commit();
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								session.close();
+						if (anggota.getStatusreg().equals("3")) {
+							if (anggota.getPassword().equals(password)) {
+								Session session = StoreHibernateUtil.openSession();
+								Transaction trx = session.beginTransaction();
+								try {
+									anggota.setLastlogin(new Date());
+									anggotaDao.save(session, anggota);
+									trx.commit();
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									session.close();
+								}
+								
+								zkSession.setAttribute("anggota", anggota);
+								Executions.sendRedirect("view/index.zul");
+							} else {
+								lblMessage = "Authentication Failed : Invalid Password";
 							}
-							
-							zkSession.setAttribute("anggota", anggota);
-							Executions.sendRedirect("view/index.zul");
-						} else {
-							lblMessage = "Authentication Failed : Invalid Password";
-						}
+						} else lblMessage = "User Id Anda belum aktif. Silahkan melakukan pembayaran atas tagihan pendaftaran yang sudah dikirim ke email Anda.";
 					} else {
 						lblMessage = "Authentication Failed : Invalid User Id";
 					}

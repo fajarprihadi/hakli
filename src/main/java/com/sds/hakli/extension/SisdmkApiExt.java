@@ -1,6 +1,7 @@
 package com.sds.hakli.extension;
 
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -24,9 +25,16 @@ public class SisdmkApiExt {
 	
 	public static void main(String[] args) {
 		try {
-			SisdmkApiExt main = new SisdmkApiExt();
-			SisdmkToken objToken = main.getToken();
-			main.getBiodata(objToken.getToken(), "");
+//			SisdmkApiExt main = new SisdmkApiExt();
+//			SisdmkToken objToken = main.getToken();
+//			main.getBiodata(objToken.getToken(), "");
+			
+			String TEXT = "1234001";
+			String[] results = TEXT.split("(?<=\\G.{1})");
+			for (String s: results) {
+				System.out.println(s);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -137,7 +145,7 @@ public class SisdmkApiExt {
 			System.out.println(output);
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, SisdmkData.class);
-			System.out.println("NIK : " + obj.getData().getNik());
+			//System.out.println("NIK : " + obj.getData().getNik());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
