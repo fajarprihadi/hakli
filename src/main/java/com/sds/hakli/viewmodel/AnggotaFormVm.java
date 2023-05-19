@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -46,6 +48,7 @@ import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
@@ -103,7 +106,7 @@ import com.sds.utils.db.StoreHibernateUtil;
 
 public class AnggotaFormVm {
 
-	private org.zkoss.zk.ui.Session session = Sessions.getCurrent();
+	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 
 	private String acttype;
 
@@ -133,11 +136,13 @@ public class AnggotaFormVm {
 	private List<Tpendidikan> pendidikans;
 	private List<Tpekerjaan> pekerjaans;
 	private String processinfo;
+	private String ijazahfilename;
 
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	private SimpleDateFormat datetimeFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
 	private Media media;
+	private Media mediaIjazah;
 
 	@Wire
 	private Window winAnggotaForm;
@@ -189,8 +194,6 @@ public class AnggotaFormVm {
 
 	@Wire
 	private Image photo;
-	@Wire
-	private Button btDeletePhoto;
 
 	@Wire
 	private Button btAddPekerjaan;
@@ -231,7 +234,7 @@ public class AnggotaFormVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			this.acttype = acttype;
-			Tanggota anggota = (Tanggota) session.getAttribute("anggota");
+			Tanggota anggota = (Tanggota) zkSession.getAttribute("anggota");
 			if (anggota == null)
 				anggota = new Tanggota();
 
@@ -290,7 +293,36 @@ public class AnggotaFormVm {
 					periode = data.getPeriodeblawal() + " " + data.getPeriodethawal() + " s/d "
 							+ data.getPeriodeblakhir() + " " + data.getPeriodethakhir();
 					row.getChildren().add(new Label(periode));
-					row.getChildren().add(new Label(data.getNoijazah()));
+					
+					Button btView = new Button();
+					btView.setIconSclass("z-icon-eye");
+					btView.setSclass("btn btn-primary btn-sm");
+					btView.setAutodisable("self");
+					btView.setTooltiptext("Lihat Ijazah");
+					btView.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							File file = new File(Executions.getCurrent().getDesktop().getWebApp()
+									.getRealPath(AppUtils.PATH_IJAZAH) + "/" + data.getIjazahlink());
+							if (data.getIjazahlink() != null && data.getIjazahlink().trim().length() > 0 && file.exists()) {
+								Map<String, String> mapDocument = new HashMap<>();
+								mapDocument.put("src", AppUtils.PATH_IJAZAH + "/" + data.getIjazahlink());
+								zkSession.setAttribute("mapDocument", mapDocument);
+								Executions.getCurrent().sendRedirect("/view/docviewer.zul", "_blank");
+							} else {
+								Messagebox.show("Dokumen Ijazah Tidak Tersedia", WebApps.getCurrent().getAppName(), Messagebox.OK,
+										Messagebox.INFORMATION);
+							}
+						}
+					});
+					
+					Hlayout hlayout = new Hlayout();
+					hlayout.appendChild(btView);
+					if (data.getNoijazah() != null && data.getNoijazah().trim().length() > 0)
+						hlayout.appendChild(new Label(data.getNoijazah()));
+					row.getChildren().add(hlayout);
+					
 					
 					if (acttype != null && acttype.equals("edit")) {
 						Button btEdit = new Button();
@@ -433,6 +465,7 @@ public class AnggotaFormVm {
 						"tpekerjaanpk desc");
 			}
 			gridPekerjaan.setModel(new ListModelList<>(this.pekerjaans));
+			Clients.scrollIntoView(gridPekerjaan);
 			
 			if (pendidikans != null) {
 				this.pendidikans = pendidikans;
@@ -572,7 +605,7 @@ public class AnggotaFormVm {
 	}
 
 	@Command
-	@NotifyChange("pendidikan")
+	@NotifyChange({"pendidikan", "ijazahfilename"})
 	public void doAddPendidikan(Tpendidikan obj) {
 		try {
 			if (obj != null) {
@@ -589,6 +622,11 @@ public class AnggotaFormVm {
 				cbPendidikanThAwal.setValue(pendidikan.getPeriodethawal());
 				cbPendidikanBlAkhir.setValue(pendidikan.getPeriodeblakhir());
 				cbPendidikanThAkhir.setValue(pendidikan.getPeriodethakhir());
+				
+				mediaIjazah = null;
+				ijazahfilename = null;
+				if (pendidikan.getIjazahfilename() != null)
+					ijazahfilename = pendidikan.getIjazahfilename();
 			} else if (btAddPendidikan.getLabel().equals("Tambah Pendidikan")) {
 				pendidikan = new Tpendidikan();
 				gbPendidikan.setVisible(true);
@@ -601,11 +639,17 @@ public class AnggotaFormVm {
 				btAddPendidikan.setLabel("Cancel");
 				btAddPendidikan.setIconSclass("z-icon-reply");
 				btSavePekerjaan.setLabel("Submit");
+				
+				mediaIjazah = null;
+				ijazahfilename = null;
 			} else {
 				pendidikan = null;
 				gbPendidikan.setVisible(false);
 				btAddPendidikan.setLabel("Tambah Pendidikan");
 				btAddPendidikan.setIconSclass("z-icon-plus-square");
+				
+				mediaIjazah = null;
+				ijazahfilename = null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -668,12 +712,23 @@ public class AnggotaFormVm {
 			if (media instanceof org.zkoss.image.Image) {
 				photo.setContent((org.zkoss.image.Image) media);
 				photo.setVisible(true);
-				btDeletePhoto.setVisible(true);
 			} else {
 				media = null;
 				Messagebox.show("Not an image: " + media, WebApps.getCurrent().getAppName(), Messagebox.OK,
 						Messagebox.ERROR);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	@NotifyChange("ijazahfilename")
+	public void doUploadIjazah(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx) {
+		try {
+			UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
+			mediaIjazah = event.getMedia();
+			ijazahfilename = mediaIjazah.getName();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -732,6 +787,26 @@ public class AnggotaFormVm {
 			if (pendidikan.getTpendidikanpk() == null) {
 				isInsert = true;
 				pendidikan.setTanggota(pribadi);
+			}
+			if (mediaIjazah != null) {
+				try {
+					String ijazahId = new TcounterengineDAO().getLastCounter("DOC" + new SimpleDateFormat("yyMM").format(new Date()), 5) + "." + mediaIjazah.getFormat();
+					String folder = Executions.getCurrent().getDesktop().getWebApp()
+							.getRealPath(AppUtils.PATH_IJAZAH);
+					if (mediaIjazah.isBinary()) {
+						Files.copy(new File(folder + "/" + ijazahId), mediaIjazah.getStreamData());
+					} else {
+						BufferedWriter writer = new BufferedWriter(
+								new FileWriter(folder + "/" + ijazahId));
+						Files.copy(writer, mediaIjazah.getReaderData());
+						writer.close();
+					}
+
+					pendidikan.setIjazahlink(ijazahId);
+					pendidikan.setIjazahfilename(ijazahfilename);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			trx = session.beginTransaction();
@@ -858,9 +933,9 @@ public class AnggotaFormVm {
 						briva.setInstitutionCode(bean.getBriva_institutioncode());
 						briva.setBrivaNo(bean.getBriva_cid());
 
-						String custcode_prov = "00" + pribadi.getMcabang().getMprov().getProvcode();
-						String custcode = custcode_prov.substring(custcode_prov.length() - 2, custcode_prov.length());
-						briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode + "013"));
+						String custcode_cabang = "0000" + pribadi.getMcabang().getKodecabang();
+						String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
+						briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 						briva.setKeterangan("Pendaftaran Anggota HAKLI");
 						briva.setNama(pribadi.getNama());
 						Calendar cal = Calendar.getInstance();
@@ -1283,6 +1358,14 @@ public class AnggotaFormVm {
 
 	public void setKabkantor(Mkab kabkantor) {
 		this.kabkantor = kabkantor;
+	}
+
+	public String getIjazahfilename() {
+		return ijazahfilename;
+	}
+
+	public void setIjazahfilename(String ijazahfilename) {
+		this.ijazahfilename = ijazahfilename;
 	}
 
 }

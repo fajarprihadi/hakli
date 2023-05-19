@@ -46,6 +46,7 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.bean.BriapiBean;
+import com.sds.hakli.bean.SisdmkBean;
 import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MjenjangDAO;
 import com.sds.hakli.dao.MkabDAO;
@@ -313,10 +314,11 @@ public class AnggotaAddVm {
 	private boolean doSisdmk() throws Exception {
 		boolean isValid = false;
 		try {
+			SisdmkBean bean = AppData.getSisdmkParam();
 			SisdmkApiExt api = new SisdmkApiExt();
-			SisdmkToken sisdmkToken = api.getToken();
+			SisdmkToken sisdmkToken = api.getToken(bean);
 			if (sisdmkToken != null && sisdmkToken.getStatus().equals("success")) {
-				SisdmkData data = api.getBiodata(sisdmkToken.getToken(), objForm.getPribadi().getNoktp());
+				SisdmkData data = api.getBiodata(bean, sisdmkToken.getToken(), objForm.getPribadi().getNoktp());
 				if (data != null && data.getStatus() == 200) {
 					Tanggota anggota = new Tanggota();
 					anggota.setGender(data.getData().getJenis_kelamin());
@@ -667,10 +669,10 @@ public class AnggotaAddVm {
 				briva.setInstitutionCode(bean.getBriva_institutioncode());
 				briva.setBrivaNo(bean.getBriva_cid());
 				
-				String custcode_prov = "00" + objForm.getPribadi().getMcabang().getMprov().getProvcode();
-				String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
+				String custcode_cabang = "0000" + objForm.getPribadi().getMcabang().getKodecabang();
+				String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
 				if (isVaCreate)
-					briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode + "013"));
+					briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 				else briva.setCustCode(objForm.getPribadi().getVaevent().substring(5));
 				briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
 				briva.setNama(objForm.getPribadi().getNama());

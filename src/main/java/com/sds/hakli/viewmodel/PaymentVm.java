@@ -261,8 +261,8 @@ public class PaymentVm {
 										briva.setInstitutionCode(bean.getBriva_institutioncode());
 										briva.setBrivaNo(bean.getBriva_cid());
 										
-										String custcode_prov = "00" + anggota.getMcabang().getMprov().getProvcode();
-										String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
+										String custcode_cabang = "0000" + anggota.getMcabang().getKodecabang();
+										String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
 										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 										
 										Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();

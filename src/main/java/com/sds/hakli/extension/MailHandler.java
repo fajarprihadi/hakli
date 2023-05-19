@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 import org.zkoss.zk.ui.Executions;
 
 import com.sds.hakli.domain.Tinvoice;
+import com.sds.utils.AppData;
 
 public class MailHandler implements Runnable {
 
@@ -34,16 +35,17 @@ public class MailHandler implements Runnable {
 	public void run() {
 		String errormsg = "";
 		try {
-			MailBean mailbean = new MailBean();
+			MailBean mailbean = AppData.getSmtpParam();
 			mailbean.setAppid(obj.getTinvoicepk());
-			mailbean.setSmtpname("mail.sdd.co.id");
-			mailbean.setSmtpport(465);
-			mailbean.setMailid("fajar.prihadi@swadharma.com");
-			mailbean.setMailpassword("fprihadi3458");
+			//mailbean.setSmtpname("mail.sdd.co.id");
+			//mailbean.setSmtpport(465);
+			//mailbean.setMailid("fajar.prihadi@swadharma.com");
+			//mailbean.setMailpassword("fprihadi3458");
 			//mailbean.setRecipient(obj.getTanggota().getEmail());
+			//mailbean.setFrom("HAKLI <fajar.prihadi@swadharma.com>");
+			
 			mailbean.setRecipient("fprihadi@gmail.com");
-			mailbean.setSubject("Tagihan Pembayaran");
-			mailbean.setFrom("HAKLI <fajar.prihadi@swadharma.com>");
+			mailbean.setSubject(obj.getInvoicedesc());
 			
 			try {
 				if (obj != null) {
@@ -66,9 +68,7 @@ public class MailHandler implements Runnable {
 					bodymsg = bodymsg.replaceAll("%invoicedate%", dateLocalFormatter.format(obj.getInvoicedate()));
 					bodymsg = bodymsg.replaceAll("%invoiceduedate%", dateLocalFormatter.format(obj.getInvoiceduedate()));
 					mailbean.setBodymsg(bodymsg);
-				} else {
-					mailbean.setBodymsg("Test");
-				}
+				} 
 				
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -80,7 +80,7 @@ public class MailSender {
 
 		Transport t = session.getTransport("smtp");
 		t.connect(mailbean.getSmtpname(), mailbean.getSmtpport(), mailbean.getMailid(), mailbean.getMailpassword());
-		t.connect("mail.sdd.co.id", 465, "fajar.prihadi@swadharma.com", "fprihadi3458");
+		//t.connect("mail.sdd.co.id", 465, "fajar.prihadi@swadharma.com", "fprihadi3458");
 		t.sendMessage(message, message.getAllRecipients());
 		t.close();
 

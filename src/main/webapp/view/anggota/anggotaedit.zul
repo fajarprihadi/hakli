@@ -229,10 +229,6 @@
 											autodisable="self" />
 										<separator />
 										<image id="photo" width="90px" />
-										<separator />
-										<button id="btDeletePhoto"
-											sclass="btn btn-danger btn-sm" label="Hapus Foto"
-											onClick="@command('doDeletePhoto')" autodisable="self" />
 									</hlayout>
 								</n:td>
 							</n:tr>
@@ -421,7 +417,8 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-3"
 					role="tabpanel" aria-labelledby="ex1-tab-3">
-					<grid id="gridPekerjaan">
+					<grid id="gridPekerjaan" sizedByContent="true"
+						style="overflow: true">
 						<columns>
 							<column
 								label="${labels.pekerjaan.namakantor}" />
@@ -471,8 +468,7 @@
 										<combobox id="cbProvkantor"
 											model="@load(vm.provkantorModel)"
 											selectedItem="@bind(vm.provkantor)"
-											onSelect="@command('doLoadKabkantor', prov=vm.provkantor)"
-											readonly="true" width="100%">
+											onSelect="@command('doLoadKabkantor', prov=vm.provkantor)" width="100%">
 											<template name="model"
 												var="provinsi">
 												<comboitem
@@ -489,8 +485,7 @@
 									<vlayout>
 										<combobox id="cbKabkantor"
 											model="@load(vm.kabkantorModel)"
-											selectedItem="@bind(vm.kabkantor)" readonly="true"
-											width="100%">
+											selectedItem="@bind(vm.kabkantor)" width="100%">
 											<template name="model"
 												var="kabupaten">
 												<comboitem
@@ -518,7 +513,7 @@
 									<vlayout>
 										<combobox id="cbRumpun"
 											selectedItem="@bind(f.mrumpun)" model="@load(vm.rumpunModel)"
-											width="100%" readonly="true">
+											width="100%">
 											<template name="model"
 												var="mrumpun">
 												<comboitem
@@ -537,7 +532,7 @@
 											selectedItem="@bind(f.mkepegawaian)"
 											model="@load(vm.kepegawaianModel)"
 											onSelect="@command('doLoadKepegawaiansub', mkepegawaian=f.mkepegawaian)"
-											width="100%" readonly="true">
+											width="100%">
 											<template name="model"
 												var="mkepegawaian">
 												<comboitem
@@ -554,8 +549,7 @@
 									<vlayout>
 										<combobox id="cbKepegawaiansub"
 											selectedItem="@bind(f.mkepegawaiansub)"
-											model="@load(vm.kepegawaiansubModel)" width="100%"
-											readonly="true">
+											model="@load(vm.kepegawaiansubModel)" width="100%">
 											<template name="model"
 												var="mkepegawaiansub">
 												<comboitem
@@ -700,8 +694,7 @@
 									<vlayout>
 										<combobox id="cbUniversitas"
 											selectedItem="@bind(g.muniversitas)"
-											model="@load(vm.universitasModel)" width="100%"
-											readonly="true">
+											model="@load(vm.universitasModel)" width="100%">
 											<template name="model"
 												var="muniversitas">
 												<comboitem
@@ -718,8 +711,7 @@
 									<vlayout>
 										<combobox id="cbJenjang"
 											selectedItem="@bind(g.mjenjang)"
-											model="@load(vm.jenjangModel)" width="100%"
-											readonly="true">
+											model="@load(vm.jenjangModel)" width="100%">
 											<template name="model"
 												var="mjenjang">
 												<comboitem
@@ -767,6 +759,19 @@
 										value="${labels.pendidikan.noijazah}" />
 									<textbox value="@bind(g.noijazah)"
 										maxlength="20" width="100%" />
+								</row>
+								<row>
+									<label value="Dokumen Ijazah" />
+									<hlayout>
+										<button
+											sclass="btn btn-info btn-sm" label="Browse..."
+											upload="true,maxsize=1000"
+											onUpload="@command('doUploadIjazah', upEvent=event)"
+											autodisable="self" />
+										<separator />
+										<label
+											value="@load(vm.ijazahfilename)" />
+									</hlayout>
 								</row>
 							</rows>
 							<foot>
@@ -853,7 +858,7 @@
 								<n:td>
 									<vlayout>
 										<combobox id="cbHubungan"
-											selectedItem="@bind(d.hubungan)" readonly="true">
+											selectedItem="@bind(d.hubungan)">
 											<comboitem value="Suami"
 												label="Suami" />
 											<comboitem value="Istri"
@@ -914,10 +919,10 @@
 									<vlayout>
 										<radiogroup id="rgDecision"
 											selectedItem="@bind(v.statusreg)" orient="vertical">
-											<radio id="rdVerDecYes" value="2"
-												label="Setujui dan Generate Pembayaran VA" />
-											<radio id="rdVerDecNo" value="9"
-												label="Tolak" />
+											<radio id="rdVerDecYes"
+												value="2" label="Setujui dan Generate Pembayaran VA" />
+											<radio id="rdVerDecNo"
+												value="9" label="Tolak" />
 										</radiogroup>
 										<label style="color:gray"
 											value="@load(vmsgs['statusreg'])" />

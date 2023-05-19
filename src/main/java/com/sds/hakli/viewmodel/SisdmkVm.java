@@ -20,6 +20,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Window;
 
+import com.sds.hakli.bean.SisdmkBean;
 import com.sds.hakli.dao.MjenjangDAO;
 import com.sds.hakli.dao.MkabDAO;
 import com.sds.hakli.dao.MprovDAO;
@@ -36,6 +37,7 @@ import com.sds.hakli.pojo.SisdmkData;
 import com.sds.hakli.pojo.SisdmkPekerjaan;
 import com.sds.hakli.pojo.SisdmkPendidikan;
 import com.sds.hakli.pojo.SisdmkToken;
+import com.sds.utils.AppData;
 
 public class SisdmkVm {
 	
@@ -63,10 +65,11 @@ public class SisdmkVm {
 	@NotifyChange("*")
 	public void doSubmit() {
 		try {
+			SisdmkBean bean = AppData.getSisdmkParam();
 			SisdmkApiExt api = new SisdmkApiExt();
-			SisdmkToken sisdmkToken = api.getToken();
+			SisdmkToken sisdmkToken = api.getToken(bean);
 			if (sisdmkToken != null && sisdmkToken.getStatus().equals("success")) {
-				SisdmkData data = api.getBiodata(sisdmkToken.getToken(), anggota.getNoktp());
+				SisdmkData data = api.getBiodata(bean, sisdmkToken.getToken(), anggota.getNoktp());
 				if (data != null && data.getStatus() == 200) {
 					processinfo = "Anda telah terdaftar di SISDMK. Berikut data SISDMK Anda :";
 					divProcessinfo.setVisible(true);

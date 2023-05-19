@@ -539,10 +539,10 @@ public class EventRegVm {
 									briva.setInstitutionCode(bean.getBriva_institutioncode());
 									briva.setBrivaNo(bean.getBriva_cid());
 									
-									String custcode_prov = "00" + objForm.getPribadi().getMcabang().getMprov().getProvcode();
-									String custcode = custcode_prov.substring(custcode_prov.length()-2, custcode_prov.length());
+									String custcode_cabang = "0000" + objForm.getPribadi().getMcabang().getKodecabang();
+									String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
 									if (isVaCreate)
-										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode + "013"));
+										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 									else briva.setCustCode(objForm.getPribadi().getVaevent().substring(5));
 									briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
 									briva.setNama(objForm.getPribadi().getNama());
