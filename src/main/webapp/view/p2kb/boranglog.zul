@@ -1,0 +1,31 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winAnggotaRegList" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BorangLogVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Borang Pengisian</n:span>
+		</caption>
+		<div class="row">
+			<div class="col-md" />
+			<div class="col-md-2" align="right">
+				<label value="Total Data :" style="font-weight: bold" />
+				<label value="@load(vm.pageTotalSize)"
+					style="font-weight: bold" />
+			</div>
+		</div>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
+			<columns>
+				<column label="${labels.common.no}" align="right"
+					width="40px" />
+				<column label="Nomor STR" />
+				<column label="Tgl Mulai" align="center" width="150px" />
+				<column label="Tgl Berakhir" align="center"
+					width="150px" />
+				<column label="Status" width="150px" align="center"/>
+				<column label="Action" align="center" width="150px" />
+			</columns>
+		</grid>
+
+	</window>
+</zk>

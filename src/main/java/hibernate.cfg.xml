@@ -55,6 +55,7 @@
 		<mapping class="com.sds.hakli.domain.Tpekerjaan" />
 		
 		<mapping class="com.sds.hakli.domain.Tp2kb" />
+		<mapping class="com.sds.hakli.domain.Tp2kbbook" />
 		<mapping class="com.sds.hakli.domain.Tp2kba01" />
 		<mapping class="com.sds.hakli.domain.Tp2kba02" />
 		<mapping class="com.sds.hakli.domain.Tp2kba03" />

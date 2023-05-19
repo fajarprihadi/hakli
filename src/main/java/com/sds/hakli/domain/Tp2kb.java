@@ -32,6 +32,8 @@ public class Tp2kb {
 	
 	private Integer totaltimapprove;
 	
+	private Tp2kbbook tp2kbbook;
+	
 	@Id
 	@SequenceGenerator(name = "tp2kb_seq", sequenceName = "tp2kb_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kb_seq")
@@ -102,6 +104,16 @@ public class Tp2kb {
 
 	public void setTotaltimapprove(Integer totaltimapprove) {
 		this.totaltimapprove = totaltimapprove;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "tp2kbbookfk")
+	public Tp2kbbook getTp2kbbook() {
+		return tp2kbbook;
+	}
+
+	public void setTp2kbbook(Tp2kbbook tp2kbbook) {
+		this.tp2kbbook = tp2kbbook;
 	}
 	
 }
