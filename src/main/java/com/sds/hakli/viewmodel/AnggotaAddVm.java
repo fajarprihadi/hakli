@@ -772,11 +772,11 @@ public class AnggotaAddVm {
 				if (hp == null || "".equals(hp.trim()))
 					this.addInvalidMessage(ctx, "hp", Labels.getLabel("common.validator.empty"));
 				
-//				if (noktp != null && provrumah != null && kabrumah != null && dob != null) {
-//					if (!StringUtils.ktpValidator(noktp, kabrumah.getKabcode(), new SimpleDateFormat("ddMMyyyy").format(dob))) {
-//						this.addInvalidMessage(ctx, "noktp", "No KTP tidak sesuai dengan data diri Anda");
-//					}
-//				}
+				if (noktp != null && provrumah != null && kabrumah != null && dob != null) {
+					if (!StringUtils.ktpValidator(noktp, kabrumah.getKabcode(), new SimpleDateFormat("ddMMyy").format(dob), gender)) {
+						this.addInvalidMessage(ctx, "noktp", "No KTP tidak sesuai dengan data diri Anda");
+					}
+				}
 
 				// Keanggotaan
 				String statusanggota = (String) ctx.getProperties("pribadi.statusanggota")[0].getValue();

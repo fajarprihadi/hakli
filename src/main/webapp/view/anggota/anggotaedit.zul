@@ -340,11 +340,21 @@
 							<n:tr>
 								<n:td>
 									<label
+										value="Periode Aktif Keanggotaan s/d" />
+								</n:td>
+								<n:td>
+									<datebox value="@load(k.periodekta)" format="dd-MM-yyyy" buttonVisible="false"
+										readonly="true" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label
 										value="${labels.anggota.statusanggota} (*)" />
 								</n:td>
 								<n:td>
 									<vlayout>
-										<combobox id="cbStatusanggota"
+										<combobox id="cbStatusanggota" buttonVisible="false" 
 											selectedItem="@bind(k.statusanggota)" readonly="true">
 											<comboitem
 												value="Anggota Biasa" label="Anggota Biasa" />
@@ -365,10 +375,10 @@
 								</n:td>
 								<n:td>
 									<vlayout>
-										<combobox id="cbRegion"
+										<combobox id="cbRegion" readonly="true"
 											model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
 											onSelect="@command('doLoadCabang', prov=vm.region)"
-											width="100%">
+											width="100%" buttonVisible="false">
 											<template name="model"
 												var="provinsi">
 												<comboitem
@@ -387,7 +397,7 @@
 								</n:td>
 								<n:td>
 									<vlayout>
-										<combobox id="cbCabang"
+										<combobox id="cbCabang" buttonVisible="false" readonly="true"
 											selectedItem="@bind(e.mcabang)" model="@load(vm.cabangModel)"
 											width="100%">
 											<template name="model"
@@ -401,17 +411,6 @@
 									</vlayout>
 								</n:td>
 							</n:tr>
-							<!-- <n:tr>
-								<n:td>
-								<label />
-								</n:td>
-								<n:td>
-								<button width="100%"
-								label="Perbarui" autodisable="self"
-								sclass="btn btn-primary btn-sm" iconSclass="z-icon-save"
-								onClick="@command('doSaveKeanggotaan')" />
-								</n:td>
-								</n:tr> -->
 						</n:table>
 					</div>
 				</n:div>

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -951,15 +952,18 @@ public class AnggotaFormVm {
 							try {
 								pribadi.setVareg(briva.getBrivaNo() + briva.getCustCode());
 								pribadi.setVaregstatus(1);
-								String provcode = pribadi.getMcabang().getMprov().getProvcode();
-								provcode = "00" + provcode;
-								provcode = provcode.substring(provcode.length() - 2, provcode.length());
-								String noanggota = new TcounterengineDAO().generateNoAnggota(provcode);
+								String kodecabang = pribadi.getMcabang().getKodecabang();
+								kodecabang = "0000" + kodecabang;
+								kodecabang = kodecabang.substring(kodecabang.length() - 4, kodecabang.length());
+								String noanggota = new TcounterengineDAO().generateNoAnggota(kodecabang);
 								noanggota = noanggota + StringUtils.checkDigit(Integer.parseInt(noanggota));
 								pribadi.setNoanggota(noanggota);
-								pribadi.setPassword(AppUtils.USERS_PASSWORD_DEFAULT);
+								
+								Random rand = new Random();
+								String password = String.valueOf(rand.nextInt(1000000)) + "000000";
+								pribadi.setPassword(password.substring(0, 6));
 								pribadi.setRegdecisiontime(new Date());
-								pribadi.setPeriodekta(new Date());
+								//pribadi.setPeriodekta(new Date());
 								oDao.save(session, pribadi);
 
 								Tinvoice inv = new InvoiceGenerator().doInvoice(pribadi,
