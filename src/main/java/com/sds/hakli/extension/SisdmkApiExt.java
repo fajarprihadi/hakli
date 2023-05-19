@@ -15,6 +15,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sds.hakli.bean.SisdmkBean;
 import com.sds.hakli.pojo.SisdmkData;
 import com.sds.hakli.pojo.SisdmkToken;
 import com.sun.jersey.api.client.Client;
@@ -28,19 +29,12 @@ public class SisdmkApiExt {
 //			SisdmkApiExt main = new SisdmkApiExt();
 //			SisdmkToken objToken = main.getToken();
 //			main.getBiodata(objToken.getToken(), "");
-			
-			String TEXT = "1234001";
-			String[] results = TEXT.split("(?<=\\G.{1})");
-			for (String s: results) {
-				System.out.println(s);
-			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public SisdmkToken getToken() throws Exception {
+	public SisdmkToken getToken(SisdmkBean bean) throws Exception {
 		SisdmkToken obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -76,14 +70,17 @@ public class SisdmkApiExt {
 		    System.out.println("***Begin Access Token SISDMK***");
 			
 		    MultivaluedMap<String, String> input = new MultivaluedHashMap<String, String>();
-			input.add("username", "hakli");
-			input.add("password", "jz0n7Vt0OgKU6GM9VbYoe9RGbZAQCm89");
+			//input.add("username", "hakli");
+			//input.add("password", "jz0n7Vt0OgKU6GM9VbYoe9RGbZAQCm89");
+		    input.add("username", bean.getUsername());
+			input.add("password", bean.getPassword());
 			
 			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
 
-			WebResource webResource = client.resource("https://sisdmk.kemkes.go.id/rest/login_ws");
+			//WebResource webResource = client.resource("https://sisdmk.kemkes.go.id/rest/login_ws");
+			WebResource webResource = client.resource(bean.getUrl() + bean.getPathtoken());
 			ClientResponse response = webResource.type(MediaType.APPLICATION_FORM_URLENCODED)
 					.post(ClientResponse.class, input);
 
@@ -91,14 +88,14 @@ public class SisdmkApiExt {
 			System.out.println(output);
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, SisdmkToken.class);
-			System.out.println("TOKEN : " + obj.getToken());
+			//System.out.println("TOKEN : " + obj.getToken());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return obj;
 	}
 	
-	public SisdmkData getBiodata(String token, String nik) throws Exception {	
+	public SisdmkData getBiodata(SisdmkBean bean, String token, String nik) throws Exception {	
 		SisdmkData obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -137,7 +134,8 @@ public class SisdmkApiExt {
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
 
-			WebResource webResource = client.resource("https://sisdmk.kemkes.go.id/rest/getBiodataByStr");
+			//WebResource webResource = client.resource("https://sisdmk.kemkes.go.id/rest/getBiodataByStr");
+			WebResource webResource = client.resource(bean.getUrl() + bean.getPathgetbiodata());
 			ClientResponse response = webResource.queryParam("nik", nik).queryParam("token", token)
 					.get(ClientResponse.class);
 

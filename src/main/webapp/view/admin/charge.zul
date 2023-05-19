@@ -59,7 +59,7 @@
 									<label value="Keterangan" />
 									<vlayout>
 										<textbox
-											value="@bind(e.chargedesc)" maxlength="20" width="100%" />
+											value="@bind(e.chargedesc)" maxlength="40" width="100%" />
 										<label style="color:gray"
 											value="@load(vmsgs['chargedescreg'])" />
 									</vlayout>
@@ -134,7 +134,7 @@
 									<label value="Komponen" />
 									<vlayout>
 										<textbox
-											value="@bind(f.chargedesc)" maxlength="20" width="100%" />
+											value="@bind(f.chargedesc)" maxlength="40" width="100%" />
 										<label style="color:gray"
 											value="@load(vmsgs['chargedesciuran'])" />
 									</vlayout>

@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.sds.hakli.dao.MsysparamDAO;
 import com.sds.hakli.domain.Msysparam;
+import com.sds.hakli.extension.MailBean;
 import com.sds.hakli.bean.BriapiBean;
+import com.sds.hakli.bean.SisdmkBean;
 
 public class AppData {
 
@@ -37,6 +41,44 @@ public class AppData {
 				bean.setBriva_pathupdateva(obj.getParamvalue());
 			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIVA_PATH_REPORT))
 				bean.setBriva_pathreport(obj.getParamvalue());
+		}
+		return bean;
+	}
+	
+	public static MailBean getSmtpParam() throws Exception {
+		MailBean bean = new MailBean();
+		List<Msysparam> params = new MsysparamDAO()
+				.listByFilter("paramgroup = '" + AppUtils.SYSPARAM_GROUP_SMTP + "'", "orderno");
+		for (Msysparam obj : params) {
+			if (obj.getParamcode().equals(AppUtils.SYSPARAM_SMTP_HOST))
+				bean.setSmtpname(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SMTP_PORT))
+				bean.setSmtpport(StringUtils.isNumeric(obj.getParamvalue()) ? Integer.parseInt(obj.getParamvalue()) : 465);
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SMTP_EMAILID))
+				bean.setMailid(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SMTP_EMAILPASSWORD))
+				bean.setMailpassword(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SMTP_EMAILSENDER))
+				bean.setFrom(obj.getParamvalue());
+		}
+		return bean;
+	}
+	
+	public static SisdmkBean getSisdmkParam() throws Exception {
+		SisdmkBean bean = new SisdmkBean();
+		List<Msysparam> params = new MsysparamDAO()
+				.listByFilter("paramgroup = '" + AppUtils.SYSPARAM_GROUP_SISDMK + "'", "orderno");
+		for (Msysparam obj : params) {
+			if (obj.getParamcode().equals(AppUtils.SYSPARAM_SISDMK_URL))
+				bean.setUrl(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SISDMK_USERNAME))
+				bean.setUsername(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SISDMK_PASSWORD))
+				bean.setPassword(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SISDMK_PATH_TOKEN))
+				bean.setPathtoken(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_SISDMK_PATH_BIODATA))
+				bean.setPathgetbiodata(obj.getParamvalue());
 		}
 		return bean;
 	}

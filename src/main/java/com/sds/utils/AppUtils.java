@@ -45,6 +45,20 @@ public class AppUtils {
 	public static final String SYSPARAM_BRIVA_PATH_UPDATEVA = "BRIVA_PATH_UPDATEVA";
 	public static final String SYSPARAM_BRIVA_PATH_REPORT = "BRIVA_PATH_REPORT";
 	
+	public static final String SYSPARAM_GROUP_SISDMK = "SISDMK";
+	public static final String SYSPARAM_SISDMK_URL = "SISDMK_URL";
+	public static final String SYSPARAM_SISDMK_USERNAME = "SISDMK_USERNAME";
+	public static final String SYSPARAM_SISDMK_PASSWORD = "SISDMK_PASSWORD";
+	public static final String SYSPARAM_SISDMK_PATH_TOKEN = "SISDMK_PATH_TOKEN";
+	public static final String SYSPARAM_SISDMK_PATH_BIODATA = "SISDMK_PATH_BIODATA";
+	
+	public static final String SYSPARAM_GROUP_SMTP = "SMTP";
+	public static final String SYSPARAM_SMTP_HOST = "SMTP_HOST";
+	public static final String SYSPARAM_SMTP_PORT = "SMTP_PORT";
+	public static final String SYSPARAM_SMTP_EMAILID = "SMTP_EMAILID";
+	public static final String SYSPARAM_SMTP_EMAILPASSWORD = "SMTP_EMAILPASSWORD";
+	public static final String SYSPARAM_SMTP_EMAILSENDER = "SMTP_EMAILSENDER";
+	
 	public static final String SCHEDULER_ENABLE_LABEL = "ENABLE";
 	public static final String SCHEDULER_ENABLE_VALUE = "1";
 	public static final String SCHEDULER_DISABLE_LABEL = "DISABLE";

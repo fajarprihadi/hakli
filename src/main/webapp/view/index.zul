@@ -56,7 +56,7 @@
 											onClick="@command('doRedirect', path='/view/payment/payment.zul', menu='anggota', index=1)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-share fa-fw me-3">
+												class="fas fa-money-check fa-fw me-3">
 											</n:i>
 											<n:span>
 												Pembayaran Iuran
@@ -66,7 +66,7 @@
 											onClick="@command('doRedirect', path='/view/anggota/mutasi.zul', menu='anggota', index=2)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-share fa-fw me-3">
+												class="fas fa-suitcase-rolling fa-fw me-3">
 											</n:i>
 											<n:span>
 												Mutasi
@@ -76,10 +76,20 @@
 											onClick="@command('doRedirect', path='/view/anggota/cetakkta.zul', menu='anggota', index=3)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
-												class="fas fa-share fa-fw me-3">
+												class="fas fa-id-card fa-fw me-3">
 											</n:i>
 											<n:span>
 												Cetak KTA
+											</n:span>
+										</a>
+										<a href="#"
+											onClick="@command('doRedirect', path='/view/anggota/anggotachangepass.zul', menu='anggota', index=4)"
+											class="list-group-item list-group-item-action py-2 ripple">
+											<n:i
+												class="fas fa-lock fa-fw me-3">
+											</n:i>
+											<n:span>
+												Ubah Password
 											</n:span>
 										</a>
 									</div>

@@ -21,12 +21,12 @@
 		<n:header>
 			<!-- Sidebar -->
 			<n:nav id="sidebarMenu"
-				class="collapse d-lg-block sidebar collapse bg-white">
+				class="collapse d-lg-block sidebar collapse bg-white mt-3">
 
-				<div class="position-sticky">
-					<n:br />
+				<!-- <div class="position-sticky">
+					<n:br /> -->
 					
-					<div class="accordion accordion-flush"
+					<div class="accordion accordion-flush" style="overflow-y: auto; height: 100%"
 						id="divAccord">
 						<div class="accordion-item">
 							<n:h2 class="accordion-header administrasi"
@@ -360,13 +360,23 @@
 												Monitoring Pembayaran
 											</n:span>
 										</a>
+										<a href="#"
+											onClick="@command('doRedirect', path='/view/dashboardinvoice.zul', menu='dashboard', index=2)"
+											class="list-group-item list-group-item-action py-2 ripple">
+											<n:i
+												class="fas fa-file-invoice fa-fw me-3">
+											</n:i>
+											<n:span>
+												Daftar Tagihan
+											</n:span>
+										</a>
 									</div>
 								</div>
 							</n:div>
 						</div>
 					</div>
 
-				</div>
+				<!-- </div> -->
 
 			</n:nav>
 			<!-- Sidebar -->
