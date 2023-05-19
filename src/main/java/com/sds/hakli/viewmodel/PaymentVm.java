@@ -181,7 +181,7 @@ public class PaymentVm {
 					row.getChildren().add(new Label(datelocalFormatter.format(data.getInvoiceduedate())));
 					row.getChildren().add(new Label(data.getVano()));
 					row.getChildren().add(new Label(data.getInvoicedesc()));
-					row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum dibayar"));
+					row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
 				}
 			});
 			

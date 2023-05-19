@@ -1,12 +1,109 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winInvoiceList" border="normal" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardInvoiceVm')">
+	<window id="winInvoiceList" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardInvoiceVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
 			<n:span>Daftar Tagihan</n:span>
 		</caption>
-		
-		<groupbox mold="3d">
+
+		<div class="row" align="right">
+			<div class="col-md-3 col-sm-6">
+				<div class="card text-white bg-info mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">
+							Jumlah Tagihan Belum Terbayar
+						</n:h5>
+					</div>
+					<div class="card-body">
+						<hlayout>
+							<label sclass="card-text"
+								value="@load(vm.totalunpaid) @converter('formatedNumber', format='###,##0')"
+								style="font-size: 20px" />
+							<n:h5>Tagihan</n:h5>
+						</hlayout>
+					</div>
+					<div class="card-footer" align="right">
+						<button label="Tampilkan" autodisable="self"
+							width="130px" sclass="btn btn-info btn-sm"
+							onClick="@command('doSearchUnpaid')" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3 col-sm-6">
+				<div class="card text-white bg-danger mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">
+							Nilai Tagihan Belum Terbayar
+						</n:h5>
+					</div>
+					<div class="card-body">
+						<hlayout>
+							<n:h5>Rp.</n:h5>
+							<label sclass="card-text"
+								value="@load(vm.totalunpaidamount) @converter('formatedNumber', format='###,##0')"
+								style="font-size: 20px" />
+						</hlayout>
+					</div>
+					<div class="card-footer" align="right">
+						<button label="Tampilkan" autodisable="self"
+							width="130px" sclass="btn btn-danger btn-sm"
+							onClick="@command('doSearchUnpaid')" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6">
+				<div class="card text-white bg-warning mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">
+							Jumlah Tagihan Jatuh Tempo 1 Minggu
+						</n:h5>
+					</div>
+					<div class="card-body">
+						<hlayout>
+							<label sclass="card-text"
+								value="@load(vm.totaldue) @converter('formatedNumber', format='###,##0')"
+								style="font-size: 20px" />
+							<n:h5>Tagihan</n:h5>
+						</hlayout>
+					</div>
+					<div class="card-footer" align="right">
+						<button label="Tampilkan" autodisable="self"
+							width="130px" sclass="btn btn-warning btn-sm"
+							onClick="@command('doSearchDue')" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6">
+				<div class="card text-white bg-primary mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">
+							Nilai Tagihan Jatuh Tempo 1 Minggu
+						</n:h5>
+					</div>
+					<div class="card-body">
+						<hlayout>
+							<n:h5>Rp.</n:h5>
+							<label sclass="card-text"
+								value="@load(vm.totaldueamount) @converter('formatedNumber', format='###,##0')"
+								style="font-size: 20px" />
+						</hlayout>
+					</div>
+					<div class="card-footer" align="right">
+						<button label="Tampilkan" autodisable="self"
+							width="130px" sclass="btn btn-primary btn-sm"
+							onClick="@command('doSearchDue')" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<groupbox id="gbSearch" mold="3d">
 			<caption label="Pencarian" iconSclass="z-icon-search" />
 			<grid>
 				<columns>
@@ -16,7 +113,8 @@
 				<rows>
 					<row>
 						<label value="Tipe Tagihan" />
-						<combobox>
+						<combobox id="cbInvoicetype"
+							selectedItem="@bind(vm.invoicetype)">
 							<comboitem label="Pendaftaran" value="01" />
 							<comboitem label="Iuran" value="02" />
 							<comboitem label="Event" value="03" />
@@ -24,11 +122,19 @@
 					</row>
 					<row>
 						<label value="Kode Tagihan" />
-						<textbox />
+						<textbox value="@bind(vm.invno)" maxlength="30" />
 					</row>
 					<row>
 						<label value="Nomor VA" />
-						<textbox />
+						<textbox value="@bind(vm.vano)" maxlength="20" />
+					</row>
+					<row>
+						<label value="Status Tagihan" />
+						<combobox id="cbStatus"
+							selectedItem="@bind(vm.invstatus)">
+							<comboitem label="Belum Dibayar" value="N" />
+							<comboitem label="Sudah Dibayar" value="Y" />
+						</combobox>
 					</row>
 					<row>
 						<label value="Periode Tagihan" />
@@ -47,13 +153,16 @@
 						<button label="Telusuri" autodisable="self"
 							iconSclass="z-icon-search" width="130px"
 							sclass="btn btn-success btn-sm" onClick="@command('doSearch')" />
+						<button label="Reset" autodisable="self"
+							iconSclass="z-icon-retweet" width="130px"
+							sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
 					</footer>
 				</foot>
 			</grid>
 		</groupbox>
 		<separator />
 		<groupbox mold="3d">
-			<caption label="Daftar Tagihan" />
+			<caption label="Daftar Tagihan" iconSclass="z-icon-list" />
 			<div class="row">
 				<div class="col-md-10">
 					<paging id="paging" autohide="true" />
@@ -78,9 +187,71 @@
 					<column label="Nomor VA" align="center" />
 					<column label="Keterangan" />
 					<column label="Status" align="center" />
+					<column label="Tanggal Bayar" align="center" />
+					<column label="No Ref Bayar" align="center" />
 				</columns>
 			</grid>
 		</groupbox>
-		
+		<separator />
+		<groupbox mold="3d">
+			<caption label="Summary Daftar Tagihan" iconSclass="z-icon-bookmark" />
+			<div class="row" align="right">
+				<div class="col-md-4 col-sm-6">
+					<div class="card text-white bg-primary mb-3"
+						style="max-width: 18rem;">
+						<div class="card-header">
+							<n:h5 class="card-title">
+								Nilai Tagihan
+							</n:h5>
+						</div>
+						<div class="card-body">
+							<hlayout>
+								<n:h5>Rp. </n:h5>
+								<label sclass="card-text"
+									value="@load(vm.invamount) @converter('formatedNumber', format='###,##0')"
+									style="font-size: 20px" />
+							</hlayout>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-6">
+					<div class="card text-white bg-success mb-3"
+						style="max-width: 18rem;">
+						<div class="card-header">
+							<n:h5 class="card-title">
+								Nilai Terbayar
+							</n:h5>
+						</div>
+						<div class="card-body">
+							<hlayout>
+								<n:h5>Rp. </n:h5>
+								<label sclass="card-text"
+									value="@load(vm.paidamount) @converter('formatedNumber', format='###,##0')"
+									style="font-size: 20px" />
+							</hlayout>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-6">
+					<div class="card text-white bg-danger mb-3"
+						style="max-width: 18rem;">
+						<div class="card-header">
+							<n:h5 class="card-title">
+								Nilai Belum Terbayar
+							</n:h5>
+						</div>
+						<div class="card-body">
+							<hlayout>
+								<n:h5>Rp. </n:h5>
+								<label sclass="card-text"
+									value="@load(vm.unpaidamount) @converter('formatedNumber', format='###,##0')"
+									style="font-size: 20px" />
+							</hlayout>
+						</div>
+					</div>
+				</div>
+			</div>
+		</groupbox>
 	</window>
+	<separator />
 </zk>

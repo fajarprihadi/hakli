@@ -1,5 +1,6 @@
 package com.sds.hakli.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +104,26 @@ public class TinvoiceDAO {
 				+ "WHERE ISPAID = 'Y' AND DATE(PAIDTIME) = '" + date + "' GROUP BY MCABANGPK, CABANG, MPROV.PROVNAME, DATE(PAIDTIME) ORDER BY MPROV.PROVNAME, CABANG").addEntity(Vpaymentbranch.class).list();
 		session.close();
         return oList;
+    }
+	
+	public BigDecimal sumAmount(String filter) throws Exception {
+		BigDecimal amount = new BigDecimal(0);
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(invoiceamount),0) from Tinvoice "
+				+ "where " + filter).uniqueResult();
+		session.close();
+        return amount;
+    }
+	
+	public Integer countDueDate() throws Exception {
+		Integer count = 0;
+		session = StoreHibernateUtil.openSession();
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice "
+				+ "where CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7").uniqueResult().toString());
+		session.close();
+        return count;
     }
 
 }
