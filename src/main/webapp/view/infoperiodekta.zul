@@ -1,20 +1,23 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk xmlns:n="native">
-	<window id="winAnggotaRegList" border="normal"
-		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoPeriodeKtaVm')">
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<window id="win" border="normal" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoPeriodeKtaVm')">
 		<caption />
-		<n:h3>
+		<n:h1>
 			<n:b>INFO PENTING!!</n:b>
-		</n:h3>
+		</n:h1>
 		<separator/>
 		<separator/>
-		<label value="Pemberitahuan !"/>
-		<label value="Kontribusi iuran HAKLI Berakhir Pada Tanggal"/>
+		<n:h5>Pemberitahuan</n:h5>
+		<n:h5>Kontribusi iuran HAKLI Berakhir Pada Tanggal</n:h5>
 		<separator/>
 		<separator/>
-		<label value="TANGGAL KTA"/>
 		<separator/>
-		<label value="Silahkan Anda melakukan pembayaran kontribusi iuran keanggotaan HAKLI per 6 bulan"/>
-		<label value="hingga kontribusi iuran keanggotaan HAKLI dinyatakan Aktif"/>
+		<separator/>
+		<label style="font-size:40px; font-weight: bold" id="periodekta"/>
+		<separator/>
+		<separator/>
+		<separator/>
+		<n:h5>Silahkan Anda melakukan pembayaran kontribusi iuran keanggotaan HAKLI per 6 bulan</n:h5>
+		<n:h5>hingga kontribusi iuran keanggotaan HAKLI dinyatakan Aktif</n:h5>
 	</window>
 </zk>

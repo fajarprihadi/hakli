@@ -43,41 +43,50 @@ import com.sds.hakli.domain.Mp2kbkegiatan;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Tp2kba01;
+import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class P2kbA01Vm {
-	
+
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private Tanggota anggota;
 	private Tp2kbA01DAO oDao = new Tp2kbA01DAO();
 	private Tp2kbDAO p2kbDao = new Tp2kbDAO();
 	private TcounterengineDAO counterDao = new TcounterengineDAO();
-	
+
 	private Mp2kbkegiatan p2kb;
 	private Tp2kba01 objForm;
+	private Tp2kbbook tpb;
 	private BigDecimal nilaiskp_curr;
-	
+
 	private Media media;
 	private String docfilename;
 	private boolean isInsert;
-	
+
 	@Wire
 	private Window winP2kba01;
-	
+
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, 
-			@ExecutionArgParam("obj") Mp2kbkegiatan p2kb, @ExecutionArgParam("objForm") Tp2kba01 objForm) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view,
+			@ExecutionArgParam("obj") Mp2kbkegiatan p2kb, @ExecutionArgParam("objForm") Tp2kba01 objForm,
+			@ExecutionArgParam("book") Tp2kbbook tpb) {
 		Selectors.wireComponents(view, this, false);
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
 		this.p2kb = p2kb;
+		
+		if(tpb != null) {
+			this.tpb = tpb;
+		}
+		
 		if (objForm != null) {
 			this.objForm = objForm;
 			nilaiskp_curr = objForm.getNilaiskp();
 			isInsert = false;
-		} else doReset();
+		} else
+			doReset();
 	}
-	
+
 	@NotifyChange("*")
 	public void doReset() {
 		isInsert = true;
@@ -85,7 +94,7 @@ public class P2kbA01Vm {
 		objForm.setTanggota(anggota);
 		objForm.setMp2kbkegiatan(p2kb);
 	}
-	
+
 	@Command
 	@NotifyChange("docfilename")
 	public void doUpload(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx) {
@@ -97,7 +106,7 @@ public class P2kbA01Vm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSave() {
@@ -108,12 +117,11 @@ public class P2kbA01Vm {
 			objForm.setCreatetime(new Date());
 			objForm.setNilaiskp(new BigDecimal(3));
 			objForm.setStatus("WC");
-			
+
 			if (media != null) {
 				try {
 					String docid = counterDao.getP2kbCounter(objForm.getMp2kbkegiatan().getIdkegiatan());
-					String folder = Executions.getCurrent().getDesktop().getWebApp()
-							.getRealPath(AppUtils.PATH_P2KB);
+					String folder = Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_P2KB);
 					if (media.isBinary()) {
 						Files.copy(new File(folder + "/" + docid + "/" + media.getFormat()), media.getStreamData());
 					} else {
@@ -128,12 +136,14 @@ public class P2kbA01Vm {
 					e.printStackTrace();
 				}
 			}
-			
+
 			oDao.save(session, objForm);
-			
-			Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk() + " and mp2kbkegiatan.mp2kbkegiatanpk = " + objForm.getMp2kbkegiatan().getMp2kbkegiatanpk());
+
+			Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk()
+					+ " and mp2kbkegiatan.mp2kbkegiatanpk = " + objForm.getMp2kbkegiatan().getMp2kbkegiatanpk());
 			if (book == null) {
 				book = new Tp2kb();
+				book.setTp2kbbook(tpb);
 				book.setTanggota(anggota);
 				book.setMp2kbkegiatan(objForm.getMp2kbkegiatan());
 				book.setTotalkegiatan(0);
@@ -141,7 +151,7 @@ public class P2kbA01Vm {
 				book.setTotalwaiting(0);
 			}
 			if (isInsert) {
-				book.setTotalkegiatan(book.getTotalkegiatan()+1);
+				book.setTotalkegiatan(book.getTotalkegiatan() + 1);
 				book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
 				book.setTotalwaiting(book.getTotalwaiting() + 1);
 			} else {
@@ -150,25 +160,24 @@ public class P2kbA01Vm {
 			}
 			book.setLastupdated(new Date());
 			p2kbDao.save(session, book);
-			
+
 			trx.commit();
-			
+
 			if (isInsert) {
 				Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
 			} else {
 				Clients.showNotification("Proses pembaruan data berhasil", "info", null, "middle_center", 1500);
 			}
-			
+
 			doClose();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-					Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 		} finally {
 			session.close();
 		}
 	}
-	
+
 	@Command()
 	@NotifyChange("*")
 	public void doClose() {
@@ -177,7 +186,7 @@ public class P2kbA01Vm {
 		Event closeEvent = new Event("onClose", winP2kba01, map);
 		Events.postEvent(closeEvent);
 	}
-	
+
 	public Validator getValidator() {
 		return new AbstractValidator() {
 

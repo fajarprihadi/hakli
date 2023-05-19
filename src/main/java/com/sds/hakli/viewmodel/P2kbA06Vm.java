@@ -46,6 +46,7 @@ import com.sds.hakli.domain.Muniversitas;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Tp2kba06;
+import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -59,6 +60,7 @@ public class P2kbA06Vm {
 	
 	private Mp2kbkegiatan p2kb;
 	private Tp2kba06 objForm;
+	private Tp2kbbook tpb;
 	private BigDecimal nilaiskp_curr;
 	
 	private Media media;
@@ -70,10 +72,16 @@ public class P2kbA06Vm {
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, 
-			@ExecutionArgParam("obj") Mp2kbkegiatan p2kb, @ExecutionArgParam("objForm") Tp2kba06 objForm) {
+			@ExecutionArgParam("obj") Mp2kbkegiatan p2kb, @ExecutionArgParam("objForm") Tp2kba06 objForm,
+			@ExecutionArgParam("book") Tp2kbbook tpb) {
 		Selectors.wireComponents(view, this, false);
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
 		this.p2kb = p2kb;
+		
+		if(tpb != null) {
+			this.tpb = tpb;
+		}
+		
 		if (objForm != null) {
 			this.objForm = objForm;
 			nilaiskp_curr = objForm.getNilaiskp();
@@ -137,6 +145,7 @@ public class P2kbA06Vm {
 			Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk() + " and mp2kbkegiatan.mp2kbkegiatanpk = " + objForm.getMp2kbkegiatan().getMp2kbkegiatanpk());
 			if (book == null) {
 				book = new Tp2kb();
+				book.setTp2kbbook(tpb);
 				book.setTanggota(anggota);
 				book.setMp2kbkegiatan(objForm.getMp2kbkegiatan());
 				book.setTotalkegiatan(0);

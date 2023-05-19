@@ -41,15 +41,6 @@
 						</vlayout>
 					</row>
 					<row>
-						<label value="Tanggal Lulus" />
-						<vlayout>
-							<datebox value="@bind(e.tglmulai)" cols="25"
-								maxlength="20" format="dd MMMMM yyyy" placeholder="Tanggal Lulus" />
-						<label style="color:gray"
-								value="@load(vmsgs['tglmulai'])" />
-						</vlayout>
-					</row>
-					<row>
 						<label value="Tanggal Selesai Kegiatan" />
 						<vlayout>
 							<datebox value="@bind(e.tglakhir)" cols="25"

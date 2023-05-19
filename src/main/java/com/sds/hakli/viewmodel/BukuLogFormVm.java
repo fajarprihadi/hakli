@@ -1,6 +1,7 @@
 package com.sds.hakli.viewmodel;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.hibernate.Session;
@@ -70,6 +71,12 @@ public class BukuLogFormVm {
 		try {
 			objForm.setTanggota(obj);
 			objForm.setStatus("Y");
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(objForm.getTglakhir());
+			cal.add(Calendar.YEAR, -5);
+			
+			objForm.setTglmulai(cal.getTime());
 			if (isInsert) {
 				objForm.setCreatetime(new Date());
 				objForm.setCreatedby(obj.getNoanggota());
@@ -114,10 +121,6 @@ public class BukuLogFormVm {
 				String nostr = (String) ctx.getProperties("nostr")[0].getValue();
 				if (nostr == null || "".equals(nostr.trim()))
 					this.addInvalidMessage(ctx, "nostr", Labels.getLabel("common.validator.empty"));
-
-				Date tglmulai = (Date) ctx.getProperties("tglmulai")[0].getValue();
-				if (tglmulai == null)
-					this.addInvalidMessage(ctx, "tglmulai", Labels.getLabel("common.validator.empty"));
 
 				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
 				if (tglakhir == null)

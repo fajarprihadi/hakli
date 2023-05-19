@@ -131,7 +131,7 @@
 												Permohonan Melakukan P2KB
 											</n:span>
 										</a>
-										<a href="#"
+										<!-- <a href="#"
 											onClick="@command('doRedirect', path='/view/p2kb/boranglog.zul', menu='p2kb', index=2)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
@@ -150,7 +150,7 @@
 											<n:span>
 												Buku Log
 											</n:span>
-										</a>
+										</a> -->
 									</div>
 								</div>
 							</n:div>
