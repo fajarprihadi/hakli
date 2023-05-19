@@ -3,7 +3,7 @@
 	<window id="winSisdmk" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.SisdmkVm')">
 		<caption>
-			<n:i class="fas fa-list"></n:i>
+			<n:i class="fas fa-check-square"></n:i>
 			<n:span>Cek Status Keanggotaan SISDMK</n:span>
 		</caption>
 		<button id="btSubmit" label="Cek Data SISDMK" autodisable="self" width="200px"

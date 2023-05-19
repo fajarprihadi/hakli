@@ -125,12 +125,14 @@ public class PaymentVm {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date());
 			
+			Calendar calNext = Calendar.getInstance();
+			calNext.add(Calendar.MONTH, 5);
 			oList = new ArrayList<>();
 			for (Mcharge obj : objList) {
 				if (obj.getIsbase().equals("Y")) {
 					qty = 0;
 					BigDecimal totalbase = new BigDecimal(0);
-					while (cal.getTime().compareTo(new Date()) == -1) {
+					while (cal.getTime().compareTo(calNext.getTime()) == -1) {
 						qty++;
 						totalbase = amountbase.multiply(new BigDecimal(qty));
 						cal.add(Calendar.MONTH, 6);

@@ -1,23 +1,26 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native" xmlns:x="xhtml">
-	<window id="win" border="normal" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoPeriodeKtaVm')">
+	<window id="winKtaDue" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoPeriodeKtaVm')">
 		<caption />
-		<n:h1>
-			<n:b>INFO PENTING!!</n:b>
-		</n:h1>
-		<separator/>
-		<separator/>
-		<n:h5>Pemberitahuan</n:h5>
-		<n:h5>Kontribusi iuran HAKLI Berakhir Pada Tanggal</n:h5>
-		<separator/>
-		<separator/>
-		<separator/>
-		<separator/>
-		<label style="font-size:40px; font-weight: bold" id="periodekta"/>
-		<separator/>
-		<separator/>
-		<separator/>
-		<n:h5>Silahkan Anda melakukan pembayaran kontribusi iuran keanggotaan HAKLI per 6 bulan</n:h5>
-		<n:h5>hingga kontribusi iuran keanggotaan HAKLI dinyatakan Aktif</n:h5>
+		<div class="card text-center">
+			<div class="card-header"><n:h3>INFO PENTING!!!</n:h3></div>
+			<div class="card-body">
+				<n:h5 class="card-title">Pemberitahuan</n:h5>
+				<n:p class="card-text">
+					Kontribusi iuran HAKLI Berakhir Pada Tanggal
+					<label style="font-size:40px; font-weight: bold"
+						id="periodekta" />
+				</n:p>
+			</div>
+			<div class="card-footer text-muted">
+				Silahkan Anda melakukan pembayaran kontribusi iuran
+				keanggotaan HAKLI
+				<n:br />
+				<button label="Klik Untuk Pembayaran"
+					autodisable="self" 
+					sclass="btn btn-primary btn-sm" onClick="@command('doClose')" />
+			</div>
+		</div>
 	</window>
 </zk>

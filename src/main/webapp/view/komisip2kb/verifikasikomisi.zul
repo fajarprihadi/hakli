@@ -3,7 +3,7 @@
 	<window id="winAnggotaRegList" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.VerifikasiKomisiVm')">
 		<caption>
-			<n:i class="fas fa-list"></n:i>
+			<n:i class="fas fa-check-double"></n:i>
 			<n:span>Pemeriksa P2KB Anggota</n:span>
 		</caption>
 		<groupbox mold="3d">

@@ -3,7 +3,7 @@
 	<window id="winSumpah" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.NaskahVm')">
 		<caption>
-			<n:i class="fas fa-list"></n:i>
+			<n:i class="fas fa-book"></n:i>
 			<n:span>Naskah</n:span>
 		</caption>
 		<groupbox mold="3d">

@@ -3,7 +3,7 @@
 	<window id="winInvoiceList" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardInvoiceVm')">
 		<caption>
-			<n:i class="fas fa-list"></n:i>
+			<n:i class="fas fa-file-invoice"></n:i>
 			<n:span>Daftar Tagihan</n:span>
 		</caption>
 
