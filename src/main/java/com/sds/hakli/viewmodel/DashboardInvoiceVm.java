@@ -2,6 +2,7 @@ package com.sds.hakli.viewmodel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
@@ -32,6 +33,13 @@ private TinvoiceListModel model;
 	private int pageStartNumber;
 	private int pageTotalSize;
 	private String filter;
+	
+	private String invoicetype;
+	private String invno;
+	private String invstatus;
+	private String vano;	
+	private Date begindate;
+	private Date enddate;
 	
 	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	
@@ -87,7 +95,10 @@ private TinvoiceListModel model;
 	@NotifyChange("*")
 	public void doSearch() {
 		filter = "0=0";
-		
+		if (vano != null  && vano.trim().length() > 0)
+			filter += "vano = '" + vano.trim() + "'";
+		if (invno != null  && invno.trim().length() > 0)
+			filter += "invoiceno = '" + invno.trim() + "'";
 		refreshModel(pageStartNumber);
 	}
 	
@@ -103,6 +114,54 @@ private TinvoiceListModel model;
 
 	public void setPageTotalSize(int pageTotalSize) {
 		this.pageTotalSize = pageTotalSize;
+	}
+
+	public String getInvoicetype() {
+		return invoicetype;
+	}
+
+	public void setInvoicetype(String invoicetype) {
+		this.invoicetype = invoicetype;
+	}
+
+	public String getInvno() {
+		return invno;
+	}
+
+	public void setInvno(String invno) {
+		this.invno = invno;
+	}
+
+	public String getInvstatus() {
+		return invstatus;
+	}
+
+	public void setInvstatus(String invstatus) {
+		this.invstatus = invstatus;
+	}
+
+	public String getVano() {
+		return vano;
+	}
+
+	public void setVano(String vano) {
+		this.vano = vano;
+	}
+
+	public Date getBegindate() {
+		return begindate;
+	}
+
+	public void setBegindate(Date begindate) {
+		this.begindate = begindate;
+	}
+
+	public Date getEnddate() {
+		return enddate;
+	}
+
+	public void setEnddate(Date enddate) {
+		this.enddate = enddate;
 	}
 	
 }

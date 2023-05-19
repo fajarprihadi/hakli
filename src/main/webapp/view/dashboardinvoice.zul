@@ -7,6 +7,52 @@
 		</caption>
 		
 		<groupbox mold="3d">
+			<caption label="Pencarian" iconSclass="z-icon-search" />
+			<grid>
+				<columns>
+					<column width="25%" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="Tipe Tagihan" />
+						<combobox>
+							<comboitem label="Pendaftaran" value="01" />
+							<comboitem label="Iuran" value="02" />
+							<comboitem label="Event" value="03" />
+						</combobox>
+					</row>
+					<row>
+						<label value="Kode Tagihan" />
+						<textbox />
+					</row>
+					<row>
+						<label value="Nomor VA" />
+						<textbox />
+					</row>
+					<row>
+						<label value="Periode Tagihan" />
+						<hlayout>
+							<datebox value="@bind(vm.begindate)"
+								format="dd-MM-yyyy" />
+							S/D
+							<datebox value="@bind(vm.enddate)"
+								format="dd-MM-yyyy" />
+						</hlayout>
+					</row>
+				</rows>
+				<foot>
+					<footer />
+					<footer>
+						<button label="Telusuri" autodisable="self"
+							iconSclass="z-icon-search" width="130px"
+							sclass="btn btn-success btn-sm" onClick="@command('doSearch')" />
+					</footer>
+				</foot>
+			</grid>
+		</groupbox>
+		<separator />
+		<groupbox mold="3d">
 			<caption label="Daftar Tagihan" />
 			<div class="row">
 				<div class="col-md-10">
