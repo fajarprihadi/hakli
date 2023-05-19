@@ -32,7 +32,7 @@ import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
 
-public class BukuLogRequestVm {
+public class BorangLogVm {
 	private Session session = Sessions.getCurrent();
 	private Tanggota obj;
 	
@@ -64,12 +64,12 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(data.getStatus().equals("Y") ? "Yes" : "No"));
 				
-				Button btEdit = new Button();
-				btEdit.setIconSclass("z-icon-edit");
-				btEdit.setSclass("btn btn-primary btn-sm");
-				btEdit.setAutodisable("self");
-				btEdit.setTooltiptext("Edit");
-				btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+				Button btBorang = new Button();
+				btBorang.setIconSclass("z-icon-edit");
+				btBorang.setSclass("btn btn-primary btn-sm");
+				btBorang.setAutodisable("self");
+				btBorang.setTooltiptext("Form Pengisian");
+				btBorang.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event event) throws Exception {
@@ -77,41 +77,15 @@ public class BukuLogRequestVm {
 						Window win = new Window();
 						map.put("obj", obj);
 						map.put("objForm", data);
-						win = (Window) Executions.createComponents("/view/p2kb/bukulogform.zul", null, map);
-						win.setWidth("70%");
+						win = (Window) Executions.createComponents("/view/p2kb/borang.zul", null, map);
+						win.setWidth("90%");
 						win.setClosable(true);
 						win.doModal();
-						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-							@Override
-							public void onEvent(Event event) throws Exception {
-								doReset();
-							}
-
-						});
 					}
 				});
 				
-				row.getChildren().add(btEdit);
+				row.getChildren().add(btBorang);
 			}
-		});
-	}
-	
-	@Command
-	@NotifyChange("*")
-	public void doAdd() {
-		Map<String, Object> map = new HashMap<>();
-		Window win = new Window();
-		map.put("obj", obj);
-		win = (Window) Executions.createComponents("/view/p2kb/bukulogform.zul", null, map);
-		win.setWidth("70%");
-		win.setClosable(true);
-		win.doModal();
-		win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-			@Override
-			public void onEvent(Event event) throws Exception {
-				doReset();
-			}
-
 		});
 	}
 	
@@ -119,7 +93,7 @@ public class BukuLogRequestVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "tanggotafk = " + obj.getTanggotapk();
+			filter = "tanggotafk = " + obj.getTanggotapk() + " and status = 'Y'";
 			orderby = "tglmulai";
 			
 			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);

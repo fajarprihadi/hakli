@@ -112,7 +112,7 @@
 											<n:span>Petunjuk Teknis</n:span>
 										</a>
 										<a href="#"
-											onClick="@command('doRedirect', path='/view/p2kb/p2kbform.zul', menu='p2kb', index=1)"
+											onClick="@command('doRedirect', path='/view/p2kb/bukulogrequest.zul', menu='p2kb', index=1)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
 												class="fas fa-suitcase fa-fw me-3">
@@ -122,7 +122,7 @@
 											</n:span>
 										</a>
 										<a href="#"
-											onClick="@command('doRedirect', path='/view/p2kb/borang.zul', menu='p2kb', index=2)"
+											onClick="@command('doRedirect', path='/view/p2kb/boranglog.zul', menu='p2kb', index=2)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
 												class="fas fa-pen fa-fw me-3">
