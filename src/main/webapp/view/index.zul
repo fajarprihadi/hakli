@@ -83,7 +83,7 @@
 											</n:span>
 										</a>
 										<a href="#"
-											onClick="@command('doRedirect', path='/view/anggota/anggotapassword.zul', menu='anggota', index=4)"
+											onClick="@command('doRedirect', path='/view/anggota/anggotachangepass.zul', menu='anggota', index=4)"
 											class="list-group-item list-group-item-action py-2 ripple">
 											<n:i
 												class="fas fa-lock fa-fw me-3">

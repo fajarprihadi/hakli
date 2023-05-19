@@ -14,6 +14,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -32,6 +33,8 @@ public class RegInitVm {
 	
 	@Wire
 	private Window winRegInit;
+	@Wire
+	private Checkbox chkSisdmk;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -50,7 +53,7 @@ public class RegInitVm {
 		} else {
 			try {
 				Map<String, Object> map = new HashMap<>();
-				map.put("event", obj);
+				map.put("isCheckSisdmk", chkSisdmk.isChecked());
 				String page = "/view/anggota/anggotaadd.zul";
 				Tanggota obj = null;
 				List<Tanggota> objList = oDao.listByFilter("noktp = '" + nik.trim() + "'", "tanggotapk desc");

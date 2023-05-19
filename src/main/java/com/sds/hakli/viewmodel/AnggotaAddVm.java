@@ -179,7 +179,7 @@ public class AnggotaAddVm {
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj, 
-			@ExecutionArgParam("event") Tevent tevent) {
+			@ExecutionArgParam("event") Tevent tevent, @ExecutionArgParam("isCheckSisdmk") Boolean isCheckSisdmk) {
 		Selectors.wireComponents(view, this, false);
 		try {
 			if (obj == null) {
@@ -202,7 +202,7 @@ public class AnggotaAddVm {
 				if (pendidikans.size() > 0)
 					objForm.setPendidikan(pendidikans.get(0));
 				
-				if (obj.getTanggotapk() == null)
+				if (obj.getTanggotapk() == null && isCheckSisdmk != null && isCheckSisdmk)
 					doSisdmk();
 				
 				if (obj.getPhotolink() != null) {
@@ -728,6 +728,7 @@ public class AnggotaAddVm {
 				String noktp = (String) ctx.getProperties("pribadi.noktp")[0].getValue();
 				if (noktp == null || "".equals(noktp.trim()))
 					this.addInvalidMessage(ctx, "noktp", Labels.getLabel("common.validator.empty"));
+				
 				String tempatlahir = (String) ctx.getProperties("pribadi.tempatlahir")[0].getValue();
 				if (tempatlahir == null || "".equals(tempatlahir.trim()))
 					this.addInvalidMessage(ctx, "tempatlahir", Labels.getLabel("common.validator.empty"));
@@ -760,7 +761,6 @@ public class AnggotaAddVm {
 					}
 				}
 
-				// Alama Rumah
 				if (provrumah == null)
 					this.addInvalidMessage(ctx, "provrumah", Labels.getLabel("common.validator.empty"));
 				if (kabrumah == null)
@@ -771,6 +771,12 @@ public class AnggotaAddVm {
 				String hp = (String) ctx.getProperties("pribadi.hp")[0].getValue();
 				if (hp == null || "".equals(hp.trim()))
 					this.addInvalidMessage(ctx, "hp", Labels.getLabel("common.validator.empty"));
+				
+//				if (noktp != null && provrumah != null && kabrumah != null && dob != null) {
+//					if (!StringUtils.ktpValidator(noktp, kabrumah.getKabcode(), new SimpleDateFormat("ddMMyyyy").format(dob))) {
+//						this.addInvalidMessage(ctx, "noktp", "No KTP tidak sesuai dengan data diri Anda");
+//					}
+//				}
 
 				// Keanggotaan
 				String statusanggota = (String) ctx.getProperties("pribadi.statusanggota")[0].getValue();

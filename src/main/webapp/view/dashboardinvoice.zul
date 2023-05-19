@@ -1,0 +1,40 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winInvoiceList" border="normal" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardInvoiceVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Daftar Tagihan</n:span>
+		</caption>
+		
+		<groupbox mold="3d">
+			<caption label="Daftar Tagihan" />
+			<div class="row">
+				<div class="col-md-10">
+					<paging id="paging" autohide="true" />
+				</div>
+				<div class="col-md-2" align="right">
+					<label value="${labels.common.totalrecord} :"
+						style="font-weight: bold" />
+					<label value="@load(vm.pageTotalSize)"
+						style="font-weight: bold" />
+				</div>
+			</div>
+			<grid id="grid" sizedByContent="true"
+				emptyMessage="${labels.common.emptymsg}">
+				<columns>
+					<column label="No" align="right" width="40px" />
+					<column label="Tipe Tagihan" />
+					<column label="Nama" />
+					<column label="Kode Tagihan" align="center" />
+					<column label="Tanggal Tagihan" align="center" />
+					<column label="Nominal Tagihan" align="right" />
+					<column label="Jatuh Tempo" align="center" />
+					<column label="Nomor VA" align="center" />
+					<column label="Keterangan" />
+					<column label="Status" align="center" />
+				</columns>
+			</grid>
+		</groupbox>
+		
+	</window>
+</zk>
