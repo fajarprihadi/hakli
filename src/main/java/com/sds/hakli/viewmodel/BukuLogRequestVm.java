@@ -2,6 +2,7 @@ package com.sds.hakli.viewmodel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,9 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Row;
@@ -47,6 +50,8 @@ public class BukuLogRequestVm {
 	
 	@Wire
 	private Grid grid;
+	@Wire
+	private Window winBookLogReq;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -64,7 +69,10 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(data.getStatus().equals("Y") ? "Yes" : "No"));
 				
-				Button btEdit = new Button();
+				Div div = new Div();
+				Hlayout hlayout = new Hlayout();
+				
+				Button btEdit = new Button("Edit");
 				btEdit.setIconSclass("z-icon-edit");
 				btEdit.setSclass("btn btn-primary btn-sm");
 				btEdit.setAutodisable("self");
@@ -91,7 +99,62 @@ public class BukuLogRequestVm {
 					}
 				});
 				
-				row.getChildren().add(btEdit);
+				Button btLog = new Button("Buku Log");
+				btLog.setIconSclass("z-icon-book");
+				btLog.setSclass("btn btn-success btn-sm");
+				btLog.setAutodisable("self");
+				btLog.setTooltiptext("Buku Log");
+				btLog.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						Map<String, Object> map = new HashMap<>();
+						Window win = new Window();
+						map.put("obj", obj);
+						map.put("book", data);
+						
+						SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+						
+						Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+						Date d2 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));;
+						
+						System.out.println(d1 + ", " + d2);
+						if(d1.compareTo(d2) < 0 ) {
+							win = (Window) Executions.createComponents("/view/p2kb/bukulog.zul", null, map);
+							win.setWidth("90%");
+							win.setClosable(true);
+							win.doModal();
+							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+								@Override
+								public void onEvent(Event event) throws Exception {
+									doReset();
+								}
+
+							});
+						} else {
+							win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+							win.setWidth("50%");
+							win.setClosable(true);
+							win.doModal();
+							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+								@Override
+								public void onEvent(Event event) throws Exception {
+									winBookLogReq.getChildren().clear();
+									winBookLogReq.setBorder(false);
+									Executions.createComponents("/view/payment/payment.zul", winBookLogReq, null);
+								}
+
+							});
+						}
+						
+					}
+				});
+				
+				hlayout.appendChild(btLog);
+				hlayout.appendChild(btEdit);
+				div.appendChild(hlayout);
+				
+				row.getChildren().add(div);
 			}
 		});
 	}

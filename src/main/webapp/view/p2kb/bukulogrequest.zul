@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winAnggotaRegList" border="normal"
+	<window id="winBookLogReq" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BukuLogRequestVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
@@ -30,8 +30,8 @@
 				<column label="Tgl Mulai" align="center" width="150px" />
 				<column label="Tgl Berakhir" align="center"
 					width="150px" />
-				<column label="Status" width="150px" align="center"/>
-				<column label="Action" align="center" width="150px" />
+				<column label="Status" width="150px" align="center" />
+				<column label="Action" align="center" width="250px" />
 			</columns>
 		</grid>
 

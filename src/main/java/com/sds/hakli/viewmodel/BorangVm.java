@@ -7,6 +7,7 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -32,6 +33,7 @@ import com.sds.hakli.dao.Mp2kbranahDAO;
 import com.sds.hakli.domain.Mp2kbkegiatan;
 import com.sds.hakli.domain.Mp2kbranah;
 import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tp2kbbook;
 
 public class BorangVm {
 	
@@ -42,6 +44,7 @@ public class BorangVm {
 	private String filter;
 	private String kegiatan;
 	private Mp2kbranah ranah;
+	private Tp2kbbook tpb;
 	
 	@Wire
 	private Window winBorang;
@@ -51,10 +54,14 @@ public class BorangVm {
 	private Combobox cbRanah;
 	
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("book") Tp2kbbook tpb) {
 		Selectors.wireComponents(view, this, false);
 		try {
 			oUser = (Muser) session.getAttribute("oUser");
+			
+			if (tpb != null) {
+				this.tpb = tpb;
+			}
 			
 			grid.setRowRenderer(new RowRenderer<Mp2kbkegiatan>() {
 
@@ -250,6 +257,7 @@ public class BorangVm {
 			} else {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("obj", obj);
+				map.put("book", tpb);
 				Window win = (Window) Executions
 						.createComponents("/view/p2kb/" + page, null, map);
 				win.setClosable(true);
@@ -257,15 +265,8 @@ public class BorangVm {
 
 					@Override
 					public void onEvent(Event event) throws Exception {
-						if (event.getData() != null) {
-							Map<String, Object> map = (Map<String, Object>) event.getData();
-							String kegiatan = (String) map.get("kegiatan");
-							if (kegiatan != null) {
-								winBorang.getChildren().clear();
-								winBorang.setBorder(false);
-								Executions.createComponents("/view/p2kb/bukulog.zul", winBorang, null);
-							}
-						}
+						Event closeEvent = new Event("onClose", winBorang, map);
+						Events.postEvent(closeEvent);
 					}
 				});
 				win.doModal();

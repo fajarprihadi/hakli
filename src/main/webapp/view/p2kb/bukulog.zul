@@ -6,7 +6,35 @@
 			<n:i class="fas fa-book"></n:i>
 			<n:span>Buku Log</n:span>
 		</caption>
-		<grid id="grid">
+		<groupbox>
+			<caption label="Informasi"/>
+			<grid>
+				<columns>
+					<column width="20%"/>
+					<column/>
+				</columns>
+				<rows>
+					<row>
+						<label value="Tanggal Mulai Kegiatan"/>
+						<label value="@load(vm.startdate)"/>
+					</row>
+					<row>
+						<label value="Tanggal Selesai Kegiatan"/>
+						<label value="@load(vm.enddate)"/>
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+		<separator/>
+		<div class="row" align="right">
+			<div class="col">
+				<button label="Tambah" autodisable="self"
+					iconSclass="z-icon-plus" sclass="btn btn-primary btn-sm"
+					onClick="@command('doAdd')" />
+			</div>
+		</div>
+		<separator/>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"> 
 			<columns>
 				<column label="No" align="right" width="50px" />
 				<column label="Nama Kegiatan" />
