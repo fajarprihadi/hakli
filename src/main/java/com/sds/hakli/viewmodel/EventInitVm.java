@@ -15,6 +15,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Html;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
@@ -43,6 +44,8 @@ public class EventInitVm {
 	private Window winInit;
 	@Wire
 	private H2 title;
+	@Wire
+	private Checkbox chkSisdmk;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -76,7 +79,7 @@ public class EventInitVm {
 			try {
 				Map<String, Object> map = new HashMap<>();
 				map.put("event", obj);
-				//String page = "/view/event/eventreg.zul";
+				map.put("isCheckSisdmk", chkSisdmk.isChecked());
 				String page = "/view/anggota/anggotaadd.zul";
 				Tanggota obj = null;
 				List<Tanggota> objList = oDao.listByFilter("noktp = '" + nik.trim() + "'", "tanggotapk desc");
@@ -90,7 +93,7 @@ public class EventInitVm {
 					} else map.put("obj", obj);
 				} else {
 					obj = new Tanggota();
-					obj.setEmail(email);
+					obj.setNoktp(nik);
 					map.put("obj", obj);
 				}
 				winInit.getChildren().clear();

@@ -658,7 +658,7 @@
 								label="${labels.pendidikan.jenjang}" />
 							<column label="${labels.pendidikan.minat1}" />
 							<column label="${labels.pendidikan.minat2}" />
-							<column label="${labels.pendidikan.period}" />
+							<column label="${labels.pendidikan.period}" align="center" />
 							<column
 								label="${labels.pendidikan.noijazah}" />
 							<column label="${labels.common.action}"

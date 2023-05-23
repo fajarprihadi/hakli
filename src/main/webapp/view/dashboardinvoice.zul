@@ -7,7 +7,7 @@
 			<n:span>Daftar Tagihan</n:span>
 		</caption>
 
-		<div class="row" align="right">
+		<div class="row" align="center">
 			<div class="col-md-3 col-sm-6">
 				<div class="card text-white bg-info mb-3"
 					style="max-width: 18rem;">
@@ -24,7 +24,7 @@
 							<n:h5>Tagihan</n:h5>
 						</hlayout>
 					</div>
-					<div class="card-footer" align="right">
+					<div class="card-footer" align="center">
 						<button label="Tampilkan" autodisable="self"
 							width="130px" sclass="btn btn-info btn-sm"
 							onClick="@command('doSearchUnpaid')" />
@@ -48,7 +48,7 @@
 								style="font-size: 20px" />
 						</hlayout>
 					</div>
-					<div class="card-footer" align="right">
+					<div class="card-footer" align="center">
 						<button label="Tampilkan" autodisable="self"
 							width="130px" sclass="btn btn-danger btn-sm"
 							onClick="@command('doSearchUnpaid')" />
@@ -71,7 +71,7 @@
 							<n:h5>Tagihan</n:h5>
 						</hlayout>
 					</div>
-					<div class="card-footer" align="right">
+					<div class="card-footer" align="center">
 						<button label="Tampilkan" autodisable="self"
 							width="130px" sclass="btn btn-warning btn-sm"
 							onClick="@command('doSearchDue')" />
@@ -94,7 +94,7 @@
 								style="font-size: 20px" />
 						</hlayout>
 					</div>
-					<div class="card-footer" align="right">
+					<div class="card-footer" align="center">
 						<button label="Tampilkan" autodisable="self"
 							width="130px" sclass="btn btn-primary btn-sm"
 							onClick="@command('doSearchDue')" />
@@ -195,7 +195,7 @@
 		<separator />
 		<groupbox mold="3d">
 			<caption label="Summary Daftar Tagihan" iconSclass="z-icon-bookmark" />
-			<div class="row" align="right">
+			<div class="row" align="center">
 				<div class="col-md-4 col-sm-6">
 					<div class="card text-white bg-primary mb-3"
 						style="max-width: 18rem;">

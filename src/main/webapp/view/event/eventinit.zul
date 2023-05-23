@@ -32,11 +32,11 @@
         
         	<image src="@load(vm.eventimg)" width="100%" />
 
-				<div class="card-body py-5 px-md-5">
+				<div class="card-body py-5 px-md-3">
 
 					<div class="row d-flex justify-content-center">
 						<div class="col-lg-8">
-							<x:h2 id="title" class="fw-bold mb-5">
+							<x:h2 id="title" class="fw-bold mb-4">
 								
 							</x:h2>
 							<n:form>
@@ -47,6 +47,8 @@
 										placeholder="Input NIK Anda untuk memulai pendaftaran"
 										sclass="form-control form-control-lg" />
 								</div>
+								
+								<n:p><n:em><checkbox id="chkSisdmk" /> Jika data belum terdaftar di keanggotaan HAKLI tapi sudah terdaftar di SISDMK, maka sistem HAKLI akan secara otomatis mengambil data Anda dari SISDMK untuk membantu Anda melengkapi data pendaftaran pada sistem HAKLI.</n:em></n:p>
 
 								<!-- Submit button -->
 								<button label="Submit"

@@ -291,8 +291,8 @@ public class AnggotaFormVm {
 					row.getChildren().add(new Label(data.getPeminatan1()));
 					row.getChildren().add(new Label(data.getPeminatan2()));
 					String periode = "";
-					periode = data.getPeriodeblawal() + " " + data.getPeriodethawal() + " s/d "
-							+ data.getPeriodeblakhir() + " " + data.getPeriodethakhir();
+					periode = (data.getPeriodeblawal() != null ? data.getPeriodeblawal() : "") + " " + (data.getPeriodethawal() != null ? data.getPeriodethawal() : "") + " s/d "
+							+ (data.getPeriodeblakhir() != null ? data.getPeriodeblakhir() : "") + " " + (data.getPeriodethakhir() != null ? data.getPeriodethakhir() : "");
 					row.getChildren().add(new Label(periode));
 					
 					Button btView = new Button();
@@ -466,7 +466,6 @@ public class AnggotaFormVm {
 						"tpekerjaanpk desc");
 			}
 			gridPekerjaan.setModel(new ListModelList<>(this.pekerjaans));
-			Clients.scrollIntoView(gridPekerjaan);
 			
 			if (pendidikans != null) {
 				this.pendidikans = pendidikans;

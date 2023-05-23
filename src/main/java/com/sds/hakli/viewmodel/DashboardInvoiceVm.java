@@ -5,23 +5,30 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
+import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.TinvoiceDAO;
@@ -86,7 +93,22 @@ public class DashboardInvoiceVm {
 			public void render(Row row, Tinvoice data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf((AppUtils.PAGESIZE * pageStartNumber) + index + 1)));
 				row.getChildren().add(new Label(AppData.getInvoiceType(data.getInvoicetype())));
-				row.getChildren().add(new Label(data.getTanggota().getNama()));
+				A aNama = new A(data.getTanggota().getNama());
+				aNama.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("obj", data.getTanggota());
+						map.put("acttype", "view");
+						Window win = (Window) Executions
+								.createComponents("/view/anggota/anggotaedit.zul", null, map);
+						win.setWidth("98%");
+						win.setClosable(true);
+						win.doModal();
+					}
+				});
+				row.getChildren().add(aNama);
 				row.getChildren().add(new Label(data.getInvoiceno()));
 				row.getChildren().add(new Label(datelocalFormatter.format(data.getInvoicedate())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getInvoiceamount())));
