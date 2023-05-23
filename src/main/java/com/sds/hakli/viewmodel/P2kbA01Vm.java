@@ -150,6 +150,7 @@ public class P2kbA01Vm {
 				book.setTotalskp(new BigDecimal(0));
 				book.setTotalwaiting(0);
 			}
+			
 			if (isInsert) {
 				book.setTotalkegiatan(book.getTotalkegiatan() + 1);
 				book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));

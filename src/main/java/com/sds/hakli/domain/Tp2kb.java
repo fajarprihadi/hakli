@@ -28,9 +28,9 @@ public class Tp2kb {
 	
 	private Date lastupdated;
 	
-	private Integer totalwaiting;
+	private Integer totalwaiting = 0;
 	
-	private Integer totaltimapprove;
+	private Integer totaltimapprove = 0;
 	
 	private Tp2kbbook tp2kbbook;
 	

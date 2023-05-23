@@ -147,10 +147,12 @@ public class P2kbD01Vm {
 				book.setMp2kbkegiatan(objForm.getMp2kbkegiatan());
 				book.setTotalkegiatan(0);
 				book.setTotalskp(new BigDecimal(0));
+				book.setTotalwaiting(0);
 			}
 			if (isInsert) {
 				book.setTotalkegiatan(book.getTotalkegiatan()+1);
 				book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
+				book.setTotalwaiting(book.getTotalwaiting() + 1);
 			} else {
 				book.setTotalskp(book.getTotalskp().subtract(nilaiskp_curr));
 				book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
