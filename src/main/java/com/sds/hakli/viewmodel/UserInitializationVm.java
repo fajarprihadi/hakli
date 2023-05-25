@@ -29,6 +29,8 @@ public class UserInitializationVm {
 	private Integer currentmenuidx;
 	
 	@Wire
+	private Div divAccord;
+	@Wire
 	private Div divMenuAnggota;
 	@Wire
 	private Div divMenuP2KB;
@@ -49,7 +51,7 @@ public class UserInitializationVm {
 		anggota = (Tanggota) session.getAttribute("anggota");
 		currentmenuidx = 0;
 		currentmenu = "anggota";
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("obj", anggota);
 		map.put("acttype", "edit");

@@ -48,7 +48,7 @@
 						style="font-weight: bold" />
 				</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}" mold="paging" pageSize="20" pagingPosition="both">
 			<columns>
 				<column label="${labels.common.no}" align="right" width="40px" />
 				<column label="${labels.anggota.cabang}" />

@@ -136,6 +136,7 @@ public class AnggotaVm {
 								BindUtils.postNotifyChange(AnggotaVm.this, "pageTotalSize");
 							}
 						});
+						win.setWidth("98%");
 						win.doModal();
 					}
 				});

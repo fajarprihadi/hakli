@@ -267,9 +267,12 @@ public class P2kbA03DetailVm {
 				lbl7.setStyle("font-weight: bold");
 				divKegiatan4.appendChild(lbl7);
 				
-				File file = new File(Executions.getCurrent().getDesktop().getWebApp()
+				File file = null;
+				if (data.getDocpath() != null && !data.getDocpath().toUpperCase().startsWith("HTTP"))
+					file = new File(Executions.getCurrent().getDesktop().getWebApp()
 							.getRealPath(data.getDocpath()));
-				if (file.exists()) {
+				
+				if ((file != null && file.exists()) || (data.getDocpath() != null && data.getDocpath().toUpperCase().startsWith("HTTP"))) {
 					divKegiatan4.appendChild(new Separator());
 					
 					Vlayout vlaydoc = new Vlayout();

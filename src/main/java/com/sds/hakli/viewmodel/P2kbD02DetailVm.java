@@ -95,282 +95,290 @@ public class P2kbD02DetailVm {
 
 			@Override
 			public void render(Row row, Tp2kbd02 data, int index) throws Exception {
-				row.getChildren().add(new Label(String.valueOf(index+1)));
-				
-				Vlayout vlayoutKet = new Vlayout();
-
-				Div divKet0 = new Div();
-				Hlayout hlayout = new Hlayout();
-				divKet0.setSclass("rows note note-light");
-				Label lblStatus = new Label("Status Pemeriksaan :");
-				lblStatus.setStyle("font-weight: bold");
-				hlayout.appendChild(lblStatus);
-
-				Separator separator = new Separator();
-				hlayout.appendChild(separator);
-
-				Combobox combobox = new Combobox();
-				combobox.setReadonly(true);
-				combobox.setCols(15);
-
-				Comboitem cbItem = new Comboitem();
-				cbItem.setLabel("Approve");
-				cbItem.setValue("A");
-				combobox.appendChild(cbItem);
-
-				cbItem = new Comboitem();
-				cbItem.setLabel("Reject");
-				cbItem.setValue("R");
-				combobox.appendChild(cbItem);
-
-				Label lblStatusVal = new Label(AppUtils.getStatusLabel(data.getStatus()));
-
-				if (isApproved)
-					hlayout.appendChild(combobox);
-				else
-					hlayout.appendChild(lblStatusVal);
-
-				divKet0.appendChild(hlayout);
-				vlayoutKet.appendChild(divKet0);
-
-				Div divKet1 = new Div();
-				divKet1.setSclass("note note-light");
-				Label lblCheckdate = new Label("Tanggal Pemeriksaan :");
-				lblCheckdate.setStyle("font-weight: bold");
-				divKet1.appendChild(lblCheckdate);
-				Label lblCheckdateVal = new Label(
-						data.getChecktime() != null ? new SimpleDateFormat("dd MMM yyyy").format(data.getChecktime())
-								: "");
-				divKet1.appendChild(lblCheckdateVal);
-				vlayoutKet.appendChild(divKet1);
-
-				Div divKet2 = new Div();
-				divKet2.setSclass("note note-light");
-				Label lblCheckedby = new Label("Pemeriksa :");
-				lblCheckedby.setStyle("font-weight: bold");
-				divKet2.appendChild(lblCheckedby);
-				Label lblCheckedbyVal = new Label(data.getCheckedby());
-				divKet2.appendChild(lblCheckedbyVal);
-				vlayoutKet.appendChild(divKet2);
-
-				Div divKet3 = new Div();
-				hlayout = new Hlayout();
-
-				divKet3.setSclass("note note-light");
-				Label lblMemoTim = new Label("Catatan Tim P2KB :");
-				lblMemoTim.setStyle("font-weight: bold");
-				hlayout.appendChild(lblMemoTim);
-
-				separator = new Separator();
-				hlayout.appendChild(separator);
-
-				Label lblMemoTimVal = new Label(data.getMemo());
-
-				Textbox tb1 = new Textbox();
-				tb1.setRows(2);
-				tb1.setCols(30);
-
-				if (approvetype != null && approvetype.equals("T"))
-					hlayout.appendChild(tb1);
-				else
-					hlayout.appendChild(lblMemoTimVal);
-
-				divKet3.appendChild(hlayout);
-				vlayoutKet.appendChild(divKet3);
-
-				Div divKet4 = new Div();
-				hlayout = new Hlayout();
-				
-				divKet4.setSclass("note note-light");
-				Label lblMemoKomisi = new Label("Catatan Komisi P2KB :");
-				lblMemoKomisi.setStyle("font-weight: bold");
-				hlayout.appendChild(lblMemoKomisi);
-				
-				separator = new Separator();
-				hlayout.appendChild(separator);
-				
-				Label lblMemoKomisiVal = new Label(data.getMemokomisi());
-				
-				if (approvetype != null && approvetype.equals("K"))
-					hlayout.appendChild(tb1);
-				else
-					hlayout.appendChild(lblMemoKomisiVal);
-				
-				divKet4.appendChild(hlayout);
-				vlayoutKet.appendChild(divKet4);
-
-				Button btApproved = new Button("Submit");
-				btApproved.setIconSclass("z-icon-check");
-				btApproved.setSclass("btn btn-primary btn-sm");
-				btApproved.setAutodisable("self");
-				btApproved.setTooltiptext("Submit");
-				btApproved.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						if ((combobox.getSelectedItem().getLabel() != null)
-								&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
-							Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
-									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
-										@Override
-										public void onEvent(Event event) throws Exception {
-											if (event.getName().equals("onOK")) {
-												doSubmit(data, combobox.getSelectedItem().getValue(), tb1.getValue());
-												BindUtils.postNotifyChange(P2kbD02DetailVm.this, "totalskp");
-											}
-										}
-									});
-						} else {
-							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
-						}
-					}
-				});
-
-				separator = new Separator();
-				vlayoutKet.appendChild(separator);
-
-				Div divBtn = new Div();
-				hlayout = new Hlayout();
-
-				hlayout.appendChild(btApproved);
-				separator = new Separator();
-				hlayout.appendChild(separator);
-
-				if (isApproved) {
-					divBtn.appendChild(hlayout);
-					vlayoutKet.appendChild(divBtn);
-				}
-
-				row.getChildren().add(vlayoutKet);
-				
-				Vlayout vlayoutKegiatan = new Vlayout();
-				
-				Div divKegiatan1 = new Div();
-				divKegiatan1.setSclass("note note-light");
-				Label lbl1 = new Label("Judul Publikasi Ilmiah");
-				lbl1.setStyle("font-weight: bold");
-				divKegiatan1.appendChild(lbl1);
-				Label lbl2 = new Label(": " + data.getJudul());
-				divKegiatan1.appendChild(lbl2);
-				vlayoutKegiatan.appendChild(divKegiatan1);
-				
-				Div divKegiatan2 = new Div();
-				divKegiatan2.setSclass("note note-light");
-				Label lbl3 = new Label("Jenis Publikasi");
-				lbl3.setStyle("font-weight: bold");
-				divKegiatan2.appendChild(lbl3);
-				Label lbl4 = new Label(": " + data.getJenispublikasi());
-				divKegiatan2.appendChild(lbl4);
-				vlayoutKegiatan.appendChild(divKegiatan2);
-				
-				Div divKegiatan3 = new Div();
-				divKegiatan3.setSclass("note note-light");
-				Label lbl5 = new Label("Tipe Publikasi");
-				lbl5.setStyle("font-weight: bold");
-				divKegiatan3.appendChild(lbl5);
-				Label lbl6 = new Label(": " + data.getTipepublikasi());
-				divKegiatan3.appendChild(lbl6);
-				vlayoutKegiatan.appendChild(divKegiatan3);
-				
-				Div divKegiatan4 = new Div();
-				divKegiatan4.setSclass("note note-light");
-				Label lbl7 = new Label("Dokumen Bukti Kegiatan");
-				lbl7.setStyle("font-weight: bold");
-				divKegiatan4.appendChild(lbl7);
-				
-				File file = new File(Executions.getCurrent().getDesktop().getWebApp()
-							.getRealPath(data.getDocpath()));
-				if (file.exists()) {
-					divKegiatan4.appendChild(new Separator());
+				try {
+					row.getChildren().add(new Label(String.valueOf(index+1)));
 					
-					Vlayout vlaydoc = new Vlayout();
-					Iframe iframe = new Iframe(data.getDocpath());
-					iframe.setWidth("100%");
-					iframe.setStyle("border: 1px solid gray");
-					vlaydoc.appendChild(iframe);
+					Vlayout vlayoutKet = new Vlayout();
+
+					Div divKet0 = new Div();
+					Hlayout hlayout = new Hlayout();
+					divKet0.setSclass("rows note note-light");
+					Label lblStatus = new Label("Status Pemeriksaan :");
+					lblStatus.setStyle("font-weight: bold");
+					hlayout.appendChild(lblStatus);
+
+					Separator separator = new Separator();
+					hlayout.appendChild(separator);
+
+					Combobox combobox = new Combobox();
+					combobox.setReadonly(true);
+					combobox.setCols(15);
+
+					Comboitem cbItem = new Comboitem();
+					cbItem.setLabel("Approve");
+					cbItem.setValue("A");
+					combobox.appendChild(cbItem);
+
+					cbItem = new Comboitem();
+					cbItem.setLabel("Reject");
+					cbItem.setValue("R");
+					combobox.appendChild(cbItem);
+
+					Label lblStatusVal = new Label(AppUtils.getStatusLabel(data.getStatus()));
+
+					if (isApproved)
+						hlayout.appendChild(combobox);
+					else
+						hlayout.appendChild(lblStatusVal);
+
+					divKet0.appendChild(hlayout);
+					vlayoutKet.appendChild(divKet0);
+
+					Div divKet1 = new Div();
+					divKet1.setSclass("note note-light");
+					Label lblCheckdate = new Label("Tanggal Pemeriksaan :");
+					lblCheckdate.setStyle("font-weight: bold");
+					divKet1.appendChild(lblCheckdate);
+					Label lblCheckdateVal = new Label(
+							data.getChecktime() != null ? new SimpleDateFormat("dd MMM yyyy").format(data.getChecktime())
+									: "");
+					divKet1.appendChild(lblCheckdateVal);
+					vlayoutKet.appendChild(divKet1);
+
+					Div divKet2 = new Div();
+					divKet2.setSclass("note note-light");
+					Label lblCheckedby = new Label("Pemeriksa :");
+					lblCheckedby.setStyle("font-weight: bold");
+					divKet2.appendChild(lblCheckedby);
+					Label lblCheckedbyVal = new Label(data.getCheckedby());
+					divKet2.appendChild(lblCheckedbyVal);
+					vlayoutKet.appendChild(divKet2);
+
+					Div divKet3 = new Div();
+					hlayout = new Hlayout();
+
+					divKet3.setSclass("note note-light");
+					Label lblMemoTim = new Label("Catatan Tim P2KB :");
+					lblMemoTim.setStyle("font-weight: bold");
+					hlayout.appendChild(lblMemoTim);
+
+					separator = new Separator();
+					hlayout.appendChild(separator);
+
+					Label lblMemoTimVal = new Label(data.getMemo());
+
+					Textbox tb1 = new Textbox();
+					tb1.setRows(2);
+					tb1.setCols(30);
+
+					if (approvetype != null && approvetype.equals("T"))
+						hlayout.appendChild(tb1);
+					else
+						hlayout.appendChild(lblMemoTimVal);
+
+					divKet3.appendChild(hlayout);
+					vlayoutKet.appendChild(divKet3);
+
+					Div divKet4 = new Div();
+					hlayout = new Hlayout();
 					
-					Div divExpand = new Div();
-					divExpand.setAlign("right");
-					Button btView = new Button("Full Screen");
-					btView.setIconSclass("z-icon-eye");
-					btView.setSclass("btn btn-success btn-sm");
-					btView.setAutodisable("self");
-					btView.setTooltiptext("Full Screen");
-					btView.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+					divKet4.setSclass("note note-light");
+					Label lblMemoKomisi = new Label("Catatan Komisi P2KB :");
+					lblMemoKomisi.setStyle("font-weight: bold");
+					hlayout.appendChild(lblMemoKomisi);
+					
+					separator = new Separator();
+					hlayout.appendChild(separator);
+					
+					Label lblMemoKomisiVal = new Label(data.getMemokomisi());
+					
+					if (approvetype != null && approvetype.equals("K"))
+						hlayout.appendChild(tb1);
+					else
+						hlayout.appendChild(lblMemoKomisiVal);
+					
+					divKet4.appendChild(hlayout);
+					vlayoutKet.appendChild(divKet4);
+
+					Button btApproved = new Button("Submit");
+					btApproved.setIconSclass("z-icon-check");
+					btApproved.setSclass("btn btn-primary btn-sm");
+					btApproved.setAutodisable("self");
+					btApproved.setTooltiptext("Submit");
+					btApproved.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 						@Override
 						public void onEvent(Event event) throws Exception {
-							Map<String, String> mapDocument = new HashMap<>();
-							mapDocument.put("src", data.getDocpath());
-							zkSession.setAttribute("mapDocument", mapDocument);
-							Executions.getCurrent().sendRedirect("/view/docviewer.zul", "_blank");
+							if ((combobox.getSelectedItem().getLabel() != null)
+									&& (tb1.getValue() != null && tb1.getValue().length() > 0)) {
+								Messagebox.show("Apakah anda yakin submit data ini?", "Confirm Dialog",
+										Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+											@Override
+											public void onEvent(Event event) throws Exception {
+												if (event.getName().equals("onOK")) {
+													doSubmit(data, combobox.getSelectedItem().getValue(), tb1.getValue());
+													BindUtils.postNotifyChange(P2kbD02DetailVm.this, "totalskp");
+												}
+											}
+										});
+							} else {
+								Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
+							}
 						}
 					});
-					divExpand.appendChild(btView);
-					vlaydoc.appendChild(divExpand);
+
+					separator = new Separator();
+					vlayoutKet.appendChild(separator);
+
+					Div divBtn = new Div();
+					hlayout = new Hlayout();
+
+					hlayout.appendChild(btApproved);
+					separator = new Separator();
+					hlayout.appendChild(separator);
+
+					if (isApproved) {
+						divBtn.appendChild(hlayout);
+						vlayoutKet.appendChild(divBtn);
+					}
+
+					row.getChildren().add(vlayoutKet);
 					
-					divKegiatan4.appendChild(vlaydoc);
-				} else {
-					Label lblempty = new Label(": Tidak ada dokumen kegiatan");
-					divKegiatan4.appendChild(lblempty);
+					Vlayout vlayoutKegiatan = new Vlayout();
+					
+					Div divKegiatan1 = new Div();
+					divKegiatan1.setSclass("note note-light");
+					Label lbl1 = new Label("Judul Publikasi Ilmiah");
+					lbl1.setStyle("font-weight: bold");
+					divKegiatan1.appendChild(lbl1);
+					Label lbl2 = new Label(": " + data.getJudul());
+					divKegiatan1.appendChild(lbl2);
+					vlayoutKegiatan.appendChild(divKegiatan1);
+					
+					Div divKegiatan2 = new Div();
+					divKegiatan2.setSclass("note note-light");
+					Label lbl3 = new Label("Jenis Publikasi");
+					lbl3.setStyle("font-weight: bold");
+					divKegiatan2.appendChild(lbl3);
+					Label lbl4 = new Label(": " + data.getJenispublikasi());
+					divKegiatan2.appendChild(lbl4);
+					vlayoutKegiatan.appendChild(divKegiatan2);
+					
+					Div divKegiatan3 = new Div();
+					divKegiatan3.setSclass("note note-light");
+					Label lbl5 = new Label("Tipe Publikasi");
+					lbl5.setStyle("font-weight: bold");
+					divKegiatan3.appendChild(lbl5);
+					Label lbl6 = new Label(": " + data.getTipepublikasi());
+					divKegiatan3.appendChild(lbl6);
+					vlayoutKegiatan.appendChild(divKegiatan3);
+					
+					Div divKegiatan4 = new Div();
+					divKegiatan4.setSclass("note note-light");
+					Label lbl7 = new Label("Dokumen Bukti Kegiatan");
+					lbl7.setStyle("font-weight: bold");
+					divKegiatan4.appendChild(lbl7);
+					
+					System.out.println("data.getDocpath() : " + data.getDocpath());
+					File file = null;
+					if (data.getDocpath() != null && !data.getDocpath().toUpperCase().startsWith("HTTP"))
+						file = new File(Executions.getCurrent().getDesktop().getWebApp()
+								.getRealPath(data.getDocpath()));
+					
+					if ((file != null && file.exists()) || (data.getDocpath() != null && data.getDocpath().toUpperCase().startsWith("HTTP"))) {
+						divKegiatan4.appendChild(new Separator());
+						
+						Vlayout vlaydoc = new Vlayout();
+						Iframe iframe = new Iframe(data.getDocpath());
+						iframe.setWidth("100%");
+						iframe.setStyle("border: 1px solid gray");
+						vlaydoc.appendChild(iframe);
+						
+						Div divExpand = new Div();
+						divExpand.setAlign("right");
+						Button btView = new Button("Full Screen");
+						btView.setIconSclass("z-icon-eye");
+						btView.setSclass("btn btn-success btn-sm");
+						btView.setAutodisable("self");
+						btView.setTooltiptext("Full Screen");
+						btView.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								Map<String, String> mapDocument = new HashMap<>();
+								mapDocument.put("src", data.getDocpath());
+								zkSession.setAttribute("mapDocument", mapDocument);
+								Executions.getCurrent().sendRedirect("/view/docviewer.zul", "_blank");
+							}
+						});
+						divExpand.appendChild(btView);
+						vlaydoc.appendChild(divExpand);
+						
+						divKegiatan4.appendChild(vlaydoc);
+					} else {
+						Label lblempty = new Label(": Tidak ada dokumen kegiatan");
+						divKegiatan4.appendChild(lblempty);
+					}
+					
+					vlayoutKegiatan.appendChild(divKegiatan4);
+					
+					Div divKegiatan5 = new Div();
+					divKegiatan5.setSclass("note note-light");
+					Label lbl9 = new Label("Tanggal Kegiatan");
+					lbl9.setStyle("font-weight: bold");
+					divKegiatan5.appendChild(lbl9);
+					Label lbl10 = new Label(": " + new SimpleDateFormat("dd MMM yyyy").format(data.getTglkegiatan()));
+					divKegiatan5.appendChild(lbl10);
+					vlayoutKegiatan.appendChild(divKegiatan5);
+					
+					Div divKegiatan7 = new Div();
+					divKegiatan7.setSclass("note note-light");
+					Label lbl13 = new Label("Nilai SKP");
+					lbl13.setStyle("font-weight: bold");
+					divKegiatan7.appendChild(lbl13);
+					Label lbl14 = new Label(": " + String.valueOf(data.getNilaiskp()) + " SKP");
+					divKegiatan7.appendChild(lbl14);
+					vlayoutKegiatan.appendChild(divKegiatan7);
+					
+					row.getChildren().add(vlayoutKegiatan);
+					
+					Div divAction = new Div();
+					Button btEdit = new Button();
+					btEdit.setIconSclass("z-icon-edit");
+					btEdit.setSclass("btn btn-primary btn-sm");
+					btEdit.setAutodisable("self");
+					btEdit.setTooltiptext("Edit");
+					btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							doEdit(data);
+						}
+					});
+					
+					Button btDel = new Button();
+					btDel.setIconSclass("z-icon-trash");
+					btDel.setSclass("btn btn-danger btn-sm");
+					btDel.setAutodisable("self");
+					btDel.setTooltiptext("Hapus");
+					btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							doDelete(data);
+						}
+					});
+					
+					divAction.appendChild(btEdit);
+					divAction.appendChild(new Separator("vertical"));
+					divAction.appendChild(btDel);
+					row.getChildren().add(divAction);
+					
+					totalskp = totalskp.add(data.getNilaiskp());
+					BindUtils.postNotifyChange(P2kbD02DetailVm.this, "totalskp");
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-				vlayoutKegiatan.appendChild(divKegiatan4);
-				
-				Div divKegiatan5 = new Div();
-				divKegiatan5.setSclass("note note-light");
-				Label lbl9 = new Label("Tanggal Kegiatan");
-				lbl9.setStyle("font-weight: bold");
-				divKegiatan5.appendChild(lbl9);
-				Label lbl10 = new Label(": " + new SimpleDateFormat("dd MMM yyyy").format(data.getTglkegiatan()));
-				divKegiatan5.appendChild(lbl10);
-				vlayoutKegiatan.appendChild(divKegiatan5);
-				
-				Div divKegiatan7 = new Div();
-				divKegiatan7.setSclass("note note-light");
-				Label lbl13 = new Label("Nilai SKP");
-				lbl13.setStyle("font-weight: bold");
-				divKegiatan7.appendChild(lbl13);
-				Label lbl14 = new Label(": " + String.valueOf(data.getNilaiskp()) + " SKP");
-				divKegiatan7.appendChild(lbl14);
-				vlayoutKegiatan.appendChild(divKegiatan7);
-				
-				row.getChildren().add(vlayoutKegiatan);
-				
-				Div divAction = new Div();
-				Button btEdit = new Button();
-				btEdit.setIconSclass("z-icon-edit");
-				btEdit.setSclass("btn btn-primary btn-sm");
-				btEdit.setAutodisable("self");
-				btEdit.setTooltiptext("Edit");
-				btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						doEdit(data);
-					}
-				});
-				
-				Button btDel = new Button();
-				btDel.setIconSclass("z-icon-trash");
-				btDel.setSclass("btn btn-danger btn-sm");
-				btDel.setAutodisable("self");
-				btDel.setTooltiptext("Hapus");
-				btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						doDelete(data);
-					}
-				});
-				
-				divAction.appendChild(btEdit);
-				divAction.appendChild(new Separator("vertical"));
-				divAction.appendChild(btDel);
-				row.getChildren().add(divAction);
-				
-				totalskp = totalskp.add(data.getNilaiskp());
-				BindUtils.postNotifyChange(P2kbD02DetailVm.this, "totalskp");
 			}
 		});
 		

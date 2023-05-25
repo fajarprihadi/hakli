@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suratrekomendasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ca554310-f762-46dd-96b5-0dbd7c939898">
-	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.zoom" value="1.0000000000000004"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="58"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
@@ -98,10 +98,9 @@ ketentuan yang berlaku.
 Atas perhatian dan kerja sama yang baik diucapkan terima kasih]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="259" y="453" width="296" height="38" uuid="82922c29-7c9c-4126-be4b-728ef57ef5ce"/>
+				<reportElement x="259" y="461" width="296" height="27" uuid="82922c29-7c9c-4126-be4b-728ef57ef5ce"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[Jakarta, 03 Februari 2022
-Ketua Umum
+				<text><![CDATA[Ketua Umum
 Himpunan Ahli Kesehatan Lingkungan Indonesia]]></text>
 			</staticText>
 			<staticText>
@@ -126,6 +125,11 @@ NPWP : 66.863.590.7-013.000, Bank Mandiri no Rek : 126-00-0656146-7]]></text>
 			<textField>
 				<reportElement x="0" y="137" width="553" height="15" uuid="917a317d-2b3a-48e3-bc54-31682035354d"/>
 				<textFieldExpression><![CDATA["No : " + $P{NOSURAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="259" y="442" width="296" height="20" uuid="424ce447-4f9c-4959-b1c3-af63b9c3790b"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMMM yyyy").format(new Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -122,9 +122,11 @@ public class EventDetailVm {
 						public void onEvent(Event event) throws Exception {
 							Map<String, Object> map = new HashMap<String, Object>();
 							map.put("obj", data.getTanggota());
+							map.put("acttype", "view");
 							Window win = (Window) Executions
-									.createComponents("/view/anggota/anggotaview.zul", null, map);
+									.createComponents("/view/anggota/anggotaedit.zul", null, map);
 							win.setClosable(true);
+							win.setWidth("98%");
 							win.doModal();
 						}
 					});

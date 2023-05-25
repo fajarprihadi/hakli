@@ -94,7 +94,7 @@ public class VerifikasiP2kbVm {
 			orderby = "nama";
 			
 			if(nama != null && nama.trim().length() > 0)
-				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
+				filter += " and upper(nama) like '%" + nama.trim().toUpperCase() + "%'";
 			
 			if(region != null)
 				filter += " ";

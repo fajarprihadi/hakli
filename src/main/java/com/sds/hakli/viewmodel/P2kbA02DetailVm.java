@@ -67,7 +67,7 @@ public class P2kbA02DetailVm {
 
 	private Map<Integer, Tp2kba02> mapData = new HashMap<>();
 	private Integer totalselected = 0;
-
+	
 	private Tp2kb p2kb;
 	private BigDecimal totalskp;
 	
