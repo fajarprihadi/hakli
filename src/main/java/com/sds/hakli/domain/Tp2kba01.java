@@ -17,41 +17,45 @@ import org.hibernate.annotations.Type;
 
 @Entity
 public class Tp2kba01 {
-	
+
 	private Integer tp2kba01pk;
-	
+
 	private Tanggota tanggota;
-	
+
 	private Mp2kbkegiatan mp2kbkegiatan;
-	
+
 	private String judul;
-	
+
 	private String tempat;
-	
+
 	private String penyelenggara;
-	
+
 	private String docid;
-	
+
 	private String docpath;
-	
+
 	private Date tglkegiatan;
-	
+
 	private BigDecimal nilaiskp;
-	
+
 	private String status;
-	
+
 	private String memo;
-	
+
 	private String memokomisi;
-	
+
 	private String createdby;
-	
+
 	private Date createtime;
-	
+
 	private String checkedby;
-	
+
 	private Date checktime;
-	
+
+	private String checkedbykomisi;
+
+	private Date checktimekomisi;
+
 	@Id
 	@SequenceGenerator(name = "tp2kba01_seq", sequenceName = "tp2kba01_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kba01_seq")
@@ -135,7 +139,7 @@ public class Tp2kba01 {
 	public void setTglkegiatan(Date tglkegiatan) {
 		this.tglkegiatan = tglkegiatan;
 	}
-	
+
 	public BigDecimal getNilaiskp() {
 		return nilaiskp;
 	}
@@ -205,5 +209,22 @@ public class Tp2kba01 {
 		this.memokomisi = memokomisi;
 	}
 
-	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getCheckedbykomisi() {
+		return checkedbykomisi;
+	}
+
+	public void setCheckedbykomisi(String checkedbykomisi) {
+		this.checkedbykomisi = checkedbykomisi;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getChecktimekomisi() {
+		return checktimekomisi;
+	}
+
+	public void setChecktimekomisi(Date checktimekomisi) {
+		this.checktimekomisi = checktimekomisi;
+	}
+
 }

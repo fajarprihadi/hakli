@@ -165,26 +165,20 @@ public class BukuLogRequestVm {
 	@NotifyChange("*")
 	public void doAdd() {
 		try {
-			List<Tp2kbbook> tpb = new Tp2kbbookDAO().listByFilter("TANGGOTAFK = " + obj.getTanggotapk() + " AND '" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "' BETWEEN TGLMULAI AND TGLAKHIR",
-					"tp2kbbookpk");
-			if (tpb.size() > 0) {
-				Messagebox.show("Tidak bisa menambah permohonan baru, karena terdapat permohonan yang masih aktif.");
-			} else {
-				Map<String, Object> map = new HashMap<>();
-				Window win = new Window();
-				map.put("obj", obj);
-				win = (Window) Executions.createComponents("/view/p2kb/bukulogform.zul", null, map);
-				win.setWidth("70%");
-				win.setClosable(true);
-				win.doModal();
-				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-					@Override
-					public void onEvent(Event event) throws Exception {
-						doReset();
-					}
+			Map<String, Object> map = new HashMap<>();
+			Window win = new Window();
+			map.put("obj", obj);
+			win = (Window) Executions.createComponents("/view/p2kb/bukulogform.zul", null, map);
+			win.setWidth("70%");
+			win.setClosable(true);
+			win.doModal();
+			win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+				@Override
+				public void onEvent(Event event) throws Exception {
+					doReset();
+				}
 
-				});
-			}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

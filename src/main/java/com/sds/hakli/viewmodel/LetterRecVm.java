@@ -28,15 +28,15 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 
 import com.sds.hakli.dao.TcounterengineDAO;
-import com.sds.hakli.dao.Tp2kbDAO;
-import com.sds.hakli.domain.Vrecp2kb;
+import com.sds.hakli.dao.Tp2kbbookDAO;
+import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.StringUtils;
 
 public class LetterRecVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	private List<Vrecp2kb> objList = new ArrayList<>();
+	private List<Tp2kbbook> objList = new ArrayList<>();
 
 	private String filter;
 	private String orderby;
@@ -53,13 +53,13 @@ public class LetterRecVm {
 		Selectors.wireComponents(view, this, false);
 		
 		doReset();
-		grid.setRowRenderer(new RowRenderer<Vrecp2kb>() {
+		grid.setRowRenderer(new RowRenderer<Tp2kbbook>() {
 
 			@Override
-			public void render(Row row, Vrecp2kb data, int index) throws Exception {
+			public void render(Row row, Tp2kbbook data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index + 1)));
-				row.getChildren().add(new Label(data.getNoanggota()));
-				row.getChildren().add(new Label(data.getNama()));
+				row.getChildren().add(new Label(data.getTanggota().getNoanggota()));
+				row.getChildren().add(new Label(data.getTanggota().getNama()));
 				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
 				
 				Button btLetter = new Button("Download");
@@ -72,7 +72,7 @@ public class LetterRecVm {
 					@Override
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> parameters = new HashMap<>();
-						List<Vrecp2kb>dataList = new ArrayList<>();
+						List<Tp2kbbook>dataList = new ArrayList<>();
 						String currentdate = "";
 						
 						Map<Integer, String> mapRomawi = new HashMap<>();
@@ -112,13 +112,13 @@ public class LetterRecVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "totalwaiting = 0 and totaltimapprove = 0";
-			orderby = "nama";
+			filter = "TOTALSKP > 5";
+			orderby = "tp2kbbookpk";
 
 			if (nama != null && nama.trim().length() > 0)
 				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
 
-			objList = new Tp2kbDAO().listRecLetter(filter, orderby);
+			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {

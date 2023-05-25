@@ -1,5 +1,6 @@
 package com.sds.hakli.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -26,6 +27,8 @@ public class Tp2kbbook {
 	private String createdby;
 	private Date lastupdated;
 	private String updatedby;
+	private Integer totalkegiatan = 0;
+	private BigDecimal totalskp = new BigDecimal(0);
 	private Tanggota tanggota;
 	
 	
@@ -110,6 +113,18 @@ public class Tp2kbbook {
 	}
 	public void setCreatedby(String createdby) {
 		this.createdby = createdby;
+	}
+	public Integer getTotalkegiatan() {
+		return totalkegiatan;
+	}
+	public void setTotalkegiatan(Integer totalkegiatan) {
+		this.totalkegiatan = totalkegiatan;
+	}
+	public BigDecimal getTotalskp() {
+		return totalskp;
+	}
+	public void setTotalskp(BigDecimal totalskp) {
+		this.totalskp = totalskp;
 	}
 	
 	

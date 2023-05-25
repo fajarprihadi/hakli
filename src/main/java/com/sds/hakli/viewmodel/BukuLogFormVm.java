@@ -3,6 +3,7 @@ package com.sds.hakli.viewmodel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -38,7 +39,7 @@ public class BukuLogFormVm {
 
 	private String tgllahir;
 	private String gender;
-	
+
 	private boolean isInsert;
 
 	@Wire
@@ -55,8 +56,8 @@ public class BukuLogFormVm {
 			gender = obj.getGender().trim().equals("P") ? "Wanita" : "Pria";
 		}
 		doReset();
-		
-		if(objForm != null) {
+
+		if (objForm != null) {
 			this.objForm = objForm;
 			isInsert = false;
 		}
@@ -66,43 +67,53 @@ public class BukuLogFormVm {
 	@Command
 	@NotifyChange("*")
 	public void doSave() {
-		Session session = StoreHibernateUtil.openSession();
-		Transaction trx = session.beginTransaction();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(objForm.getTglakhir());
+		cal.add(Calendar.YEAR, -5);
+
 		try {
-			objForm.setTanggota(obj);
-			objForm.setStatus("Y");
-			
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(objForm.getTglakhir());
-			cal.add(Calendar.YEAR, -5);
-			
-			objForm.setTglmulai(cal.getTime());
-			if (isInsert) {
-				objForm.setCreatetime(new Date());
-				objForm.setCreatedby(obj.getNoanggota());
+			List<Tp2kbbook> tpb = new Tp2kbbookDAO().listByFilter("TANGGOTAFK = " + obj.getTanggotapk() + " AND (('"
+					+ new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime())
+					+ "' BETWEEN TGLMULAI AND TGLAKHIR) OR ('"
+					+ new SimpleDateFormat("yyyy-MM-dd").format(objForm.getTglakhir())
+					+ "' BETWEEN TGLMULAI AND TGLAKHIR))", "tp2kbbookpk");
+
+			if (tpb.size() > 0) {
+				Messagebox.show("Tidak bisa menambah permohonan baru, karena terdapat permohonan yang masih aktif.");
 			} else {
-				objForm.setLastupdated(new Date());
-				objForm.setUpdatedby(obj.getNoanggota());
+				Session session = StoreHibernateUtil.openSession();
+				Transaction trx = session.beginTransaction();
+				
+				objForm.setTanggota(obj);
+				objForm.setStatus("Y");
+
+				objForm.setTglmulai(cal.getTime());
+				if (isInsert) {
+					objForm.setCreatetime(new Date());
+					objForm.setCreatedby(obj.getNoanggota());
+				} else {
+					objForm.setLastupdated(new Date());
+					objForm.setUpdatedby(obj.getNoanggota());
+				}
+
+				new Tp2kbbookDAO().save(session, objForm);
+				trx.commit();
+				session.close();
+				
+				if (isInsert) {
+					Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
+				} else {
+					Clients.showNotification("Proses pembaruan data berhasil", "info", null, "middle_center", 1500);
+				}
+
+				doClose();
 			}
-			
-			new Tp2kbbookDAO().save(session, objForm);
-			trx.commit();
-			
-			if (isInsert) {
-				Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
-			} else {
-				Clients.showNotification("Proses pembaruan data berhasil", "info", null, "middle_center", 1500);
-			}
-			
-			doClose();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
-		} finally {
-			session.close();
 		}
 	}
-	
+
 	public void doReset() {
 		objForm = new Tp2kbbook();
 		isInsert = true;
