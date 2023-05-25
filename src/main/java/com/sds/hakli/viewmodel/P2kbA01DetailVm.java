@@ -221,7 +221,7 @@ public class P2kbA01DetailVm {
 										}
 									});
 						} else {
-							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
+							Messagebox.show("Silahkan isi status dan catatan terlebih dahulu.");
 						}
 					}
 				});

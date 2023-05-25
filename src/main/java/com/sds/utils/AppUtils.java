@@ -23,6 +23,8 @@ public class AppUtils {
 	
 	public static final String STATUS_APPROVEDKOMISI = "AK";
 	public static final String STATUS_REJECTEDKOMISI = "RK";
+	
+	public static final String STATUS_WAITCONFIRM = "WC";
 
 	public static final String CHARGETYPE_REG = "01";
 	public static final String CHARGETYPE_IURAN = "02";
@@ -70,13 +72,15 @@ public class AppUtils {
 
 	public static String getStatusLabel(String code) {
 		if (code.trim().equals(AppUtils.STATUS_APPROVEDTIM))
-			return "APPROVED TIMP2KB";
+			return "DISETUJUI TIMP2KB";
 		else if (code.trim().equals(AppUtils.STATUS_REJECTEDTIM))
-			return "REJECTED TIMP2KB";
+			return "DITOLAK TIMP2KB";
 		else if (code.trim().equals(AppUtils.STATUS_APPROVEDKOMISI))
-			return "APPROVED KOMISI";
+			return "DISETUJUI KOMISI";
 		else if (code.trim().equals(AppUtils.STATUS_REJECTEDKOMISI))
-			return "REJECTED KOMISI";
+			return "DITOLAK KOMISI";
+		else if (code.trim().equals(AppUtils.STATUS_WAITCONFIRM))
+			return "MENUNGGU KONFIRMASI";
 		else
 			return code;
 	}

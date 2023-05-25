@@ -404,6 +404,10 @@ public class P2kbE10DetailVm {
 				
 				obj.setMemokomisi(memotim);
 			}
+			new Tp2kbDAO().save(session, p2kb);
+
+			obj.setCheckedby(anggota.getNama());
+			obj.setChecktime(new Date());
 			new Tp2kbE10DAO().save(session, obj);
 			
 			totalskp = totalskp.subtract(obj.getNilaiskp());

@@ -32,6 +32,7 @@ import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Vrecp2kb;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
+import com.sds.utils.StringUtils;
 
 public class LetterRecVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
@@ -72,18 +73,23 @@ public class LetterRecVm {
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> parameters = new HashMap<>();
 						List<Vrecp2kb>dataList = new ArrayList<>();
+						String currentdate = "";
 						
 						Map<Integer, String> mapRomawi = new HashMap<>();
 						
 						int year = Calendar.getInstance().get(Calendar.YEAR);
 						int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-						mapRomawi = AppData.getAngkaRomawi();
+						int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 						
-						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM/PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
+						mapRomawi = AppData.getAngkaRomawi();
+						currentdate = day + " " + StringUtils.getMonthLabel(month) + " " + year;
+						
+						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
 						dataList.add(data);
 						zkSession.setAttribute("objList", dataList);
 						
 						parameters.put("NOSURAT", nosurat);
+						parameters.put("CURRENTDATE", currentdate);
 						parameters.put("TTD_KETUAUMUM",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
 						parameters.put("LOGO",

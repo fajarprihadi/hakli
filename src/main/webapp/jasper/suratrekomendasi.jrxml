@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suratrekomendasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ca554310-f762-46dd-96b5-0dbd7c939898">
-	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="332"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
+	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="noanggota" class="java.lang.String"/>
 	<field name="nostr" class="java.lang.String"/>
@@ -98,7 +99,7 @@ ketentuan yang berlaku.
 Atas perhatian dan kerja sama yang baik diucapkan terima kasih]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="259" y="461" width="296" height="27" uuid="82922c29-7c9c-4126-be4b-728ef57ef5ce"/>
+				<reportElement x="259" y="465" width="296" height="26" uuid="82922c29-7c9c-4126-be4b-728ef57ef5ce"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Ketua Umum
 Himpunan Ahli Kesehatan Lingkungan Indonesia]]></text>
@@ -127,9 +128,9 @@ NPWP : 66.863.590.7-013.000, Bank Mandiri no Rek : 126-00-0656146-7]]></text>
 				<textFieldExpression><![CDATA["No : " + $P{NOSURAT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="259" y="442" width="296" height="20" uuid="424ce447-4f9c-4959-b1c3-af63b9c3790b"/>
+				<reportElement x="259" y="451" width="296" height="15" uuid="2328e981-9114-4f8f-8347-85a65baed7d6"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMMM yyyy").format(new Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -65,6 +65,7 @@ public class P2kbE11DetailVm {
 	
 	private Tp2kb p2kb;
 	private BigDecimal totalskp;
+	
 	private boolean isApproved = false;
 
 	@Wire
@@ -403,6 +404,10 @@ public class P2kbE11DetailVm {
 				
 				obj.setMemokomisi(memotim);
 			}
+			new Tp2kbDAO().save(session, p2kb);
+
+			obj.setCheckedby(anggota.getNama());
+			obj.setChecktime(new Date());
 			new Tp2kbE11DAO().save(session, obj);
 			
 			totalskp = totalskp.subtract(obj.getNilaiskp());
