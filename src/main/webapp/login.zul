@@ -57,17 +57,17 @@
 												onClick="@command('doLogin')"
 												sclass="btn btn-dark btn-lg btn-block" />
 										</div>
+										
+											<a class="small text-muted" href="#!">Lupa Password?</a>
+											<n:p class="mb-5 pb-lg-2" style="color: #393f81;">Belum terdaftar sebagai anggota HAKLI? <n:a href="/hakli/reginit.zul"
+											style="color: #393f81;">Daftar Disini</n:a></n:p>
 										<!-- 
-											<n:a class="small text-muted" href="#!">Forgot password?</n:a>
-											<n:p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <n:a href="#!"
-											style="color: #393f81;">Register here</n:a></n:p>
-										-->
 										<div align="right">
 											<n:a class="btn btn-success"
 												href="/hakli/reginit.zul" role="button">
 												Registrasi
 											</n:a>
-										</div>
+										</div> -->
 										
 										
 									</n:form>

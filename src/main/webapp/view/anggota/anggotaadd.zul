@@ -383,7 +383,7 @@
 							</vlayout>
 						</row>
 						<row>
-							<label value="${labels.pekerjaan.nip} (*)" />
+							<label value="${labels.pekerjaan.nip}" />
 							<vlayout>
 								<textbox value="@bind(e.pekerjaan.nip)"
 									maxlength="20" width="100%" />
@@ -393,7 +393,7 @@
 						</row>
 						<row>
 							<label
-								value="${labels.pekerjaan.jabatan} (*)" />
+								value="${labels.pekerjaan.jabatan}" />
 							<vlayout>
 								<textbox
 									value="@bind(e.pekerjaan.jabatankantor)" maxlength="50"

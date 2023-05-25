@@ -110,6 +110,7 @@ public class AnggotaWaitPayVm {
 								BindUtils.postNotifyChange(AnggotaWaitPayVm.this, "pageTotalSize");
 							}
 						});
+						win.setWidth("98%");
 						win.doModal();
 					}
 				});

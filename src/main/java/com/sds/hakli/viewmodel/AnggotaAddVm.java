@@ -499,7 +499,7 @@ public class AnggotaAddVm {
 				photo.setVisible(true);
 			} else {
 				media = null;
-				Messagebox.show("File bukan berupa gambar: " + media, WebApps.getCurrent().getAppName(), Messagebox.OK,
+				Messagebox.show("File bukan berupa gambar", WebApps.getCurrent().getAppName(), Messagebox.OK,
 						Messagebox.ERROR);
 			}
 		} catch (Exception e) {
@@ -585,6 +585,12 @@ public class AnggotaAddVm {
 
 								// pendidikan
 								objForm.getPendidikan().setTanggota(objForm.getPribadi());
+								if (cbPendidikanBlAwal.getValue() != null)
+									objForm.getPendidikan().setPeriodeblawal(String.valueOf(cbPendidikanBlAwal.getSelectedIndex() + 1));
+								if (cbPendidikanBlAkhir.getValue() != null)
+									objForm.getPendidikan().setPeriodeblakhir(String.valueOf(cbPendidikanBlAkhir.getSelectedIndex() + 1));
+								objForm.getPendidikan().setPeriodethawal(cbPendidikanThAwal.getValue());
+								objForm.getPendidikan().setPeriodethakhir(cbPendidikanThAkhir.getValue());
 								pendidikanDao.save(session, objForm.getPendidikan());
 								
 								// pekerjaan
@@ -807,15 +813,15 @@ public class AnggotaAddVm {
 				String alamatkantor = (String) ctx.getProperties("pekerjaan.alamatkantor")[0].getValue();
 				if (alamatkantor == null || "".equals(alamatkantor.trim()))
 					this.addInvalidMessage(ctx, "alamatkantor", Labels.getLabel("common.validator.empty"));
-				String jabatan = (String) ctx.getProperties("pekerjaan.jabatankantor")[0].getValue();
-				if (jabatan == null || "".equals(jabatan.trim()))
-					this.addInvalidMessage(ctx, "jabatan", Labels.getLabel("common.validator.empty"));
+//				String jabatan = (String) ctx.getProperties("pekerjaan.jabatankantor")[0].getValue();
+//				if (jabatan == null || "".equals(jabatan.trim()))
+//					this.addInvalidMessage(ctx, "jabatan", Labels.getLabel("common.validator.empty"));
 				Date tglmulai = (Date) ctx.getProperties("pekerjaan.tglmulai")[0].getValue();
 				if (tglmulai == null)
 					this.addInvalidMessage(ctx, "tglmulai", Labels.getLabel("common.validator.empty"));
 				String nip = (String) ctx.getProperties("pekerjaan.nip")[0].getValue();
-				if (nip == null || "".equals(nip.trim()))
-					this.addInvalidMessage(ctx, "nip", Labels.getLabel("common.validator.empty"));
+//				if (nip == null || "".equals(nip.trim()))
+//					this.addInvalidMessage(ctx, "nip", Labels.getLabel("common.validator.empty"));
 
 				// Pendidikan
 				Muniversitas muniversitas = (Muniversitas) ctx.getProperties("pendidikan.muniversitas")[0].getValue();

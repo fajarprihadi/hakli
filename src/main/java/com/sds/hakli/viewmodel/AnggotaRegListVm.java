@@ -122,8 +122,6 @@ public class AnggotaRegListVm {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("obj", data);
 						map.put("acttype", "approval");
-//						Window win = (Window) Executions
-//								.createComponents("/view/anggota/anggotaregapproval.zul", null, map);
 						Window win = (Window) Executions
 								.createComponents("/view/anggota/anggotaedit.zul", null, map);
 						win.setClosable(true);
@@ -135,6 +133,7 @@ public class AnggotaRegListVm {
 								BindUtils.postNotifyChange(AnggotaRegListVm.this, "pageTotalSize");
 							}
 						});
+						win.setWidth("98%");
 						win.doModal();
 					}
 				});

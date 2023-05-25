@@ -288,7 +288,7 @@ public class StringUtils {
 			label = "Apr";
 			break;
 		case 5:
-			label = "May";
+			label = "Mei";
 			break;
 		case 6:
 			label = "Jun";
@@ -297,19 +297,19 @@ public class StringUtils {
 			label = "Jul";
 			break;
 		case 8:
-			label = "Aug";
+			label = "Agu";
 			break;
 		case 9:
 			label = "Sep";
 			break;
 		case 10:
-			label = "Oct";
+			label = "Okt";
 			break;
 		case 11:
 			label = "Nov";
 			break;
 		case 12:
-			label = "Dec";
+			label = "Des";
 			break;
 		}
 

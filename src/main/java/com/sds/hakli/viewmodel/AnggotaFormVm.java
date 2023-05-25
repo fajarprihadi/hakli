@@ -291,8 +291,8 @@ public class AnggotaFormVm {
 					row.getChildren().add(new Label(data.getPeminatan1()));
 					row.getChildren().add(new Label(data.getPeminatan2()));
 					String periode = "";
-					periode = (data.getPeriodeblawal() != null ? data.getPeriodeblawal() : "") + " " + (data.getPeriodethawal() != null ? data.getPeriodethawal() : "") + " s/d "
-							+ (data.getPeriodeblakhir() != null ? data.getPeriodeblakhir() : "") + " " + (data.getPeriodethakhir() != null ? data.getPeriodethakhir() : "");
+					periode = (data.getPeriodeblawal() != null ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblawal())) : "") + " " + (data.getPeriodethawal() != null ? data.getPeriodethawal() : "") + " s/d "
+							+ (data.getPeriodeblakhir() != null ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblakhir())) : "") + " " + (data.getPeriodethakhir() != null ? data.getPeriodethakhir() : "");
 					row.getChildren().add(new Label(periode));
 					
 					Button btView = new Button();
@@ -466,6 +466,8 @@ public class AnggotaFormVm {
 						"tpekerjaanpk desc");
 			}
 			gridPekerjaan.setModel(new ListModelList<>(this.pekerjaans));
+			gridPekerjaan.setSizedByContent(true);
+			gridPekerjaan.setSpan(true);
 			
 			if (pendidikans != null) {
 				this.pendidikans = pendidikans;
@@ -812,9 +814,11 @@ public class AnggotaFormVm {
 			trx = session.beginTransaction();
 			pendidikan.setLastupdated(new Date());
 			pendidikan.setUpdatedby(pribadi.getNoanggota());
-			pendidikan.setPeriodeblawal(cbPendidikanBlAwal.getValue());
+			if (cbPendidikanBlAwal.getValue() != null)
+				pendidikan.setPeriodeblawal(String.valueOf(cbPendidikanBlAwal.getSelectedIndex() + 1));
 			pendidikan.setPeriodethawal(cbPendidikanThAwal.getValue());
-			pendidikan.setPeriodeblakhir(cbPendidikanBlAkhir.getValue());
+			if (cbPendidikanBlAkhir.getValue() != null)
+				pendidikan.setPeriodeblakhir(String.valueOf(cbPendidikanBlAkhir.getSelectedIndex() + 1));
 			pendidikan.setPeriodethakhir(cbPendidikanThAkhir.getValue());
 			pendidikanDao.save(session, pendidikan);
 			trx.commit();
@@ -1120,15 +1124,15 @@ public class AnggotaFormVm {
 				String namakantor = (String) ctx.getProperties("namakantor")[0].getValue();
 				if (namakantor == null || "".equals(namakantor.trim()))
 					this.addInvalidMessage(ctx, "namakantor", Labels.getLabel("common.validator.empty"));
-				String jabatan = (String) ctx.getProperties("jabatankantor")[0].getValue();
-				if (jabatan == null || "".equals(jabatan.trim()))
-					this.addInvalidMessage(ctx, "jabatan", Labels.getLabel("common.validator.empty"));
+//				String jabatan = (String) ctx.getProperties("jabatankantor")[0].getValue();
+//				if (jabatan == null || "".equals(jabatan.trim()))
+//					this.addInvalidMessage(ctx, "jabatan", Labels.getLabel("common.validator.empty"));
 				Date tglmulai = (Date) ctx.getProperties("tglmulai")[0].getValue();
 				if (tglmulai == null)
 					this.addInvalidMessage(ctx, "tglmulai", Labels.getLabel("common.validator.empty"));
-				String nip = (String) ctx.getProperties("nip")[0].getValue();
-				if (nip == null || "".equals(nip.trim()))
-					this.addInvalidMessage(ctx, "nip", Labels.getLabel("common.validator.empty"));
+//				String nip = (String) ctx.getProperties("nip")[0].getValue();
+//				if (nip == null || "".equals(nip.trim()))
+//					this.addInvalidMessage(ctx, "nip", Labels.getLabel("common.validator.empty"));
 			}
 		};
 	}

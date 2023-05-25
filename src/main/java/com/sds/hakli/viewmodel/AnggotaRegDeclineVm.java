@@ -110,6 +110,7 @@ public class AnggotaRegDeclineVm {
 								BindUtils.postNotifyChange(AnggotaRegDeclineVm.this, "pageTotalSize");
 							}
 						});
+						win.setWidth("98%");
 						win.doModal();
 					}
 				});
