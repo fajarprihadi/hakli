@@ -242,7 +242,7 @@ public class P2kbE04DetailVm {
 										}
 									});
 						} else {
-							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
+							Messagebox.show("Silahkan isi status dan catatan terlebih dahulu.");
 						}
 					}
 				});
@@ -269,7 +269,7 @@ public class P2kbE04DetailVm {
 										}
 									});
 						} else {
-							Messagebox.show("Silahkan status dan catatan terlebih dahulu.");
+							Messagebox.show("Silahkan isi status dan catatan terlebih dahulu.");
 						}
 					}
 				});
