@@ -48,44 +48,45 @@ import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class P2kbB09Vm {
-	
+
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private Tanggota anggota;
 	private Tp2kbB09DAO oDao = new Tp2kbB09DAO();
 	private Tp2kbDAO p2kbDao = new Tp2kbDAO();
 	private TcounterengineDAO counterDao = new TcounterengineDAO();
-	
+
 	private Mp2kbkegiatan p2kb;
 	private Tp2kbb09 objForm;
 	private Tp2kbbook tpb;
 	private BigDecimal nilaiskp_curr;
-	
+
 	private Media media;
 	private String docfilename;
 	private boolean isInsert;
-	
+
 	@Wire
 	private Window winP2kbb09;
-	
+
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, 
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view,
 			@ExecutionArgParam("obj") Mp2kbkegiatan p2kb, @ExecutionArgParam("objForm") Tp2kbb09 objForm,
 			@ExecutionArgParam("book") Tp2kbbook tpb) {
 		Selectors.wireComponents(view, this, false);
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
 		this.p2kb = p2kb;
-		
-		if(tpb != null) {
+
+		if (tpb != null) {
 			this.tpb = tpb;
 		}
-		
+
 		if (objForm != null) {
 			this.objForm = objForm;
 			nilaiskp_curr = objForm.getNilaiskp();
 			isInsert = false;
-		} else doReset();
+		} else
+			doReset();
 	}
-	
+
 	@NotifyChange("*")
 	public void doReset() {
 		isInsert = true;
@@ -93,7 +94,7 @@ public class P2kbB09Vm {
 		objForm.setTanggota(anggota);
 		objForm.setMp2kbkegiatan(p2kb);
 	}
-	
+
 	@Command
 	@NotifyChange("docfilename")
 	public void doUpload(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx) {
@@ -105,86 +106,94 @@ public class P2kbB09Vm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSave() {
-		Session session = StoreHibernateUtil.openSession();
-		Transaction trx = session.beginTransaction();
-		try {
-			objForm.setNilaiskp(getNilaiSkp(objForm));
-			objForm.setCreatedby(anggota.getNoanggota());
-			objForm.setCreatetime(new Date());
-			objForm.setStatus("WC");
-			
-			if (media != null) {
-				try {
-					String docid = counterDao.getP2kbCounter(objForm.getMp2kbkegiatan().getIdkegiatan());
-					String folder = Executions.getCurrent().getDesktop().getWebApp()
-							.getRealPath(AppUtils.PATH_P2KB);
-					if (media.isBinary()) {
-						Files.copy(new File(folder + "/" + docid + "/" + media.getFormat()), media.getStreamData());
-					} else {
-						BufferedWriter writer = new BufferedWriter(
-								new FileWriter(folder + "/" + docid + "/" + media.getFormat()));
-						Files.copy(writer, media.getReaderData());
-						writer.close();
+		if (objForm.getTglmulai().compareTo(tpb.getTglmulai()) >= 0
+				&& objForm.getTglakhir().compareTo(tpb.getTglakhir()) <= 0) {
+			Session session = StoreHibernateUtil.openSession();
+			Transaction trx = session.beginTransaction();
+			try {
+				objForm.setNilaiskp(getNilaiSkp(objForm));
+				objForm.setCreatedby(anggota.getNoanggota());
+				objForm.setCreatetime(new Date());
+				objForm.setStatus("WC");
+
+				if (media != null) {
+					try {
+						String docid = counterDao.getP2kbCounter(objForm.getMp2kbkegiatan().getIdkegiatan());
+						String folder = Executions.getCurrent().getDesktop().getWebApp()
+								.getRealPath(AppUtils.PATH_P2KB);
+						if (media.isBinary()) {
+							Files.copy(new File(folder + "/" + docid + "/" + media.getFormat()), media.getStreamData());
+						} else {
+							BufferedWriter writer = new BufferedWriter(
+									new FileWriter(folder + "/" + docid + "/" + media.getFormat()));
+							Files.copy(writer, media.getReaderData());
+							writer.close();
+						}
+						objForm.setDocid(docid);
+						objForm.setDocpath(AppUtils.PATH_P2KB + "/" + docid + "/" + media.getFormat());
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					objForm.setDocid(docid);
-					objForm.setDocpath(AppUtils.PATH_P2KB + "/" + docid + "/" + media.getFormat());
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
+
+				oDao.save(session, objForm);
+
+				Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk()
+						+ " and mp2kbkegiatan.mp2kbkegiatanpk = " + objForm.getMp2kbkegiatan().getMp2kbkegiatanpk());
+				if (book == null) {
+					book = new Tp2kb();
+					book.setTp2kbbook(tpb);
+					book.setTanggota(anggota);
+					book.setMp2kbkegiatan(objForm.getMp2kbkegiatan());
+					book.setTotalkegiatan(0);
+					book.setTotalskp(new BigDecimal(0));
+					book.setTotalwaiting(0);
+				}
+				if (isInsert) {
+					book.setTotalkegiatan(book.getTotalkegiatan() + 1);
+					book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
+					book.setTotalwaiting(book.getTotalwaiting() + 1);
+				} else {
+					book.setTotalskp(book.getTotalskp().subtract(nilaiskp_curr));
+					book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
+				}
+				book.setLastupdated(new Date());
+				p2kbDao.save(session, book);
+
+				trx.commit();
+
+				if (isInsert) {
+					Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
+				} else {
+					Clients.showNotification("Proses pembaruan data berhasil", "info", null, "middle_center", 1500);
+				}
+
+				doClose();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+			} finally {
+				session.close();
 			}
-			
-			oDao.save(session, objForm);
-			
-			Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk() + " and mp2kbkegiatan.mp2kbkegiatanpk = " + objForm.getMp2kbkegiatan().getMp2kbkegiatanpk());
-			if (book == null) {
-				book = new Tp2kb();
-				book.setTp2kbbook(tpb);
-				book.setTanggota(anggota);
-				book.setMp2kbkegiatan(objForm.getMp2kbkegiatan());
-				book.setTotalkegiatan(0);
-				book.setTotalskp(new BigDecimal(0));
-				book.setTotalwaiting(0);
-			}
-			if (isInsert) {
-				book.setTotalkegiatan(book.getTotalkegiatan()+1);
-				book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
-				book.setTotalwaiting(book.getTotalwaiting() + 1);
-			} else {
-				book.setTotalskp(book.getTotalskp().subtract(nilaiskp_curr));
-				book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
-			}
-			book.setLastupdated(new Date());
-			p2kbDao.save(session, book);
-			
-			trx.commit();
-			
-			if (isInsert) {
-				Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
-			} else {
-				Clients.showNotification("Proses pembaruan data berhasil", "info", null, "middle_center", 1500);
-			}
-			
-			doClose();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-					Messagebox.OK, Messagebox.ERROR);
-		} finally {
-			session.close();
+		} else {
+			Messagebox.show("Tanggal kegiatan diluar periode log.");
 		}
 	}
-	
+
 	public BigDecimal getNilaiSkp(Tp2kbb09 obj) throws Exception {
 		BigDecimal skp = new BigDecimal(0);
-		if (obj.getJeniskegiatan().equals("Memenuhi Perundang-Undangan") && obj.getStatuspeserta().equals("Ketua Tim")) {
+		if (obj.getJeniskegiatan().equals("Memenuhi Perundang-Undangan")
+				&& obj.getStatuspeserta().equals("Ketua Tim")) {
 			skp = new BigDecimal(3);
-		} else if (obj.getJeniskegiatan().equals("Memenuhi Perundang-Undangan") && obj.getStatuspeserta().equals("Anggota Tim")) {
+		} else if (obj.getJeniskegiatan().equals("Memenuhi Perundang-Undangan")
+				&& obj.getStatuspeserta().equals("Anggota Tim")) {
 			skp = new BigDecimal(2);
-		} else if (obj.getJeniskegiatan().equals("Memenuhi Perundang-Undangan") && obj.getStatuspeserta().equals("Kontributor")) {
+		} else if (obj.getJeniskegiatan().equals("Memenuhi Perundang-Undangan")
+				&& obj.getStatuspeserta().equals("Kontributor")) {
 			skp = new BigDecimal(1);
 		} else if (obj.getJeniskegiatan().equals("Surveilans") && obj.getStatuspeserta().equals("Ketua Tim")) {
 			skp = new BigDecimal(3);
@@ -204,16 +213,19 @@ public class P2kbB09Vm {
 			skp = new BigDecimal(2);
 		} else if (obj.getJeniskegiatan().equals("Analisis Risiko") && obj.getStatuspeserta().equals("Kontributor")) {
 			skp = new BigDecimal(1);
-		} else if (obj.getJeniskegiatan().equals("Rekomendasi Tindak Lanjut") && obj.getStatuspeserta().equals("Ketua Tim")) {
+		} else if (obj.getJeniskegiatan().equals("Rekomendasi Tindak Lanjut")
+				&& obj.getStatuspeserta().equals("Ketua Tim")) {
 			skp = new BigDecimal(3);
-		} else if (obj.getJeniskegiatan().equals("Rekomendasi Tindak Lanjut") && obj.getStatuspeserta().equals("Anggota Tim")) {
+		} else if (obj.getJeniskegiatan().equals("Rekomendasi Tindak Lanjut")
+				&& obj.getStatuspeserta().equals("Anggota Tim")) {
 			skp = new BigDecimal(2);
-		} else if (obj.getJeniskegiatan().equals("Rekomendasi Tindak Lanjut") && obj.getStatuspeserta().equals("Kontributor")) {
+		} else if (obj.getJeniskegiatan().equals("Rekomendasi Tindak Lanjut")
+				&& obj.getStatuspeserta().equals("Kontributor")) {
 			skp = new BigDecimal(1);
-		} 
+		}
 		return skp;
 	}
-	
+
 	@Command()
 	@NotifyChange("*")
 	public void doClose() {
@@ -222,7 +234,7 @@ public class P2kbB09Vm {
 		Event closeEvent = new Event("onClose", winP2kbb09, map);
 		Events.postEvent(closeEvent);
 	}
-	
+
 	public Validator getValidator() {
 		return new AbstractValidator() {
 

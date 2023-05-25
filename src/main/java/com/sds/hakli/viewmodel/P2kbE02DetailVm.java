@@ -52,6 +52,7 @@ import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Tp2kbe01;
 import com.sds.hakli.domain.Tp2kbe02;
+import com.sds.hakli.handler.P2KBHandler;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
@@ -135,7 +136,7 @@ public class P2kbE02DetailVm {
 
 				Div divKet1 = new Div();
 				divKet1.setSclass("note note-light");
-				Label lblCheckdate = new Label("Tanggal Pemeriksaan :");
+				Label lblCheckdate = new Label("Tanggal Pemeriksaan Tim P2KB : ");
 				lblCheckdate.setStyle("font-weight: bold");
 				divKet1.appendChild(lblCheckdate);
 				Label lblCheckdateVal = new Label(
@@ -146,7 +147,7 @@ public class P2kbE02DetailVm {
 
 				Div divKet2 = new Div();
 				divKet2.setSclass("note note-light");
-				Label lblCheckedby = new Label("Pemeriksa :");
+				Label lblCheckedby = new Label("Pemeriksa Tim P2KB : ");
 				lblCheckedby.setStyle("font-weight: bold");
 				divKet2.appendChild(lblCheckedby);
 				Label lblCheckedbyVal = new Label(data.getCheckedby());
@@ -177,6 +178,26 @@ public class P2kbE02DetailVm {
 
 				divKet3.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet3);
+
+				Div divKet5 = new Div();
+				divKet5.setSclass("note note-light");
+				Label lblCheckdatekomisi = new Label("Tanggal Pemeriksaan Komisi : ");
+				lblCheckdatekomisi.setStyle("font-weight: bold");
+				divKet5.appendChild(lblCheckdatekomisi);
+				Label lblCheckeddateValkomisi = new Label(data.getChecktimekomisi() != null
+						? new SimpleDateFormat("dd MMM yyyy").format(data.getChecktimekomisi())
+						: "");
+				divKet5.appendChild(lblCheckeddateValkomisi);
+				vlayoutKet.appendChild(divKet5);
+
+				Div divKet6 = new Div();
+				divKet6.setSclass("note note-light");
+				Label lblCheckedbykomisi = new Label("Pemeriksa Komisi : ");
+				lblCheckedbykomisi.setStyle("font-weight: bold");
+				divKet6.appendChild(lblCheckedbykomisi);
+				Label lblCheckedbyValkomisi = new Label(data.getCheckedbykomisi());
+				divKet6.appendChild(lblCheckedbyValkomisi);
+				vlayoutKet.appendChild(divKet6);
 
 				Div divKet4 = new Div();
 				hlayout = new Hlayout();
@@ -346,9 +367,11 @@ public class P2kbE02DetailVm {
 					}
 				});
 				
-				divAction.appendChild(btEdit);
-				divAction.appendChild(new Separator("vertical"));
-				divAction.appendChild(btDel);
+				if (data.getStatus().equals(AppUtils.STATUS_WAITCONFIRM)) {
+					divAction.appendChild(btEdit);
+					divAction.appendChild(new Separator("vertical"));
+					divAction.appendChild(btDel);
+				}
 				row.getChildren().add(divAction);
 				
 				totalskp = totalskp.add(data.getNilaiskp());
@@ -365,31 +388,29 @@ public class P2kbE02DetailVm {
 			Session session = StoreHibernateUtil.openSession();
 			Transaction trx = session.beginTransaction();
 
-			if(approvetype.equals("T")) {
-				p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
-				
-				if(action.equals("A")) {
-					p2kb.setTotaltimapprove(p2kb.getTotaltimapprove() + 1);
+			if (approvetype.equals("T")) {
+				if (action.equals("A")) {
 					obj.setStatus(AppUtils.STATUS_APPROVEDTIM);
-				}else {
+				} else {
 					obj.setStatus(AppUtils.STATUS_REJECTEDTIM);
 				}
-				
 				obj.setMemo(memotim);
+				obj.setCheckedby(anggota.getNama());
+				obj.setChecktime(new Date());
 			} else {
-				p2kb.setTotaltimapprove(p2kb.getTotaltimapprove() - 1);
-				
-				if(action.equals("A"))
+				if (action.equals("A"))
 					obj.setStatus(AppUtils.STATUS_APPROVEDKOMISI);
 				else
 					obj.setStatus(AppUtils.STATUS_REJECTEDKOMISI);
-				
+
 				obj.setMemokomisi(memotim);
+				obj.setCheckedbykomisi(anggota.getNama());
+				obj.setChecktimekomisi(new Date());
 			}
+
+			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action);
 			new Tp2kbDAO().save(session, p2kb);
 
-			obj.setCheckedby(anggota.getNama());
-			obj.setChecktime(new Date());
 			new Tp2kbE02DAO().save(session, obj);
 			
 			totalskp = totalskp.subtract(obj.getNilaiskp());

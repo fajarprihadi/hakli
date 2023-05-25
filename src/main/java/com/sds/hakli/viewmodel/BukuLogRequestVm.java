@@ -118,7 +118,6 @@ public class BukuLogRequestVm {
 
 						Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 						Date d2 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
-						;
 
 						System.out.println(d1 + ", " + d2);
 						if (d1.compareTo(d2) < 0) {

@@ -1,6 +1,7 @@
 package com.sds.hakli.viewmodel;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -44,6 +45,8 @@ public class LetterRecVm {
 	private String nama;
 
 	private Integer pageTotalSize;
+	
+	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Wire
 	private Grid grid;
@@ -60,6 +63,8 @@ public class LetterRecVm {
 				row.getChildren().add(new Label(String.valueOf(index + 1)));
 				row.getChildren().add(new Label(data.getTanggota().getNoanggota()));
 				row.getChildren().add(new Label(data.getTanggota().getNama()));
+				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglmulai())));
+				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
 				
 				Button btLetter = new Button("Download");
