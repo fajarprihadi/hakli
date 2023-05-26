@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suratrekomendasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ca554310-f762-46dd-96b5-0dbd7c939898">
-	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="332"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
-	<field name="nama" class="java.lang.String"/>
-	<field name="noanggota" class="java.lang.String"/>
+	<parameter name="CURRENTDATE" class="java.lang.String"/>
+	<field name="tanggota.nama" class="java.lang.String"/>
+	<field name="tanggota.noanggota" class="java.lang.String"/>
 	<field name="nostr" class="java.lang.String"/>
-	<field name="cabang" class="java.lang.String"/>
+	<field name="tanggota.mcabang.cabang" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -72,7 +73,7 @@ Di - Jakarta
 			</staticText>
 			<textField>
 				<reportElement x="0" y="293" width="555" height="15" uuid="882ebdc6-67af-4a25-b9f0-058652cd5353"/>
-				<textFieldExpression><![CDATA["Nama                       	: " + $F{nama}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nama                       	: " + $F{tanggota.nama}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1" y="307" width="555" height="15" uuid="e15911ee-56b5-43f8-bc2a-c165140d5b51"/>
@@ -80,11 +81,11 @@ Di - Jakarta
 			</textField>
 			<textField>
 				<reportElement x="1" y="321" width="555" height="15" uuid="100a20a0-234e-4c89-9d3e-9bb6c05b1dbd"/>
-				<textFieldExpression><![CDATA["Nomor KTA                  	: " + $F{noanggota}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nomor KTA                  	: " + $F{tanggota.noanggota}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1" y="335" width="555" height="15" uuid="c5b3e5d0-fdb8-4415-bd04-11d611b21269"/>
-				<textFieldExpression><![CDATA["Tempat Kerja                   	: " + $F{cabang}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Tempat Kerja                   	: " + $F{tanggota.mcabang.cabang}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="372" width="554" height="67" uuid="b6c438ce-9b0c-4e67-a14f-f0d3c8483c65"/>
@@ -98,7 +99,7 @@ ketentuan yang berlaku.
 Atas perhatian dan kerja sama yang baik diucapkan terima kasih]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="259" y="461" width="296" height="27" uuid="82922c29-7c9c-4126-be4b-728ef57ef5ce"/>
+				<reportElement x="259" y="465" width="296" height="26" uuid="82922c29-7c9c-4126-be4b-728ef57ef5ce"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Ketua Umum
 Himpunan Ahli Kesehatan Lingkungan Indonesia]]></text>
@@ -127,9 +128,9 @@ NPWP : 66.863.590.7-013.000, Bank Mandiri no Rek : 126-00-0656146-7]]></text>
 				<textFieldExpression><![CDATA["No : " + $P{NOSURAT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="259" y="442" width="296" height="20" uuid="424ce447-4f9c-4959-b1c3-af63b9c3790b"/>
+				<reportElement x="259" y="451" width="296" height="15" uuid="2328e981-9114-4f8f-8347-85a65baed7d6"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMMM yyyy").format(new Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -95,8 +95,7 @@ public class VerifikasiKomisiDataVm {
 						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 							@Override
 							public void onEvent(Event event) throws Exception {
-								Event closeEvent = new Event("onClose", winVerifikasidata, null);
-								Events.postEvent(closeEvent);
+								doRefresh();
 							}
 
 						});

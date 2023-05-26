@@ -6,8 +6,8 @@
 		<caption>
 			<n:i class="fas fa-book"></n:i>
 			<n:span>Buku Log</n:span>
-		</caption>
-		<grid id="grid" sclass="z-sticky-header">
+		</caption> 
+		<grid id="grid" sclass="z-sticky-header" emptyMessage="${labels.common.emptymsg}">
 			<columns>
 				<column label="No" align="right" width="40px"
 					valign="top" />

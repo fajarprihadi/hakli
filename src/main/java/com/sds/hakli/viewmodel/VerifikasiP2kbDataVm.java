@@ -28,6 +28,7 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
@@ -60,9 +61,14 @@ public class VerifikasiP2kbDataVm {
 		Selectors.wireComponents(view, this, false);
 		objAnggota = (Tanggota) zkSession.getAttribute("anggota");
 		if (obj != null) {
-			this.obj = obj;
-			image.setSrc(AppUtils.PATH_PHOTO + "/" + objAnggota.getPhotolink());
-			image.setHeight("100px");
+			try {
+				this.obj = obj;
+				Tanggota tanggota = new TanggotaDAO().findByFilter("tanggotapk = " + obj.getTanggotapk());
+				image.setSrc(AppUtils.PATH_PHOTO + "/" + tanggota.getPhotolink());
+				image.setHeight("100px");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		doRefresh();
@@ -95,8 +101,7 @@ public class VerifikasiP2kbDataVm {
 						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 							@Override
 							public void onEvent(Event event) throws Exception {
-								Event closeEvent = new Event("onClose", winVerifikasidata, null);
-								Events.postEvent(closeEvent);
+								doRefresh();
 							}
 
 						});

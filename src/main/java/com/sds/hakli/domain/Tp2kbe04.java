@@ -52,6 +52,10 @@ public class Tp2kbe04 {
 	
 	private Date checktime;
 	
+	private String checkedbykomisi;
+
+	private Date checktimekomisi;
+	
 	@Id
 	@SequenceGenerator(name = "tp2kbe04_seq", sequenceName = "tp2kbe04_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kbe04_seq")
@@ -206,5 +210,21 @@ public class Tp2kbe04 {
 		this.memokomisi = memokomisi;
 	}
 
-	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getCheckedbykomisi() {
+		return checkedbykomisi;
+	}
+
+	public void setCheckedbykomisi(String checkedbykomisi) {
+		this.checkedbykomisi = checkedbykomisi;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getChecktimekomisi() {
+		return checktimekomisi;
+	}
+
+	public void setChecktimekomisi(Date checktimekomisi) {
+		this.checktimekomisi = checktimekomisi;
+	}		
 }

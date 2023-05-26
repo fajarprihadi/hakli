@@ -1,6 +1,7 @@
 package com.sds.hakli.viewmodel;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -28,14 +29,15 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 
 import com.sds.hakli.dao.TcounterengineDAO;
-import com.sds.hakli.dao.Tp2kbDAO;
-import com.sds.hakli.domain.Vrecp2kb;
+import com.sds.hakli.dao.Tp2kbbookDAO;
+import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
+import com.sds.utils.StringUtils;
 
 public class LetterRecVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	private List<Vrecp2kb> objList = new ArrayList<>();
+	private List<Tp2kbbook> objList = new ArrayList<>();
 
 	private String filter;
 	private String orderby;
@@ -43,6 +45,8 @@ public class LetterRecVm {
 	private String nama;
 
 	private Integer pageTotalSize;
+	
+	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Wire
 	private Grid grid;
@@ -52,13 +56,15 @@ public class LetterRecVm {
 		Selectors.wireComponents(view, this, false);
 		
 		doReset();
-		grid.setRowRenderer(new RowRenderer<Vrecp2kb>() {
+		grid.setRowRenderer(new RowRenderer<Tp2kbbook>() {
 
 			@Override
-			public void render(Row row, Vrecp2kb data, int index) throws Exception {
+			public void render(Row row, Tp2kbbook data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index + 1)));
-				row.getChildren().add(new Label(data.getNoanggota()));
-				row.getChildren().add(new Label(data.getNama()));
+				row.getChildren().add(new Label(data.getTanggota().getNoanggota()));
+				row.getChildren().add(new Label(data.getTanggota().getNama()));
+				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglmulai())));
+				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
 				
 				Button btLetter = new Button("Download");
@@ -71,19 +77,24 @@ public class LetterRecVm {
 					@Override
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> parameters = new HashMap<>();
-						List<Vrecp2kb>dataList = new ArrayList<>();
+						List<Tp2kbbook>dataList = new ArrayList<>();
+						String currentdate = "";
 						
 						Map<Integer, String> mapRomawi = new HashMap<>();
 						
 						int year = Calendar.getInstance().get(Calendar.YEAR);
 						int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-						mapRomawi = AppData.getAngkaRomawi();
+						int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 						
-						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM/PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
+						mapRomawi = AppData.getAngkaRomawi();
+						currentdate = day + " " + StringUtils.getMonthLabel(month) + " " + year;
+						
+						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
 						dataList.add(data);
 						zkSession.setAttribute("objList", dataList);
 						
 						parameters.put("NOSURAT", nosurat);
+						parameters.put("CURRENTDATE", currentdate);
 						parameters.put("TTD_KETUAUMUM",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
 						parameters.put("LOGO",
@@ -106,13 +117,13 @@ public class LetterRecVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "totalwaiting = 0 and totaltimapprove = 0";
-			orderby = "nama";
+			filter = "TOTALSKP > 5";
+			orderby = "tp2kbbookpk";
 
 			if (nama != null && nama.trim().length() > 0)
 				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
 
-			objList = new Tp2kbDAO().listRecLetter(filter, orderby);
+			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {

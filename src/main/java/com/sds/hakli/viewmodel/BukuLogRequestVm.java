@@ -27,6 +27,7 @@ import org.zkoss.zul.Grid;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
@@ -38,16 +39,16 @@ import com.sds.hakli.domain.Tp2kbbook;
 public class BukuLogRequestVm {
 	private Session session = Sessions.getCurrent();
 	private Tanggota obj;
-	
+
 	List<Tp2kbbook> objList = new ArrayList<>();
-	
+
 	private String filter;
 	private String orderby;
-	
+
 	private Integer pageTotalSize;
-	
+
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd MMMM yyyy");
-	
+
 	@Wire
 	private Grid grid;
 	@Wire
@@ -57,7 +58,7 @@ public class BukuLogRequestVm {
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		obj = (Tanggota) session.getAttribute("anggota");
-		
+
 		doReset();
 		grid.setRowRenderer(new RowRenderer<Tp2kbbook>() {
 
@@ -68,10 +69,10 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglmulai())));
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(data.getStatus().equals("Y") ? "Yes" : "No"));
-				
+
 				Div div = new Div();
 				Hlayout hlayout = new Hlayout();
-				
+
 				Button btEdit = new Button("Edit");
 				btEdit.setIconSclass("z-icon-edit");
 				btEdit.setSclass("btn btn-primary btn-sm");
@@ -98,7 +99,7 @@ public class BukuLogRequestVm {
 						});
 					}
 				});
-				
+
 				Button btLog = new Button("Buku Log");
 				btLog.setIconSclass("z-icon-book");
 				btLog.setSclass("btn btn-success btn-sm");
@@ -112,14 +113,14 @@ public class BukuLogRequestVm {
 						Window win = new Window();
 						map.put("obj", obj);
 						map.put("book", data);
-						
+
 						SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-						
+
 						Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-						Date d2 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));;
-						
+						Date d2 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
+
 						System.out.println(d1 + ", " + d2);
-						if(d1.compareTo(d2) < 0 ) {
+						if (d1.compareTo(d2) < 0) {
 							win = (Window) Executions.createComponents("/view/p2kb/bukulog.zul", null, map);
 							win.setWidth("90%");
 							win.setClosable(true);
@@ -146,45 +147,50 @@ public class BukuLogRequestVm {
 
 							});
 						}
-						
+
 					}
 				});
-				
+
 				hlayout.appendChild(btLog);
 				hlayout.appendChild(btEdit);
 				div.appendChild(hlayout);
-				
+
 				row.getChildren().add(div);
 			}
 		});
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doAdd() {
-		Map<String, Object> map = new HashMap<>();
-		Window win = new Window();
-		map.put("obj", obj);
-		win = (Window) Executions.createComponents("/view/p2kb/bukulogform.zul", null, map);
-		win.setWidth("70%");
-		win.setClosable(true);
-		win.doModal();
-		win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-			@Override
-			public void onEvent(Event event) throws Exception {
-				doReset();
-			}
+		try {
+			Map<String, Object> map = new HashMap<>();
+			Window win = new Window();
+			map.put("obj", obj);
+			win = (Window) Executions.createComponents("/view/p2kb/bukulogform.zul", null, map);
+			win.setWidth("70%");
+			win.setClosable(true);
+			win.doModal();
+			win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+				@Override
+				public void onEvent(Event event) throws Exception {
+					doReset();
+				}
 
-		});
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
 			filter = "tanggotafk = " + obj.getTanggotapk();
 			orderby = "tglmulai";
-			
+
 			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
@@ -192,7 +198,7 @@ public class BukuLogRequestVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doReset() {

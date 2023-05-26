@@ -44,6 +44,9 @@
 				<column label="${labels.common.no}" align="right" width="40px" />
 				<column label="${labels.anggota.noanggota}" align="center" width="150px"/>
 				<column label="${labels.anggota.nama}" />
+				<column label="Tgl Mulai" align="center" width="150px" />
+				<column label="Tgl Berakhir" align="center"
+					width="150px" />
 				<column label="Total SKP" align="right" width="150px"/>
 				<column label="Action" align="center" width="150px"/>
 			</columns>
