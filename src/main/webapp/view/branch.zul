@@ -43,11 +43,11 @@
 							<label value="Provinsi (*)" />
 							<vlayout>
 								<combobox id="cbRegion"
-									selectedItem="@bind(e.mprovinsi)" model="@load(vm.provModel)" width="100%">
+									selectedItem="@bind(e.mprov)" model="@load(vm.provModel)" width="100%">
 									<template name="model"
-										var="mprovinsi">
+										var="mprov">
 										<comboitem
-											label="@load(mprovinsi.provname)" />
+											label="@load(mprov.provname)" />
 									</template>
 								</combobox>
 								<label style="color:gray"

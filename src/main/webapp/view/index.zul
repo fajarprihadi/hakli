@@ -1,393 +1,299 @@
 <?link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" ?>
-<?link rel="shortcut icon" type="image/x-icon" href="/img/app_icon.ico" ?>
 <?link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" ?>
+<!--
+  ~ Irsal Hakim Alamsyah
+  ~ @irsalha
+  ~ 12 - 4 - 2023
+  -->
+
 <!-- MDB -->
 <?link rel="stylesheet" href="/mdb/css/mdb.min.css" ?>
 <!-- Custom styles -->
 <?link rel="stylesheet" href="/mdb/css/admin.css" ?>
+<?link rel="stylesheet" type="text/css" href="/assets/css/custom.css?v=69" ?>
 
 <?meta charset="UTF-8" ?>
 <?meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" ?>
 <?meta http-equiv="x-ua-compatible" content="ie=edge" ?>
 
 <zk xmlns:n="native">
-	<zscript>
-	com.sds.hakli.domain.Tanggota anggota = (com.sds.hakli.domain.Tanggota) session.getAttribute("anggota");
-	if (anggota == null)
-		Executions.sendRedirect("/timeout.zul");
-</zscript>
-	<div
-		viewModel="@id('vm')@init('com.sds.hakli.viewmodel.UserInitializationVm')">
-		<n:header>
-			<!-- Sidebar -->
-			<n:nav id="sidebarMenu"
-				class="collapse d-lg-block sidebar collapse bg-white mt-3">
+    <zscript>
+        com.sds.hakli.domain.Tanggota oUser = (com.sds.hakli.domain.Tanggota) session.getAttribute("anggota");
+        if (oUser == null)
+        Executions.sendRedirect("/timeout.zul");
+    </zscript>
+    <div
+            viewModel="@id('vm')@init('com.sds.hakli.viewmodel.UserInitializationVm')">
+        <n:header>
+            <!-- Sidebar -->
+            <n:nav id="sidebarMenu"
+                   class="collapse d-lg-block sidebar collapse bg-white i-sidebar ">
 
-				<!-- <div class="position-sticky">
-					<n:br /> -->
-					<div class="accordion accordion-flush" style="overflow-y: auto; height: 100%"
-						id="divAccord">
-						<div class="accordion-item">
-							<n:h2 class="accordion-header profil"
-								id="flush-headingOne">
-								<n:button
-									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target=".colapse-profil"
-									aria-expanded="false" aria-controls="flush-collapseOne">
-									Profil
-								</n:button>
-							</n:h2>
-							<n:div id="flush-collapseOne"
-								class="accordion-collapse collapse colapse-profil"
-								aria-labelledby="flush-headingOne"
-								data-mdb-parent=".profil">
-								<div class="accordion-body">
-									<div id="divMenuAnggota"
-										class="list-group list-group-flush mx-3 mt-4">
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/anggota/anggotaedit.zul', menu='anggota', index=0)"
-											class="list-group-item list-group-item-action py-2 ripple active">
-											<n:i
-												class="fas fa-user-graduate fa-fw me-3">
-											</n:i>
-											<n:span>Data Diri</n:span>
-										</a>
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/payment/payment.zul', menu='anggota', index=1)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-money-check fa-fw me-3">
-											</n:i>
-											<n:span>
-												Pembayaran Iuran
-											</n:span>
-										</a>
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/anggota/mutasi.zul', menu='anggota', index=2)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-suitcase-rolling fa-fw me-3">
-											</n:i>
-											<n:span>
-												Mutasi
-											</n:span>
-										</a>
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/anggota/cetakkta.zul', menu='anggota', index=3)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-id-card fa-fw me-3">
-											</n:i>
-											<n:span>
-												Cetak KTA
-											</n:span>
-										</a>
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/anggota/anggotachangepass.zul', menu='anggota', index=4)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-lock fa-fw me-3">
-											</n:i>
-											<n:span>
-												Ubah Password
-											</n:span>
-										</a>
-									</div>
-								</div>
-							</n:div>
-						</div>
-						<div class="accordion-item">
-							<n:h2 class="accordion-header p2kb"
-								id="flush-headingTwo">
-								<n:button
-									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target=".collapse-p2kb"
-									aria-expanded="false" aria-controls="flush-collapseTwo">
-									P2KB
-								</n:button>
-							</n:h2>
-							<n:div id="flush-collapseTwo"
-								class="accordion-collapse collapse collapse-p2kb"
-								aria-labelledby="flush-headingTwo"
-								data-mdb-parent=".p2kb">
-								<div class="accordion-body">
-									<div id="divMenuP2KB"
-										class="list-group list-group-flush mx-3 mt-4">
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/p2kb/juknis.zul', menu='p2kb', index=0)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-book fa-fw me-3">
-											</n:i>
-											<n:span>Petunjuk Teknis</n:span>
-										</a>
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/p2kb/bukulogrequest.zul', menu='p2kb', index=1)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-suitcase fa-fw me-3">
-											</n:i>
-											<n:span>
-												Permohonan Melakukan P2KB
-											</n:span>
-										</a>
-										<!-- <a href="#"
-											onClick="@command('doRedirect', path='/view/p2kb/boranglog.zul', menu='p2kb', index=2)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-pen fa-fw me-3">
-											</n:i>
-											<n:span>
-												Borang Pengisian
-											</n:span>
-										</a>
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/p2kb/bukulog.zul', menu='p2kb', index=3)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-address-book fa-fw me-3">
-											</n:i>
-											<n:span>
-												Buku Log
-											</n:span>
-										</a> -->
-									</div>
-								</div>
-							</n:div>
-						</div>
-						
-						<div class="accordion-item">
-							<n:h2 class="accordion-header timp2kb"
-								id="flush-headingThree">
-								<n:button
-									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target=".collapse-timp2kb"
-									aria-expanded="false" aria-controls="flush-collapseThree">
-									Tim P2KB
-								</n:button>
-							</n:h2>
-							<n:div id="flush-collapseThree"
-								class="accordion-collapse collapse collapse-timp2kb"
-								aria-labelledby="flush-headingThree"
-								data-mdb-parent=".timp2kb">
-								<div class="accordion-body">
-									<div id="divMenuTimP2KB"
-										class="list-group list-group-flush mx-3 mt-4">
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/timp2kb/verifikasip2kb.zul', menu='timp2kb', index=0)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-check fa-fw me-3">
-											</n:i>
-											<n:span>Verifikasi P2KB</n:span>
-										</a>
-									</div>
-								</div>
-							</n:div>
-						</div>
-						
-						<div class="accordion-item">
-							<n:h2 class="accordion-header komisip2kb"
-								id="flush-headingFive">
-								<n:button
-									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target=".collapse-komisip2kb"
-									aria-expanded="false" aria-controls="flush-collapseFive">
-									Komisi P2KB
-								</n:button>
-							</n:h2>
-							<n:div id="flush-collapseFive"
-								class="accordion-collapse collapse collapse-komisip2kb"
-								aria-labelledby="flush-headingFive"
-								data-mdb-parent=".komisip2kb">
-								<div class="accordion-body">
-									<div id="divMenuKomisiP2KB"
-										class="list-group list-group-flush mx-3 mt-4">
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/komisip2kb/verifikasikomisi.zul', menu='komisip2kb', index=0)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-check-double fa-fw me-3">
-											</n:i>
-											<n:span>Pemeriksaan P2KB Anggota</n:span>
-										</a>
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/komisip2kb/letterrec.zul', menu='komisip2kb', index=1)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-envelope fa-fw me-3">
-											</n:i>
-											<n:span>Surat Rekomendasi P2KB</n:span>
-										</a>
-									</div>
-								</div>
-							</n:div>
-						</div>
-						
-						<div class="accordion-item">
-							<n:h2 class="accordion-header naskah"
-								id="flush-headingFour">
-								<n:button
-									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target=".colapse-naskah"
-									aria-expanded="false" aria-controls="flush-collapseFour">
-									Naskah
-								</n:button>
-							</n:h2>
-							<n:div id="flush-collapseFour"
-								class="accordion-collapse collapse colapse-naskah"
-								aria-labelledby="flush-headingFour"
-								data-mdb-parent=".naskah">
-								<div class="accordion-body">
-									<div id="divMenuNaskah"
-										class="list-group list-group-flush mx-3 mt-4">
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/naskah/sumpah.zul', menu='naskah', index=0)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-book fa-fw me-3">
-											</n:i>
-											<n:span>Naskah Sumpah</n:span>
-										</a>
-									</div>
-								</div>
-							</n:div>
-						</div>
-						
-						<div class="accordion-item">
-							<n:h2 class="accordion-header sisdmk"
-								id="flush-headingNine">
-								<n:button
-									class="accordion-button collapsed" type="button"
-									data-mdb-toggle="collapse" data-mdb-target=".collapse-sisdmk"
-									aria-expanded="false" aria-controls="flush-collapseNine">
-									SISDMK
-								</n:button>
-							</n:h2>
-							<n:div id="flush-collapseNine"
-								class="accordion-collapse collapse collapse-sisdmk"
-								aria-labelledby="flush-headingNine"
-								data-mdb-parent=".sisdmk">
-								<div class="accordion-body">
-									<div id="divMenuSisdmk"
-										class="list-group list-group-flush mx-3 mt-4">
-										<a href="#"
-											onClick="@command('doRedirect', path='/view/sisdmk/sisdmk.zul', menu='sisdmk', index=0)"
-											class="list-group-item list-group-item-action py-2 ripple">
-											<n:i
-												class="fas fa-check-square fa-fw me-3">
-											</n:i>
-											<n:span>Cek SISDMK</n:span>
-										</a>
-									</div>
-								</div>
-							</n:div>
-						</div>
+                <div class="accordion mt-2" id="divAccord"/>
 
-					</div>
+            </n:nav>
+            <!-- Sidebar -->
 
-				<!-- </div> -->
+            <!-- Navbar -->
+            <n:nav id="main-navbar"
+                   class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+                <!-- Container wrapper -->
+                <n:div class="container-fluid">
+                    <!-- Toggle button -->
+                    <n:button class="navbar-toggler tombolmenu"
+                              type="button" data-mdb-toggle="collapse"
+                              onClick="menuHide2()"
+                              data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu"
+                              aria-expanded="false" aria-label="Toggle navigation">
+                        <n:i class="fas fa-bars"></n:i>
+                    </n:button>
 
-			</n:nav>
-			<!-- Sidebar -->
+                    <!-- Toggle button atas-->
+                    <n:button class="tombolmenu d-none d-lg-block"
+                              style="border: 0;background-color: transparent;padding: 0.25rem 0.75rem;font-size: 1.25rem;line-height: 1;color: rgba(0,0,0,.55);"
+                              type="button"
+                              onClick="menuHide()"
+                              aria-controls="sidebarMenu"
+                              aria-expanded="false" aria-label="Toggle navigation">
+                        <n:i class="fas fa-bars"></n:i>
+                    </n:button>
 
-			<!-- Navbar -->
-			<n:nav id="main-navbar" 
-				class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-				<!-- Container wrapper -->
-				<n:div class="container-fluid" style="background-color: #262626">
-					<!-- Toggle button -->
-					<n:button class="navbar-toggler tombolmenu"
-						type="button" data-mdb-toggle="collapse"
-						data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu"
-						aria-expanded="false" aria-label="Toggle navigation">
-						<n:i class="fas fa-bars"></n:i>
-					</n:button>
+                    <!-- Brand -->
+                    <n:a class="navbar-brand"
+                         href="index.zul">
+                        <image src="/img/logo_hakli.png" height="40px"/>
+                    </n:a>
 
-					<!-- Brand -->
-					<n:a class="navbar-brand"
-						href="/hakli/view/index.zul">
-						<image src="/img/logo_hakli.png" height="50px" />
-						<!-- <image src="/img/hakli.png" height="45px" />
-						<n:span class="h1 fw-bold mb-0">HAKLI |</n:span>
-						<n:span class="h6 fw-bold mb-0">
-							Himpunan Ahli Kesehatan Lingkungan
-						</n:span>
-						 -->
-					</n:a>
+                    <!-- Right links -->
+                    <n:ul class="navbar-nav ms-auto d-flex flex-row">
+                        <!-- Avatar -->
+                        <n:li class="nav-item dropdown">
+                            <n:a
+                                    class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
+                                    href="#" id="navbarDropdownMenuLink" role="button"
+                                    data-mdb-toggle="dropdown" aria-expanded="false">
+                                <image src="/img/user.png"
+                                       height="30px" sclass="rounded-circle"/>
+                            </n:a>
+                            <n:ul
+                                    class="dropdown-menu dropdown-menu-end border border-black"
+                                    aria-labelledby="navbarDropdownMenuLink">
+                                <n:li>
+                                    <a sclass="dropdown-item">
 
-					<!-- Right links -->
-					<n:ul class="navbar-nav ms-auto d-flex flex-row">
-						<!-- Avatar -->
-						<n:li class="nav-item dropdown">
-							<n:a
-								class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
-								href="#" id="navbarDropdownMenuLink" role="button"
-								data-mdb-toggle="dropdown" aria-expanded="false">
-								<image src="/img/user.png" height="24px"
-									sclass="rounded-circle" />
-							</n:a>
-							<n:ul
-								class="dropdown-menu dropdown-menu-end"
-								aria-labelledby="navbarDropdownMenuLink">
-								<n:li>
-									<a sclass="dropdown-item"
-										onClick="@command('doLogout')">
-										Logout
-									</a>
-								</n:li>
-							</n:ul>
-						</n:li>
-					</n:ul>
-				</n:div>
-				<!-- Container wrapper -->
-			</n:nav>
-			<!-- Navbar -->
-		</n:header>
+                                        ${oUser.nama}
+                                        (${oUser.musergroup.usergroupname})
 
-		<n:main style="margin-top: 58px">
-			<n:div class="container pt-4">
-				<!-- Section: Main chart -->
-				<div id="divContent" />
-				<!-- Section: Main chart -->
+                                    </a>
 
-			</n:div>
-		</n:main>
-	</div>
-	<script type="text/javascript" src="/mdb/js/mdb.min.js"></script>
-	<!-- Custom scripts -->
-	<script type="text/javascript" src="/mdb/js/admin.js"></script>
+                                </n:li>
+                                <n:li>
+                                    <a sclass="dropdown-item"
+                                       onClick="@command('openProfile')">
+                                        Profile
+                                    </a>
+                                </n:li>
+                                <n:li>
+                                    <a sclass="dropdown-item"
+                                       onClick="@command('doLogout')">
+                                        Logout
+                                    </a>
+                                </n:li>
+                            </n:ul>
+                        </n:li>
+                    </n:ul>
+                </n:div>
+                <!-- Container wrapper -->
+            </n:nav>
+            <!-- Navbar -->
+        </n:header>
 
-	<script>
-		const hidenavbar = () => { let height =
-		document.getElementsByClassName("tombolmenu")[0].clientHeight;
+        <n:main style="margin-top: 58px;-webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;" class="i-main">
+            <n:div class="container pt-4">
+                <!-- Section: Main chart -->
+                <div class="divContent" style="transition: display 1s ease-in-out" id="divContent"/>
+                <!-- Section: Main chart -->
 
-		if(height != 0){
-		document.getElementsByClassName("tombolmenu")[0].click() } }
-	</script>
-
-	<script>
-		function noScroll(){ let now =
-		document.getElementsByTagName('body')[0].style.overflow;
-
-		if(now == ''){
-		document.getElementsByTagName('body')[0].style.overflow =
-		'hidden'; }else{
-		document.getElementsByTagName('body')[0].style.overflow = '' }
-
-		}
-	</script>
+            </n:div>
+        </n:main>
 
 
-	<script>
-		const toastTemplate1 = Swal.mixin({ toast: true, position:
-		'top-end', showConfirmButton: false, timer: 2200,
-		timerProgressBar: true, didOpen: (toast) => {
-		toast.addEventListener('mouseenter', Swal.stopTimer)
-		toast.addEventListener('mouseleave', Swal.resumeTimer) } });
+        <html>
 
-		function showToast1(icon, msg){ toastTemplate1.fire({ icon:
-		icon, title: msg }); }
-	</script>
+
+            <![CDATA[
+
+
+			<div id="loadingirsal" class="scene center-screen d-none"
+			style="--hue: 260; --saturation: 87;z-index: 10000000;
+			--lightness: 68">
+
+            <div style="    z-index: 80000;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(0, 0, 0);
+    opacity: 0.6;
+    cursor: wait;
+    position: fixed;" >  </div>
+
+			<div style="z-index: 90000;" class="loader">
+    <div>
+        <ul>
+            <li><svg viewBox="0 0 90 120" fill="currentColor">
+                    <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg></li>
+            <li><svg viewBox="0 0 90 120" fill="currentColor">
+                    <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg></li>
+            <li><svg viewBox="0 0 90 120" fill="currentColor">
+                    <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg></li>
+            <li><svg viewBox="0 0 90 120" fill="currentColor">
+                    <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg></li>
+            <li><svg viewBox="0 0 90 120" fill="currentColor">
+                    <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg></li>
+            <li><svg viewBox="0 0 90 120" fill="currentColor">
+                    <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg></li>
+        </ul>
+    </div><span>Loading</span>
+</div>
+
+			</div>
+
+			]]>
+
+
+        </html>
+
+    </div>
+    <script type="text/javascript" src="/mdb/js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript" src="/mdb/js/admin.js"></script>
+    <script src="/assets/js/bundle/sweetalert2.bundle.js"></script>
+    <script src="/assets/js/custom/notiflix-aio.js"></script>
+    <script src="/assets/js/custom/notiflix-block-aio-3.2.5.min.js"></script>
+    <script src="/assets/js/custom/notiflix-loading-aio-3.2.5.min.js"></script>
+    <script src="/assets/js/custom.js"></script>
+
+    <script>
+        const elDiv = document.getElementsByClassName('divContent')[0];
+
+        const animeKeluar = () => {
+            
+        }
+
+        const animeMasuk = () => {
+
+        }
+    </script>
+
+
+    <script>
+        const hidenavbar = () => { let height =
+        document.getElementsByClassName("tombolmenu")[0].clientHeight;
+
+        if(height != 0){
+        document.getElementsByClassName("tombolmenu")[0].click() } }
+
+
+    </script>
+
+    <script>
+        function noScroll(){
+        let now = document.getElementsByTagName('body')[0].style.overflow;
+        console.log(now);
+        if(now == ''){
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+        }else{
+        document.getElementsByTagName('body')[0].style.overflow = ''
+        }
+        }
+
+    </script>
+
+    <script>
+        const toastTemplate1 = Swal.mixin({ toast: true, position:
+        'top-end', showConfirmButton: false, timer: 2200,
+        timerProgressBar: true, didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer) } });
+
+        function showToast1(icon, msg){ toastTemplate1.fire({ icon:
+        icon, title: msg }); }
+    </script>
+
+    <script>
+        function disabledAll(nama, status){ let aa =
+        document.getElementsByClassName(nama);
+
+        for(const data of aa){ data.disabled = status; }
+
+        }
+    </script>
+
+    <script>
+        function copyByClass(className) {
+        let copyText = document.getElementsByClassName(className)[0];
+
+
+        navigator.clipboard.writeText(copyText.innerText);
+
+        }
+    </script>
+
+    <script>
+        function menuHide(){
+        let i_sidebar = document.getElementsByClassName("i-sidebar")[0];
+        let i_main = document.getElementsByClassName("i-main")[0];
+        i_sidebar.style.transition = "width 0.5s ease-in-out";
+        if(i_sidebar.clientWidth > 0){
+
+        i_sidebar.style.width = "0px"
+        i_main.style.paddingLeft = "0px";
+
+        }else{
+        i_sidebar.style.transition = "width 0.5s ease-in-out";
+        i_sidebar.style.width = "240px"
+        i_main.style.paddingLeft = "240px";
+
+        }
+        }
+
+        function menuHide2(){
+        console.log("ASdad")
+        let i_sidebar = document.getElementsByClassName("i-sidebar")[0];
+        let i_main = document.getElementsByClassName("i-main")[0];
+        i_sidebar.style.width = "100%"
+        i_sidebar.style.transition = "";
+        i_main.style.paddingLeft = "0px";
+
+        }
+    </script>
+    
+    <script>
+    
+    function disableAllElement(root){
+    	let rootEl = document.getElementsByClassName(root)[0];
+    	
+    	let listEl = rootEl.getElementsByTagName('input');
+    	
+    	for(const item of listEl){
+    		item.disabled = true;
+    	}
+    }
+    
+    </script>
+
 
 </zk>

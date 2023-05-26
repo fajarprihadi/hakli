@@ -112,6 +112,8 @@ public class Tanggota {
 	
 	private Date sisdmklastupdated;
 	
+	private Musergroup musergroup;
+	
 	@Id
 	@SequenceGenerator(name = "tanggota_seq", sequenceName = "tanggota_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tanggota_seq")
@@ -471,6 +473,15 @@ public class Tanggota {
 	}
 	public void setSisdmklastupdated(Date sisdmklastupdated) {
 		this.sisdmklastupdated = sisdmklastupdated;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="musergroupfk")
+	public Musergroup getMusergroup() {
+		return musergroup;
+	}
+	public void setMusergroup(Musergroup musergroup) {
+		this.musergroup = musergroup;
 	}
 	
 }

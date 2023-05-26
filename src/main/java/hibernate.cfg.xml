@@ -43,10 +43,13 @@
 		<mapping class="com.sds.hakli.domain.Mjenjang" />
 		<mapping class="com.sds.hakli.domain.Mkepegawaian" />
 		<mapping class="com.sds.hakli.domain.Mkepegawaiansub" />
+		<mapping class="com.sds.hakli.domain.Mmenu" />
 		<mapping class="com.sds.hakli.domain.Mp2kbranah" />
 		<mapping class="com.sds.hakli.domain.Mp2kbkegiatan" />
 		<mapping class="com.sds.hakli.domain.Mrumpun" />
 		<mapping class="com.sds.hakli.domain.Muser" />
+		<mapping class="com.sds.hakli.domain.Musergroup" />
+		<mapping class="com.sds.hakli.domain.Musergroupmenu" />
 		<mapping class="com.sds.hakli.domain.Tanggota" />
 		<mapping class="com.sds.hakli.domain.Tcounterengine" />
 		<mapping class="com.sds.hakli.domain.Tfeeshare" />
