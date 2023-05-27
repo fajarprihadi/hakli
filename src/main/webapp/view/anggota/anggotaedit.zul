@@ -416,26 +416,26 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-3"
 					role="tabpanel" aria-labelledby="ex1-tab-3">
-					<grid id="gridPekerjaan" sizedByContent="true" span="true">
+					<grid id="gridPekerjaan" span="true">
 						<columns sizable="true">
 							<column
-								label="${labels.pekerjaan.namakantor}"  hflex="min" />
-							<column label="${labels.area.prov}"  hflex="min" />
-							<column label="${labels.area.kab}"  hflex="min" />
-							<column label="${labels.area.alamat}"  hflex="min" />
-							<column label="${labels.pekerjaan.rumpun}"  hflex="min" />
+								label="${labels.pekerjaan.namakantor}" width="220px" />
+							<column label="${labels.area.prov}" width="110px" />
+							<column label="${labels.area.kab}" width="110px" />
+							<column label="${labels.area.alamat}" width="220px" />
+							<column label="${labels.pekerjaan.rumpun}" width="150px" />
 							<column
-								label="${labels.pekerjaan.kepegawaian}"  hflex="min" />
-							<column label="${labels.pekerjaan.jabatan}"  hflex="min" />
-							<column label="${labels.pekerjaan.nip}"  hflex="min" />
-							<column label="${labels.pekerjaan.period}"  hflex="min" />
-							<column label="${labels.pekerjaan.nosk}"  hflex="min" />
+								label="${labels.pekerjaan.kepegawaian}" width="120px" />
+							<column label="${labels.pekerjaan.jabatan}" width="105px" />
+							<column label="${labels.pekerjaan.nip}" width="100px" />
+							<column label="${labels.pekerjaan.period}" align="center" width="130px" />
+							<column label="${labels.pekerjaan.nosk}" width="100px" />
 							<column
-								label="${labels.pekerjaan.keterangan}"  hflex="min" />
-							<column label="${labels.pekerjaan.notelp}"  hflex="min" />
-							<column label="${labels.pekerjaan.nofax}"  hflex="min" />
+								label="${labels.pekerjaan.keterangan}" width="120px" />
+							<column label="${labels.pekerjaan.notelp}" width="100px" />
+							<column label="${labels.pekerjaan.nofax}" width="100px" />
 							<column label="${labels.common.action}"
-								align="center"  hflex="min" />
+								align="center" width="90px" />
 						</columns>
 						<rows />
 					</grid>
@@ -650,19 +650,19 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-4"
 					role="tabpanel" aria-labelledby="ex1-tab-4">
-					<grid id="gridPendidikan" sizedByContent="true" span="true">
+					<grid id="gridPendidikan" span="true">
 						<columns sizable="true">
 							<column
-								label="${labels.pendidikan.universitas}" />
+								label="${labels.pendidikan.universitas}" width="220px" />
 							<column
-								label="${labels.pendidikan.jenjang}" />
-							<column label="${labels.pendidikan.minat1}" />
-							<column label="${labels.pendidikan.minat2}" />
-							<column label="${labels.pendidikan.period}" align="center" />
+								label="${labels.pendidikan.jenjang}" width="100px" />
+							<column label="${labels.pendidikan.minat1}" width="150px" />
+							<column label="${labels.pendidikan.minat2}" width="150px" />
+							<column label="${labels.pendidikan.period}" align="center" width="180px" />
 							<column
-								label="${labels.pendidikan.noijazah}" />
+								label="${labels.pendidikan.noijazah}" width="180px" />
 							<column label="${labels.common.action}"
-								align="center" />
+								align="center" width="90px" />
 						</columns>
 					</grid>
 					<separator />

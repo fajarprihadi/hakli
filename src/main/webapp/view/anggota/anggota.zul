@@ -59,15 +59,16 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
-			<columns>
-				<column label="${labels.common.no}" align="right" width="40px" />
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
+			<columns sizable="true">
+				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.nama}" />
-				<column label="${labels.anggota.noktp}" />
-				<column label="${labels.anggota.cabang}" />
 				<column label="${labels.anggota.noanggota}" align="center" />
+				<column label="${labels.anggota.noktp}" align="center" />
+				<column label="${labels.area.prov}" />
+				<column label="${labels.anggota.cabang}" />
 				<column label="${labels.anggota.nostr}" />
-				<column label="${labels.common.action}" align="center" width="70px" />
+				<column label="${labels.common.action}" align="center" />
 			</columns>
 		</grid>
 

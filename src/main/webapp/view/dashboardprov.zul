@@ -1,0 +1,40 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winDashboardProv" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardProvVm')">
+		<caption>
+			<n:i class="fas fa-chart-line"></n:i>
+			<n:span>Sebaran Populasi Anggota Area Cabang</n:span>
+		</caption>
+		<div class="row">
+			<div class="col">
+				<charts id="chart" type="bar"
+					title="Sebaran Anggota Diseluruh Cabang" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<grid id="grid">
+					<columns>
+						<column label="No" align="right" width="40px" />
+						<column label="Cabang" />
+						<column label="Total Anggota" align="right" />
+					</columns>
+					<foot>
+						<footer />
+						<footer>
+							<label value="TOTAL"
+								style="font-size: 14px" />
+						</footer>
+						<footer>
+							<decimalbox value="@load(vm.totalpop)"
+								format="#,##0" readonly="true"
+								style="text-align: right; font-size: 14px" />
+						</footer>
+					</foot>
+				</grid>
+			</div>
+		</div>
+	</window>
+	<separator />
+</zk>

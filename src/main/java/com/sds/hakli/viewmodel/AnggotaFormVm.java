@@ -235,6 +235,8 @@ public class AnggotaFormVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			this.acttype = acttype;
+//			if (this.acttype == null)
+//				this.acttype = "edit";
 			Tanggota anggota = (Tanggota) zkSession.getAttribute("anggota");
 			if (anggota == null)
 				anggota = new Tanggota();
@@ -291,8 +293,8 @@ public class AnggotaFormVm {
 					row.getChildren().add(new Label(data.getPeminatan1()));
 					row.getChildren().add(new Label(data.getPeminatan2()));
 					String periode = "";
-					periode = (data.getPeriodeblawal() != null ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblawal())) : "") + " " + (data.getPeriodethawal() != null ? data.getPeriodethawal() : "") + " s/d "
-							+ (data.getPeriodeblakhir() != null ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblakhir())) : "") + " " + (data.getPeriodethakhir() != null ? data.getPeriodethakhir() : "");
+					periode = (data.getPeriodeblawal() != null && StringUtils.isNumeric(data.getPeriodeblawal()) ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblawal())) : "") + " " + (data.getPeriodethawal() != null ? data.getPeriodethawal() : "") + " s/d "
+							+ (data.getPeriodeblakhir() != null && StringUtils.isNumeric(data.getPeriodeblakhir()) ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblakhir())) : "") + " " + (data.getPeriodethakhir() != null ? data.getPeriodethakhir() : "");
 					row.getChildren().add(new Label(periode));
 					
 					Button btView = new Button();
@@ -477,7 +479,7 @@ public class AnggotaFormVm {
 			}
 			gridPendidikan.setModel(new ListModelList<>(this.pendidikans));
 			
-			if (acttype != null && acttype.equals("approval")) {
+			if (this.acttype != null && this.acttype.equals("approval")) {
 				tabApproval.setVisible(true);
 				List<Component> compExclude = new ArrayList<>();
 				compExclude.add(rgDecision);
@@ -486,12 +488,12 @@ public class AnggotaFormVm {
 				compExclude.add(tbMemo);
 				compExclude.add(btSaveApproval);
 				CompUtils.doDisableComponent(winAnggotaForm, true, compExclude);
-			} else if (acttype != null && acttype.equals("decided")) {
+			} else if (this.acttype != null && this.acttype.equals("decided")) {
 				CompUtils.doDisableComponent(winAnggotaForm, true, null);
-			} else if (acttype != null && acttype.equals("view")) {
+			} else if (this.acttype != null && this.acttype.equals("view")) {
 				tabApproval.setVisible(false);
 				CompUtils.doDisableComponent(winAnggotaForm, true, null);
-			} else if (acttype != null && acttype.equals("edit")) {
+			} else if (this.acttype != null && this.acttype.equals("edit")) {
 				tabApproval.setVisible(false);
 			} 
 		} catch (Exception e) {

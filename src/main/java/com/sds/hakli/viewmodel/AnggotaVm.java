@@ -1,7 +1,5 @@
 package com.sds.hakli.viewmodel;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,9 +9,12 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -23,7 +24,6 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Hlayout;
-import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Paging;
@@ -34,16 +34,18 @@ import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MprovDAO;
-import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprov;
+import com.sds.hakli.domain.Muser;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.model.TanggotaListModel;
 import com.sds.utils.AppUtils;
 
 public class AnggotaVm {
 	
-	private TanggotaDAO oDao = new TanggotaDAO();
+	private Session session = Sessions.getCurrent();
+	private Tanggota oUser;
+	
 	private TanggotaListModel model;
 	private ListModelList<Mcabang> cabangModel;
 	
@@ -56,8 +58,6 @@ public class AnggotaVm {
 	private Mprov region;
 	private Mcabang cabang;
 	
-	private SimpleDateFormat datetimeFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-	
 	@Wire
 	private Combobox cbRegion;
 	@Wire
@@ -68,8 +68,9 @@ public class AnggotaVm {
 	private Grid grid;
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("act") String act) {
 		Selectors.wireComponents(view, this, false);
+		oUser = (Tanggota) session.getAttribute("anggota");
 		
 		if (paging != null) {
 			paging.addEventListener("onPaging", new EventListener<Event>() {
@@ -88,37 +89,18 @@ public class AnggotaVm {
 			@Override
 			public void render(Row row, Tanggota data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf((AppUtils.PAGESIZE * pageStartNumber) + index + 1)));
-				
-				/*if (data.getPhotolink() != null) {
-					File file = new File(Executions.getCurrent().getDesktop().getWebApp()
-							.getRealPath(AppUtils.PATH_PHOTO) + "/" + data.getPhotolink());
-					if (file.exists()) {
-						Image img = new Image(AppUtils.PATH_PHOTO + "/" + data.getPhotolink());
-						img.setWidth("90px");
-						
-						Hlayout hlayout = new Hlayout();
-						hlayout.setValign("middle");
-						hlayout.appendChild(img);
-						hlayout.appendChild(new Label(data.getNama()));
-						row.getChildren().add(hlayout);
-					} else {
-						row.getChildren().add(new Label(data.getNama()));
-					}
-				} else {
-					row.getChildren().add(new Label(data.getNama()));
-				}*/
-				
 				row.getChildren().add(new Label(data.getNama()));
-				row.getChildren().add(new Label(data.getNoktp()));
-				row.getChildren().add(new Label(data.getMcabang().getCabang()));
 				row.getChildren().add(new Label(data.getNoanggota()));
+				row.getChildren().add(new Label(data.getNoktp()));
+				row.getChildren().add(new Label(data.getMcabang().getMprov().getProvname()));
+				row.getChildren().add(new Label(data.getMcabang().getCabang()));
 				row.getChildren().add(new Label(data.getNostr()));
-				Button btProcess = new Button();
-				btProcess.setIconSclass("z-icon-eye");
-				btProcess.setSclass("btn btn-primary btn-sm");
-				btProcess.setAutodisable("self");
-				btProcess.setTooltiptext("Detail");
-				btProcess.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+				Button btView = new Button();
+				btView.setIconSclass("z-icon-eye");
+				btView.setSclass("btn btn-primary btn-sm");
+				btView.setAutodisable("self");
+				btView.setTooltiptext("Detail");
+				btView.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event event) throws Exception {
@@ -140,7 +122,41 @@ public class AnggotaVm {
 						win.doModal();
 					}
 				});
-				row.getChildren().add(btProcess);
+				
+				Hlayout hlayout = new Hlayout();
+				hlayout.appendChild(btView);
+				
+				if (act != null && act.equals("role")) {
+					Button btSetRoles = new Button();
+					btSetRoles.setIconSclass("z-icon-user-secret");
+					btSetRoles.setSclass("btn btn-danger btn-sm");
+					btSetRoles.setAutodisable("self");
+					btSetRoles.setTooltiptext("Set Kewenangan");
+					btSetRoles.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							Map<String, Object> map = new HashMap<String, Object>();
+							map.put("obj", data);
+							Window win = (Window) Executions
+									.createComponents("/view/anggota/anggotarole.zul", null, map);
+							win.setClosable(true);
+							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+
+								@Override
+								public void onEvent(Event event) throws Exception {
+									doSearch();
+									BindUtils.postNotifyChange(AnggotaVm.this, "pageTotalSize");
+								}
+							});
+							win.doModal();
+						}
+					});
+					
+					hlayout.appendChild(btSetRoles);
+				}
+				
+				row.getChildren().add(hlayout);
 			}
 		});
 		
@@ -171,7 +187,12 @@ public class AnggotaVm {
 				filter += " and mcabangfk = " + cabang.getMcabangpk();
 			else filter += " and mcabang.mprovfk = " + region.getMprovpk();
 		}
-			
+		
+		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+			filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+		}
 
 		needsPageUpdate = true;
 		pageStartNumber = 0;
@@ -194,9 +215,14 @@ public class AnggotaVm {
 	public void doLoadCabang(@BindingParam("prov") Mprov prov) {
 		try {
 			if (prov != null) {
+				String filter = "";
+				if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN))
+					filter = "mcabangpk = " + oUser.getMcabang().getMcabangpk();
+				else filter = "mprov.mprovpk = " + prov.getMprovpk(); 
+				
 				cbCabang.setValue(null);
 				cabangModel = new ListModelList<>(
-						new McabangDAO().listByFilter("mprov.mprovpk = " + prov.getMprovpk(), "cabang"));
+						new McabangDAO().listByFilter(filter, "cabang"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -206,7 +232,9 @@ public class AnggotaVm {
 	public ListModelList<Mprov> getRegionModel() {
 		ListModelList<Mprov> oList = null;
 		try {
-			oList = new ListModelList<>(new MprovDAO().listAll());
+			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT))
+				oList = new ListModelList<>(new MprovDAO().listAll());
+			else oList = new ListModelList<>(new MprovDAO().listByFilter("mprovpk = " + oUser.getMcabang().getMprov().getMprovpk(), "provname"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

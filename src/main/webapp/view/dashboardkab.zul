@@ -1,0 +1,178 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winDashboardKab" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardKabVm')">
+		<caption>
+			<n:i class="fas fa-chart-line"></n:i>
+			<n:span>Dashboard Populasi Cabang</n:span>
+		</caption>
+
+		<div class="row">
+			<div class="col-md-7 col-sm-12">
+				<charts id="chart" type="column"
+					title="Anggota Aktif VS Anggota Non Aktif" />
+			</div>
+			<div class="col-md-5 col-sm-12" align="right">
+				<div class="card text-white bg-primary mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">Total Anggota</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totalanggota)" style="font-size: 20px" />
+					</div>
+				</div>
+				<separator />
+				<div class="card text-white bg-success mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">
+							Total Anggota Aktif
+						</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totalaktif)" style="font-size: 20px" />
+					</div>
+				</div>
+				<separator />
+				<div class="card text-white bg-danger mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">
+							Total Anggota Non Aktif
+						</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totalnonaktif)" style="font-size: 20px" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<separator />
+
+		<n:ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+			<n:li class="nav-item" role="presentation">
+				<n:a class="nav-link active" id="ex1-tab-1"
+					data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab"
+					aria-controls="ex1-tabs-1" aria-selected="true">
+					<n:i class="fas fa-user-tag"></n:i>
+					Anggota Aktif
+				</n:a>
+			</n:li>
+			<n:li class="nav-item" role="presentation">
+				<n:a class="nav-link" id="ex1-tab-2"
+					data-mdb-toggle="tab" href="#ex1-tabs-2" role="tab"
+					aria-controls="ex1-tabs-2" aria-selected="false">
+					<n:i class="far fa-address-card"></n:i>
+					Anggota Tidak Aktif
+				</n:a>
+			</n:li>
+		</n:ul>
+		<div class="tab-content" id="ex1-content">
+			<n:div class="tab-pane fade show active" id="ex1-tabs-1"
+				role="tabpanel" aria-labelledby="ex1-tab-1">
+				<groupbox mold="3d">
+					<caption label="Pencarian"
+						iconSclass="z-icon-search" />
+					<div class="row">
+						<div class="col">
+							<textbox placeholder="Nama"
+								value="@bind(vm.namaaktif)" onOK="@command('doSearchAktif')" width="100%" />
+						</div>
+						<div class="col">
+							<div class="row">
+								<div class="col">
+									<button label="Telusuri"
+										autodisable="self" iconSclass="z-icon-search" width="100%"
+										sclass="btn btn-success btn-sm"
+										onClick="@command('doSearchAktif')" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</groupbox>
+				<separator />
+				<div class="row">
+					<div class="col-md-10">
+						<paging id="pagingAktif" autohide="true" />
+					</div>
+					<div class="col-md-2" align="right">
+						<label value="${labels.common.totalrecord} :"
+							style="font-weight: bold" />
+						<label value="@load(vm.pageTotalSizeAktif)"
+							style="font-weight: bold" />
+					</div>
+				</div>
+				<grid id="gridAktif"
+					emptyMessage="${labels.common.emptymsg}" span="true">
+					<columns sizable="true">
+						<column label="${labels.common.no}"
+							align="right" width="40px" />
+						<column label="${labels.anggota.nama}" />
+						<column label="${labels.anggota.noanggota}"
+							align="center" />
+						<column label="${labels.anggota.nostr}" />
+						<column label="${labels.anggota.periodekta}"
+							align="center" />
+						<column label="${labels.common.action}"
+							align="center" width="80px" />
+					</columns>
+				</grid>
+			</n:div>
+			<n:div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel"
+				aria-labelledby="ex1-tab-2">
+				<groupbox mold="3d">
+					<caption label="Pencarian"
+						iconSclass="z-icon-search" />
+					<div class="row">
+						<div class="col">
+							<textbox placeholder="Nama"
+								value="@bind(vm.namanonaktif)" onOK="@command('doSearchNonAktif')" width="100%" />
+						</div>
+						<div class="col">
+							<div class="row">
+								<div class="col">
+									<button label="Telusuri"
+										autodisable="self" iconSclass="z-icon-search" width="100%"
+										sclass="btn btn-success btn-sm"
+										onClick="@command('doSearchNonAktif')" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</groupbox>
+				<separator />
+				<div class="row">
+					<div class="col-md-10">
+						<paging id="pagingNonAktif" autohide="true" />
+					</div>
+					<div class="col-md-2" align="right">
+						<label value="${labels.common.totalrecord} :"
+							style="font-weight: bold" />
+						<label value="@load(vm.pageTotalSizeNonAktif)"
+							style="font-weight: bold" />
+					</div>
+				</div>
+				<grid id="gridNonAktif"
+					emptyMessage="${labels.common.emptymsg}" span="true">
+					<columns sizable="true">
+						<column label="${labels.common.no}"
+							align="right" width="40px" />
+						<column label="${labels.anggota.nama}" />
+						<column label="${labels.anggota.noanggota}"
+							align="center" />
+						<column label="${labels.anggota.nostr}" />
+						<column label="${labels.anggota.periodekta}"
+							align="center" />
+						<column label="${labels.common.action}"
+							align="center" width="80px" />
+					</columns>
+				</grid>
+			</n:div>
+		</div>
+	</window>
+	<separator />
+</zk>

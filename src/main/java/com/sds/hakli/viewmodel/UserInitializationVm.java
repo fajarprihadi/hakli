@@ -18,8 +18,11 @@ import org.zkoss.zul.Html;
 import com.sds.hakli.dao.MusergroupmenuDAO;
 import com.sds.hakli.domain.Musergroupmenu;
 import com.sds.hakli.domain.Tanggota;
+import com.sds.utils.AppUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserInitializationVm {
 	
@@ -44,8 +47,24 @@ public class UserInitializationVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			oUser = (Tanggota) zkSession.getAttribute("anggota");
-			doRenderMenu();
-			//Executions.createComponents("/view/dashboard/dashboard.zul", divContent, null);
+			
+			if (oUser != null) {
+				doRenderMenu();
+				Map<String, Object> map = new HashMap<>();
+				
+				if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ANGGOTABIASA)) {
+					map.put("obj", oUser);
+					map.put("acttype", "edit");
+					
+					Executions.createComponents("/view/anggota/anggotaedit.zul", divContent, map);
+				} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+					Executions.createComponents("/view/dashboardprov.zul", divContent, null);
+				} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+					Executions.createComponents("/view/dashboardkab.zul", divContent, null);
+				} else {
+					Executions.createComponents("/view/dashboard.zul", divContent, null);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -126,7 +145,13 @@ public class UserInitializationVm {
 						
 						divContent.getChildren().clear();
 						divContent.setVisible(false);
-						Executions.createComponents(obj.getMmenu().getMenupath(), divContent, null);
+						
+						Map<String, String> map = new HashMap<String, String>();
+						map.put(obj.getMmenu().getMenuparamname(), obj.getMmenu().getMenuparamvalue());
+						
+						System.out.println(obj.getMmenu().getMenuparamname() + " : " + obj.getMmenu().getMenuparamvalue());
+						
+						Executions.createComponents(obj.getMmenu().getMenupath(), divContent, map);
 						divContent.setVisible(true);
 					}
 				});
@@ -138,8 +163,8 @@ public class UserInitializationVm {
 	
 	@Command
 	public void doLogout() {
-		if (zkSession.getAttribute("oUser") != null) {
-			zkSession.removeAttribute("oUser");
+		if (zkSession.getAttribute("anggota") != null) {
+			zkSession.removeAttribute("anggota");
 		}
 		Executions.sendRedirect("/logout.zul");
 	}

@@ -8,10 +8,8 @@ import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
-import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
-import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.chart.Charts;
 import org.zkoss.chart.Color;
@@ -42,30 +40,32 @@ import org.zkoss.zul.Window;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.domain.BranchTop;
 import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tanggota;
 
-public class DashboardPopCabangVm {
+public class DashboardProvVm {
 
 	private Session session = Sessions.getCurrent();
-	
+	private Tanggota oUser;
+
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
 
 	private long totalpop;
-	private BranchTop obj;
+	private String totalanggota;
 	private List<BranchTop> objList = new ArrayList<>();
-	
+
+	@Wire
+	private Window winDashboardProv;
 	@Wire
 	private Grid grid;
 	@Wire
 	private Charts chart;
-	@Wire
-	private Window winPopCabang;
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") BranchTop obj) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
-		
-		this.obj = obj;
-		
+
+		oUser = (Tanggota) session.getAttribute("anggota");
+
 		grid.setRowRenderer(new RowRenderer<BranchTop>() {
 
 			@Override
@@ -75,18 +75,28 @@ public class DashboardPopCabangVm {
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotal())));
 				
 				totalpop += data.getTotal();
-				BindUtils.postNotifyChange(DashboardPopCabangVm.this, "totalpop");
+				BindUtils.postNotifyChange(DashboardProvVm.this, "totalpop");
 			}
 		});
-
+		
+		doCount();
 		doBranchTop();
 		doChart();
 	}
 
+	@NotifyChange("totalanggota")
+	public void doCount() {
+		try {
+			totalanggota = NumberFormat.getInstance().format(anggotaDao.pageCount("statusreg = '3' and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void doBranchTop() {
 		try {
 			totalpop = 0;
-			objList = anggotaDao.listBranchByProv(obj.getId());
+			objList = anggotaDao.listBranchByProv(oUser.getMcabang().getMprov().getMprovpk());
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,7 +109,7 @@ public class DashboardPopCabangVm {
 			for (BranchTop obj : objList) {
 				 model.setValue(obj.getName(), obj.getName(), obj.getTotal());
 			}
-	        chart.setSubtitle("Provinsi " + obj.getName());
+	        chart.setSubtitle("Provinsi " + oUser.getMcabang().getMprov().getProvname());
 			chart.setModel(model);
 	        chart.getXAxis().setTitle("");
 	        
@@ -109,32 +119,19 @@ public class DashboardPopCabangVm {
 	        yAxis.getTitle().setAlign("high");
 	        yAxis.getLabels().setOverflow("justify");
 	        
-	        //chart.getTooltip().setValueSuffix(" millions");
-	        
 	        chart.getPlotOptions().getBar().getDataLabels().setEnabled(true);
-	        
-//	        Legend legend = chart.getLegend();
-//	        legend.setLayout("vertical");
-//	        legend.setAlign("right");
-//	        legend.setVerticalAlign("top");
-//	        legend.setX(-40);
-//	        legend.setY(80);
-//	        legend.setFloating(true);
-//	        legend.setBorderWidth(1);
-//	        legend.setBackgroundColor("#FFFFFF");
-//	        legend.setShadow(true);
-	        
 	        chart.getCredits().setEnabled(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	@Command
-	public void doBack() {
-		Component comp = winPopCabang.getParent();
-		comp.getChildren().clear();
-		Executions.createComponents("/view/dashboard.zul", comp, null);
+
+	public String getTotalanggota() {
+		return totalanggota;
+	}
+
+	public void setTotalanggota(String totalanggota) {
+		this.totalanggota = totalanggota;
 	}
 
 	public long getTotalpop() {

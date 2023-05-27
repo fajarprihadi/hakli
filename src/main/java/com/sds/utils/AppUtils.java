@@ -12,6 +12,14 @@ public class AppUtils {
 
 	public static final int PAGESIZE = 20;
 	public static final String USERS_PASSWORD_DEFAULT = "123456";
+	
+	public static final String ANGGOTA_ROLE_ADMIN = "ADM";
+	public static final String ANGGOTA_ROLE_ANGGOTABIASA = "AB";
+	public static final String ANGGOTA_ROLE_PENGURUSPUSAT = "PPU";
+	public static final String ANGGOTA_ROLE_PENGURUSPROVINSI = "PPR";
+	public static final String ANGGOTA_ROLE_PENGURUSKABUPATEN = "PKA";
+	public static final String ANGGOTA_ROLE_KOMISIP2KB = "KP2";
+	public static final String ANGGOTA_ROLE_TIMP2KB = "TP2";
 
 	public static final String STATUS_ANGGOTA_REG = "1";
 	public static final String STATUS_ANGGOTA_REG_PAYMENT = "2";
