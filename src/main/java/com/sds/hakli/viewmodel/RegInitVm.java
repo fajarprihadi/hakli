@@ -1,5 +1,6 @@
 package com.sds.hakli.viewmodel;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +20,16 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.TanggotaDAO;
+import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.domain.Tanggota;
-import com.sds.hakli.domain.Tevent;
+import com.sds.hakli.domain.Tinvoice;
+import com.sds.utils.AppUtils;
 import com.sds.utils.StringUtils;
 
 public class RegInitVm {
 	
 	private TanggotaDAO oDao = new TanggotaDAO();
 	
-	private Tevent obj;
 	private String email;
 	private String nik;
 	
@@ -59,30 +61,32 @@ public class RegInitVm {
 				List<Tanggota> objList = oDao.listByFilter("noktp = '" + nik.trim() + "'", "tanggotapk desc");
 				if (objList.size() > 0) {
 					obj = objList.get(0);
-					if (obj.getStatusreg() != null && obj.getStatusreg().trim().length() > 0) {
+					if (obj.getStatusreg() != null && obj.getStatusreg().trim().length() > 0 && !obj.getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE)) {
+						page = "/regdone.zul";
 						if (obj.getStatusreg().equals("1")) {
-							Messagebox.show("Data NIK Anda sudah melakukan pendaftaran pada sistem keanggotaan HAKLI. \nSaat ini data pendaftaran Anda sedang dalam proses verifikasi. \nMohon ditunggu.", WebApps.getCurrent().getAppName(), Messagebox.OK,
-									Messagebox.INFORMATION);
+							map.put("regstatus", "waitver");
 						} else if (obj.getStatusreg().equals("2")) {
-							Messagebox.show("Data NIK Anda sudah melakukan pendaftaran pada sistem keanggotaan HAKLI. \nSilahkan menyelesaikan pendaftaran Anda dengan menyelesaikan pembayaran pendaftaran. \nCek e-Mail anda " + obj.getEmail() + " untuk melihat informasi tagihan.", WebApps.getCurrent().getAppName(), Messagebox.OK,
-									Messagebox.INFORMATION);
+							Tinvoice inv = new TinvoiceDAO().findByFilter("vano = '" + obj.getVareg() + "'");
+							if (inv != null && inv.getInvoicetype().equals(AppUtils.INVOICETYPE_REG) && inv.getInvoiceduedate().compareTo(new Date()) < 0) {
+								map.put("regstatus", "invexp");
+								map.put("inv", inv);
+							} else {
+								map.put("regstatus", "waitpay");
+							}
 						} else if (obj.getStatusreg().equals("3")) {
-							Messagebox.show("Data NIK sudah terdaftar pada sistem keanggotaan HAKLI. Silahkan login menggunakan user id dan password Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
-									Messagebox.INFORMATION);
+							map.put("regstatus", "aktif");
 						}
 					} else {
 						map.put("obj", obj);
-						map.put("regtype", "event");
-						winRegInit.getChildren().clear();
-						Executions.createComponents(page, winRegInit, map);
 					}
 				} else {
 					obj = new Tanggota();
 					obj.setNoktp(nik);
 					map.put("obj", obj);
-					winRegInit.getChildren().clear();
-					Executions.createComponents(page, winRegInit, map);
 				}
+				
+				winRegInit.getChildren().clear();
+				Executions.createComponents(page, winRegInit, map);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

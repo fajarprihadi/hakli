@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 
 import org.zkoss.zk.ui.Executions;
 
+import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.utils.AppData;
 
@@ -18,10 +19,10 @@ public class MailHandler implements Runnable {
 	private SimpleDateFormat filenameFormatter = new SimpleDateFormat("MMyyyy");
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	
-	private Tinvoice obj;
+	private Object obj;
 	private String bodymail;
 	
-	public MailHandler(Tinvoice obj, String bodymail) {
+	public MailHandler(Object obj, String bodymail) {
 		this.obj = obj;
 		this.bodymail = bodymail;
 	}
@@ -36,16 +37,6 @@ public class MailHandler implements Runnable {
 		String errormsg = "";
 		try {
 			MailBean mailbean = AppData.getSmtpParam();
-			mailbean.setAppid(obj.getTinvoicepk());
-			//mailbean.setSmtpname("mail.sdd.co.id");
-			//mailbean.setSmtpport(465);
-			//mailbean.setMailid("fajar.prihadi@swadharma.com");
-			//mailbean.setMailpassword("fprihadi3458");
-			//mailbean.setRecipient(obj.getTanggota().getEmail());
-			//mailbean.setFrom("HAKLI <fajar.prihadi@swadharma.com>");
-			
-			mailbean.setRecipient("fprihadi@gmail.com");
-			mailbean.setSubject(obj.getInvoicedesc());
 			
 			try {
 				if (obj != null) {
@@ -59,14 +50,30 @@ public class MailHandler implements Runnable {
 					}
 					br.close();
 					String bodymsg = template.toString();
-					bodymsg = bodymsg.replaceAll("%nama%", obj.getTanggota().getNama());
-					bodymsg = bodymsg.replaceAll("%email%", obj.getTanggota().getEmail());
-					bodymsg = bodymsg.replaceAll("%vano%", obj.getVano());
-					bodymsg = bodymsg.replaceAll("%invoiceno%", obj.getInvoiceno());
-					bodymsg = bodymsg.replaceAll("%invoiceamount%", NumberFormat.getInstance().format(obj.getInvoiceamount()));
-					bodymsg = bodymsg.replaceAll("%invoicedesc%", obj.getInvoicedesc());
-					bodymsg = bodymsg.replaceAll("%invoicedate%", dateLocalFormatter.format(obj.getInvoicedate()));
-					bodymsg = bodymsg.replaceAll("%invoiceduedate%", dateLocalFormatter.format(obj.getInvoiceduedate()));
+					
+					if (obj instanceof Tinvoice) {
+						mailbean.setRecipient(((Tinvoice)obj).getTanggota().getEmail());
+						mailbean.setSubject(((Tinvoice)obj).getInvoicedesc());
+						
+						bodymsg = bodymsg.replaceAll("%nama%", ((Tinvoice)obj).getTanggota().getNama());
+						bodymsg = bodymsg.replaceAll("%noanggota%", ((Tinvoice)obj).getTanggota().getNoanggota());
+						bodymsg = bodymsg.replaceAll("%email%", ((Tinvoice)obj).getTanggota().getEmail());
+						bodymsg = bodymsg.replaceAll("%vano%", ((Tinvoice)obj).getVano());
+						bodymsg = bodymsg.replaceAll("%invoiceno%", ((Tinvoice)obj).getInvoiceno());
+						bodymsg = bodymsg.replaceAll("%invoiceamount%", NumberFormat.getInstance().format(((Tinvoice)obj).getInvoiceamount()));
+						bodymsg = bodymsg.replaceAll("%invoicedesc%", ((Tinvoice)obj).getInvoicedesc());
+						bodymsg = bodymsg.replaceAll("%invoicedate%", dateLocalFormatter.format(((Tinvoice)obj).getInvoicedate()));
+						bodymsg = bodymsg.replaceAll("%invoiceduedate%", dateLocalFormatter.format(((Tinvoice)obj).getInvoiceduedate()));
+						
+					} else if (obj instanceof Tanggota) {
+						mailbean.setRecipient(((Tanggota)obj).getEmail());
+						mailbean.setSubject("Penolakan Permohonan Pendaftaran Keanggotaan HAKLI");
+						bodymsg = bodymsg.replaceAll("%nama%", ((Tanggota)obj).getNama());
+						bodymsg = bodymsg.replaceAll("%noanggota%", ((Tanggota)obj).getNoanggota());
+						bodymsg = bodymsg.replaceAll("%password%", ((Tanggota)obj).getPassword());
+						bodymsg = bodymsg.replaceAll("%regmemo%", ((Tanggota)obj).getRegmemo());
+					}
+					
 					mailbean.setBodymsg(bodymsg);
 				} 
 				

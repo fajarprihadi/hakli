@@ -626,6 +626,7 @@ public class AnggotaAddVm {
 									divForm.getChildren().clear();
 									Map<String, Object> map = new HashMap<>();
 									map.put("obj", objForm);
+									map.put("regstatus", "reg");
 									Executions.createComponents("/regdone.zul", divForm, map);
 								}
 							} catch (Exception e) {

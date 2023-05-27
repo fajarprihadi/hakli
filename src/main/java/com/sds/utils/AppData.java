@@ -3,6 +3,7 @@ package com.sds.utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -90,6 +91,14 @@ public class AppData {
 		else if (code.equals("DJARIDJ1"))
 			name = "Bank Syariah Indonesia";
 		return name;
+	}
+	
+	public static String passwordGenerator() {
+		String password = "";
+		Random rand = new Random();
+		password = String.valueOf(rand.nextInt(1000000)) + "000000";
+		password = password.substring(0, 6);
+		return password;
 	}
 	
 	public static String getInvoiceType(String code) {

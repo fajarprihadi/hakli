@@ -964,9 +964,7 @@ public class AnggotaFormVm {
 								noanggota = noanggota + StringUtils.checkDigit(Integer.parseInt(noanggota));
 								pribadi.setNoanggota(noanggota);
 								
-								Random rand = new Random();
-								String password = String.valueOf(rand.nextInt(1000000)) + "000000";
-								pribadi.setPassword(password.substring(0, 6));
+								pribadi.setPassword(AppData.passwordGenerator());
 								pribadi.setRegdecisiontime(new Date());
 								//pribadi.setPeriodekta(new Date());
 								oDao.save(session, pribadi);
@@ -1014,6 +1012,11 @@ public class AnggotaFormVm {
 					pribadi.setRegdecisiontime(new Date());
 					oDao.save(session, pribadi);
 					trx.commit();
+					
+					String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
+							.getRealPath("/themes/mail/mailregdecline.html");
+					new Thread(new MailHandler(pribadi, bodymail_path)).start();
+					
 					processinfo = "Proses penolakan pendaftaran anggota berhasil diproses.";
 					divProcessinfo.setVisible(true);
 				} catch (Exception e) {

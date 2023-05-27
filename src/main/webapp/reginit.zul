@@ -43,9 +43,6 @@
 
 								<!-- Email input -->
 								<div class="form mb-4">
-									<!-- <textbox value="@bind(vm.email)"
-										placeholder="Input alamat E-Mail Anda untuk memulai pendaftaran"
-										sclass="form-control form-control-lg" /> -->
 									<textbox value="@bind(vm.nik)"
 										placeholder="Input NIK Anda untuk memulai pendaftaran"
 										sclass="form-control form-control-lg" />
