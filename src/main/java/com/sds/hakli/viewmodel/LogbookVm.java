@@ -370,4 +370,12 @@ public class LogbookVm {
 		this.enddate = enddate;
 	}
 
+	public Tp2kbbook getTpb() {
+		return tpb;
+	}
+
+	public void setTpb(Tp2kbbook tpb) {
+		this.tpb = tpb;
+	}
+
 }

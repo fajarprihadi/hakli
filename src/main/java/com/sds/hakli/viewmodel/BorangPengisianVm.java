@@ -1,5 +1,7 @@
 package com.sds.hakli.viewmodel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,39 +32,40 @@ import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.Mp2kbkegiatanDAO;
 import com.sds.hakli.dao.Mp2kbranahDAO;
+import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Mp2kbkegiatan;
 import com.sds.hakli.domain.Mp2kbranah;
 import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
 
-public class BorangVm {
-	
+public class BorangPengisianVm {
+
 	private org.zkoss.zk.ui.Session session = Sessions.getCurrent();
 	private Muser oUser;
+	private Tanggota obj;
+
 	private Mp2kbkegiatanDAO kegiatanDao = new Mp2kbkegiatanDAO();
-	
+
 	private String filter;
 	private String kegiatan;
 	private Mp2kbranah ranah;
 	private Tp2kbbook tpb;
-	
+
 	@Wire
 	private Window winBorang;
 	@Wire
 	private Grid grid;
 	@Wire
 	private Combobox cbRanah;
-	
+
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("book") Tp2kbbook tpb) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		try {
 			oUser = (Muser) session.getAttribute("oUser");
-			
-			if (tpb != null) {
-				this.tpb = tpb;
-			}
-			
+			obj = (Tanggota) session.getAttribute("anggota");
+
 			grid.setRowRenderer(new RowRenderer<Mp2kbkegiatan>() {
 
 				@Override
@@ -86,13 +89,36 @@ public class BorangVm {
 					row.getChildren().add(btEdit);
 				}
 			});
-			
+
 			doReset();
+
+			tpb = new Tp2kbbookDAO().findByFilter("tanggotafk = " + obj.getTanggotapk() + "'"
+					+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "' BETWEEN TGLMULAI AND TGLAKHIR");
+			if (tpb == null) {
+				Map<String, Object> map = new HashMap<>();
+				Window win = new Window();
+				map.put("type", "permohonan");
+				win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+				win.setWidth("50%");
+				win.setClosable(true);
+				win.doModal();
+				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+					@Override
+					public void onEvent(Event event) throws Exception {
+						winBorang.getChildren().clear();
+						winBorang.setBorder(false);
+						Executions.createComponents("/view/p2kb/bukulogrequest.zul", winBorang, null);
+					}
+
+				});
+			} else {
+				tpb = new Tp2kbbook();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void refreshModel() {
 		try {
 			grid.setModel(new ListModelList<>(kegiatanDao.listByFilter(filter, "idkegiatan")));
@@ -100,7 +126,7 @@ public class BorangVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	public void doSearch() {
 		filter = "0=0";
@@ -112,7 +138,7 @@ public class BorangVm {
 		}
 		refreshModel();
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doReset() {
@@ -121,7 +147,7 @@ public class BorangVm {
 		cbRanah.setValue(null);
 		doSearch();
 	}
-	
+
 	public void doLoadPage(Mp2kbkegiatan obj) {
 		try {
 			String page = "";
@@ -250,16 +276,15 @@ public class BorangVm {
 				page = "p2kbe11.zul";
 				break;
 			}
-			
+
 			if (page.equals("")) {
-				Messagebox.show("Page not available. Please contact the administrator", WebApps.getCurrent().getAppName(),
-						Messagebox.OK, Messagebox.INFORMATION);
+				Messagebox.show("Page not available. Please contact the administrator",
+						WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.INFORMATION);
 			} else {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("obj", obj);
 				map.put("book", tpb);
-				Window win = (Window) Executions
-						.createComponents("/view/p2kb/" + page, null, map);
+				Window win = (Window) Executions.createComponents("/view/p2kb/" + page, null, map);
 				win.setClosable(true);
 				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 
@@ -271,13 +296,12 @@ public class BorangVm {
 				});
 				win.doModal();
 			}
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public ListModelList<Mp2kbranah> getRanahModel() {
 		ListModelList<Mp2kbranah> oList = null;
 		try {

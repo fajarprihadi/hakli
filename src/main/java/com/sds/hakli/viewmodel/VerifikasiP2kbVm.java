@@ -13,6 +13,8 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -29,9 +31,12 @@ import org.zkoss.zul.Window;
 import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Mprov;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Vp2kb;
 
 public class VerifikasiP2kbVm {
+	private Session session = Sessions.getCurrent();
+	private Tanggota obj;
 	
 	private List<Vp2kb> objList = new ArrayList<>();
 
@@ -49,7 +54,8 @@ public class VerifikasiP2kbVm {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
-
+		obj = (Tanggota) session.getAttribute("anggota");
+		
 		doReset();
 		grid.setRowRenderer(new RowRenderer<Vp2kb>() {
 
@@ -90,7 +96,7 @@ public class VerifikasiP2kbVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "0=0";
+			filter = "mcabangpk = " + obj.getMcabang().getMcabangpk();
 			orderby = "nama";
 			
 			if(nama != null && nama.trim().length() > 0)

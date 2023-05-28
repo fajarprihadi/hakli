@@ -7,25 +7,39 @@
 			<n:span>Buku Log</n:span>
 		</caption>
 		<groupbox>
-			<caption label="Informasi"/>
+			<caption label="Informasi" />
 			<grid>
 				<columns>
-					<column width="20%"/>
-					<column/>
+					<column width="20%" />
+					<column />
 				</columns>
 				<rows>
 					<row>
-						<label value="Tanggal Mulai Kegiatan"/>
-						<label value="@load(vm.startdate)"/>
+						<label value="Nama Anggota" />
+						<label value="@load(vm.tpb.tanggota.nama)" />
 					</row>
 					<row>
-						<label value="Tanggal Selesai Kegiatan"/>
-						<label value="@load(vm.enddate)"/>
+						<label value="Nomor STR" />
+						<label value="@load(vm.tpb.nostr)" />
 					</row>
+					<row>
+						<label value="Cabang" />
+						<label value="@load(vm.tpb.tanggota.mcabang.cabang)" />
+					</row>
+					<row>
+						<label value="Periode" />
+						<hlayout>
+							<label value="@load(vm.startdate)" />
+							<separator />
+							<label value="s/d" />
+							<label value="@load(vm.enddate)" />
+						</hlayout>
+					</row>
+
 				</rows>
 			</grid>
 		</groupbox>
-		<separator/>
+		<separator />
 		<div class="row" align="right">
 			<div class="col">
 				<button label="Tambah" autodisable="self"
@@ -33,8 +47,8 @@
 					onClick="@command('doAdd')" />
 			</div>
 		</div>
-		<separator/>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}"> 
+		<separator />
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
 			<columns>
 				<column label="No" align="right" width="50px" />
 				<column label="Nama Kegiatan" />

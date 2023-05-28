@@ -1,0 +1,80 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winBorang" border="normal" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BorangPengisianVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Borang Pengisian</n:span>
+		</caption>
+		<groupbox mold="3d">
+			<caption label="Pencarian" iconSclass="z-icon-search" />
+			<grid>
+				<columns>
+					<column width="20%" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="Nama Anggota" />
+						<label value="@load(vm.tpb.tanggota.nama)" />
+					</row>
+					<row>
+						<label value="Nomor STR" />
+						<label value="@load(vm.tpb.nostr)" />
+					</row>
+					<row>
+						<label value="Cabang" />
+						<label value="@load(vm.tpb.tanggota.mcabang.cabang)" />
+					</row>
+					<row>
+						<label value="Periode" />
+						<hlayout>
+							<label value="@load(vm.startdate)" />
+							<separator />
+							<label value="s/d" />
+							<label value="@load(vm.enddate)" />
+						</hlayout>
+					</row>
+
+				</rows>
+			</grid>
+			<div class="row">
+				<div class="col">
+					<textbox placeholder="Nama Kegiatan" value="@bind(vm.kegiatan)"
+						width="100%" maxlength="40" onOK="@command('doSearch')" />
+				</div>
+				<div class="col">
+					<combobox id="cbRanah" placeholder="Ranah"
+						model="@load(vm.ranahModel)" selectedItem="@bind(vm.ranah)"
+						width="100%">
+						<template name="model" var="mp2kbranah">
+							<comboitem label="@load(mp2kbranah.ranah)" />
+						</template>
+					</combobox>
+				</div>
+				<div class="col">
+					<div class="row">
+						<div class="col">
+							<button label="Telusuri" autodisable="self"
+								iconSclass="z-icon-search" width="100%"
+								sclass="btn btn-success btn-sm" onClick="@command('doSearch')" />
+						</div>
+						<div class="col">
+							<button label="Reset" autodisable="self"
+								iconSclass="z-icon-retweet" width="100%"
+								sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</groupbox>
+		<separator />
+		<grid id="grid">
+			<columns>
+				<column label="No" align="right" width="40px" />
+				<column label="Kegiatan" width="70%" />
+				<column label="Ranah" width="30%" />
+				<column label="Aksi" align="center" width="100px" />
+			</columns>
+		</grid>
+	</window>
+</zk>
