@@ -32,13 +32,13 @@ import com.sds.hakli.dao.Mp2kbkegiatanDAO;
 import com.sds.hakli.dao.Mp2kbranahDAO;
 import com.sds.hakli.domain.Mp2kbkegiatan;
 import com.sds.hakli.domain.Mp2kbranah;
-import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
 
 public class BorangVm {
 	
 	private org.zkoss.zk.ui.Session session = Sessions.getCurrent();
-	private Muser oUser;
+	private Tanggota oUser;
 	private Mp2kbkegiatanDAO kegiatanDao = new Mp2kbkegiatanDAO();
 	
 	private String filter;
@@ -57,7 +57,7 @@ public class BorangVm {
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("book") Tp2kbbook tpb) {
 		Selectors.wireComponents(view, this, false);
 		try {
-			oUser = (Muser) session.getAttribute("oUser");
+			oUser = (Tanggota) session.getAttribute("anggota");
 			
 			if (tpb != null) {
 				this.tpb = tpb;
