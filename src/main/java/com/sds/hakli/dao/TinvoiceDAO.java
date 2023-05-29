@@ -22,7 +22,7 @@ public class TinvoiceDAO {
     	if (filter == null || "".equals(filter))
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
-    	oList = session.createSQLQuery("select * from tinvoice  "
+    	oList = session.createSQLQuery("select * from tinvoice join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
 				+ "where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
 				.addEntity(Tinvoice.class).list();		
 
@@ -35,7 +35,7 @@ public class TinvoiceDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice "
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
 				+ "where " + filter).uniqueResult().toString());
 		session.close();
         return count;
@@ -90,18 +90,18 @@ public class TinvoiceDAO {
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
 		oList = session.createSQLQuery("SELECT INVOICETYPE, DATE(PAIDTIME) AS PAIDTIME, SUM(PAIDAMOUNT) AS PAIDAMOUNT "
-				+ "FROM TINVOICE WHERE ISPAID = 'Y' AND " + filter + " GROUP BY INVOICETYPE, DATE(PAIDTIME)").addEntity(Vpaymentmon.class).list();
+				+ "FROM TINVOICE JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK WHERE ISPAID = 'Y' AND " + filter + " GROUP BY INVOICETYPE, DATE(PAIDTIME)").addEntity(Vpaymentmon.class).list();
 		session.close();
         return oList;
     }
 	
 	@SuppressWarnings("unchecked")
-	public List<Vpaymentbranch> listPaymentBranch(String date) throws Exception {		
+	public List<Vpaymentbranch> listPaymentBranch(String filter) throws Exception {		
     	List<Vpaymentbranch> oList = null;
     	session = StoreHibernateUtil.openSession();
 		oList = session.createSQLQuery("SELECT MCABANGPK, CABANG, MPROV.PROVNAME AS PROVNAME, DATE(PAIDTIME) AS PAIDTIME, SUM(PAIDAMOUNT) AS PAIDAMOUNT "
 				+ "FROM TINVOICE JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROV ON MPROVFK = MPROVPK "
-				+ "WHERE ISPAID = 'Y' AND DATE(PAIDTIME) = '" + date + "' GROUP BY MCABANGPK, CABANG, MPROV.PROVNAME, DATE(PAIDTIME) ORDER BY MPROV.PROVNAME, CABANG").addEntity(Vpaymentbranch.class).list();
+				+ "WHERE " + filter + " GROUP BY MCABANGPK, CABANG, MPROV.PROVNAME, DATE(PAIDTIME) ORDER BY MPROV.PROVNAME, CABANG").addEntity(Vpaymentbranch.class).list();
 		session.close();
         return oList;
     }
@@ -111,19 +111,10 @@ public class TinvoiceDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(invoiceamount),0) from Tinvoice "
+		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(invoiceamount),0) from Tinvoice  join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
 				+ "where " + filter).uniqueResult();
 		session.close();
         return amount;
-    }
-	
-	public Integer countDueDate() throws Exception {
-		Integer count = 0;
-		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice "
-				+ "where CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7").uniqueResult().toString());
-		session.close();
-        return count;
     }
 
 }

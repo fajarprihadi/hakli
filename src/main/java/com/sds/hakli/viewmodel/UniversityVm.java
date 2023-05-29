@@ -37,13 +37,13 @@ import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.MuniversitasDAO;
 import com.sds.hakli.domain.Muniversitas;
-import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class UniversityVm {
 	
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	private Muser oUser;
+	private Tanggota oUser;
 	
 	private MuniversitasDAO oDao = new MuniversitasDAO();
 	
@@ -69,7 +69,7 @@ public class UniversityVm {
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		
-		oUser = (Muser) zkSession.getAttribute("oUser");
+		oUser = (Tanggota) zkSession.getAttribute("anggota");
 		grid.setRowRenderer(new RowRenderer<Muniversitas>() {
 
 			@Override
@@ -197,16 +197,16 @@ public class UniversityVm {
 	}
 	
 	@Command
-	@NotifyChange("objForm")
+	@NotifyChange("*")
 	public void doSave() {
 		Session session = StoreHibernateUtil.openSession();
 		Transaction trx = session.beginTransaction();
 		try {
 			if (isInsert) {
-				objForm.setCreatedby(oUser.getUserid());
+				objForm.setCreatedby(oUser.getNoanggota());
 				objForm.setCreatetime(new Date());
 			} else {
-				objForm.setUpdatedby(oUser.getUserid());
+				objForm.setUpdatedby(oUser.getNoanggota());
 				objForm.setLastupdated(new Date());
 			}
 			

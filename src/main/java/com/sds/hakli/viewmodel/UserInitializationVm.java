@@ -77,7 +77,7 @@ public class UserInitializationVm {
 			Div divAccordItem = null;
 			Div divAccordBody = null;
 			int idx = 0;
-			int idxParent = 0;
+			//int idxParent = 0;
 			
 			List<Musergroupmenu> oList = new MusergroupmenuDAO().listByFilter("musergroup.musergrouppk = "
 					+ oUser.getMusergroup().getMusergrouppk(),

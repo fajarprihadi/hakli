@@ -4,13 +4,13 @@
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.PaymentVm')"
 		validationMessages="@id('vmsgs')">
 		<caption>
-			<n:i class="fas fa-list"></n:i>
+			<n:i class="fas fa-file-invoice"></n:i>
 			<n:span>Pembayaran Iuran</n:span>
 		</caption>
 		<groupbox id="gbForm" mold="3d">
 			<caption>
 				<n:span class="h5 fw-bold mb-0">
-					<n:i class="fas fa-cog"></n:i>
+					<n:i class="fas fa-file-invoice"></n:i>
 					Formulir Pembayaran
 				</n:span>
 			</caption>
@@ -96,7 +96,7 @@
 		<groupbox mold="3d">
 			<caption>
 				<n:span class="h5 fw-bold mb-0">
-					<n:i class="fas fa-cog"></n:i>
+					<n:i class="fas fa-list-alt"></n:i>
 					Riwayat Tagihan
 				</n:span>
 			</caption>
@@ -111,10 +111,11 @@
 						style="font-weight: bold" />
 				</div>
 			</div>
-			<grid id="gridHist" sizedByContent="true"
+			<grid id="gridHist" sizedByContent="true" span="true"
 				emptyMessage="${labels.common.emptymsg}">
-				<columns>
+				<columns sizable="true">
 					<column label="No" align="right" width="40px" />
+					<column label="Tipe Tagihan" />
 					<column label="Kode Tagihan" align="center" />
 					<column label="Tanggal Tagihan" align="center" />
 					<column label="Nominal Tagihan" align="right" />

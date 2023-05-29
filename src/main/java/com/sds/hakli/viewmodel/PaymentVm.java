@@ -160,7 +160,6 @@ public class PaymentVm {
 
 			gridCharge.setModel(new ListModelList<>(objList));
 			
-			
 			if (paging != null) {
 				paging.addEventListener("onPaging", new EventListener<Event>() {
 
@@ -177,6 +176,7 @@ public class PaymentVm {
 				@Override
 				public void render(Row row, Tinvoice data, int index) throws Exception {
 					row.getChildren().add(new Label(String.valueOf((AppUtils.PAGESIZE * pageStartNumber) + index + 1)));
+					row.getChildren().add(new Label(AppData.getInvoiceType(data.getInvoicetype())));
 					row.getChildren().add(new Label(data.getInvoiceno()));
 					row.getChildren().add(new Label(datelocalFormatter.format(data.getInvoicedate())));
 					row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getInvoiceamount())));
@@ -190,8 +190,12 @@ public class PaymentVm {
 			refreshModel(pageStartNumber);
 			
 			if (anggota.getVaregstatus() == 1) {
-				keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar. \n Silahkan lihat di tabel riwayat tagihan dihalaman bawah.";
-				btSave.setDisabled(true);
+				Tinvoice inv = invDao.findByFilter("vano = '" + anggota.getVareg() + "' and ispaid = 'N'");
+				if (inv != null && inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN) && inv.getInvoiceduedate().compareTo(new Date()) >= 0) {
+					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar. \n Silahkan lihat di tabel riwayat tagihan dihalaman bawah.";
+					btSave.setDisabled(true);
+				}
+				
 			}
 			
 		} catch (Exception e) {
@@ -263,9 +267,18 @@ public class PaymentVm {
 										briva.setInstitutionCode(bean.getBriva_institutioncode());
 										briva.setBrivaNo(bean.getBriva_cid());
 										
-										String custcode_cabang = "0000" + anggota.getMcabang().getKodecabang();
-										String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
-										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
+										boolean isVaUpdate = false;
+										if (anggota.getVareg() != null && anggota.getVaregstatus() == 0) {
+											isVaUpdate = true;
+										}
+										
+										if (isVaUpdate)
+											briva.setCustCode(anggota.getVareg().substring(5));
+										else {
+											String custcode_cabang = "0000" + anggota.getMcabang().getKodecabang();
+											String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
+											briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
+										}
 										
 										Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
 										Calendar cal = Calendar.getInstance();
@@ -280,8 +293,13 @@ public class PaymentVm {
 										vaexpdate = cal.getTime();
 										briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 										
-										BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
-										if (brivaCreated.getStatus()) {
+										BrivaCreateResp brivaCreated = null;
+										if (isVaUpdate) {
+											brivaCreated = briapi.updateDataBriva(briapiToken.getAccess_token(), briva);
+										} else {
+											brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+										}
+										if (brivaCreated != null && brivaCreated.getStatus()) {
 											trx = session.beginTransaction();
 											
 											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);

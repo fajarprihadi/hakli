@@ -24,12 +24,13 @@ import org.zkoss.zul.Textbox;
 
 import com.sds.hakli.dao.MsysparamDAO;
 import com.sds.hakli.domain.Msysparam;
-import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class MsysparamVm {
+	
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	private Muser oUser;
+	private Tanggota oUser;
 	
 	private MsysparamDAO oDao = new MsysparamDAO();
 
@@ -39,7 +40,7 @@ public class MsysparamVm {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
-		oUser = (Muser) zkSession.getAttribute("oUser");				
+		oUser = (Tanggota) zkSession.getAttribute("anggota");				
 		try {		
 			String group = "";
 			List<Msysparam> params = oDao.listByFilter("0=0", "orderno");
@@ -90,7 +91,7 @@ public class MsysparamVm {
 					Textbox tbox = (Textbox) comp.getChildren().get(2);
 					Msysparam obj = (Msysparam) comp.getAttribute("obj");
 					obj.setParamvalue(tbox.getValue());
-					obj.setUpdatedby(oUser.getUserid());
+					obj.setUpdatedby(oUser.getNoanggota());
 					obj.setLastupdated(new Date());
 					oDao.save(session, obj);
 				}				

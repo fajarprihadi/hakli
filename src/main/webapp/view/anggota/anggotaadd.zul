@@ -570,8 +570,6 @@
 										label="Anggota Biasa" />
 									<comboitem value="Anggota Muda"
 										label="Anggota Muda" />
-									<comboitem value="Pengurus Pusat"
-										label="Pengurus Pusat" />
 								</combobox>
 								<label style="color:gray"
 									value="@load(vmsgs['statusanggota'])" />

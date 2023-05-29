@@ -58,7 +58,6 @@ import com.sds.hakli.dao.MrumpunDAO;
 import com.sds.hakli.dao.MuniversitasDAO;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
-import com.sds.hakli.dao.TeventDAO;
 import com.sds.hakli.dao.TeventregDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.dao.TpekerjaanDAO;
@@ -97,7 +96,6 @@ public class EventRegVm {
 	private TpendidikanDAO pendidikanDao = new TpendidikanDAO();
 	private MprovDAO provDao = new MprovDAO();
 	private MkabDAO kabDao = new MkabDAO();
-	private TeventDAO eventDao = new TeventDAO();
 	private TeventregDAO eventregDao = new TeventregDAO();
 
 	private AnggotaReg objForm;

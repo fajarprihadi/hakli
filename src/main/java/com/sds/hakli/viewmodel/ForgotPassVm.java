@@ -1,7 +1,5 @@
 package com.sds.hakli.viewmodel;
 
-import java.util.Date;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -11,7 +9,6 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
@@ -22,8 +19,6 @@ import com.sds.hakli.extension.MailHandler;
 import com.sds.utils.AppData;
 import com.sds.utils.db.StoreHibernateUtil;
 public class ForgotPassVm {
-
-	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
 

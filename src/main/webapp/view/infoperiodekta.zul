@@ -8,7 +8,7 @@
 			<div class="card-body">
 				<n:h5 class="card-title">Pemberitahuan</n:h5>
 				<n:p class="card-text">
-					Kontribusi iuran HAKLI Berakhir Pada Tanggal
+					Kontribusi iuran keanggotaan HAKLI Berakhir Pada Tanggal <n:br/>
 					<label style="font-size:40px; font-weight: bold"
 						id="periodekta" />
 				</n:p>

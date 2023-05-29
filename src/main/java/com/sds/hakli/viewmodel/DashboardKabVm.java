@@ -2,13 +2,9 @@ package com.sds.hakli.viewmodel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -16,15 +12,9 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.chart.AxisTitle;
 import org.zkoss.chart.Charts;
-import org.zkoss.chart.Color;
-import org.zkoss.chart.Legend;
-import org.zkoss.chart.Point;
-import org.zkoss.chart.Series;
 import org.zkoss.chart.Tooltip;
-import org.zkoss.chart.YAxis;
 import org.zkoss.chart.model.CategoryModel;
 import org.zkoss.chart.model.DefaultCategoryModel;
-import org.zkoss.chart.plotOptions.PiePlotOptions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
@@ -36,21 +26,14 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Grid;
-import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
-import com.sds.hakli.dao.TanggotaDAO;
-import com.sds.hakli.domain.BranchTop;
-import com.sds.hakli.domain.Mcabang;
-import com.sds.hakli.domain.Muser;
 import com.sds.hakli.domain.Tanggota;
-import com.sds.hakli.domain.Veventamount;
 import com.sds.hakli.model.TanggotaListModel;
 import com.sds.utils.AppUtils;
 
@@ -59,8 +42,6 @@ public class DashboardKabVm {
 	private Session session = Sessions.getCurrent();
 	private Tanggota oUser;
 
-	private TanggotaDAO anggotaDao = new TanggotaDAO();
-	
 	private TanggotaListModel modelAktif;
 	private int pageStartNumberAktif;
 	private int pageTotalSizeAktif;
@@ -77,7 +58,6 @@ public class DashboardKabVm {
 	private String totalanggota;
 	private String totalaktif;
 	private String totalnonaktif;
-	private List<BranchTop> objList = new ArrayList<>();
 	
 	private String namaaktif;
 	private String namanonaktif;

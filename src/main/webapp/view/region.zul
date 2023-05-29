@@ -1,0 +1,91 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winRegion" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.RegionVm')" validationMessages="@id('vmsgs')">
+		<caption>
+			<n:i class="fas fa-university"></n:i>
+			<n:span>Region</n:span>
+		</caption>
+		<div class="row">
+			<div class="col">
+				<button id="btAdd" label="Tambah Region"
+					autodisable="self" sclass="btn btn-primary btn-sm"
+					iconSclass="z-icon-plus-square" onClick="@command('doAdd')" />
+			</div>
+		</div>
+		<div id="divForm" visible="false"
+			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')
+			@validator(vm.validator) ">
+			<separator />
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-user-tag"></n:i>
+						Form Region
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="Kode Region (*)" />
+							<vlayout>
+								<textbox value="@bind(e.provcode)"
+									width="100%" maxlength="2" />
+								<label style="color:gray"
+									value="@load(vmsgs['provcode'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="Nama Region (*)" />
+							<vlayout>
+								<textbox value="@bind(e.provname)"
+									width="100%" maxlength="30" />
+								<label style="color:gray"
+									value="@load(vmsgs['provname'])" />
+							</vlayout>
+						</row>
+					</rows>
+					<foot>
+						<footer />
+						<footer>
+							<button id="btSave" label="Submit"
+								autodisable="self" width="100%" iconSclass="z-icon-save"
+								sclass="btn btn-primary btn-sm" onClick="@command('doSave')" />
+						</footer>
+					</foot>
+				</grid>
+			</groupbox>
+		</div>
+		<separator />
+		<div class="row">
+			<div class="col" align="right">
+				<label value="Total Records" style="font-weight: bold" />
+				<label value="@load(vm.totalrecords)"
+					style="font-weight: bold" />
+			</div>
+		</div>
+		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true">
+			<columns>
+				<column label="No" align="right" width="40px" />
+				<column>
+					<textbox inplace="true" value="@bind(vm.cabang)"
+						width="100%" maxlength="100" placeholder="Kode Region"
+						tooltiptext="${labels.common.searchonheader}"
+						onOK="@command('doSearch')" />
+				</column>
+				<column>
+					<textbox inplace="true" value="@bind(vm.provname)"
+						width="100%" maxlength="100" placeholder="Nama Region"
+						tooltiptext="${labels.common.searchonheader}"
+						onOK="@command('doSearch')" />
+				</column>
+				<column label="Aksi" align="center" width="120px" />
+			</columns>
+		</grid>
+
+	</window>
+</zk>

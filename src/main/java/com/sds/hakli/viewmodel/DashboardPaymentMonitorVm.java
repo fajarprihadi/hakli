@@ -1,65 +1,57 @@
 package com.sds.hakli.viewmodel;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
-import org.zkoss.bind.annotation.ExecutionArgParam;
-import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.chart.AxisLabels;
 import org.zkoss.chart.Charts;
 import org.zkoss.chart.ChartsEvent;
-import org.zkoss.chart.Color;
 import org.zkoss.chart.Legend;
 import org.zkoss.chart.Point;
 import org.zkoss.chart.Series;
 import org.zkoss.chart.Tooltip;
 import org.zkoss.chart.XAxis;
 import org.zkoss.chart.YAxis;
-import org.zkoss.chart.model.CategoryModel;
-import org.zkoss.chart.model.DefaultCategoryModel;
 import org.zkoss.chart.model.DefaultXYModel;
 import org.zkoss.chart.model.XYModel;
-import org.zkoss.chart.plotOptions.PiePlotOptions;
 import org.zkoss.chart.plotOptions.SeriesPlotOptions;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
-import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Column;
 import org.zkoss.zul.Columns;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Row;
-import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.TinvoiceDAO;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Vpaymentbranch;
 import com.sds.hakli.domain.Vpaymentmon;
 import com.sds.utils.AppData;
+import com.sds.utils.AppUtils;
 import com.sds.utils.TimeUtil;
 
 public class DashboardPaymentMonitorVm {
+	
+	private Session session = Sessions.getCurrent();
+	private Tanggota oUser;
 
 	private TinvoiceDAO oDao = new TinvoiceDAO();
 
@@ -83,6 +75,7 @@ public class DashboardPaymentMonitorVm {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
+		oUser = (Tanggota) session.getAttribute("anggota");
 		
         chart.addEventListener("onPlotClick", new EventListener<ChartsEvent>() {
 
@@ -95,6 +88,7 @@ public class DashboardPaymentMonitorVm {
 		        msgBox.setTop(anchor.getTop());
 		        msgBox.setLeft(anchor.getLeft());
 		        Label msg = (Label) msgBox.getFellow("msg");
+		        System.out.println("event.getCategory() : " + event.getSeries().getName() + " " + event.getSeriesIndex());
 		        String formattedDate = TimeUtil.getFormattedTime((Long) event.getCategory(),
 		                "EEEEEEEEE, MMM dd, yyyy");
 		        msg.setValue(formattedDate + ":\n Rp. " + NumberFormat.getInstance().format(point.getY()));
@@ -115,12 +109,26 @@ public class DashboardPaymentMonitorVm {
 		        
 		        String date = TimeUtil.getFormattedTime((Long) event.getCategory(),
 		                "yyyy-MM-dd");
-		        for (Vpaymentbranch obj: oDao.listPaymentBranch(date)) {
+		        String filter = "ISPAID = 'Y' AND DATE(PAIDTIME) = '" + date + "'";
+		        if (event.getSeries().getName().equals("Pendaftaran"))
+		        	filter += " AND INVOICETYPE = '" + AppUtils.INVOICETYPE_REG + "'";
+		        else if (event.getSeries().getName().equals("Iuran"))
+		        	filter += " AND INVOICETYPE = '" + AppUtils.INVOICETYPE_IURAN + "'";
+		        else if (event.getSeries().getName().equals("Event"))
+		        	filter += " AND INVOICETYPE = '" + AppUtils.INVOICETYPE_EVENT + "'";
+		        if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+					filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+				} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+					filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+				}
+		        BigDecimal totalamount = new BigDecimal(0);
+		        for (Vpaymentbranch obj: oDao.listPaymentBranch(filter)) {
 		        	Row row = new Row();
 		        	row.appendChild(new Label(obj.getProvname()));
 		        	row.appendChild(new Label(obj.getCabang()));
 		        	row.appendChild(new Label(NumberFormat.getInstance().format(obj.getPaidamount())));
 		        	rows.appendChild(row);
+		        	totalamount = totalamount.add(obj.getPaidamount());
 		        }
 		        grid.appendChild(rows);
 		        msgBox.appendChild(grid);
@@ -154,6 +162,11 @@ public class DashboardPaymentMonitorVm {
 				doDefaultPeriod();
 			}
 			filter = "date(paidtime) between '" + datelocalFormatter.format(begindate) + "' and '" + datelocalFormatter.format(enddate) + "'";
+			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+				filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+			} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+				filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+			}
 			objList = oDao.listPaymentMonitor(filter);
 			XYModel model = new DefaultXYModel();
 			for (Vpaymentmon obj: objList) {

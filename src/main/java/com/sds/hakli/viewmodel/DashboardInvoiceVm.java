@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -16,6 +15,8 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -32,12 +33,16 @@ import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.TinvoiceDAO;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.model.TinvoiceListModel;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
 public class DashboardInvoiceVm {
+	
+	private Session session = Sessions.getCurrent();
+	private Tanggota oUser;
 	
 	private TinvoiceListModel model;
 	
@@ -76,6 +81,7 @@ public class DashboardInvoiceVm {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
+		oUser = (Tanggota) session.getAttribute("anggota");
 		
 		paging.addEventListener("onPaging", new EventListener<Event>() {
 
@@ -129,10 +135,22 @@ public class DashboardInvoiceVm {
 	@NotifyChange("*")
 	public void doSummary() {
 		try {
-			totaldue = oDao.countDueDate();
-			totaldueamount = oDao.sumAmount("CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7");
-			totalunpaid = oDao.pageCount("ispaid = 'N'");
-			totalunpaidamount = oDao.sumAmount("ispaid = 'N'");
+			filter = "CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7 AND INVOICEDUEDATE >= DATE(NOW())";
+			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+				filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+			} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+				filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+			}
+			totaldue = oDao.pageCount(filter);
+			totaldueamount = oDao.sumAmount(filter);
+			filter = "ISPAID = 'N' AND INVOICEDUEDATE >= DATE(NOW())";
+			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+				filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+			} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+				filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+			}
+			totalunpaid = oDao.pageCount(filter);
+			totalunpaidamount = oDao.sumAmount(filter);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -154,7 +172,13 @@ public class DashboardInvoiceVm {
 	public void doSearchDue() {
 		doReset();
 		gbSearch.setOpen(false);
-		filter = "CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7";
+		filter = "CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7 AND INVOICEDUEDATE >= DATE(NOW())";
+		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+			filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+		}
+		
 		refreshModel(pageStartNumber);
 	}
 	
@@ -163,7 +187,12 @@ public class DashboardInvoiceVm {
 	public void doSearchUnpaid() {
 		doReset();
 		gbSearch.setOpen(false);
-		filter = "ispaid = 'N'";
+		filter = "ispaid = 'N' AND INVOICEDUEDATE >= DATE(NOW())";
+		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+			filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+		}
 		refreshModel(pageStartNumber);
 	}
 	
@@ -182,6 +211,13 @@ public class DashboardInvoiceVm {
 		if (begindate != null && enddate != null) {
 			filter += " and invoicedate between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "'";
 		}
+		
+		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+			filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+		}
+		
 		refreshModel(pageStartNumber);
 	}
 	

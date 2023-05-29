@@ -42,14 +42,14 @@ import com.sds.hakli.dao.MchargeDAO;
 import com.sds.hakli.dao.MfeeDAO;
 import com.sds.hakli.domain.Mcharge;
 import com.sds.hakli.domain.Mfee;
-import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class ChargeVm {
 	
 	private org.zkoss.zk.ui.Session session = Sessions.getCurrent();
-	private Muser oUser;
+	private Tanggota oUser;
 	private MchargeDAO chargeDao = new MchargeDAO();
 	private MfeeDAO feeDao = new MfeeDAO();
 	
@@ -87,7 +87,7 @@ public class ChargeVm {
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		try {
-			oUser = (Muser) session.getAttribute("oUser");
+			oUser = (Tanggota) session.getAttribute("anggota");
 			
 			gridReg.setRowRenderer(new RowRenderer<Mcharge>() {
 
@@ -333,11 +333,11 @@ public class ChargeVm {
 			if (objReg.getMchargepk() == null) {
 				isInsert = true;
 				objReg.setCreatetime(new Date());
-				objReg.setCreatedby(oUser.getUserid());
+				objReg.setCreatedby(oUser.getNoanggota());
 				objReg.setIsbase("N");
 			} else {
 				objReg.setLastupdated(new Date());
-				objReg.setUpdatedby(oUser.getUserid());
+				objReg.setUpdatedby(oUser.getNoanggota());
 			}
 			trx = session.beginTransaction();
 			
@@ -377,11 +377,11 @@ public class ChargeVm {
 			if (objIuran.getMchargepk() == null) {
 				isInsert = true;
 				objIuran.setCreatetime(new Date());
-				objIuran.setCreatedby(oUser.getUserid());
+				objIuran.setCreatedby(oUser.getNoanggota());
 				objIuran.setIsbase("N");
 			} else {
 				objIuran.setLastupdated(new Date());
-				objIuran.setUpdatedby(oUser.getUserid());
+				objIuran.setUpdatedby(oUser.getNoanggota());
 			}
 			
 			trx = session.beginTransaction();
@@ -474,9 +474,9 @@ public class ChargeVm {
 			try {
 				trx = session.beginTransaction();
 				objFee.setCreatetime(new Date());
-				objFee.setCreatedby(oUser.getUserid());
+				objFee.setCreatedby(oUser.getNoanggota());
 				objFee.setLastupdated(new Date());
-				objFee.setUpdatedby(oUser.getUserid());
+				objFee.setUpdatedby(oUser.getNoanggota());
 				feeDao.save(session, objFee);
 				trx.commit();
 				Clients.showNotification("Pengaturan nilai distrubsi fee berhasil disimpan", "info", null, "middle_center", 1500);

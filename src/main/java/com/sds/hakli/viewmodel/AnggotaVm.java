@@ -36,7 +36,6 @@ import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprov;
-import com.sds.hakli.domain.Muser;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.model.TanggotaListModel;
 import com.sds.utils.AppUtils;

@@ -1,9 +1,8 @@
 package com.sds.hakli.viewmodel;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.ValidationContext;
@@ -16,7 +15,6 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
@@ -26,6 +24,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
@@ -34,30 +33,29 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Separator;
-import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import com.sds.hakli.dao.MuserDAO;
-import com.sds.hakli.domain.Muser;
+import com.sds.hakli.dao.MprovDAO;
+import com.sds.hakli.domain.Mprov;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.db.StoreHibernateUtil;
 
-public class UserVm {
+public class RegionVm {
 	
-	private Session session = Sessions.getCurrent();
-	private Muser oUser;
+	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
+	private Tanggota oUser;
 	
-	private MuserDAO oDao = new MuserDAO();
+	private MprovDAO oDao = new MprovDAO();
 	
-	private Muser objForm;
-	private List<Muser> objList;
-	private String nama;
+	private Mprov objForm;
+	private List<Mprov> objList;
+	private String filter;
+	private String provname;
 	private Integer totalrecords;
 	private boolean isInsert;
 	
-	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-	
 	@Wire
-	private Window winUser;
+	private Window winBranch;
 	@Wire
 	private Grid grid;
 	@Wire
@@ -67,25 +65,22 @@ public class UserVm {
 	@Wire
 	private Div divForm;
 	@Wire
-	private Textbox tbUserid;
+	private Combobox cbRegion;
 	@Wire
-	private Textbox tbPassword;
+	private Combobox cbBank;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		
-		oUser = (Muser) session.getAttribute("oUser");
-		
-		grid.setRowRenderer(new RowRenderer<Muser>() {
+		oUser = (Tanggota) zkSession.getAttribute("anggota");
+		grid.setRowRenderer(new RowRenderer<Mprov>() {
 
 			@Override
-			public void render(Row row, Muser data, int index) throws Exception {
+			public void render(Row row, Mprov data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index+1)));
-				
-				row.getChildren().add(new Label(data.getUserid()));
-				row.getChildren().add(new Label(data.getUsername()));
-				row.getChildren().add(new Label(data.getLastlogin() != null ? datelocalFormatter.format(data.getLastlogin()) : ""));
+				row.getChildren().add(new Label(data.getProvcode()));
+				row.getChildren().add(new Label(data.getProvname()));
 				Button btEdit = new Button();
 				btEdit.setIconSclass("z-icon-edit");
 				btEdit.setSclass("btn btn-primary btn-sm");
@@ -96,7 +91,7 @@ public class UserVm {
 					@Override
 					public void onEvent(Event event) throws Exception {
 						doAdd(data);
-						BindUtils.postNotifyChange(UserVm.this, "objForm");
+						BindUtils.postNotifyChange(RegionVm.this, "objForm");
 					}
 				});
 				row.getChildren().add(btEdit);
@@ -117,14 +112,14 @@ public class UserVm {
 							public void onEvent(Event event)
 									throws Exception {
 								if (event.getName().equals("onOK")) {
-									org.hibernate.Session session = StoreHibernateUtil.openSession();
+									Session session = StoreHibernateUtil.openSession();
 									Transaction trx = session.beginTransaction();
 									try {
 										oDao.delete(session, data);
 										trx.commit();
 										Clients.showNotification("Proses hapus data berhasil", "info", null, "middle_center", 1500);
 										doReset();
-										BindUtils.postNotifyChange(UserVm.this, "*");
+										BindUtils.postNotifyChange(RegionVm.this, "*");
 									} catch (Exception e) {	
 										Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 										e.printStackTrace();
@@ -150,29 +145,40 @@ public class UserVm {
 	}
 	
 	@Command
+	@NotifyChange("*")
 	public void doReset() {
-		nama = null;
-		doRefresh();
+		provname = null;
+		doSearch();
 		divForm.setVisible(false);
-		btAdd.setLabel("Tambah User");
+		btAdd.setLabel("Tambah Region");
 		btAdd.setIconSclass("z-icon-plus-square");
+		cbRegion.setValue(null);
 	}
 	
 	@Command
 	@NotifyChange("totalrecords")
 	public void doRefresh() {
 		try {
-			objList = oDao.listByFilter("0=0", "userid");
+			objList = oDao.listByFilter(filter, "provcode, prov");
 			totalrecords = objList.size();
-			grid.setModel(new ListModelList<>(objList) );
+			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Command
+	@NotifyChange("totalrecords")
+	public void doSearch() {
+		filter = "0=0";
+		if (provname != null && provname.trim().length() > 0)
+			filter += " and upper(provname) like '%" + provname.trim().toUpperCase() + "%'";
+		doRefresh();
+	}
+	
+	@Command
 	@NotifyChange("*")
-	public void doAdd(Muser obj) {
+	public void doAdd(Mprov obj) {
 		if (obj != null) {
 			isInsert = false;
 			objForm = obj;
@@ -180,45 +186,39 @@ public class UserVm {
 			btAdd.setLabel("Cancel");
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Perbarui");
-			
-			tbUserid.setDisabled(true);
-			tbPassword.setDisabled(true);
-		} else if (btAdd.getLabel().equals("Tambah User")) {
+		} else if (btAdd.getLabel().equals("Tambah Region")) {
 			isInsert = true;
-			objForm = new Muser();
+			objForm = new Mprov();
 			divForm.setVisible(true);
 			btAdd.setLabel("Cancel");
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Submit");
 			
-			tbUserid.setDisabled(false);
-			tbPassword.setDisabled(false);
+			cbRegion.setValue(null);
 		} else {
 			divForm.setVisible(false);
-			btAdd.setLabel("Tambah User");
+			btAdd.setLabel("Tambah Region");
 			btAdd.setIconSclass("z-icon-plus-square");
 		}
 	}
 	
 	@Command
-	@NotifyChange("objForm")
+	@NotifyChange("*")
 	public void doSave() {
-		org.hibernate.Session session = StoreHibernateUtil.openSession();
-		Transaction trx = null;
+		Session session = StoreHibernateUtil.openSession();
+		Transaction trx = session.beginTransaction();
 		try {
-			trx = session.beginTransaction();
-			objForm.setLastupdated(new Date());
-			objForm.setUpdatedby(oUser.getUserid());
 			oDao.save(session, objForm);
 			trx.commit();
 			if (isInsert) {
 				Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
 			} else { 
 				Clients.showNotification("Proses pembaruan data berhasil", "info", null, "middle_center", 1500);
-			} 
-			doReset();
+			}doReset();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 	}
 	
@@ -227,26 +227,32 @@ public class UserVm {
 
 			@Override
 			public void validate(ValidationContext ctx) {
-				String userid = (String) ctx.getProperties("userid")[0].getValue();
-				String username = (String) ctx.getProperties("username")[0].getValue();
-				String password = (String) ctx.getProperties("password")[0].getValue();
-				
-				if (userid == null || "".equals(userid.trim()))
-					this.addInvalidMessage(ctx, "userid", Labels.getLabel("common.validator.empty"));
-				if (username == null || "".equals(username.trim()))
-					this.addInvalidMessage(ctx, "username", Labels.getLabel("common.validator.empty"));
-				if (isInsert && (password == null || "".equals(password.trim())))
-					this.addInvalidMessage(ctx, "password", Labels.getLabel("common.validator.empty"));
+				String provcode = (String) ctx.getProperties("provcode")[0].getValue();
+				if (provcode == null || "".equals(provcode.trim()))
+					this.addInvalidMessage(ctx, "provcode", Labels.getLabel("common.validator.empty"));
+				String provname = (String) ctx.getProperties("provname")[0].getValue();
+				if (provname == null || "".equals(provname.trim()))
+					this.addInvalidMessage(ctx, "provname", Labels.getLabel("common.validator.empty"));
 			}
 		};
 	}
-
-	public String getNama() {
-		return nama;
+	
+	public ListModelList<Mprov> getProvModel() {
+		ListModelList<Mprov> oList = null;
+		try {
+			oList = new ListModelList<>(new MprovDAO().listAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return oList;
 	}
 
-	public void setNama(String nama) {
-		this.nama = nama;
+	public Mprov getObjForm() {
+		return objForm;
+	}
+
+	public void setObjForm(Mprov objForm) {
+		this.objForm = objForm;
 	}
 
 	public Integer getTotalrecords() {
@@ -257,12 +263,13 @@ public class UserVm {
 		this.totalrecords = totalrecords;
 	}
 
-	public Muser getObjForm() {
-		return objForm;
+	public String getProvname() {
+		return provname;
 	}
 
-	public void setObjForm(Muser objForm) {
-		this.objForm = objForm;
+	public void setProvname(String provname) {
+		this.provname = provname;
 	}
+
 	
 }

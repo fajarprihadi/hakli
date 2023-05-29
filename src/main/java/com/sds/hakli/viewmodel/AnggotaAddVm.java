@@ -56,6 +56,7 @@ import com.sds.hakli.dao.MnegaraDAO;
 import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.MrumpunDAO;
 import com.sds.hakli.dao.MuniversitasDAO;
+import com.sds.hakli.dao.MusergroupDAO;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.TeventregDAO;
@@ -575,6 +576,7 @@ public class AnggotaAddVm {
 								trx = session.beginTransaction();
 								
 								// anggota/pribadi
+								objForm.getPribadi().setMusergroup(new MusergroupDAO().findByFilter("usergroupcode = '" + AppUtils.ANGGOTA_ROLE_ANGGOTABIASA + "'"));
 								objForm.getPribadi().setTgllahir(dob);
 								objForm.getPribadi().setProvcode(provrumah.getProvcode());
 								objForm.getPribadi().setProvname(provrumah.getProvname());

@@ -36,7 +36,6 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Spinner;
 
 import com.sds.hakli.dao.TschedulerDAO;
-import com.sds.hakli.domain.Muser;
 import com.sds.hakli.domain.Tscheduler;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
@@ -117,14 +116,13 @@ public class TschedulerVm {
 										throws Exception {
 									if (event.getName().equals("onOK")) {
 										try {
-											Muser oUser = (Muser) zkSession.getAttribute("oUser");
 											session = StoreHibernateUtil.openSession();
 											transaction = session.beginTransaction();
 											oForm.setSchedulerstatus(cboxStatus.getValue().equals(AppUtils.SCHEDULER_DISABLE_LABEL) ? AppUtils.SCHEDULER_DISABLE_VALUE : AppUtils.SCHEDULER_ENABLE_VALUE);
 											oForm.setSchedulerrepeattype(cboxType.getValue());
 											oForm.setRepeatinterval(spinner.getValue());
 											oForm.setLastupdated(new Date());
-											oForm.setUpdatedby(oUser.getUserid());
+											//oForm.setUpdatedby(oUser.getUserid());
 											oDao.save(session, oForm);
 											transaction.commit();
 											session.close();		

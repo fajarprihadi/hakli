@@ -1,6 +1,5 @@
 package com.sds.hakli.viewmodel;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -41,14 +40,14 @@ import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprov;
-import com.sds.hakli.domain.Muser;
+import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.AppData;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class BranchVm {
 	
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	private Muser oUser;
+	private Tanggota oUser;
 	
 	private McabangDAO oDao = new McabangDAO();
 	
@@ -79,7 +78,7 @@ public class BranchVm {
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		
-		oUser = (Muser) zkSession.getAttribute("oUser");
+		oUser = (Tanggota) zkSession.getAttribute("anggota");
 		grid.setRowRenderer(new RowRenderer<Mcabang>() {
 
 			@Override
@@ -225,10 +224,10 @@ public class BranchVm {
 		try {
 			if (isInsert) {
 				objForm.setCreatetime(new Date());
-				objForm.setCreatedby(oUser.getUserid());
+				//objForm.setCreatedby(oUser.getUserid());
 			} else {
 				objForm.setLastupdated(new Date());
-				objForm.setUpdatedby(oUser.getUserid());
+				//objForm.setUpdatedby(oUser.getUserid());
 			}
 			objForm.setBankname(AppData.getBankName(objForm.getBankcode()));
 			oDao.save(session, objForm);

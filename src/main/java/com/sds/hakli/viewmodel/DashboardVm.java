@@ -12,18 +12,11 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.chart.Charts;
-import org.zkoss.chart.Color;
-import org.zkoss.chart.Legend;
-import org.zkoss.chart.Point;
-import org.zkoss.chart.Series;
 import org.zkoss.chart.YAxis;
 import org.zkoss.chart.model.CategoryModel;
 import org.zkoss.chart.model.DefaultCategoryModel;
-import org.zkoss.chart.plotOptions.PiePlotOptions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -39,12 +32,8 @@ import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.domain.BranchTop;
-import com.sds.hakli.domain.Muser;
 
 public class DashboardVm {
-
-	private Session session = Sessions.getCurrent();
-	private Muser oUser;
 
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
 
@@ -65,8 +54,6 @@ public class DashboardVm {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
-
-		oUser = (Muser) session.getAttribute("oUser");
 
 		grid.setRowRenderer(new RowRenderer<BranchTop>() {
 
@@ -134,6 +121,7 @@ public class DashboardVm {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void doChart() {
 		try {
 			CategoryModel model = new DefaultCategoryModel();
@@ -150,20 +138,7 @@ public class DashboardVm {
 	        yAxis.getTitle().setAlign("high");
 	        yAxis.getLabels().setOverflow("justify");
 	        
-	        //chart.getTooltip().setValueSuffix(" millions");
-	        
 	        chart.getPlotOptions().getBar().getDataLabels().setEnabled(true);
-	        
-//	        Legend legend = chart.getLegend();
-//	        legend.setLayout("vertical");
-//	        legend.setAlign("right");
-//	        legend.setVerticalAlign("top");
-//	        legend.setX(-40);
-//	        legend.setY(80);
-//	        legend.setFloating(true);
-//	        legend.setBorderWidth(1);
-//	        legend.setBackgroundColor("#FFFFFF");
-//	        legend.setShadow(true);
 	        
 	        chart.getCredits().setEnabled(false);
 		} catch (Exception e) {
