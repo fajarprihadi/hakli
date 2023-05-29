@@ -3,7 +3,7 @@
 	<window id="winKtaDue" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoPeriodeKtaVm')">
 		<caption />
-		<div class="card text-center">
+		<div id="divPeriodekta" visible="false" class="card text-center">
 			<div class="card-header"><n:h3>INFO PENTING!!!</n:h3></div>
 			<div class="card-body">
 				<n:h5 class="card-title">Pemberitahuan</n:h5>
@@ -18,6 +18,15 @@
 				keanggotaan HAKLI
 				<n:br />
 				<button label="Klik Untuk Pembayaran"
+					autodisable="self" 
+					sclass="btn btn-primary btn-sm" onClick="@command('doClose')" />
+			</div>
+		</div>
+		<div id="divPermohonan" visible="false" class="card text-center">
+			<div class="card-footer text-muted">
+				Silahkan membuat permohonan untuk melakukan P2KB terlebih dahulu.
+				<n:br />
+				<button label="Klik Untuk Membuat Permohonan"
 					autodisable="self" 
 					sclass="btn btn-primary btn-sm" onClick="@command('doClose')" />
 			</div>

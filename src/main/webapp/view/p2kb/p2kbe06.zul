@@ -33,7 +33,7 @@
 								selectedItem="@bind(e.jeniskegiatan)">
 								<radio label="Seminar" value="Seminar" />
 								<radio label="Pelatihan/ Workshop"
-									value="Pelatihan/ Workshop" />
+									value="Pelatihan / Workshop" />
 							</radiogroup>
 							<label style="color:gray"
 								value="@load(vmsgs['jeniskegiatan'])" />

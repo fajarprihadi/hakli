@@ -198,9 +198,9 @@ public class P2kbD02Vm {
 			skp = new BigDecimal(3);
 		} else if (obj.getJenispublikasi().equals("Desain") && obj.getTipepublikasi().equals("Diseminasi Internal")) {
 			skp = new BigDecimal(3);
-		} else if (obj.getJenispublikasi().equals("Maket") && obj.getTipepublikasi().equals("Diseminasi Eksternal")) {
+		} else if (obj.getJenispublikasi().equals("Market") && obj.getTipepublikasi().equals("Diseminasi Eksternal")) {
 			skp = new BigDecimal(2);
-		} else if (obj.getJenispublikasi().equals("Maket") && obj.getTipepublikasi().equals("Diseminasi Internal")) {
+		} else if (obj.getJenispublikasi().equals("Market") && obj.getTipepublikasi().equals("Diseminasi Internal")) {
 			skp = new BigDecimal(4);
 		} else if (obj.getJenispublikasi().equals("Konsep") && obj.getTipepublikasi().equals("Diseminasi Eksternal")) {
 			skp = new BigDecimal(2);

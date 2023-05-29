@@ -188,12 +188,12 @@ public class P2kbC01Vm {
 		BigDecimal skp = new BigDecimal(0);
 		if (obj.getJeniskegiatan().equals("Pendampingan") && obj.getStatuspeserta().equals("Ketua")) {
 			skp = new BigDecimal(3);
-		} else if (obj.getJeniskegiatan().equals("Pendampingan)") && obj.getStatuspeserta().equals("Anggota")) {
+		} else if (obj.getJeniskegiatan().equals("Pendampingan") && obj.getStatuspeserta().equals("Anggota")) {
 			skp = new BigDecimal(1);
 		} else if (obj.getJeniskegiatan().equals("Pembimbingan") && obj.getStatuspeserta().equals("Ketua")) {
 			skp = new BigDecimal(2);
 		} else if (obj.getJeniskegiatan().equals("Pembimbingan") && obj.getStatuspeserta().equals("Anggota")) {
-			skp = new BigDecimal(3);
+			skp = new BigDecimal(1);
 		} else if (obj.getJeniskegiatan().equals("Pembinaan") && obj.getStatuspeserta().equals("Ketua")) {
 			skp = new BigDecimal(2);
 		} else if (obj.getJeniskegiatan().equals("Pembinaan") && obj.getStatuspeserta().equals("Anggota")) {
@@ -264,6 +264,8 @@ public class P2kbC01Vm {
 				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
 				if (tglakhir == null)
 					this.addInvalidMessage(ctx, "tglakhir", Labels.getLabel("common.validator.empty"));
+				if(tglmulai.compareTo(tglakhir) > 0)
+					this.addInvalidMessage(ctx, "tglmulai", "Tanggal mulai harus lebih kecil dari tanggal selesai.");
 				if (isInsert && media == null)
 					this.addInvalidMessage(ctx, "media", "Silahkan upload dokumen bukti kegiatan");
 			}

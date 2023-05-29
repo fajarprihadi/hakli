@@ -20,7 +20,7 @@
 					<row>
 						<label value="Nama Institusi Pendidikan" />
 						<vlayout>
-							<combobox
+							<combobox id="cbInstitut"
 								selectedItem="@bind(e.muniversitas)"
 								model="@load(vm.universitasModel)">
 								<template name="model"

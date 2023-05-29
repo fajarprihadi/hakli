@@ -352,7 +352,7 @@ public class P2kbB15DetailVm {
 				Label lbl11 = new Label("Tanggal Mulai");
 				lbl11.setStyle("font-weight: bold");
 				divKegiatan6.appendChild(lbl11);
-				Label lbl12 = new Label(": " + new SimpleDateFormat("dd MMM yyyy").format(data.getTglmulai()));
+				Label lbl12 = new Label(": " + new SimpleDateFormat("dd MMM yyyy").format(data.getTglakhir()));
 				divKegiatan6.appendChild(lbl12);
 				vlayoutKegiatan.appendChild(divKegiatan6);
 				
@@ -479,6 +479,7 @@ public class P2kbB15DetailVm {
 		map.put("action", "edit");
 		map.put("page", "p2kbb15.zul");
 		map.put("p2kb", obj);
+		map.put("book", p2kb.getTp2kbbook());
 		map.put("p2kbkegiatan", obj.getMp2kbkegiatan());
 		Event closeEvent = new Event("onClose", winP2kbb15Detail, map);
 		Events.postEvent(closeEvent);
