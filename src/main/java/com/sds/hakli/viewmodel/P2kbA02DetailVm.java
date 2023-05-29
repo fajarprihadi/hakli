@@ -94,6 +94,9 @@ public class P2kbA02DetailVm {
 			approvetype = isApprove;
 		}
 		
+		anggota = (Tanggota) zkSession.getAttribute("anggota");
+		this.p2kb = p2kb;
+		
 		grid.setRowRenderer(new RowRenderer<Tp2kba02>() {
 
 			@Override
@@ -461,6 +464,7 @@ public class P2kbA02DetailVm {
 		map.put("action", "edit");
 		map.put("page", "p2kba02.zul");
 		map.put("p2kb", obj);
+		map.put("book", p2kb.getTp2kbbook());
 		map.put("p2kbkegiatan", obj.getMp2kbkegiatan());
 		Event closeEvent = new Event("onClose", winP2kba02Detail, map);
 		Events.postEvent(closeEvent);

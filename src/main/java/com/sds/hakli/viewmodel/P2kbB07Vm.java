@@ -186,22 +186,22 @@ public class P2kbB07Vm {
 
 	public BigDecimal getNilaiSkp(Tp2kbb07 obj) throws Exception {
 		BigDecimal skp = new BigDecimal(0);
-		if (obj.getJeniskegiatan().equals("Surveilans kualitas media lingkungan")
+		if (obj.getJeniskegiatan().equals("Surveilans Kualitas Media Lingkungan")
 				&& obj.getStatuspeserta().equals("Ketua Tim")) {
 			skp = new BigDecimal(3);
-		} else if (obj.getJeniskegiatan().equals("Surveilans kualitas media lingkungan")
+		} else if (obj.getJeniskegiatan().equals("Surveilans Kualitas Media Lingkungan")
 				&& obj.getStatuspeserta().equals("Anggota Tim")) {
 			skp = new BigDecimal(2);
-		} else if (obj.getJeniskegiatan().equals("Surveilans kualitas media lingkungan")
+		} else if (obj.getJeniskegiatan().equals("Surveilans Kualitas Media Lingkungan")
 				&& obj.getStatuspeserta().equals("Kontributor")) {
 			skp = new BigDecimal(1);
-		} else if (obj.getJeniskegiatan().equals("Uji Laboratorium dan pengukuran lapangan (insit)")
+		} else if (obj.getJeniskegiatan().equals("Uji Laboratorium dan Pengukuran Lapangan (insit)")
 				&& obj.getStatuspeserta().equals("Ketua Tim")) {
 			skp = new BigDecimal(3);
-		} else if (obj.getJeniskegiatan().equals("Uji Laboratorium dan pengukuran lapangan (insit)")
+		} else if (obj.getJeniskegiatan().equals("Uji Laboratorium dan Pengukuran Lapangan (insit)")
 				&& obj.getStatuspeserta().equals("Anggota Tim")) {
 			skp = new BigDecimal(2);
-		} else if (obj.getJeniskegiatan().equals("Uji Laboratorium dan pengukuran lapangan (insit)")
+		} else if (obj.getJeniskegiatan().equals("Uji Laboratorium dan Pengukuran Lapangan (insit)")
 				&& obj.getStatuspeserta().equals("Kontributor")) {
 			skp = new BigDecimal(1);
 		} else if (obj.getJeniskegiatan().equals("Analisa Risiko") && obj.getStatuspeserta().equals("Ketua Tim")) {

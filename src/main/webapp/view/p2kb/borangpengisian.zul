@@ -37,6 +37,7 @@
 
 				</rows>
 			</grid>
+			<separator/>
 			<div class="row">
 				<div class="col">
 					<textbox placeholder="Nama Kegiatan" value="@bind(vm.kegiatan)"

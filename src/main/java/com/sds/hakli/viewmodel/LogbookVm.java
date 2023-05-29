@@ -289,6 +289,7 @@ public class LogbookVm {
 								Map<String, Object> map = new HashMap<String, Object>();
 								map.put("obj", p2kbkegiatan);
 								map.put("objForm", mapEvent.get("p2kb"));
+								map.put("book", tpb);
 								Window win = (Window) Executions.createComponents("/view/p2kb/" + page, null, map);
 								win.setClosable(true);
 								win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {

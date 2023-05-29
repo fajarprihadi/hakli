@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
@@ -69,6 +70,8 @@ public class P2kbA06Vm {
 
 	@Wire
 	private Window winP2kba06;
+	@Wire
+	private Combobox cbInstitut;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view,
@@ -86,6 +89,7 @@ public class P2kbA06Vm {
 			this.objForm = objForm;
 			nilaiskp_curr = objForm.getNilaiskp();
 			isInsert = false;
+			cbInstitut.setValue(objForm.getMuniversitas().getUniversitas());
 		} else
 			doReset();
 	}
@@ -196,7 +200,7 @@ public class P2kbA06Vm {
 		} else if (obj.getJenjang().equals("Profesi Kesling/MgT/Sp1")) {
 			skp = new BigDecimal(22.5);
 		} else if (obj.getJenjang().equals("DrTerapan/Sp2")) {
-			skp = new BigDecimal(1);
+			skp = new BigDecimal(40);
 		}
 		return skp;
 	}
@@ -230,6 +234,8 @@ public class P2kbA06Vm {
 				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
 				if (tglakhir == null)
 					this.addInvalidMessage(ctx, "tglakhir", Labels.getLabel("common.validator.empty"));
+				if(tglmulai.compareTo(tglakhir) > 0)
+					this.addInvalidMessage(ctx, "tglmulai", "Tanggal mulai harus lebih kecil dari tanggal selesai.");
 				if (isInsert && media == null)
 					this.addInvalidMessage(ctx, "media", "Silahkan upload dokumen bukti kegiatan");
 			}

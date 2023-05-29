@@ -90,6 +90,7 @@ public class P2kbE10Vm {
 	@NotifyChange("*")
 	public void doReset() {
 		isInsert = true;
+		objForm = new Tp2kbe10();
 		objForm.setTanggota(anggota);
 		objForm.setMp2kbkegiatan(p2kb);
 	}
@@ -221,6 +222,8 @@ public class P2kbE10Vm {
 				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
 				if (tglakhir == null)
 					this.addInvalidMessage(ctx, "tglakhir", Labels.getLabel("common.validator.empty"));
+				if(tglmulai.compareTo(tglakhir) > 0)
+					this.addInvalidMessage(ctx, "tglmulai", "Tanggal mulai harus lebih kecil dari tanggal selesai.");
 				if (isInsert && media == null)
 					this.addInvalidMessage(ctx, "media", "Silahkan upload dokumen bukti kegiatan");
 			}

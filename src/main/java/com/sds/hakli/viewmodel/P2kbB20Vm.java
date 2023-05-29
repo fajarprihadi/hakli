@@ -189,7 +189,7 @@ public class P2kbB20Vm {
 		if (obj.getJeniskegiatan().equals("Pengurangan dan Penanganan Sampah Perundangan")
 				&& obj.getStatuspeserta().equals("Ketua Tim")) {
 			skp = new BigDecimal(3);
-		} else if (obj.getJeniskegiatan().equals("Pengurangan dan Penanganan Sampah Perundangan)")
+		} else if (obj.getJeniskegiatan().equals("Pengurangan dan Penanganan Sampah Perundangan")
 				&& obj.getStatuspeserta().equals("Anggota Tim")) {
 			skp = new BigDecimal(2);
 		} else if (obj.getJeniskegiatan().equals("Pengurangan dan Penanganan Sampah Perundangan")
@@ -243,6 +243,8 @@ public class P2kbB20Vm {
 				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
 				if (tglakhir == null)
 					this.addInvalidMessage(ctx, "tglakhir", Labels.getLabel("common.validator.empty"));
+				if(tglmulai.compareTo(tglakhir) > 0)
+					this.addInvalidMessage(ctx, "tglmulai", "Tanggal mulai harus lebih kecil dari tanggal selesai.");
 				if (isInsert && media == null)
 					this.addInvalidMessage(ctx, "media", "Silahkan upload dokumen bukti kegiatan");
 			}

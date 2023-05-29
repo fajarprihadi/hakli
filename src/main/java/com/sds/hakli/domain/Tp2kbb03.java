@@ -87,6 +87,7 @@ public class Tp2kbb03 {
 		this.mp2kbkegiatan = mp2kbkegiatan;
 	}
 	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getJenisjabatan() {
 		return jenisjabatan;
 	}

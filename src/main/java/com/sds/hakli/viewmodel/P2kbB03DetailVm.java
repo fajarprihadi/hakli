@@ -471,6 +471,7 @@ public class P2kbB03DetailVm {
 		map.put("action", "edit");
 		map.put("page", "p2kbb03.zul");
 		map.put("p2kb", obj);
+		map.put("book", p2kb.getTp2kbbook());
 		map.put("p2kbkegiatan", obj.getMp2kbkegiatan());
 		Event closeEvent = new Event("onClose", winP2kbb03Detail, map);
 		Events.postEvent(closeEvent);

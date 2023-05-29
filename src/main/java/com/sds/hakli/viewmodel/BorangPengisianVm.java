@@ -51,6 +51,8 @@ public class BorangPengisianVm {
 	private String kegiatan;
 	private Mp2kbranah ranah;
 	private Tp2kbbook tpb;
+	private String startdate;
+	private String enddate;
 
 	@Wire
 	private Window winBorang;
@@ -92,9 +94,10 @@ public class BorangPengisianVm {
 
 			doReset();
 
-			tpb = new Tp2kbbookDAO().findByFilter("tanggotafk = " + obj.getTanggotapk() + "'"
+			tpb = new Tp2kbbookDAO().findByFilter("tanggotafk = " + obj.getTanggotapk() + " and '"
 					+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "' BETWEEN TGLMULAI AND TGLAKHIR");
 			if (tpb == null) {
+				tpb = new Tp2kbbook();
 				Map<String, Object> map = new HashMap<>();
 				Window win = new Window();
 				map.put("type", "permohonan");
@@ -112,7 +115,8 @@ public class BorangPengisianVm {
 
 				});
 			} else {
-				tpb = new Tp2kbbook();
+				startdate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglmulai());
+				enddate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglakhir());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -334,6 +338,22 @@ public class BorangPengisianVm {
 
 	public void setTpb(Tp2kbbook tpb) {
 		this.tpb = tpb;
+	}
+
+	public String getStartdate() {
+		return startdate;
+	}
+
+	public void setStartdate(String startdate) {
+		this.startdate = startdate;
+	}
+
+	public String getEnddate() {
+		return enddate;
+	}
+
+	public void setEnddate(String enddate) {
+		this.enddate = enddate;
 	}
 
 }
