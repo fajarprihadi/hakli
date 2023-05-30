@@ -186,16 +186,15 @@ public class MutasiVm {
 
 			@Override
 			public void validate(ValidationContext ctx) {
-//				Mcabang mcabang = (Mcabang) ctx.getProperties("mcabang")[0].getValue();
-//				if (mcabang == null)
-//					this.addInvalidMessage(ctx, "mcabang", Labels.getLabel("common.validator.empty"));
-//
-//				String memo = (String) ctx.getProperties("memo")[0].getValue();
-//				if (memo == null || "".equals(memo.trim()))
-//					this.addInvalidMessage(ctx, "memo", Labels.getLabel("common.validator.empty"));
-//
-//				if (media == null)
-//					this.addInvalidMessage(ctx, "media", "Silahkan upload surat pengantar");
+				if (mcabang == null)
+					this.addInvalidMessage(ctx, "mcabang", Labels.getLabel("common.validator.empty"));
+
+				String memo = (String) ctx.getProperties("memo")[0].getValue();
+				if (memo == null || "".equals(memo.trim()))
+					this.addInvalidMessage(ctx, "memo", Labels.getLabel("common.validator.empty"));
+
+				if (media == null)
+					this.addInvalidMessage(ctx, "media", "Silahkan upload surat pengantar");
 			}
 		};
 	}
