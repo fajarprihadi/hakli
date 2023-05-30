@@ -1,10 +1,173 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winMutasi" border="normal">
+	<window id="winMutasi" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.MutasiVm')"
+		validationMessages="@id('vmsgs')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
-			<n:span>Mutasi</n:span>
+			<n:span>Pengajuan Mutasi</n:span>
 		</caption>
-		<n:h3>On Progress Development</n:h3>
+		<grid>
+			<columns>
+				<column align="center" label="Asal Cabang Keanggotaan" />
+			</columns>
+			<rows>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="Nomor Anggota" />
+						</div>
+						<div class="col-10">
+							<label value="@load(vm.anggota.noanggota)" />
+						</div>
+					</div>
+				</row>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="Nama Lengkap" />
+						</div>
+						<div class="col-10">
+							<label value="@load(vm.anggota.nama)" />
+						</div>
+					</div>
+				</row>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="DPW" />
+						</div>
+						<div class="col-10">
+							<label
+								value="@load(vm.anggota.mcabang.mprov.provname)" />
+						</div>
+					</div>
+				</row>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="Cabang" />
+						</div>
+						<div class="col-10">
+							<label
+								value="@load(vm.anggota.mcabang.cabang)" />
+						</div>
+					</div>
+				</row>
+			</rows>
+		</grid>
+		<grid
+			form="@id('e') @load(vm.obj) @save(vm.obj, before='doSave')
+			@validator(vm.validator) ">
+			<columns>
+				<column align="center" label="Mutasi Tujuan" />
+			</columns>
+			<rows>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="Wilayah Tujuan" />
+						</div>
+						<div class="col-10">
+							<combobox id="cbRegion"
+								placeholder="-- Pilih Provinsi --" model="@load(vm.mprovmodel)"
+								cols="30" selectedItem="@bind(vm.mprov)"
+								onChange="@command('doBranchLoad', item=vm.mprov)">
+								<template name="model" var="mprov">
+									<comboitem
+										label="@load(mprov.provname)" />
+								</template>
+							</combobox>
+						</div>
+					</div>
+				</row>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="Cabang Tujuan" />
+						</div>
+						<div class="col-10">
+							<vlayout>
+								<combobox id="cbCabang"
+									placeholder="-- Pilih Kota --" model="@load(vm.mcabangmodel)"
+									cols="30" selectedItem="@bind(vm.mcabang)">
+									<template name="model"
+										var="mcabang">
+										<comboitem
+											label="@load(mcabang.cabang)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['mcabang'])" />
+							</vlayout>
+						</div>
+					</div>
+				</row>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="Surat Pengantar Mutasi" />
+						</div>
+						<div class="col-10">
+							<vlayout>
+								<hlayout>
+									<button sclass="btn btn-info btn-sm"
+										label="Browse..." upload="true,maxsize=1000"
+										onUpload="@command('doUpload', upEvent=event)"
+										autodisable="self" />
+									<separator orient="vertical" />
+									<label
+										value="@load(vm.docfilename)" />
+								</hlayout>
+								<label style="color:gray"
+									value="@load(vmsgs['media'])" />
+							</vlayout>
+						</div>
+					</div>
+				</row>
+				<row>
+					<div class="row" align="left">
+						<div class="col-2">
+							<label value="Keterangan" />
+						</div>
+						<div class="col-10">
+							<vlayout>
+								<textbox value="@bind(e.memo)" width="100%"
+									rows="3" maxlength="200" />
+								<label style="color:gray"
+									value="@load(vmsgs['memo'])" />
+							</vlayout>
+						</div>
+					</div>
+				</row>
+			</rows>
+			<foot>
+				<footer>
+					<button id="btSave" width="100%"
+						iconSclass="z-icon-save" label="Simpan" autodisable="self"
+						sclass="btn btn-primary btn-sm" onClick="@command('doSave')" />
+				</footer>
+			</foot>
+		</grid>
+		<separator />
+		<div class="row">
+			<div class="col-md" />
+			<div class="col-md-2" align="right">
+				<label value="Total Data :" style="font-weight: bold" />
+				<label value="@load(vm.pageTotalSize)"
+					style="font-weight: bold" />
+			</div>
+		</div>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true"
+			mold="paging" pageSize="20" pagingPosition="both">
+			<columns>
+				<column label="${labels.common.no}" align="right" />
+				<column label="DPW Asal" />
+				<column label="Cabang Asal" />
+				<column label="Tgl Pengajuan" align="center"/>
+				<column label="DPW Tujuan" />
+				<column label="Cabang Tujuan" />
+			</columns>
+		</grid>
 	</window>
 </zk>
