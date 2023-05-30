@@ -72,7 +72,7 @@
 			<columns>
 				<column label="No" align="right" width="40px" />
 				<column>
-					<textbox inplace="true" value="@bind(vm.cabang)"
+					<textbox inplace="true" value="@bind(vm.provcode)"
 						width="100%" maxlength="100" placeholder="Kode Region"
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />

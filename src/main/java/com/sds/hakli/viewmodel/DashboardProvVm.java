@@ -2,10 +2,13 @@ package com.sds.hakli.viewmodel;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -14,6 +17,7 @@ import org.zkoss.chart.YAxis;
 import org.zkoss.chart.model.CategoryModel;
 import org.zkoss.chart.model.DefaultCategoryModel;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.Selectors;
@@ -26,6 +30,7 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.TanggotaDAO;
+import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.BranchTop;
 import com.sds.hakli.domain.Tanggota;
 
@@ -35,9 +40,11 @@ public class DashboardProvVm {
 	private Tanggota oUser;
 
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
+	private Tp2kbDAO timp2kbDao = new Tp2kbDAO();
 
 	private long totalpop;
 	private String totalanggota;
+	private String totaltimp2kb;
 	private List<BranchTop> objList = new ArrayList<>();
 
 	@Wire
@@ -71,10 +78,11 @@ public class DashboardProvVm {
 		doChart();
 	}
 
-	@NotifyChange("totalanggota")
+	@NotifyChange({"totalanggota", "totaltimp2kb"})
 	public void doCount() {
 		try {
 			totalanggota = NumberFormat.getInstance().format(anggotaDao.pageCount("statusreg = '3' and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk()));
+			totaltimp2kb = NumberFormat.getInstance().format(timp2kbDao.getSumWaitTimP2KB("mprovfk = " + oUser.getMcabang().getMprov().getMprovpk()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,6 +121,22 @@ public class DashboardProvVm {
 			e.printStackTrace();
 		}
 	}
+	
+	@Command
+	public void doViewTimP2kb() {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("mprovpk", oUser.getMcabang().getMprov().getMprovpk());
+			map.put("provname", oUser.getMcabang().getMprov().getProvname());
+			Window win = (Window) Executions
+					.createComponents("/view/p2kb/p2kbsumwaittimkab.zul", null, map);
+			win.setClosable(true);
+			win.setWidth("80%");
+			win.doModal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public String getTotalanggota() {
 		return totalanggota;
@@ -128,6 +152,14 @@ public class DashboardProvVm {
 
 	public void setTotalpop(long totalpop) {
 		this.totalpop = totalpop;
+	}
+
+	public String getTotaltimp2kb() {
+		return totaltimp2kb;
+	}
+
+	public void setTotaltimp2kb(String totaltimp2kb) {
+		this.totaltimp2kb = totaltimp2kb;
 	}
 
 }

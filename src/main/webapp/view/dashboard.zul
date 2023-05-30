@@ -20,7 +20,32 @@
 					</div>
 					<div class="card-body">
 						<label sclass="card-text"
-							value="@load(vm.totalanggota)" style="font-size: 20px" />
+							value="@load(vm.totalanggota)" style="font-size: 20px" /> Anggota
+					</div>
+				</div>
+				<separator />
+				<div class="card text-white bg-success mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">Pending Komisi P2KB</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totalkomisip2kb)" style="font-size: 20px" /> Kegiatan
+					</div>
+				</div>
+				<separator />
+				<div class="card text-white bg-warning mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">Pending Tim P2KB</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totaltimp2kb)" style="font-size: 20px" /> Kegiatan
+					</div>
+					<div class="card-footer">
+						<a onClick="@command('doViewTimP2kb')" style="color: white">Tampilkan</a>
 					</div>
 				</div>
 				<separator />
@@ -29,6 +54,7 @@
 				</n:h6>
 				<grid id="grid">
 					<columns>
+						<column label="No" align="right" width="40px" />
 						<column label="Cabang" />
 						<column label="Anggota" align="right" />
 					</columns>

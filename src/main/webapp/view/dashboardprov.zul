@@ -6,12 +6,42 @@
 			<n:i class="fas fa-chart-line"></n:i>
 			<n:span>Sebaran Populasi Anggota Area Cabang</n:span>
 		</caption>
+
 		<div class="row">
-			<div class="col">
+			<div class="col-md-7 col-sm-12">
 				<charts id="chart" type="bar"
 					title="Sebaran Anggota Diseluruh Cabang" />
 			</div>
+			<div class="col-md-5 col-sm-12" align="right">
+				<div class="card text-white bg-primary mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">Total Anggota</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totalanggota)" style="font-size: 20px" /> Anggota
+					</div>
+				</div>
+				<separator />
+				<div class="card text-white bg-warning mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">
+							Pending Tim P2KB
+						</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totaltimp2kb)" style="font-size: 20px" /> Kegiatan
+					</div>
+					<div class="card-footer">
+						<a onClick="@command('doViewTimP2kb')" style="color: white">Tampilkan</a>
+					</div>
+				</div>
+			</div>
 		</div>
+		<separator />
 		<div class="row">
 			<div class="col">
 				<grid id="grid">
