@@ -10,11 +10,12 @@
 			<caption label="Pencarian" iconSclass="z-icon-search" />
 			<div class="row">
 				<div class="col">
-					<textbox placeholder="Nama" value="@bind(vm.nama)" onOK="@command('doSearch')"
-						width="100%" maxlength="40" />
+					<textbox placeholder="Nama" value="@bind(vm.nama)"
+						onOK="@command('doSearch')" width="100%" maxlength="40" />
 				</div>
 				<div class="col">
-					<combobox id="cbRegion" placeholder="Provinsi" onSelect="@command('doLoadCabang', prov=vm.region)"
+					<combobox id="cbRegion" placeholder="Provinsi"
+						onSelect="@command('doLoadCabang', prov=vm.region)"
 						model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
 						width="100%">
 						<template name="model" var="region">
@@ -57,13 +58,17 @@
 					style="font-weight: bold" />
 				<label value="@load(vm.pageTotalSize)"
 					style="font-weight: bold" />
+				<button autodisable="self" iconSclass="z-icon-download" tooltiptext="Download Data"
+					sclass="btn btn-success btn-sm" onClick="@command('doExport')" />
 			</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
+			sizedByContent="true" span="true">
 			<columns sizable="true">
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.nama}" />
-				<column label="${labels.anggota.noanggota}" align="center" />
+				<column label="${labels.anggota.noanggota}"
+					align="center" />
 				<column label="${labels.anggota.noktp}" align="center" />
 				<column label="${labels.area.prov}" />
 				<column label="${labels.anggota.cabang}" />

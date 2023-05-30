@@ -8,11 +8,11 @@
 		</caption>
 
 		<div class="row">
-			<div class="col-md-7 col-sm-12">
+			<div class="col-md-8 col-sm-12">
 				<charts id="chart" type="bar"
 					title="Sebaran Anggota Diseluruh Cabang" />
 			</div>
-			<div class="col-md-5 col-sm-12" align="right">
+			<div class="col-md-4 col-sm-12" align="right">
 				<div class="card text-white bg-primary mb-3"
 					style="max-width: 18rem;">
 					<div class="card-header">

@@ -50,6 +50,18 @@ public class TanggotaDAO {
         return oList;
     }	
 	
+	@SuppressWarnings("unchecked")
+	public List<Tanggota> listNative(String filter, String orderby) throws Exception {		
+    	List<Tanggota> oList = null;
+    	if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from tanggota join mcabang on mcabangfk = mcabangpk "
+				+ "where " + filter + " order by " + orderby).addEntity(Tanggota.class).list();
+		session.close();
+        return oList;
+    }	
+	
 	public Tanggota findByPk(Integer pk) throws Exception {
 		session = StoreHibernateUtil.openSession();
 		Tanggota oForm = (Tanggota) session.createQuery("from Tanggota where tanggotapk = " + pk).uniqueResult();
