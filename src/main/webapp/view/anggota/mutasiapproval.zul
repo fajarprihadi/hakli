@@ -3,8 +3,8 @@
 	<window id="winMutasi" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.MutasiApprovalVm')">
 		<caption>
-			<n:i class="fas fa-list"></n:i>
-			<n:span>Verifikasi Mutasi</n:span>
+			<n:i class="fas fa-check"></n:i>
+			<n:span>Verifikasi Pengajuan Mutasi</n:span>
 		</caption>
 		<groupbox mold="3d">
 			<caption label="Form Verifikasi" />
@@ -31,7 +31,7 @@
 		</groupbox>
 		<separator/>
 		<groupbox mold="3d">
-			<caption label="Daftar Mutasi" />
+			<caption label="Daftar Pengajuan Mutasi" />
 			<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true"
 				mold="paging" pageSize="20" pagingPosition="both">
 				<columns>
