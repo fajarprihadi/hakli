@@ -8,8 +8,8 @@
 		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/haklidb5</property>
 		<!-- <property name="hibernate.connection.url">jdbc:postgresql://10.12.4.164:5432/haklidb5</property> -->		
 		<property name="hibernate.connection.username">postgres</property>
-		<property name="hibernate.connection.password">prihadi</property>
-		<!-- <property name="hibernate.connection.password">SDS@dmindepok</property> -->
+		<!-- <property name="hibernate.connection.password">prihadi</property> -->
+		<property name="hibernate.connection.password">SDS@dmindepok</property>
 		
 		<property name="hibernate.jdbc.batch_size">20</property>
 		<property name="hibernate.cache.use_second_level_cache">false</property>

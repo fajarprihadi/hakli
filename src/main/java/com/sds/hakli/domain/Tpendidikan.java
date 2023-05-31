@@ -220,6 +220,7 @@ public class Tpendidikan {
 		this.issisdmk = issisdmk;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSisdmklastupdated() {
 		return sisdmklastupdated;
 	}

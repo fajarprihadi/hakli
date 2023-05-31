@@ -467,7 +467,7 @@ public class Tanggota {
 	public void setIssisdmk(String issisdmk) {
 		this.issisdmk = issisdmk;
 	}
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSisdmklastupdated() {
 		return sisdmklastupdated;
 	}
