@@ -385,6 +385,7 @@ public class P2kbA02DetailVm {
 					divAction.appendChild(new Separator("vertical"));
 					divAction.appendChild(btDel);
 				}
+				row.getChildren().add(divAction);
 
 				totalskp = totalskp.add(data.getNilaiskp());
 				BindUtils.postNotifyChange(P2kbA02DetailVm.this, "totalskp");

@@ -416,7 +416,7 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-3"
 					role="tabpanel" aria-labelledby="ex1-tab-3">
-					<grid id="gridPekerjaan" span="true">
+					<grid id="gridPekerjaan" span="true" emptyMessage="${labels.common.emptymsg}">
 						<columns sizable="true">
 							<column
 								label="${labels.pekerjaan.namakantor}" width="220px" />
@@ -508,7 +508,7 @@
 								</row>
 								<row>
 									<label
-										value="${labels.area.rumpun} (*)" />
+										value="Rumpun (*)" />
 									<vlayout>
 										<combobox id="cbRumpun"
 											selectedItem="@bind(f.mrumpun)" model="@load(vm.rumpunModel)"
@@ -611,7 +611,7 @@
 										value="${labels.pekerjaan.tglakhir} (*)" />
 									<vlayout>
 										<datebox
-											value="@bind(f.tglmulai)" maxlength="10" cols="12"
+											value="@bind(f.tglakhir)" maxlength="10" cols="12"
 											format="dd-MM-yyyy" />
 										<label style="color:gray"
 											value="@load(vmsgs['tglakhir'])" />
@@ -650,7 +650,7 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-4"
 					role="tabpanel" aria-labelledby="ex1-tab-4">
-					<grid id="gridPendidikan" span="true">
+					<grid id="gridPendidikan" span="true" emptyMessage="${labels.common.emptymsg}">
 						<columns sizable="true">
 							<column
 								label="${labels.pendidikan.universitas}" width="220px" />

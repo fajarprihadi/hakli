@@ -294,14 +294,14 @@ public class P2kbB05DetailVm {
 				divKegiatan3.appendChild(lbl6);
 				vlayoutKegiatan.appendChild(divKegiatan3);
 				
-				Div divKegiatan31 = new Div();
-				divKegiatan31.setSclass("note note-light");
-				Label lbl51 = new Label("Jenis Kegiatan");
-				lbl51.setStyle("font-weight: bold");
-				divKegiatan31.appendChild(lbl51);
-				Label lbl61 = new Label(": " + data.getJeniskegiatan());
-				divKegiatan31.appendChild(lbl61);
-				vlayoutKegiatan.appendChild(divKegiatan31);
+//				Div divKegiatan31 = new Div();
+//				divKegiatan31.setSclass("note note-light");
+//				Label lbl51 = new Label("Jenis Kegiatan");
+//				lbl51.setStyle("font-weight: bold");
+//				divKegiatan31.appendChild(lbl51);
+//				Label lbl61 = new Label(": " + data.getJeniskegiatan());
+//				divKegiatan31.appendChild(lbl61);
+//				vlayoutKegiatan.appendChild(divKegiatan31);
 				
 				Div divKegiatan4 = new Div();
 				divKegiatan4.setSclass("note note-light");
