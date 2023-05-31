@@ -144,6 +144,7 @@ public class AnggotaFormVm {
 
 	private Media media;
 	private Media mediaIjazah;
+	private String strDob;
 
 	@Wire
 	private Window winAnggotaForm;
@@ -230,8 +231,9 @@ public class AnggotaFormVm {
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
-			@ExecutionArgParam("pekerjaans") List<Tpekerjaan> pekerjaans, 
-			@ExecutionArgParam("pendidikans") List<Tpendidikan> pendidikans, @ExecutionArgParam("acttype") String acttype) {
+			@ExecutionArgParam("pekerjaans") List<Tpekerjaan> pekerjaans,
+			@ExecutionArgParam("pendidikans") List<Tpendidikan> pendidikans,
+			@ExecutionArgParam("acttype") String acttype) {
 		Selectors.wireComponents(view, this, false);
 		try {
 			this.acttype = acttype;
@@ -257,6 +259,10 @@ public class AnggotaFormVm {
 			}
 
 			dob = pribadi.getTgllahir();
+			System.out.println(dob);
+			System.out.println(new SimpleDateFormat("dd").format(dob) + ", "
+					+ (Integer.parseInt(new SimpleDateFormat("MM").format(dob))) + ", "
+					+ new SimpleDateFormat("yyyy").format(dob));
 			if (dob != null) {
 				cbDobDay.setValue(new SimpleDateFormat("dd").format(dob));
 				cbDobMonth.setSelectedIndex(Integer.parseInt(new SimpleDateFormat("MM").format(dob)) - 1);
@@ -293,10 +299,16 @@ public class AnggotaFormVm {
 					row.getChildren().add(new Label(data.getPeminatan1()));
 					row.getChildren().add(new Label(data.getPeminatan2()));
 					String periode = "";
-					periode = (data.getPeriodeblawal() != null && StringUtils.isNumeric(data.getPeriodeblawal()) ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblawal())) : "") + " " + (data.getPeriodethawal() != null ? data.getPeriodethawal() : "") + " s/d "
-							+ (data.getPeriodeblakhir() != null && StringUtils.isNumeric(data.getPeriodeblakhir()) ? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblakhir())) : "") + " " + (data.getPeriodethakhir() != null ? data.getPeriodethakhir() : "");
+					periode = (data.getPeriodeblawal() != null && StringUtils.isNumeric(data.getPeriodeblawal())
+							? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblawal()))
+							: "")
+							+ " " + (data.getPeriodethawal() != null ? data.getPeriodethawal() : "") + " s/d "
+							+ (data.getPeriodeblakhir() != null && StringUtils.isNumeric(data.getPeriodeblakhir())
+									? StringUtils.getMonthshortLabel(Integer.parseInt(data.getPeriodeblakhir()))
+									: "")
+							+ " " + (data.getPeriodethakhir() != null ? data.getPeriodethakhir() : "");
 					row.getChildren().add(new Label(periode));
-					
+
 					Button btView = new Button();
 					btView.setIconSclass("z-icon-eye");
 					btView.setSclass("btn btn-primary btn-sm");
@@ -306,27 +318,28 @@ public class AnggotaFormVm {
 
 						@Override
 						public void onEvent(Event event) throws Exception {
-							File file = new File(Executions.getCurrent().getDesktop().getWebApp()
-									.getRealPath(AppUtils.PATH_IJAZAH) + "/" + data.getIjazahlink());
-							if (data.getIjazahlink() != null && data.getIjazahlink().trim().length() > 0 && file.exists()) {
+							File file = new File(
+									Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_IJAZAH)
+											+ "/" + data.getIjazahlink());
+							if (data.getIjazahlink() != null && data.getIjazahlink().trim().length() > 0
+									&& file.exists()) {
 								Map<String, String> mapDocument = new HashMap<>();
 								mapDocument.put("src", AppUtils.PATH_IJAZAH + "/" + data.getIjazahlink());
 								zkSession.setAttribute("mapDocument", mapDocument);
 								Executions.getCurrent().sendRedirect("/view/docviewer.zul", "_blank");
 							} else {
-								Messagebox.show("Dokumen Ijazah Tidak Tersedia", WebApps.getCurrent().getAppName(), Messagebox.OK,
-										Messagebox.INFORMATION);
+								Messagebox.show("Dokumen Ijazah Tidak Tersedia", WebApps.getCurrent().getAppName(),
+										Messagebox.OK, Messagebox.INFORMATION);
 							}
 						}
 					});
-					
+
 					Hlayout hlayout = new Hlayout();
 					hlayout.appendChild(btView);
 					if (data.getNoijazah() != null && data.getNoijazah().trim().length() > 0)
 						hlayout.appendChild(new Label(data.getNoijazah()));
 					row.getChildren().add(hlayout);
-					
-					
+
 					if (acttype != null && acttype.equals("edit")) {
 						Button btEdit = new Button();
 						btEdit.setIconSclass("z-icon-edit");
@@ -353,7 +366,8 @@ public class AnggotaFormVm {
 							@Override
 							public void onEvent(Event event) throws Exception {
 								Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
-										Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+										Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
+										new EventListener<Event>() {
 
 											@Override
 											public void onEvent(Event event) throws Exception {
@@ -361,8 +375,9 @@ public class AnggotaFormVm {
 													try {
 
 													} catch (Exception e) {
-														Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-																Messagebox.OK, Messagebox.ERROR);
+														Messagebox.show(e.getMessage(),
+																WebApps.getCurrent().getAppName(), Messagebox.OK,
+																Messagebox.ERROR);
 														e.printStackTrace();
 													}
 												}
@@ -403,7 +418,7 @@ public class AnggotaFormVm {
 					row.getChildren().add(new Label(data.getKeterangankerja()));
 					row.getChildren().add(new Label(data.getTelpkantor()));
 					row.getChildren().add(new Label(data.getFaxkantor()));
-					
+
 					if (acttype != null && acttype.equals("edit")) {
 						Button btEdit = new Button();
 						btEdit.setIconSclass("z-icon-edit");
@@ -430,7 +445,8 @@ public class AnggotaFormVm {
 							@Override
 							public void onEvent(Event event) throws Exception {
 								Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog",
-										Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+										Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
+										new EventListener<Event>() {
 
 											@Override
 											public void onEvent(Event event) throws Exception {
@@ -438,8 +454,9 @@ public class AnggotaFormVm {
 													try {
 
 													} catch (Exception e) {
-														Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
-																Messagebox.OK, Messagebox.ERROR);
+														Messagebox.show(e.getMessage(),
+																WebApps.getCurrent().getAppName(), Messagebox.OK,
+																Messagebox.ERROR);
 														e.printStackTrace();
 													}
 												}
@@ -470,7 +487,7 @@ public class AnggotaFormVm {
 			gridPekerjaan.setModel(new ListModelList<>(this.pekerjaans));
 			gridPekerjaan.setSizedByContent(true);
 			gridPekerjaan.setSpan(true);
-			
+
 			if (pendidikans != null) {
 				this.pendidikans = pendidikans;
 			} else {
@@ -478,7 +495,7 @@ public class AnggotaFormVm {
 						"tpendidikanpk desc");
 			}
 			gridPendidikan.setModel(new ListModelList<>(this.pendidikans));
-			
+
 			if (this.acttype != null && this.acttype.equals("approval")) {
 				tabApproval.setVisible(true);
 				List<Component> compExclude = new ArrayList<>();
@@ -495,7 +512,7 @@ public class AnggotaFormVm {
 				CompUtils.doDisableComponent(winAnggotaForm, true, null);
 			} else if (this.acttype != null && this.acttype.equals("edit")) {
 				tabApproval.setVisible(false);
-			} 
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -609,7 +626,7 @@ public class AnggotaFormVm {
 	}
 
 	@Command
-	@NotifyChange({"pendidikan", "ijazahfilename"})
+	@NotifyChange({ "pendidikan", "ijazahfilename" })
 	public void doAddPendidikan(Tpendidikan obj) {
 		try {
 			if (obj != null) {
@@ -626,7 +643,7 @@ public class AnggotaFormVm {
 				cbPendidikanThAwal.setValue(pendidikan.getPeriodethawal());
 				cbPendidikanBlAkhir.setValue(pendidikan.getPeriodeblakhir());
 				cbPendidikanThAkhir.setValue(pendidikan.getPeriodethakhir());
-				
+
 				mediaIjazah = null;
 				ijazahfilename = null;
 				if (pendidikan.getIjazahfilename() != null)
@@ -643,7 +660,7 @@ public class AnggotaFormVm {
 				btAddPendidikan.setLabel("Cancel");
 				btAddPendidikan.setIconSclass("z-icon-reply");
 				btSavePekerjaan.setLabel("Submit");
-				
+
 				mediaIjazah = null;
 				ijazahfilename = null;
 			} else {
@@ -651,7 +668,7 @@ public class AnggotaFormVm {
 				gbPendidikan.setVisible(false);
 				btAddPendidikan.setLabel("Tambah Pendidikan");
 				btAddPendidikan.setIconSclass("z-icon-plus-square");
-				
+
 				mediaIjazah = null;
 				ijazahfilename = null;
 			}
@@ -725,7 +742,7 @@ public class AnggotaFormVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("ijazahfilename")
 	public void doUploadIjazah(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx) {
@@ -780,7 +797,7 @@ public class AnggotaFormVm {
 			session.close();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSavePendidikan() {
@@ -794,14 +811,13 @@ public class AnggotaFormVm {
 			}
 			if (mediaIjazah != null) {
 				try {
-					String ijazahId = new TcounterengineDAO().getLastCounter("DOC" + new SimpleDateFormat("yyMM").format(new Date()), 5) + "." + mediaIjazah.getFormat();
-					String folder = Executions.getCurrent().getDesktop().getWebApp()
-							.getRealPath(AppUtils.PATH_IJAZAH);
+					String ijazahId = new TcounterengineDAO().getLastCounter(
+							"DOC" + new SimpleDateFormat("yyMM").format(new Date()), 5) + "." + mediaIjazah.getFormat();
+					String folder = Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_IJAZAH);
 					if (mediaIjazah.isBinary()) {
 						Files.copy(new File(folder + "/" + ijazahId), mediaIjazah.getStreamData());
 					} else {
-						BufferedWriter writer = new BufferedWriter(
-								new FileWriter(folder + "/" + ijazahId));
+						BufferedWriter writer = new BufferedWriter(new FileWriter(folder + "/" + ijazahId));
 						Files.copy(writer, mediaIjazah.getReaderData());
 						writer.close();
 					}
@@ -923,8 +939,8 @@ public class AnggotaFormVm {
 			if (pribadi.getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_PAYMENT)) {
 				try {
 					BigDecimal invamount = new BigDecimal(0);
-					for (Mcharge charge : new MchargeDAO().listByFilter("chargetype = '" + AppUtils.CHARGETYPE_REG + "'",
-							"isbase desc")) {
+					for (Mcharge charge : new MchargeDAO()
+							.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_REG + "'", "isbase desc")) {
 						invamount = invamount.add(charge.getChargeamount());
 					}
 
@@ -940,7 +956,8 @@ public class AnggotaFormVm {
 						briva.setBrivaNo(bean.getBriva_cid());
 
 						String custcode_cabang = "0000" + pribadi.getMcabang().getKodecabang();
-						String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
+						String custcode = custcode_cabang.substring(custcode_cabang.length() - 4,
+								custcode_cabang.length());
 						briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 						briva.setKeterangan("Pendaftaran Anggota HAKLI");
 						briva.setNama(pribadi.getNama());
@@ -963,10 +980,10 @@ public class AnggotaFormVm {
 								String noanggota = new TcounterengineDAO().generateNoAnggota(kodecabang);
 								noanggota = noanggota + StringUtils.checkDigit(Integer.parseInt(noanggota));
 								pribadi.setNoanggota(noanggota);
-								
+
 								pribadi.setPassword(AppData.passwordGenerator());
 								pribadi.setRegdecisiontime(new Date());
-								//pribadi.setPeriodekta(new Date());
+								// pribadi.setPeriodekta(new Date());
 								oDao.save(session, pribadi);
 
 								Tinvoice inv = new InvoiceGenerator().doInvoice(pribadi,
@@ -997,14 +1014,13 @@ public class AnggotaFormVm {
 								processinfo = "Proses generate virtual account gagal : " + brivaCreated.getErrDesc();
 								divProcessinfo.setVisible(true);
 							}
-								
+
 						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
-							Messagebox.ERROR);
-				} 
+					Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+				}
 			} else if (pribadi.getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE)) {
 				Session session = StoreHibernateUtil.openSession();
 				Transaction trx = session.beginTransaction();
@@ -1012,18 +1028,17 @@ public class AnggotaFormVm {
 					pribadi.setRegdecisiontime(new Date());
 					oDao.save(session, pribadi);
 					trx.commit();
-					
+
 					String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 							.getRealPath("/themes/mail/mailregdecline.html");
 					new Thread(new MailHandler(pribadi, bodymail_path)).start();
-					
+
 					processinfo = "Proses penolakan pendaftaran anggota berhasil diproses.";
 					divProcessinfo.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 					trx.rollback();
-					Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
-							Messagebox.ERROR);
+					Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 				} finally {
 					session.close();
 				}
@@ -1062,10 +1077,12 @@ public class AnggotaFormVm {
 				}
 				if (cbDobDay.getValue().trim().length() > 0 && cbDobMonth.getValue().trim().length() > 0
 						&& cbDobYear.getValue().trim().length() > 0) {
-					String strDob = cbDobYear.getValue().toString() + "-" + (cbDobMonth.getSelectedIndex() + 1) + "-"
-							+ cbDobDay.getValue().toString();
+					strDob = cbDobYear.getValue() + "-" + (cbDobMonth.getSelectedIndex() + 1) + "-"
+							+ cbDobDay.getValue();
+					System.out.println(strDob);
 					try {
-						dob = dateFormatter.parse(strDob);
+						dob = new SimpleDateFormat("yyyy-MM-dd").parse(strDob);
+						System.out.println("DOB : " + dob);
 					} catch (ParseException e) {
 						this.addInvalidMessage(ctx, "tgllahir", "Data tanggal lahir tidak sesuai");
 						e.printStackTrace();
@@ -1168,7 +1185,7 @@ public class AnggotaFormVm {
 			}
 		};
 	}
-	
+
 	public Validator getValidatorApproval() {
 		return new AbstractValidator() {
 
@@ -1178,7 +1195,8 @@ public class AnggotaFormVm {
 				if (statusreg == null || "".equals(statusreg.trim()))
 					this.addInvalidMessage(ctx, "statusreg", Labels.getLabel("common.validator.empty"));
 				else {
-					if (!statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_PAYMENT) && !statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE))
+					if (!statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_PAYMENT)
+							&& !statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE))
 						this.addInvalidMessage(ctx, "statusreg", Labels.getLabel("common.validator.empty"));
 					else if (statusreg.equals(AppUtils.STATUS_ANGGOTA_REG_DECLINE)) {
 						String regmemo = (String) ctx.getProperties("regmemo")[0].getValue();
