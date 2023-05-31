@@ -21,4 +21,9 @@
 		<value>iceblue_c</value>
 	</library-property>
 	
+	<library-property>
+		<name>org.zkoss.zul.Paging.mold</name>
+		<value>os</value>
+	</library-property>
+	
 </zk>

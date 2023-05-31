@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -31,14 +32,18 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.TanggotaDAO;
+import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.BranchTop;
 
 public class DashboardVm {
 
 	private TanggotaDAO anggotaDao = new TanggotaDAO();
+	private Tp2kbDAO p2kbDao = new Tp2kbDAO();
 
 	private long totalpop;
 	private String totalanggota;
+	private String totalkomisip2kb;
+	private String totaltimp2kb;
 	private List<BranchTop> objList = new ArrayList<>();
 	private List<BranchTop> objListTopTen = new ArrayList<>();
 
@@ -59,6 +64,7 @@ public class DashboardVm {
 
 			@Override
 			public void render(Row row, BranchTop data, int index) throws Exception {
+				row.getChildren().add(new Label(String.valueOf(index+1)));
 				row.getChildren().add(new Label(data.getName()));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotal())));
 			}
@@ -99,10 +105,12 @@ public class DashboardVm {
 		doChart();
 	}
 
-	@NotifyChange("totalanggota")
+	@NotifyChange({"totalanggota", "totaltimp2kb", "totalkomisip2kb"})
 	public void doCount() {
 		try {
 			totalanggota = NumberFormat.getInstance().format(anggotaDao.pageCount("statusreg = '3'"));
+			totalkomisip2kb = NumberFormat.getInstance().format(p2kbDao.getSumWaitKomisiP2KB("0=0"));
+			totaltimp2kb = NumberFormat.getInstance().format(p2kbDao.getSumWaitTimP2KB("0=0"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -144,8 +152,19 @@ public class DashboardVm {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-
+	}
+	
+	@Command
+	public void doViewTimP2kb() {
+		try {
+			Window win = (Window) Executions
+					.createComponents("/view/p2kb/p2kbsumwaittim.zul", null, null);
+			win.setClosable(true);
+			win.setWidth("85%");
+			win.doModal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getTotalanggota() {
@@ -162,6 +181,22 @@ public class DashboardVm {
 
 	public void setTotalpop(long totalpop) {
 		this.totalpop = totalpop;
+	}
+
+	public String getTotalkomisip2kb() {
+		return totalkomisip2kb;
+	}
+
+	public void setTotalkomisip2kb(String totalkomisip2kb) {
+		this.totalkomisip2kb = totalkomisip2kb;
+	}
+
+	public String getTotaltimp2kb() {
+		return totaltimp2kb;
+	}
+
+	public void setTotaltimp2kb(String totaltimp2kb) {
+		this.totaltimp2kb = totaltimp2kb;
 	}
 
 }

@@ -24,7 +24,6 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
@@ -50,6 +49,7 @@ public class RegionVm {
 	private Mprov objForm;
 	private List<Mprov> objList;
 	private String filter;
+	private String provcode;
 	private String provname;
 	private Integer totalrecords;
 	private boolean isInsert;
@@ -64,10 +64,6 @@ public class RegionVm {
 	private Button btSave;
 	@Wire
 	private Div divForm;
-	@Wire
-	private Combobox cbRegion;
-	@Wire
-	private Combobox cbBank;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -152,14 +148,13 @@ public class RegionVm {
 		divForm.setVisible(false);
 		btAdd.setLabel("Tambah Region");
 		btAdd.setIconSclass("z-icon-plus-square");
-		cbRegion.setValue(null);
 	}
 	
 	@Command
 	@NotifyChange("totalrecords")
 	public void doRefresh() {
 		try {
-			objList = oDao.listByFilter(filter, "provcode, prov");
+			objList = oDao.listByFilter(filter, "provcode");
 			totalrecords = objList.size();
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
@@ -171,6 +166,8 @@ public class RegionVm {
 	@NotifyChange("totalrecords")
 	public void doSearch() {
 		filter = "0=0";
+		if (provcode != null && provcode.trim().length() > 0)
+			filter += " and upper(provcode) like '%" + provcode.trim().toUpperCase() + "%'";
 		if (provname != null && provname.trim().length() > 0)
 			filter += " and upper(provname) like '%" + provname.trim().toUpperCase() + "%'";
 		doRefresh();
@@ -193,8 +190,6 @@ public class RegionVm {
 			btAdd.setLabel("Cancel");
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Submit");
-			
-			cbRegion.setValue(null);
 		} else {
 			divForm.setVisible(false);
 			btAdd.setLabel("Tambah Region");
@@ -269,6 +264,14 @@ public class RegionVm {
 
 	public void setProvname(String provname) {
 		this.provname = provname;
+	}
+
+	public String getProvcode() {
+		return provcode;
+	}
+
+	public void setProvcode(String provcode) {
+		this.provcode = provcode;
 	}
 
 	

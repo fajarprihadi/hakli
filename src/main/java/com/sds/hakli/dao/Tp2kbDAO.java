@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+import com.sds.hakli.domain.BranchTop;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Vp2kb;
 import com.sds.hakli.domain.Vrecp2kb;
@@ -130,4 +131,54 @@ public class Tp2kbDAO {
 		session.delete(oForm);
 	}
 
+	public int getSumWaitTimP2KB(String filter) throws Exception {
+		int count = 0;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		count = Integer.parseInt((String) session.createSQLQuery("select coalesce(sum(totalwaiting),0) from Tp2kb join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where " + filter)
+				.uniqueResult().toString());
+		session.close();
+		return count;
+	}
+	
+	public int getSumWaitKomisiP2KB(String filter) throws Exception {
+		int count = 0;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		count = Integer.parseInt((String) session.createSQLQuery("select coalesce(sum(totaltimapprove),0) from Tp2kb join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where " + filter)
+				.uniqueResult().toString());
+		session.close();
+		return count;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<BranchTop> listSumWaitTimP2KB(String filter) throws Exception {
+		List<BranchTop> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, SUM(TOTALWAITING) AS TOTAL FROM TP2KB " + 
+				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROV ON MPROVFK = MPROVPK " +
+				"GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY SUM(TOTALWAITING) DESC").addEntity(BranchTop.class)
+				.list();
+		session.close();
+		return oList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<BranchTop> listSumWaitTimP2KBKab(String filter) throws Exception {
+		List<BranchTop> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT MCABANGPK AS ID, CABANG AS NAME, SUM(TOTALWAITING) AS TOTAL FROM TP2KB " + 
+				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK " +
+				"WHERE " + filter + " " + 
+				"GROUP BY MCABANGPK, CABANG ORDER BY SUM(TOTALWAITING) DESC").addEntity(BranchTop.class)
+				.list();
+		session.close();
+		return oList;
+	}
 }
