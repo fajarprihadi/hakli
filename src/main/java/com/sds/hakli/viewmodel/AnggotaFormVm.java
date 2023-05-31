@@ -259,10 +259,6 @@ public class AnggotaFormVm {
 			}
 
 			dob = pribadi.getTgllahir();
-			System.out.println(dob);
-			System.out.println(new SimpleDateFormat("dd").format(dob) + ", "
-					+ (Integer.parseInt(new SimpleDateFormat("MM").format(dob))) + ", "
-					+ new SimpleDateFormat("yyyy").format(dob));
 			if (dob != null) {
 				cbDobDay.setValue(new SimpleDateFormat("dd").format(dob));
 				cbDobMonth.setSelectedIndex(Integer.parseInt(new SimpleDateFormat("MM").format(dob)) - 1);
@@ -373,7 +369,18 @@ public class AnggotaFormVm {
 											public void onEvent(Event event) throws Exception {
 												if (event.getName().equals("onOK")) {
 													try {
+														Session session = StoreHibernateUtil.openSession();
+														Transaction trx = session.beginTransaction();
+														pendidikanDao.delete(session, data);
+														trx.commit();
+														session.close();
 
+														List<Tpendidikan> tpList = pendidikanDao.listByFilter(
+																"tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+																"tpendidikanpk desc");
+														gridPendidikan.setModel(new ListModelList<>(tpList));
+														
+														Clients.showNotification("Data pendidikan berhasil dihapus.", "info", null, "middle_center", 1500);
 													} catch (Exception e) {
 														Messagebox.show(e.getMessage(),
 																WebApps.getCurrent().getAppName(), Messagebox.OK,
@@ -452,7 +459,20 @@ public class AnggotaFormVm {
 											public void onEvent(Event event) throws Exception {
 												if (event.getName().equals("onOK")) {
 													try {
+														Session session = StoreHibernateUtil.openSession();
+														Transaction trx = session.beginTransaction();
+														new TpekerjaanDAO().delete(session, data);
+														trx.commit();
+														session.close();
 
+														List<Tpekerjaan> tpList = pekerjaanDao.listByFilter(
+																"tanggota.tanggotapk = " + pribadi.getTanggotapk(),
+																"tpekerjaanpk desc");
+														gridPekerjaan.setModel(new ListModelList<>(tpList));
+														gridPekerjaan.setSizedByContent(true);
+														gridPekerjaan.setSpan(true);
+														
+														Clients.showNotification("Data pekerjaan berhasil dihapus.", "info", null, "middle_center", 1500);
 													} catch (Exception e) {
 														Messagebox.show(e.getMessage(),
 																WebApps.getCurrent().getAppName(), Messagebox.OK,
@@ -1079,10 +1099,8 @@ public class AnggotaFormVm {
 						&& cbDobYear.getValue().trim().length() > 0) {
 					strDob = cbDobYear.getValue() + "-" + (cbDobMonth.getSelectedIndex() + 1) + "-"
 							+ cbDobDay.getValue();
-					System.out.println(strDob);
 					try {
 						dob = new SimpleDateFormat("yyyy-MM-dd").parse(strDob);
-						System.out.println("DOB : " + dob);
 					} catch (ParseException e) {
 						this.addInvalidMessage(ctx, "tgllahir", "Data tanggal lahir tidak sesuai");
 						e.printStackTrace();

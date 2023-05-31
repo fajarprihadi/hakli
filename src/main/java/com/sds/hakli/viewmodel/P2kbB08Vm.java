@@ -119,7 +119,6 @@ public class P2kbB08Vm {
 				if (objForm.getTp2kbb08pk() == null) {
 					isInsert = true;
 
-					objForm.setNilaiskp(getNilaiSkp(objForm));
 					objForm.setCreatedby(anggota.getNoanggota());
 					objForm.setCreatetime(new Date());
 					objForm.setStatus("WC");
@@ -146,6 +145,7 @@ public class P2kbB08Vm {
 					}
 				}
 
+				objForm.setNilaiskp(getNilaiSkp(objForm));
 				oDao.save(session, objForm);
 
 				Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk()
