@@ -154,7 +154,7 @@ public class EventFormVm {
 				BigDecimal eventprice = (BigDecimal) ctx.getProperties("eventprice")[0].getValue();
 				if (eventprice == null)
 					this.addInvalidMessage(ctx, "eventprice", Labels.getLabel("common.validator.empty"));
-				if (media == null)
+				if (isInsert && media == null)
 					this.addInvalidMessage(ctx, "eventimg", Labels.getLabel("common.validator.empty"));
 			}
 		};
