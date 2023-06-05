@@ -2,12 +2,13 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49860e0c-7f12-4d79-a659-7d29003d4f62">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.y" value="356"/>
 	<parameter name="SALAMNASKAH" class="java.lang.String"/>
 	<parameter name="TTD_MENGANGKATSUMPAH" class="java.lang.String"/>
 	<parameter name="TTD_SAKSI" class="java.lang.String"/>
 	<parameter name="FOTO" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="noanggota" class="java.lang.String"/>
 	<field name="gelardepan" class="java.lang.String"/>
@@ -59,16 +60,12 @@ mempertaruhkan kehormatan saya sebagai Tenaga Sanitasi Lingkungan (Sanitarian).
 				<reportElement x="0" y="51" width="554" height="15" uuid="58c8c5e2-8e7e-42f8-81a5-d2dc5b48dbe8"/>
 				<textFieldExpression><![CDATA['"' + $P{SALAMNASKAH} + '"' + " :"]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="183" y="262" width="181" height="103" uuid="00a9bc38-2398-428a-b1e5-c9d9f32069d9"/>
-				<imageExpression><![CDATA[$P{TTD_SAKSI}]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="1" y="93" width="144" height="15" uuid="86017577-62b2-4d54-9763-3d519b05ad0a"/>
 				<text><![CDATA[Yang mengangkat sumpah]]></text>
 			</staticText>
 			<image>
-				<reportElement x="208" y="400" width="136" height="151" uuid="45f72994-354d-4811-a2e6-3fc64fb07f66"/>
+				<reportElement x="200" y="257" width="136" height="151" uuid="45f72994-354d-4811-a2e6-3fc64fb07f66"/>
 				<imageExpression><![CDATA[$P{FOTO}]]></imageExpression>
 			</image>
 			<image>
@@ -76,26 +73,10 @@ mempertaruhkan kehormatan saya sebagai Tenaga Sanitasi Lingkungan (Sanitarian).
 				<imageExpression><![CDATA[$P{TTD_MENGANGKATSUMPAH}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="184" y="248" width="180" height="15" uuid="c5d3761b-1641-456b-a04f-ed0e864491e7"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[Saksi/Rohaniwan :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="184" y="364" width="180" height="30" uuid="88cf6d29-bad8-4ce5-ba30-3f6a162d33f4"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[(Qowiyun Awal, MA)
-NIP.197902222001121003]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="1" y="209" width="180" height="34" uuid="b141aefd-72a9-452d-ba3b-772daa39a3bd"/>
 				<text><![CDATA[Prof. Dr. H. Arif Sumantri, SKM. M.Kes.
 No.KTA:317410895]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="355" y="93" width="194" height="16" uuid="ee2391b0-82e8-4da4-a182-52417b71b783"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="355" y="108" width="194" height="100" uuid="57a68a26-8ecf-44b5-a16f-f043f9f90ac9"/>
 				<textElement textAlignment="Center"/>
@@ -118,6 +99,11 @@ materai 10000
 				<reportElement x="355" y="222" width="194" height="16" uuid="e533828f-773c-487b-a051-3228bfd55421"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="94" width="194" height="15" uuid="78cec1ff-baa8-4ba8-960b-6c3e3eea5f86"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

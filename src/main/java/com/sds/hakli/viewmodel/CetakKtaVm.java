@@ -1,6 +1,7 @@
 package com.sds.hakli.viewmodel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.zkoss.zul.Div;
 
 import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.AppUtils;
+import com.sds.utils.StringUtils;
 
 public class CetakKtaVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
@@ -35,7 +37,14 @@ public class CetakKtaVm {
 		Selectors.wireComponents(view, this, false);
 		obj = (Tanggota) zkSession.getAttribute("anggota");
 		objList.add(obj);
+		String currentdate = "";
 		
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+		int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		
+		currentdate = day + " " + StringUtils.getMonthLabel(month) + " " + year;
+		parameters.put("CURRENTDATE", currentdate);
 		parameters.put("FOTO", Executions.getCurrent().getDesktop().getWebApp()
 				.getRealPath(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink()));
 		parameters.put("CARD1",

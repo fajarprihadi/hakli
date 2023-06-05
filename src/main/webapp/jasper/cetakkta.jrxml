@@ -2,10 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cetakkta" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1797a0a-6826-4e1a-877f-337eec26aa05">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="440"/>
 	<parameter name="CARD1" class="java.lang.String"/>
 	<parameter name="CARD2" class="java.lang.String"/>
 	<parameter name="FOTO" class="java.lang.String"/>
+	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
@@ -121,13 +122,6 @@
 				<reportElement x="54" y="229" width="302" height="188" uuid="5868da94-aa23-495d-8c00-5f48900667d7"/>
 				<imageExpression><![CDATA[$P{CARD2}]]></imageExpression>
 			</image>
-			<textField>
-				<reportElement x="235" y="336" width="100" height="13" uuid="8343c9a3-6370-4be3-8064-f651febbe01e"/>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="71" y="67" width="74" height="11" uuid="4792d192-c481-4174-9781-3f10a1f3bd05"/>
 				<textElement>
@@ -170,6 +164,13 @@
 				</textElement>
 				<text><![CDATA[Cabang]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="232" y="337" width="100" height="11" uuid="0385d17b-6da1-4e47-8f87-c0d480709e8e"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

@@ -1,6 +1,7 @@
 package com.sds.hakli.viewmodel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.zkoss.zk.ui.select.Selectors;
 
 import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.AppUtils;
+import com.sds.utils.StringUtils;
 
 public class NaskahVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
@@ -36,6 +38,13 @@ public class NaskahVm {
 			List<Tanggota> objList = new ArrayList<>();
 			objList.add(obj);
 			zkSession.setAttribute("objList", objList);
+			String currentdate = "";
+			
+			int year = Calendar.getInstance().get(Calendar.YEAR);
+			int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+			int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			
+			currentdate = day + " " + StringUtils.getMonthLabel(month) + " " + year;
 
 			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
@@ -67,6 +76,7 @@ public class NaskahVm {
 				filepath2 = "";
 			}
 
+			parameters.put("CURRENTDATE", currentdate);
 			parameters.put("FOTO",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink()));
 			parameters.put("TTD_KETUAUMUM",

@@ -2,28 +2,25 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahetika2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfc9871a-6df6-43de-a488-b685d984bc17">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="22"/>
 	<parameter name="FOTO" class="java.lang.String"/>
-	<field name="nama" class="java.lang.String"/>
-	<field name="noanggota" class="java.lang.String"/>
-	<field name="gelardepan" class="java.lang.String"/>
-	<field name="gelarbelakang" class="java.lang.String"/>
+	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="257" splitType="Stretch">
+		<band height="195" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="15" uuid="d777ec50-b054-465f-9c59-2a946cef1117"/>
 				<text><![CDATA[Demikian pernyataan ini saya buat dengan sungguh-sungguh, penuh kesadaran dan penuh rasa tanggung jawab.
 ]]></text>
 			</staticText>
 			<image>
-				<reportElement x="58" y="44" width="129" height="151" uuid="0714dcfc-79d4-4126-9b69-49be0d9f6093"/>
+				<reportElement x="51" y="44" width="136" height="151" uuid="0714dcfc-79d4-4126-9b69-49be0d9f6093"/>
 				<imageExpression><![CDATA[$P{FOTO}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="346" y="60" width="194" height="91" uuid="5a6f2b6c-d68b-4b66-96e5-06ef8baa4b8d"/>
+				<reportElement x="369" y="60" width="186" height="135" uuid="5a6f2b6c-d68b-4b66-96e5-06ef8baa4b8d"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Yang Menyatakan
 
@@ -33,22 +30,13 @@ materai 10000
 
 
 
-]]></text>
+GALUH TRI TUNGGAL DEWI A.Md.Kes.
+No. KTA :317114472]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="346" y="151" width="194" height="15" uuid="c420051d-4147-454a-9b81-5ca9836fca7a"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{nama} + " " + $F{gelarbelakang}]]></textFieldExpression>
-			</textField>
 			<textField>
-				<reportElement x="346" y="45" width="194" height="16" uuid="a047fd68-8d2c-457a-8962-dea5621ad821"/>
+				<reportElement x="369" y="46" width="186" height="15" uuid="cab7723c-af1f-493d-9648-61d2fe52abb2"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="346" y="165" width="194" height="15" uuid="615a2869-5380-4667-8b60-a31bf5851d6b"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
