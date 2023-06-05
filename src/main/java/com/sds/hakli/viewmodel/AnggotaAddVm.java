@@ -576,7 +576,8 @@ public class AnggotaAddVm {
 								trx = session.beginTransaction();
 								
 								// anggota/pribadi
-								objForm.getPribadi().setMusergroup(new MusergroupDAO().findByFilter("usergroupcode = '" + AppUtils.ANGGOTA_ROLE_ANGGOTABIASA + "'"));
+								if (objForm.getPribadi().getMusergroup() == null)
+									objForm.getPribadi().setMusergroup(new MusergroupDAO().findByFilter("usergroupcode = '" + AppUtils.ANGGOTA_ROLE_ANGGOTABIASA + "'"));
 								objForm.getPribadi().setTgllahir(dob);
 								objForm.getPribadi().setProvcode(provrumah.getProvcode());
 								objForm.getPribadi().setProvname(provrumah.getProvname());
@@ -730,32 +731,44 @@ public class AnggotaAddVm {
 
 			@Override
 			public void validate(ValidationContext ctx) {
+				boolean isValid = true;
 				// Pribadi
 				String nama = (String) ctx.getProperties("pribadi.nama")[0].getValue();
-				if (nama == null || "".equals(nama.trim()))
+				if (nama == null || "".equals(nama.trim())) {
 					this.addInvalidMessage(ctx, "nama", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String noktp = (String) ctx.getProperties("pribadi.noktp")[0].getValue();
-				if (noktp == null || "".equals(noktp.trim()))
+				if (noktp == null || "".equals(noktp.trim())) {
 					this.addInvalidMessage(ctx, "noktp", Labels.getLabel("common.validator.empty"));
-				
+					isValid = false;
+				}
 				String tempatlahir = (String) ctx.getProperties("pribadi.tempatlahir")[0].getValue();
-				if (tempatlahir == null || "".equals(tempatlahir.trim()))
+				if (tempatlahir == null || "".equals(tempatlahir.trim())) {
 					this.addInvalidMessage(ctx, "tempatlahir", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String gender = (String) ctx.getProperties("pribadi.gender")[0].getValue();
-				if (gender == null || "".equals(gender.trim()))
+				if (gender == null || "".equals(gender.trim())) {
 					this.addInvalidMessage(ctx, "gender", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String warganegara = (String) ctx.getProperties("pribadi.warganegara")[0].getValue();
-				if (warganegara == null || "".equals(warganegara.trim()))
+				if (warganegara == null || "".equals(warganegara.trim())) {
 					this.addInvalidMessage(ctx, "warganegara", Labels.getLabel("common.validator.empty"));
-				else if (warganegara.equals("WNA")) {
+					isValid = false;
+				} else if (warganegara.equals("WNA")) {
 					Mnegara mnegara = (Mnegara) ctx.getProperties("pribadi.mnegara")[0].getValue();
-					if (mnegara == null)
+					if (mnegara == null) {
 						this.addInvalidMessage(ctx, "negara", Labels.getLabel("common.validator.empty"));
+						isValid = false;
+					}
 				}
 				String email = (String) ctx.getProperties("pribadi.email")[0].getValue();
-				if (email == null || "".equals(email.trim()))
+				if (email == null || "".equals(email.trim())) {
 					this.addInvalidMessage(ctx, "email", Labels.getLabel("common.validator.empty"));
-				else if (!StringUtils.emailValidator(email)) {
+					isValid = false;
+				} else if (!StringUtils.emailValidator(email)) {
 					this.addInvalidMessage(ctx, "email", "Format e-Mail tidak sesuai");
 				}
 				if (cbDobDay.getValue().trim().length() > 0 && cbDobMonth.getValue().trim().length() > 0
@@ -766,21 +779,29 @@ public class AnggotaAddVm {
 						dob = dateFormatter.parse(strDob);
 					} catch (ParseException e) {
 						this.addInvalidMessage(ctx, "tgllahir", "Data tanggal lahir tidak sesuai");
+						isValid = false;
 						e.printStackTrace();
 					}
 				}
 
-				if (provrumah == null)
+				if (provrumah == null) {
 					this.addInvalidMessage(ctx, "provrumah", Labels.getLabel("common.validator.empty"));
-				if (kabrumah == null)
+					isValid = false;
+				}
+				if (kabrumah == null) {
 					this.addInvalidMessage(ctx, "kabrumah", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String alamat = (String) ctx.getProperties("pribadi.alamat")[0].getValue();
-				if (alamat == null || "".equals(alamat.trim()))
+				if (alamat == null || "".equals(alamat.trim())) {
 					this.addInvalidMessage(ctx, "alamat", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String hp = (String) ctx.getProperties("pribadi.hp")[0].getValue();
-				if (hp == null || "".equals(hp.trim()))
+				if (hp == null || "".equals(hp.trim())) {
 					this.addInvalidMessage(ctx, "hp", Labels.getLabel("common.validator.empty"));
-				
+					isValid = false;
+				}
 //				if (noktp != null && provrumah != null && kabrumah != null && dob != null) {
 //					if (!StringUtils.ktpValidator(noktp, kabrumah.getKabcode(), new SimpleDateFormat("ddMMyy").format(dob), gender)) {
 //						this.addInvalidMessage(ctx, "noktp", "No KTP tidak sesuai dengan data diri Anda");
@@ -789,61 +810,87 @@ public class AnggotaAddVm {
 
 				// Keanggotaan
 				String statusanggota = (String) ctx.getProperties("pribadi.statusanggota")[0].getValue();
-				if (statusanggota == null || "".equals(statusanggota.trim()))
+				if (statusanggota == null || "".equals(statusanggota.trim())) {
 					this.addInvalidMessage(ctx, "statusanggota", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				Mcabang mcabang = (Mcabang) ctx.getProperties("pribadi.mcabang")[0].getValue();
-				if (mcabang == null)
+				if (mcabang == null) {
 					this.addInvalidMessage(ctx, "mcabang", Labels.getLabel("common.validator.empty"));
-
+					isValid = false;
+				}
 				// Pekerjaan
 				Mrumpun mrumpun = (Mrumpun) ctx.getProperties("pekerjaan.mrumpun")[0].getValue();
-				if (mrumpun == null)
+				if (mrumpun == null) {
 					this.addInvalidMessage(ctx, "mrumpun", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				Mkepegawaian mkepegawaian = (Mkepegawaian) ctx.getProperties("pekerjaan.mkepegawaian")[0].getValue();
-				if (mkepegawaian == null)
+				if (mkepegawaian == null) {
 					this.addInvalidMessage(ctx, "mkepegawaian", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				Mkepegawaiansub mkepegawaiansub = (Mkepegawaiansub) ctx.getProperties("pekerjaan.mkepegawaiansub")[0]
 						.getValue();
-				if (mkepegawaiansub == null)
+				if (mkepegawaiansub == null) {
 					this.addInvalidMessage(ctx, "mkepegawaiansub", Labels.getLabel("common.validator.empty"));
-				if (provkantor == null)
+					isValid = false;
+				}
+				if (provkantor == null) {
 					this.addInvalidMessage(ctx, "provkantor", Labels.getLabel("common.validator.empty"));
-				if (kabkantor == null)
+					isValid = false;
+				}
+				if (kabkantor == null) {
 					this.addInvalidMessage(ctx, "kabkantor", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String namakantor = (String) ctx.getProperties("pekerjaan.namakantor")[0].getValue();
-				if (namakantor == null || "".equals(namakantor.trim()))
+				if (namakantor == null || "".equals(namakantor.trim())) {
 					this.addInvalidMessage(ctx, "namakantor", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String alamatkantor = (String) ctx.getProperties("pekerjaan.alamatkantor")[0].getValue();
-				if (alamatkantor == null || "".equals(alamatkantor.trim()))
+				if (alamatkantor == null || "".equals(alamatkantor.trim())) {
 					this.addInvalidMessage(ctx, "alamatkantor", Labels.getLabel("common.validator.empty"));
-//				String jabatan = (String) ctx.getProperties("pekerjaan.jabatankantor")[0].getValue();
-//				if (jabatan == null || "".equals(jabatan.trim()))
-//					this.addInvalidMessage(ctx, "jabatan", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				Date tglmulai = (Date) ctx.getProperties("pekerjaan.tglmulai")[0].getValue();
-				if (tglmulai == null)
+				if (tglmulai == null) {
 					this.addInvalidMessage(ctx, "tglmulai", Labels.getLabel("common.validator.empty"));
-				String nip = (String) ctx.getProperties("pekerjaan.nip")[0].getValue();
-//				if (nip == null || "".equals(nip.trim()))
-//					this.addInvalidMessage(ctx, "nip", Labels.getLabel("common.validator.empty"));
-
+					isValid = false;
+				}
 				// Pendidikan
 				Muniversitas muniversitas = (Muniversitas) ctx.getProperties("pendidikan.muniversitas")[0].getValue();
-				if (muniversitas == null)
+				if (muniversitas == null) {
 					this.addInvalidMessage(ctx, "muniversitas", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				Mjenjang mjenjang = (Mjenjang) ctx.getProperties("pendidikan.mjenjang")[0].getValue();
-				if (mjenjang == null)
+				if (mjenjang == null) {
 					this.addInvalidMessage(ctx, "mjenjang", Labels.getLabel("common.validator.empty"));
-
+					isValid = false;
+				}
 				// Kontak Darurat
 				String namadarurat = (String) ctx.getProperties("pribadi.namadarurat")[0].getValue();
-				if (namadarurat == null || "".equals(namadarurat.trim()))
+				if (namadarurat == null || "".equals(namadarurat.trim())) {
 					this.addInvalidMessage(ctx, "namadarurat", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String hubungan = (String) ctx.getProperties("pribadi.hubungan")[0].getValue();
-				if (hubungan == null || "".equals(hubungan.trim()))
+				if (hubungan == null || "".equals(hubungan.trim())) {
 					this.addInvalidMessage(ctx, "hubungan", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 				String nohpdarurat = (String) ctx.getProperties("pribadi.nohpdarurat")[0].getValue();
-				if (nohpdarurat == null || "".equals(nohpdarurat.trim()))
+				if (nohpdarurat == null || "".equals(nohpdarurat.trim())) {
 					this.addInvalidMessage(ctx, "nohpdarurat", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
+				
+				if (!isValid) {
+					Messagebox.show("Harap lengkapi data Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
+							Messagebox.EXCLAMATION);
+				}
 			}
 		};
 	}
