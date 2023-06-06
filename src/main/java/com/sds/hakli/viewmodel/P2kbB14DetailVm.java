@@ -347,7 +347,7 @@ public class P2kbB14DetailVm {
 				
 				Div divKegiatan6 = new Div();
 				divKegiatan6.setSclass("note note-light");
-				Label lbl11 = new Label("Tanggal Mulai");
+				Label lbl11 = new Label("Tanggal Selesai");
 				lbl11.setStyle("font-weight: bold");
 				divKegiatan6.appendChild(lbl11);
 				Label lbl12 = new Label(": " + new SimpleDateFormat("dd MMM yyyy").format(data.getTglakhir()));

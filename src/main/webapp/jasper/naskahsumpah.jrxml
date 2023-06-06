@@ -2,13 +2,14 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e09c74e-ba1b-4239-a24e-7de27df87915">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="779"/>
+	<property name="ireport.y" value="48"/>
 	<parameter name="SUMPAHAGAMA" class="java.lang.String"/>
 	<parameter name="AGAMA" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<parameter name="TGLLAHIR" class="java.lang.String"/>
 	<parameter name="LOCALDATE" class="java.lang.String"/>
+	<parameter name="NOSURAT" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
@@ -54,12 +55,16 @@ Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 	<columnHeader>
 		<band height="80" splitType="Stretch">
 			<staticText>
-				<reportElement x="116" y="0" width="307" height="51" uuid="b7f4ba39-47cd-41ce-9aaa-1c34960a2660"/>
+				<reportElement x="116" y="0" width="307" height="39" uuid="b7f4ba39-47cd-41ce-9aaa-1c34960a2660"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[SURAT PERNYATAAN TELAH MENGUCAPKAN
-SUMPAH PROFESI TENAGA SANITASI LINGKUNGAN (SANITARIAN)
-Nomor : 1742/SP/PP-HAKLI/I/2023]]></text>
+SUMPAH PROFESI TENAGA SANITASI LINGKUNGAN (SANITARIAN)]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="116" y="38" width="307" height="15" uuid="2a2ca343-c124-4a34-bad6-3bc305c74c2e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Nomor : " + $P{NOSURAT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>

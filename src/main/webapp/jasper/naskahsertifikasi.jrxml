@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsertifikasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6a188592-b153-4e09-8bd1-8b5a25138ae2">
-	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.zoom" value="1.9487171000000014"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="439"/>
+	<property name="ireport.y" value="120"/>
 	<parameter name="FOTO" class="java.lang.String"/>
-	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="TGLLAHIR" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
 	<field name="noanggota" class="java.lang.String"/>
 	<field name="agama" class="java.lang.String"/>
-	<field name="gelardepan" class="java.lang.String"/>
 	<field name="gelarbelakang" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -41,8 +40,8 @@ Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 				<reportElement x="0" y="95" width="555" height="1" uuid="ebd845b4-1690-40c1-8d47-e2516a348e93"/>
 			</line>
 			<image>
-				<reportElement x="1" y="8" width="81" height="71" uuid="fc56f637-c647-4dc8-895a-d1d5b3087a14"/>
-				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+				<reportElement x="0" y="6" width="101" height="84" uuid="0f1aee36-5f98-4365-bf90-cdca676da2e2"/>
+				<imageExpression><![CDATA["C:\\Users\\SDD-SWD\\Pictures\\hakli-min.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -62,7 +61,7 @@ Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="1" y="126" width="553" height="15" uuid="10342ccc-6f4a-44f9-b6e3-c6c1d21728a7"/>
-				<textFieldExpression><![CDATA["Tempat, tanggal lahir				: " + $F{tempatlahir} + ", " + new SimpleDateFormat("dd MMMMM yyyy").format($F{tgllahir})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Tempat, tanggal lahir				: " + $F{tempatlahir} + ", " + $P{TGLLAHIR}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1" y="153" width="553" height="15" uuid="b45e794e-011f-4460-8267-f88bc913e2db"/>
@@ -88,9 +87,9 @@ pernyataan ini menjadi ketentuan sarat yang wajib dipatuhi.
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="348" y="279" width="187" height="113" uuid="7183c9a7-2d25-42c4-a48b-2e6b6e014e94"/>
+				<reportElement x="368" y="280" width="187" height="109" uuid="7183c9a7-2d25-42c4-a48b-2e6b6e014e94"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[...................., ...............................20.....
+				<text><![CDATA[.........................., ...............................20
 Yang bersumpah
 
 
@@ -105,14 +104,14 @@ materai 10000
 				<imageExpression><![CDATA[$P{FOTO}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="348" y="406" width="187" height="16" uuid="29ef53c2-9dfa-4e11-be78-53c790b12a1a"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="348" y="392" width="187" height="16" uuid="f62f1892-c248-4bc7-9edb-d3f4d092c9d4"/>
+				<reportElement x="368" y="388" width="188" height="15" uuid="0b38938d-bd3d-4d2b-9717-0fad3d3f21bb"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{nama} + " " + $F{gelarbelakang}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="368" y="402" width="188" height="16" uuid="5d608b39-198a-4350-88bd-1ef10a78e691"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

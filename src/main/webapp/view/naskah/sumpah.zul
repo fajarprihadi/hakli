@@ -8,16 +8,12 @@
 		</caption>
 		<groupbox mold="3d">
 			<caption label="Naskah Sumpah" />
-			<grid emptyMessage="${labels.common.emptymsg}">
+			<grid emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
 				<columns>
 					<column label="${labels.common.no}" align="right"
 						width="40px" />
 					<column label="Uraian" width="350px" />
-					<column label="Islam" align="center"/>
-					<column label="Kristen Khatolik" align="center"/>
-					<column label="Kristen Protestan" align="center"/>
-					<column label="Hindu" align="center"/>
-					<column label="Budha" align="center"/>
+					<column label="Aksi" align="center"/>
 				</columns>
 				<rows>
 					<row>
@@ -27,23 +23,7 @@
 						<button label="Download" autodisable="self"
 							iconSclass="z-icon-download" 
 							sclass="btn btn-success btn-sm"
-							onClick="@command('doDownload', arg='islam')" />
-						<button label="Download" autodisable="self"
-							iconSclass="z-icon-download"
-							sclass="btn btn-success btn-sm"
-							onClick="@command('doDownload', arg='khatolik')" />
-						<button label="Download" autodisable="self"
-							iconSclass="z-icon-download"
-							sclass="btn btn-success btn-sm"
-							onClick="@command('doDownload', arg='protestan')" />
-						<button label="Download" autodisable="self"
-							iconSclass="z-icon-download"
-							sclass="btn btn-success btn-sm"
-							onClick="@command('doDownload', arg='hindu')" />
-						<button label="Download" autodisable="self"
-							iconSclass="z-icon-download"
-							sclass="btn btn-success btn-sm"
-							onClick="@command('doDownload', arg='budha')" />
+							onClick="@command('doDownload', arg='sumpah')" />
 					</row>
 				</rows>
 			</grid>
@@ -51,7 +31,7 @@
 		<separator />
 		<groupbox mold="3d">
 			<caption label="Pernyataan Patuh Etik" />
-			<grid emptyMessage="${labels.common.emptymsg}">
+			<grid emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
 				<columns>
 					<column label="${labels.common.no}" align="right"
 						width="40px" />
@@ -75,7 +55,7 @@
 		<groupbox mold="3d">
 			<caption
 				label="Pernyataan Kesediaan Untuk Mengikuti Sertifikasi Kompetensi" />
-			<grid emptyMessage="${labels.common.emptymsg}">
+			<grid emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
 				<columns>
 					<column label="${labels.common.no}" align="right"
 						width="40px" />
