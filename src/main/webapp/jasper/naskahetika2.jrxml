@@ -2,9 +2,12 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahetika2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfc9871a-6df6-43de-a488-b685d984bc17">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="22"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="FOTO" class="java.lang.String"/>
 	<parameter name="CURRENTDATE" class="java.lang.String"/>
+	<field name="nama" class="java.lang.String"/>
+	<field name="gelarbelakang" class="java.lang.String"/>
+	<field name="noanggota" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -20,7 +23,7 @@
 				<imageExpression><![CDATA[$P{FOTO}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="369" y="60" width="186" height="135" uuid="5a6f2b6c-d68b-4b66-96e5-06ef8baa4b8d"/>
+				<reportElement x="369" y="60" width="186" height="106" uuid="5a6f2b6c-d68b-4b66-96e5-06ef8baa4b8d"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Yang Menyatakan
 
@@ -30,13 +33,22 @@ materai 10000
 
 
 
-GALUH TRI TUNGGAL DEWI A.Md.Kes.
-No. KTA :317114472]]></text>
+]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="369" y="46" width="186" height="15" uuid="cab7723c-af1f-493d-9648-61d2fe52abb2"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="369" y="179" width="186" height="16" uuid="de81ca3e-0f5d-4d99-9dc2-f6cb6466ebea"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="369" y="166" width="186" height="14" uuid="e65a2921-db99-4b7e-a1f9-35f3e75c669a"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{nama} + " " + $F{gelarbelakang}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

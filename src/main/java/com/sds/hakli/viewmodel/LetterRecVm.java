@@ -4,8 +4,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -33,7 +35,6 @@ import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
-import com.sds.utils.StringUtils;
 
 public class LetterRecVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
@@ -84,10 +85,9 @@ public class LetterRecVm {
 						
 						int year = Calendar.getInstance().get(Calendar.YEAR);
 						int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-						int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 						
 						mapRomawi = AppData.getAngkaRomawi();
-						currentdate = day + " " + StringUtils.getMonthLabel(month) + " " + year;
+						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 						
 						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
 						dataList.add(data);

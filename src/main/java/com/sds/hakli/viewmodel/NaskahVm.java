@@ -1,9 +1,12 @@
 package com.sds.hakli.viewmodel;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -18,7 +21,6 @@ import org.zkoss.zk.ui.select.Selectors;
 
 import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.AppUtils;
-import com.sds.utils.StringUtils;
 
 public class NaskahVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
@@ -38,13 +40,9 @@ public class NaskahVm {
 			List<Tanggota> objList = new ArrayList<>();
 			objList.add(obj);
 			zkSession.setAttribute("objList", objList);
-			String currentdate = "";
-			
-			int year = Calendar.getInstance().get(Calendar.YEAR);
-			int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-			int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-			
-			currentdate = day + " " + StringUtils.getMonthLabel(month) + " " + year;
+			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
+			String localdate = new SimpleDateFormat("EEEE, dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
+			String tgllahir = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getTgllahir());
 
 			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
@@ -76,15 +74,27 @@ public class NaskahVm {
 				filepath2 = "";
 			}
 
+			String photoname = "";
+
+			File file = new File(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink());
+			if (file.exists()) {
+				System.out.println("ADA FOTO");
+				photoname = obj.getPhotolink();
+			} else {
+				System.out.println("TIDAK ADA FOTO");
+				photoname = "default.png";
+			}
+
 			parameters.put("CURRENTDATE", currentdate);
-			parameters.put("FOTO",
-					Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink()));
+			parameters.put("LOCALDATE", localdate);
+			parameters.put("TGLLAHIR", tgllahir);
+			parameters.put("FOTO", Executions.getCurrent().getDesktop().getWebApp()
+					.getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
 			parameters.put("TTD_KETUAUMUM",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
 			parameters.put("TTD_SAKSI",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_saksi.jpg"));
-			parameters.put("LOGO",
-					Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
+			parameters.put("LOGO", Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
 
 			zkSession.setAttribute("parameters", parameters);
 			zkSession.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
