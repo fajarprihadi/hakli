@@ -28,8 +28,10 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 
 import com.sds.hakli.bean.BriapiBean;
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TeventregDAO;
-import com.sds.hakli.domain.Teventreg;
+import com.sds.hakli.dao.TinvoiceDAO;
+import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.extension.BriApiExt;
 import com.sds.hakli.pojo.BriApiToken;
 import com.sds.hakli.pojo.BrivaDataUpdate;
@@ -37,17 +39,20 @@ import com.sds.hakli.pojo.BrivaReport;
 import com.sds.hakli.pojo.BrivaReportResp;
 import com.sds.hakli.pojo.BrivaUpdateResp;
 import com.sds.utils.AppData;
+import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class VaUpdateVm {
 	
+	private TanggotaDAO anggotaDao = new TanggotaDAO();
+	private TinvoiceDAO invDao = new TinvoiceDAO();
 	private TeventregDAO eventregDao = new TeventregDAO();
 	
 	private BrivaReportResp obj;
 	private BriApiToken briapiToken;
 	private String vano;
 	private Date date;
-	private Teventreg objForm;
+	private Tinvoice objInv;
 	
 	private BriapiBean bean;
 	
@@ -89,8 +94,9 @@ public class VaUpdateVm {
 	public void doSubmit() {
 		if (date != null && vano != null && vano.trim().length() > 5) {
 			try {
-				objForm = eventregDao.findByFilter("vano = '" + vano.trim() + "' and ispaid = 'N'");
-				if (objForm == null) {
+				//objForm = eventregDao.findByFilter("vano = '" + vano.trim() + "' and ispaid = 'N'");
+				objInv = invDao.findByFilter("vano = '" + vano.trim() + "' and ispaid = 'N'");
+				if (objInv == null) {
 					Messagebox.show("Nomor VA " + vano.trim() + " tidak ditemukan pada sistem" , WebApps.getCurrent().getAppName(), Messagebox.OK,
 							Messagebox.EXCLAMATION);
 //				} else if (objForm.getIspaid().equals("Y")) {
@@ -168,9 +174,24 @@ public class VaUpdateVm {
 						BrivaUpdateResp objResp = briapi.updateBriva(briapiToken.getAccess_token(), data);
 						if (objResp != null && objResp.getStatus() != null && objResp.getStatus()) {
 							
-							objForm.setIspaid("Y");
+							objInv.setIspaid("Y");
+							invDao.save(session, objInv);
 							
-							eventregDao.save(session, objForm);
+							if (objInv.getInvoicetype().equals(AppUtils.INVOICETYPE_EVENT)) {
+								objInv.getTeventreg().setIspaid("Y");
+								eventregDao.save(session, objInv.getTeventreg());
+								
+								if (objInv.getTanggota().getVaevent().equals(data.getBrivaNo() + data.getCustCode())) {
+									objInv.getTanggota().setVaeventstatus(0);
+									anggotaDao.save(session, objInv.getTanggota());
+								}
+							} else {
+								if (objInv.getTanggota().getVareg().equals(data.getBrivaNo() + data.getCustCode())) {
+									objInv.getTanggota().setVaregstatus(0);
+									anggotaDao.save(session, objInv.getTanggota());
+								}
+							}
+							
 							trx.commit();
 							
 							btUpdate.setDisabled(true);
