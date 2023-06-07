@@ -189,8 +189,9 @@
 				<column label="Waktu Registrasi" align="center" />
 				<column label="Nomor VA" align="center" />
 				<column label="VA Jatuh Tempo" align="center" />
-				<column label="Status Pembayaran" align="center" />
-				<column label="Waktu Pembayaran" align="center" />
+				<column label="Status Bayar" align="center" />
+				<column label="Jumlah Bayar" align="center" />
+				<column label="Waktu Bayar" align="center" />
 				<column label="${labels.common.action}" align="center" />
 			</columns>
 		</grid>

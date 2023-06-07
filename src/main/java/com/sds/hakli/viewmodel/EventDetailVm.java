@@ -2,6 +2,7 @@ package com.sds.hakli.viewmodel;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -123,6 +124,7 @@ public class EventDetailVm {
 					row.getChildren().add(new Label(data.getVano()));
 					row.getChildren().add(new Label(data.getVaexpdate() != null ? datetimeLocalFormatter.format(data.getVaexpdate()) : ""));
 					row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
+					row.getChildren().add(new Label(data.getPaidamount() != null ? NumberFormat.getInstance().format(data.getPaidamount()) : ""));
 					row.getChildren().add(new Label(data.getPaidat() != null ? datetimeLocalFormatter.format(data.getPaidat()) : ""));
 					Button btProcess = new Button();
 					btProcess.setIconSclass("z-icon-eye");

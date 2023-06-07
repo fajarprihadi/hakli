@@ -686,9 +686,7 @@ public class AnggotaAddVm {
 				else briva.setCustCode(objForm.getPribadi().getVaevent().substring(5));
 				briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
 				briva.setNama(objForm.getPribadi().getNama());
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DAY_OF_MONTH, 10);
-				vaexpdate = cal.getTime();
+				vaexpdate = tevent.getEventdate();
 				briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 				
 				BrivaCreateResp brivaCreated = null;
