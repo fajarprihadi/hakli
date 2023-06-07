@@ -28,6 +28,10 @@ public class Tevent {
 	
 	private BigDecimal eventprice;
 	
+	private String eventtype;
+	
+	private String eventlocation;
+	
 	@Id
 	@SequenceGenerator(name = "tevent_seq", sequenceName = "tevent_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tevent_seq")
@@ -90,6 +94,24 @@ public class Tevent {
 
 	public void setEventprice(BigDecimal eventprice) {
 		this.eventprice = eventprice;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getEventtype() {
+		return eventtype;
+	}
+
+	public void setEventtype(String eventtype) {
+		this.eventtype = eventtype;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getEventlocation() {
+		return eventlocation;
+	}
+
+	public void setEventlocation(String eventlocation) {
+		this.eventlocation = eventlocation;
 	}
 
 }

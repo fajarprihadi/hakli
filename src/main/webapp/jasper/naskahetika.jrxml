@@ -2,8 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahetika" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4701e50e-fca1-4ca4-a284-7ce19de67303">
 	<property name="ireport.zoom" value="1.7715610000000013"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="96"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
+	<parameter name="TGLLAHIR" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
@@ -75,7 +76,7 @@ TENAGA SANITASI LINGKUNGAN (SANITARIAN)]]></text>
 			</textField>
 			<textField>
 				<reportElement x="2" y="39" width="553" height="15" uuid="c49fda96-1474-4cd6-8501-656b3f5fc3ed"/>
-				<textFieldExpression><![CDATA["Tempat, tanggal lahir				: " + $F{tempatlahir} + ", " + new SimpleDateFormat("dd MMMMM yyyy").format($F{tgllahir})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Tempat, tanggal lahir				: " + $F{tempatlahir} + ", " + $P{TGLLAHIR}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="2" y="52" width="553" height="15" uuid="c82c96fa-5c08-4e27-aa3a-3599c67259f0"/>

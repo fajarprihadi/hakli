@@ -53,7 +53,8 @@ public class NaskahVm {
 
 			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
-			if (arg.equals("naskah")) {
+			if (arg.equals("sumpah")) {
+				System.out.println("'" + objAnggota.getAgama() + "'");
 				if (objAnggota.getAgama().toUpperCase().equals("ISLAM")) {
 					parameters.put("SALAMNASKAH", "Semoga Allah Subhanahu wa ta’ala memberikan kekuatan kepada saya");
 					parameters.put("SUMPAHAGAMA", "Demi Allah saya bersumpah");

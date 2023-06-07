@@ -10,11 +10,12 @@
 			<caption label="Pencarian" iconSclass="z-icon-search" />
 			<div class="row">
 				<div class="col">
-					<textbox placeholder="Nama" value="@bind(vm.nama)" onOK="@command('doSearch')"
-						width="100%" maxlength="40" />
+					<textbox placeholder="Nama" value="@bind(vm.nama)"
+						onOK="@command('doSearch')" width="100%" maxlength="40" />
 				</div>
 				<div class="col">
-					<combobox id="cbRegion" placeholder="Provinsi" onSelect="@command('doLoadCabang', prov=vm.region)"
+					<combobox id="cbRegion" placeholder="Provinsi"
+						onSelect="@command('doLoadCabang', prov=vm.region)"
 						model="@load(vm.regionmodel)" selectedItem="@bind(vm.region)"
 						width="100%">
 						<template name="model" var="region">
@@ -41,21 +42,23 @@
 		<separator />
 		<div class="row">
 			<div class="col-md" />
-				<div class="col-md-2" align="right">
-					<label value="Total Data :"
-						style="font-weight: bold" />
-					<label value="@load(vm.pageTotalSize)"
-						style="font-weight: bold" />
-				</div>
+			<div class="col-md-2" align="right">
+				<label value="Total Data :" style="font-weight: bold" />
+				<label value="@load(vm.pageTotalSize)"
+					style="font-weight: bold" />
+			</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
+			sizedByContent="true" span="true" mold="paging" pageSize="20"
+			pagingPosition="both">
 			<columns>
-				<column label="${labels.common.no}" align="right" width="40px" />
+				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.cabang}" />
-				<column label="${labels.anggota.noanggota}" align="center" width="150px"/>
+				<column label="${labels.anggota.noanggota}"
+					align="center" width="150px" />
 				<column label="${labels.anggota.nama}" />
 				<column label="Alamat" />
-				<column label="Total Waiting" align="right" width="150px"/>
+				<column label="Total Waiting" align="right" />
 			</columns>
 		</grid>
 
