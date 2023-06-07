@@ -123,9 +123,11 @@ public class EventRegListVm {
 			String localdate = new SimpleDateFormat("EEEE, dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 			String tgllahir = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getTgllahir());
 
+			String nosurat = "";
 			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
 			if (arg.equals("sumpah")) {
+				nosurat = data.getSpno();
 				System.out.println("'" + obj.getAgama() + "'");
 				if (obj.getAgama().toUpperCase().equals("ISLAM")) {
 					parameters.put("SALAMNASKAH", "Semoga Allah Subhanahu wa ta’ala memberikan kekuatan kepada saya");
@@ -149,6 +151,7 @@ public class EventRegListVm {
 					parameters.put("AGAMA", "Budha");
 				}
 			} else if (arg.equals("etik")) {
+				nosurat = data.getKeno();
 				filepath = "naskahetika.jasper";
 				filepath2 = "naskahetika2.jasper";
 			} else if (arg.equals("sertifikasi")) {
@@ -166,8 +169,7 @@ public class EventRegListVm {
 				System.out.println("TIDAK ADA FOTO");
 				photoname = "default.png";
 			}
-
-			String nosurat = data.getSpno();
+			
 			String location = data.getTevent().getEventlocation();
 
 			String gelardepan = "";
