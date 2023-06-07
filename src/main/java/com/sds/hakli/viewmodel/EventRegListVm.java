@@ -96,19 +96,21 @@ public class EventRegListVm {
 						downloadNaskah(data, "etik");
 					}
 				});
-				
+
 				Div div = new Div();
-				div.appendChild(btNaskah);
-				Separator separator = new Separator();
-				div.appendChild(separator);
-				div.appendChild(btEtika);
-				
+				if (data.getIspaid().equals("Y")) {
+					div.appendChild(btNaskah);
+					Separator separator = new Separator();
+					div.appendChild(separator);
+					div.appendChild(btEtika);
+				}
+
 				row.getChildren().add(div);
 			}
 
 		});
 	}
-	
+
 	public void downloadNaskah(Teventreg data, String arg) {
 		try {
 			Map<String, Object> parameters = new HashMap<>();
@@ -144,7 +146,7 @@ public class EventRegListVm {
 					parameters.put("SUMPAHAGAMA", "Demi yang Tiratana saya berjanji");
 					parameters.put("AGAMA", "Budha");
 				}
-			}  else if (arg.equals("etik")) {
+			} else if (arg.equals("etik")) {
 				filepath = "naskahetika.jasper";
 				filepath2 = "naskahetika2.jasper";
 			} else if (arg.equals("sertifikasi")) {
@@ -162,7 +164,7 @@ public class EventRegListVm {
 				System.out.println("TIDAK ADA FOTO");
 				photoname = "default.png";
 			}
-			
+
 			String nosurat = data.getTevent().getEventid().trim();
 			String location = data.getTevent().getEventlocation();
 
