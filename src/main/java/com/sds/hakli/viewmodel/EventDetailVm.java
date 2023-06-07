@@ -53,6 +53,8 @@ public class EventDetailVm {
 	private String email;
 	private String vano;
 	private String status;
+	private String gender;
+	private String agama;
 	
 	private SimpleDateFormat datetimeLocalFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	
@@ -150,6 +152,10 @@ public class EventDetailVm {
 			filter += " and teventreg.vano like '%" + vano.trim() + "%'";
 		if (status != null && status.trim().length() > 0)
 			filter += " and ispaid = '" + status + "'";
+		if (gender != null && gender.trim().length() > 0)
+			filter += " and gender = '" + gender.trim() + "'";
+		if (agama != null && agama.trim().length() > 0)
+			filter += " and agama = '" + agama.trim() + "'";
 		needsPageUpdate = true;
 		pageStartNumber = 0;
 		refreshModel(pageStartNumber);
@@ -162,6 +168,8 @@ public class EventDetailVm {
 		email = null;
 		vano = null;
 		status = null;
+		gender = null;
+		agama = null;
 		cbStatus.setValue(null);
 		doSearch();
 		doChart();
@@ -250,5 +258,29 @@ public class EventDetailVm {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Tevent getObj() {
+		return obj;
+	}
+
+	public void setObj(Tevent obj) {
+		this.obj = obj;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAgama() {
+		return agama;
+	}
+
+	public void setAgama(String agama) {
+		this.agama = agama;
 	}
 }

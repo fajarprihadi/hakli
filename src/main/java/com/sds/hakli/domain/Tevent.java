@@ -26,6 +26,10 @@ public class Tevent {
 	
 	private String eventimg;
 	
+	private String eventtype;
+	
+	private String eventlocation;
+	
 	private BigDecimal eventprice;
 	
 	@Id
@@ -90,6 +94,24 @@ public class Tevent {
 
 	public void setEventprice(BigDecimal eventprice) {
 		this.eventprice = eventprice;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getEventtype() {
+		return eventtype;
+	}
+
+	public void setEventtype(String eventtype) {
+		this.eventtype = eventtype;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getEventlocation() {
+		return eventlocation;
+	}
+
+	public void setEventlocation(String eventlocation) {
+		this.eventlocation = eventlocation;
 	}
 
 }

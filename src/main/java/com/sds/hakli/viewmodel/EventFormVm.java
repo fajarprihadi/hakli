@@ -145,12 +145,18 @@ public class EventFormVm {
 				String eventname = (String) ctx.getProperties("eventname")[0].getValue();
 				if (eventname == null || "".equals(eventname.trim()))
 					this.addInvalidMessage(ctx, "eventname", Labels.getLabel("common.validator.empty"));
+				String eventtype = (String) ctx.getProperties("eventtype")[0].getValue();
+				if (eventtype == null || "".equals(eventtype.trim()))
+					this.addInvalidMessage(ctx, "eventtype", Labels.getLabel("common.validator.empty"));
 				String eventdesc = (String) ctx.getProperties("eventdesc")[0].getValue();
 				if (eventdesc == null || "".equals(eventdesc.trim()))
 					this.addInvalidMessage(ctx, "eventdesc", Labels.getLabel("common.validator.empty"));
 				Date eventdate = (Date) ctx.getProperties("eventdate")[0].getValue();
 				if (eventdate == null)
 					this.addInvalidMessage(ctx, "eventdate", Labels.getLabel("common.validator.empty"));
+				String eventlocation = (String) ctx.getProperties("eventlocation")[0].getValue();
+				if (eventlocation == null || "".equals(eventlocation.trim()))
+					this.addInvalidMessage(ctx, "eventlocation", Labels.getLabel("common.validator.empty"));
 				BigDecimal eventprice = (BigDecimal) ctx.getProperties("eventprice")[0].getValue();
 				if (eventprice == null)
 					this.addInvalidMessage(ctx, "eventprice", Labels.getLabel("common.validator.empty"));

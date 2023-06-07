@@ -10,6 +10,60 @@
 			sclass="btn btn-primary btn-sm" autodisable="self"
 			onClick="@command('doBack')" />
 		<separator />
+		<groupbox mold="3d">
+			<caption label="Informasi Event" iconSclass="z-icon-info" />
+			<n:table class="table table-sm table-striped mb-0">
+				<n:tr>
+					<n:td>
+						<label value="Event" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.eventname)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Tipe Event" />
+					</n:td>
+					<n:td>
+						<combobox selectedItem="@load(vm.obj.eventtype)"
+							readonly="true" buttonVisible="false">
+							<comboitem value="SP"
+								label="Sumpah Profesi" />
+							<comboitem value="SM" label="Seminar" />
+							<comboitem value="WS" label="Workshop" />
+						</combobox>
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Tanggal Pelaksanaan" />
+					</n:td>
+					<n:td>
+						<label
+							value="@load(vm.obj.eventdate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Lokasi" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.eventlocation)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Biaya" />
+					</n:td>
+					<n:td>
+						<label
+							value="@load(vm.obj.eventprice) @converter('formatedNumber', format='###,##0')" />
+					</n:td>
+				</n:tr>
+			</n:table>
+		</groupbox>
+		<separator />
 		<div class="row">
 			<div class="col">
 				<groupbox mold="3d">
@@ -32,14 +86,44 @@
 							</row>
 							<row>
 								<textbox placeholder="Nomor VA"
-									value="@bind(vm.vano)" onOK="@command('doSearch')"
-									width="100%" maxlength="40" />
+									value="@bind(vm.vano)" onOK="@command('doSearch')" width="100%"
+									maxlength="40" />
 							</row>
 							<row>
-								<combobox id="cbStatus" placeholder="Status Pembayaran"
-									selectedItem="@bind(vm.status)" width="50%">
-									<comboitem value="Y" label="Sudah Dibayar" />
-									<comboitem value="N" label="Belum Dibayar" />
+								<combobox
+									placeholder="${labels.anggota.gender}"
+									selectedItem="@bind(vm.gender)">
+									<comboitem label="Laki-Laki"
+										value="L" />
+									<comboitem label="Perempuan"
+										value="P" />
+								</combobox>
+							</row>
+							<row>
+								<combobox
+									placeholder="${labels.anggota.agama}"
+									selectedItem="@bind(vm.agama)">
+									<comboitem value="Islam"
+										label="Islam" />
+									<comboitem value="Protestan"
+										label="Protestan" />
+									<comboitem value="Katolik"
+										label="Katolik" />
+									<comboitem value="Hindu"
+										label="Hindu" />
+									<comboitem value="Buddha"
+										label="Buddha" />
+									<comboitem value="Konghucu"
+										label="Konghucu" />
+								</combobox>
+							</row>
+							<row>
+								<combobox id="cbStatus"
+									placeholder="Status Pembayaran" selectedItem="@bind(vm.status)">
+									<comboitem value="Y"
+										label="Sudah Dibayar" />
+									<comboitem value="N"
+										label="Belum Dibayar" />
 								</combobox>
 							</row>
 						</rows>
@@ -91,7 +175,8 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true">
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
+			sizedByContent="true">
 			<columns>
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.nama}" />
