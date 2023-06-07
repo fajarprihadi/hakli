@@ -9,6 +9,8 @@
 	<parameter name="FOTO" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="CURRENTDATE" class="java.lang.String"/>
+	<parameter name="GELARDEPAN" class="java.lang.String"/>
+	<parameter name="GELARBELAKANG" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="noanggota" class="java.lang.String"/>
 	<field name="gelardepan" class="java.lang.String"/>
@@ -73,7 +75,7 @@ mempertaruhkan kehormatan saya sebagai Tenaga Sanitasi Lingkungan (Sanitarian).
 				<imageExpression><![CDATA[$P{TTD_MENGANGKATSUMPAH}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="1" y="209" width="180" height="34" uuid="b141aefd-72a9-452d-ba3b-772daa39a3bd"/>
+				<reportElement x="1" y="209" width="181" height="34" uuid="b141aefd-72a9-452d-ba3b-772daa39a3bd"/>
 				<text><![CDATA[Prof. Dr. H. Arif Sumantri, SKM. M.Kes.
 No.KTA:317410895]]></text>
 			</staticText>
@@ -91,12 +93,7 @@ materai 10000
 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="355" y="208" width="194" height="15" uuid="895c4a2f-3a05-469c-bbbd-360172ae3eb0"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{nama} + " " + $F{gelarbelakang}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="355" y="222" width="194" height="16" uuid="e533828f-773c-487b-a051-3228bfd55421"/>
+				<reportElement x="355" y="221" width="194" height="16" uuid="e533828f-773c-487b-a051-3228bfd55421"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
 			</textField>
@@ -104,6 +101,11 @@ materai 10000
 				<reportElement x="355" y="94" width="194" height="15" uuid="78cec1ff-baa8-4ba8-960b-6c3e3eea5f86"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="355" y="208" width="194" height="14" uuid="72385995-b82c-4fbf-86fd-7095fefbe75e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{GELARDEPAN} + $F{nama} + $P{GELARBELAKANG}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
