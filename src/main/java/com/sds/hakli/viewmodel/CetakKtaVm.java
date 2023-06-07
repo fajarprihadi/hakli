@@ -1,9 +1,12 @@
 package com.sds.hakli.viewmodel;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -18,7 +21,6 @@ import org.zkoss.zul.Div;
 
 import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.AppUtils;
-import com.sds.utils.StringUtils;
 
 public class CetakKtaVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
@@ -37,16 +39,24 @@ public class CetakKtaVm {
 		Selectors.wireComponents(view, this, false);
 		obj = (Tanggota) zkSession.getAttribute("anggota");
 		objList.add(obj);
-		String currentdate = "";
+		String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
+		String localdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getTgllahir());;
 		
-		int year = Calendar.getInstance().get(Calendar.YEAR);
-		int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-		int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		String photoname = "";
+
+		File file = new File(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink());
+		if (file.exists()) {
+			System.out.println("ADA FOTO");
+			photoname = obj.getPhotolink();
+		} else {
+			System.out.println("TIDAK ADA FOTO");
+			photoname = "default.png";
+		}
 		
-		currentdate = day + " " + StringUtils.getMonthLabel(month) + " " + year;
+		parameters.put("TGLLAHIR", localdate);
 		parameters.put("CURRENTDATE", currentdate);
 		parameters.put("FOTO", Executions.getCurrent().getDesktop().getWebApp()
-				.getRealPath(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink()));
+				.getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
 		parameters.put("CARD1",
 				Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/cetakkta1.jpg"));
 		parameters.put("CARD2",

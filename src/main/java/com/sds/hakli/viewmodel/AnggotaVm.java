@@ -80,6 +80,8 @@ public class AnggotaVm {
 	private String filter;
 	
 	private String nama;
+	private String agama;
+	private String jenjang;
 	private Mprov region;
 	private Mcabang cabang;
 	
@@ -213,6 +215,11 @@ public class AnggotaVm {
 			else filter += " and mcabang.mprovfk = " + region.getMprovpk();
 		}
 		
+		if (agama != null && agama.trim().length() > 0)
+			filter += " and upper(agama) like '%" + agama.trim().toUpperCase() + "%'" ;
+		if (jenjang != null && jenjang.trim().length() > 0)
+			filter += " and upper(jenjang) like '%" + nama.trim().toUpperCase() + "%'" ;
+		
 		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
 			filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
 		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
@@ -228,6 +235,8 @@ public class AnggotaVm {
 	@NotifyChange("*")
 	public void doReset() {
 		nama = null;
+		agama = null;
+		jenjang = null;
 		region = null;
 		cabang = null;
 		cbRegion.setValue(null);
@@ -415,6 +424,22 @@ public class AnggotaVm {
 
 	public void setNama(String nama) {
 		this.nama = nama;
+	}
+
+	public String getAgama() {
+		return agama;
+	}
+
+	public void setAgama(String agama) {
+		this.agama = agama;
+	}
+
+	public String getJenjang() {
+		return jenjang;
+	}
+
+	public void setJenjang(String jenjang) {
+		this.jenjang = jenjang;
 	}
 	
 }

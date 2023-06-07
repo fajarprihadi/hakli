@@ -8,45 +8,66 @@
 		</caption>
 		<groupbox mold="3d">
 			<caption label="Pencarian" iconSclass="z-icon-search" />
-			<div class="row">
-				<div class="col">
-					<textbox placeholder="Nama" value="@bind(vm.nama)"
-						onOK="@command('doSearch')" width="100%" maxlength="40" />
-				</div>
-				<div class="col">
-					<combobox id="cbRegion" placeholder="Provinsi"
-						onSelect="@command('doLoadCabang', prov=vm.region)"
-						model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
-						width="100%">
-						<template name="model" var="region">
-							<comboitem label="@load(region.provname)" />
-						</template>
-					</combobox>
-				</div>
-				<div class="col">
-					<combobox id="cbCabang" placeholder="Cabang"
-						model="@load(vm.cabangModel)" selectedItem="@bind(vm.cabang)"
-						width="100%">
-						<template name="model" var="cabang">
-							<comboitem label="@load(cabang.cabang)" />
-						</template>
-					</combobox>
-				</div>
-				<div class="col">
-					<div class="row">
-						<div class="col">
+			<grid>
+				<columns>
+					<column width="10%" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="Nama" />
+						<textbox placeholder="Nama"
+							value="@bind(vm.nama)" cols="50" onOK="@command('doSearch')"
+							maxlength="40" />
+					</row>
+					<row>
+						<label value="Provinsi" />
+						<combobox id="cbRegion" placeholder="Provinsi"
+							cols="50" onSelect="@command('doLoadCabang', prov=vm.region)"
+							model="@load(vm.regionModel)" selectedItem="@bind(vm.region)">
+							<template name="model" var="region">
+								<comboitem
+									label="@load(region.provname)" />
+							</template>
+						</combobox>
+					</row>
+					<row>
+						<label value="Cabang" />
+						<combobox id="cbCabang" placeholder="Cabang"
+							cols="50" model="@load(vm.cabangModel)"
+							selectedItem="@bind(vm.cabang)">
+							<template name="model" var="cabang">
+								<comboitem label="@load(cabang.cabang)" />
+							</template>
+						</combobox>
+					</row>
+					<row>
+						<label value="Agama" />
+						<textbox placeholder="Agama"
+							value="@bind(vm.agama)" cols="50" onOK="@command('doSearch')"
+							maxlength="40" />
+					</row>
+					<row visible="false">
+						<label value="Jenjang" />
+						<textbox placeholder="Jenjang"
+							value="@bind(vm.jenjang)" cols="5" onOK="@command('doSearch')"
+							maxlength="40" />
+					</row>
+				</rows>
+				<foot>
+					<footer/>
+					<footer>
+						<hlayout>
 							<button label="Telusuri" autodisable="self"
 								iconSclass="z-icon-search" width="100%"
 								sclass="btn btn-success btn-sm" onClick="@command('doSearch')" />
-						</div>
-						<div class="col">
 							<button label="Reset" autodisable="self"
 								iconSclass="z-icon-retweet" width="100%"
 								sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
-						</div>
-					</div>
-				</div>
-			</div>
+						</hlayout>
+					</footer>
+				</foot>
+			</grid>
 		</groupbox>
 		<separator />
 		<div class="row">
@@ -58,8 +79,9 @@
 					style="font-weight: bold" />
 				<label value="@load(vm.pageTotalSize)"
 					style="font-weight: bold" />
-				<button autodisable="self" iconSclass="z-icon-download" tooltiptext="Download Data"
-					sclass="btn btn-success btn-sm" onClick="@command('doExport')" />
+				<button autodisable="self" iconSclass="z-icon-download"
+					tooltiptext="Download Data" sclass="btn btn-success btn-sm"
+					onClick="@command('doExport')" />
 			</div>
 		</div>
 		<grid id="grid" emptyMessage="${labels.common.emptymsg}"

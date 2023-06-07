@@ -3,28 +3,7 @@
 	<property name="ireport.zoom" value="1.7715610000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<style name="table">
-		<box>
-			<pen lineWidth="1.0" lineColor="#FFFFFF"/>
-		</box>
-	</style>
-	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-		</box>
-	</style>
-	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-		</box>
-	</style>
-	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-		</box>
-	</style>
-	<subDataset name="dataset1" uuid="361d2632-d41b-46b2-984a-0f055d985b85"/>
-	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="NOSURAT" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
@@ -34,12 +13,12 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="102" splitType="Stretch">
+		<band height="107" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="94" width="555" height="1" uuid="2313bb3f-04c8-40c5-90b9-94cd037d3043"/>
+				<reportElement x="0" y="92" width="555" height="1" uuid="2313bb3f-04c8-40c5-90b9-94cd037d3043"/>
 			</line>
 			<staticText>
-				<reportElement x="102" y="2" width="340" height="90" uuid="51abc935-7e40-4af8-af49-7a554597b025"/>
+				<reportElement x="102" y="0" width="340" height="90" uuid="51abc935-7e40-4af8-af49-7a554597b025"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[PENGURUS PUSAT
 HIMPUNAN AHLI KESEHATAN LINGKUNGAN INDONESIA
@@ -50,30 +29,34 @@ Phone +62 21 2965 1162 Fax +62 21 2965 1222 WA : +62 812 8379 9257
 Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="92" width="555" height="1" uuid="11a07beb-5ab1-4ab5-827b-db04e3336d9d"/>
+				<reportElement x="0" y="90" width="555" height="1" uuid="11a07beb-5ab1-4ab5-827b-db04e3336d9d"/>
 			</line>
 			<line>
-				<reportElement x="0" y="95" width="555" height="1" uuid="e8971189-eea6-4243-8a86-19e57f6f9dea"/>
+				<reportElement x="0" y="93" width="555" height="1" uuid="e8971189-eea6-4243-8a86-19e57f6f9dea"/>
 			</line>
 			<line>
-				<reportElement x="0" y="97" width="555" height="1" uuid="3f3b4d4f-efd3-4279-b1bc-7fad3b3a5cf2"/>
+				<reportElement x="0" y="95" width="555" height="1" uuid="3f3b4d4f-efd3-4279-b1bc-7fad3b3a5cf2"/>
 			</line>
 			<image>
-				<reportElement x="1" y="12" width="81" height="71" uuid="b69a923d-4821-49ee-83a7-67411ca9176a"/>
-				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+				<reportElement x="1" y="6" width="101" height="84" uuid="8e788b98-02be-480b-ae35-4a0ee16ca2b5"/>
+				<imageExpression><![CDATA["C:\\Users\\SDD-SWD\\Pictures\\hakli-min.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="64" splitType="Stretch">
 			<staticText>
-				<reportElement x="102" y="1" width="334" height="61" uuid="d8fa6e2b-24d3-4ae8-99fa-fbef8ded70a8"/>
+				<reportElement x="102" y="1" width="334" height="39" uuid="d8fa6e2b-24d3-4ae8-99fa-fbef8ded70a8"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[PERNYATAAN
 MEMATUHI DAN MELAKSANAKAN KETENTUAN ETIKA PROFESI
-TENAGA SANITASI LINGKUNGAN (SANITARIAN)
-Nomor : 1742/KE/PP-HAKLI/I/2023]]></text>
+TENAGA SANITASI LINGKUNGAN (SANITARIAN)]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="102" y="39" width="334" height="25" uuid="9a88f3b2-6699-40d9-91e7-2731991ccf59"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Nomor : " + $P{NOSURAT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -101,9 +84,9 @@ Nomor : 1742/KE/PP-HAKLI/I/2023]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="502" splitType="Stretch">
+		<band height="505" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="10" width="555" height="41" uuid="aaa9d03e-0c85-4567-be9d-648fcf59f806"/>
+				<reportElement x="10" y="10" width="554" height="41" uuid="aaa9d03e-0c85-4567-be9d-648fcf59f806"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
@@ -112,70 +95,45 @@ Sanitasi Lingkungan (Sanitarian) dalam melaksanakan tugas sebagai Tenaga Sanitas
 berikut :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="56" width="533" height="443" uuid="8a089d31-5744-410c-9cda-6eba3ce172a1"/>
-				<textElement textAlignment="Justified" markup="none">
+				<reportElement x="13" y="51" width="551" height="444" uuid="8a089d31-5744-410c-9cda-6eba3ce172a1"/>
+				<textElement textAlignment="Justified">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[Menjunjung tinggi, menghayati dan mengamalkan profesi sanitasi dengan sebaik-baiknya yang dilandasi dengan rasa keimanan dan ketaqwaan kepada Tuhan Yang Maha Esa.
-Senantiasa berupaya melaksanakan profesinya sesuai dengan standar profesi yang tertinggi.
-Dalam melakukan pekerjaan atau praktek profesi sanitasi, saya tidak boleh dipengaruhi sesuatu yang mengakibatkan hilangnya kebebasan dan kemandirian profesi saya.
-Harus menghindarkan diri dari perbuatan yang bersifat memuji diri sendiri.
-Senantiasa berhati-hati dalam menerapkan setiap penemuan teknik atau cara baru yang belum teruji kehandalannya dan hal-hal yang dapat menimbulkan keresahan masyarakat.
-Hanya memberi saran atau rekomendasi yang telah melalui suatu proses analisis secara komprehensif.
-Dalam menjalankan profesi, saya harus memberikan pelayanan yang sebaik-baiknya dengan menjunjung tinggi kesehatan dan keselamatan manusia, serta kelestarian lingkungan.
-Harus bersikap jujur dalam berhubungan dengan klien atau masyarakat dan teman seprofesi saya, dan berupaya untuk mengingatkan teman seprofesi saya yang dia ketahui memiliki kekurangan dalam karakter atau kompetensi, atau yang melakukan penipuan atau kebohongan dalam menangani masalah klien atau masyarakat.
-Harus menghormati hak-hak klien atau masyarakat, hak-hak teman seprofesi, dan hak tenaga kesehatan lainnya, dan harus menjaga kepercayaan klien atau masyarakat.
-Dalam melakukan pekerjaan, saya harus memperhatikan kepentingan masyarakat dan memperhatikan seluruh aspek kesehatan lingkungan secara menyeluruh, baik fisik, biologi maupun sosial, serta berusaha menjadi pendidik dan pengabdi masyarakat yang sebenar- benarnya.
-Dalam bekerja sama dengan para pejabat di bidang kesehatan dan bidang lainnya serta masyarakat, harus saling menghormati.
-Wajib bersikap tulus ikhlas dan mempergunakan segala ilmu dan keterampilannya untuk kepentingan penyelesaian masalah klien atau masyarakat. Dalam hal ia tidak mampu melakukan suatu pemeriksaan atau penyelesaian masalah, maka saya wajib berkonsultasi, bekerjasama dan atau merujuk pekerjaan tersebut kepada teman sejawat lain yang mempunyai keahlian dalam penyelesaian masalah tersebut.
-Wajib melaksanakan tugas profesi secara sungguh-sungguh dan bertanggung jawab.
-Wajib melakukan penyelesaian masalah sanitasi secara tuntas dan keseluruhan.
-Wajib memberikan informasi kepada kliennya atas pelayanan yang diberikannya.
-Mendapatkan perlindungan atas praktek pemberian pelayanan.
-Memperlakukan teman seprofesi saya sebagai bagian dari penyelesaian masalah.
-Tidak boleh saling mengambil alih pekerjaan dari teman seprofesi saya, kecuali dengan persetujuan, atau berdasarkan prosedur yang ada.
-Harus memperhatikan dan mempraktekan hidup bersih dan sehat supaya dapat bekerja dengan baik.
-Harus senantiasa mengikuti perkembangan ilmu pengetahuan dan teknologi kesehatan lingkungan, kesehatan dan bidang-bidang lain yang terkait. ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="56" width="18" height="443" uuid="32831a50-a258-4c35-a922-c3740e8d13be"/>
-				<textElement textAlignment="Right">
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1.
-
-2.
-3.
-
-4.
-5.
-
-6.
-7.
-
-8.
-
-
-9.
-
-10.
-
-
-11.
-
-12.
-
-
-
-13.
-14.
-15.
-16.
-17.
-18.
-
-19.
-20.]]></text>
+				<text><![CDATA[1. Menjunjung tinggi, menghayati dan mengamalkan profesi sanitasi dengan sebaik-baiknya yang dilandasi dengan rasa
+    keimanan dan ketaqwaan kepada Tuhan Yang Maha Esa.
+2. Senantiasa berupaya melaksanakan profesinya sesuai dengan standar profesi yang tertinggi.
+3. Dalam melakukan pekerjaan atau praktek profesi sanitasi, saya tidak boleh dipengaruhi sesuatu yang mengakibatkan
+    hilangnya kebebasan dan kemandirian profesi saya.
+4. Harus menghindarkan diri dari perbuatan yang bersifat memuji diri sendiri.
+5. Senantiasa berhati-hati dalam menerapkan setiap penemuan teknik atau cara baru yang belum teruji kehandalannya
+    dan hal-hal yang dapat menimbulkan keresahan masyarakat.
+6. Hanya memberi saran atau rekomendasi yang telah melalui suatu proses analisis secara komprehensif.
+7. Dalam menjalankan profesi, saya harus memberikan pelayanan yang sebaik-baiknya dengan menjunjung tinggi
+    kesehatan dan keselamatan manusia, serta kelestarian lingkungan.
+8. Harus bersikap jujur dalam berhubungan dengan klien atau masyarakat dan teman seprofesi saya, dan
+    berupaya untuk mengingatkan teman seprofesi saya yang dia ketahui memiliki kekurangan dalam karakter atau
+    kompetensi, atau yang melakukan penipuan atau kebohongan dalam menangani masalah klien atau masyarakat.
+9. Harus menghormati hak-hak klien atau masyarakat, hak-hak teman seprofesi, dan hak tenaga kesehatan lainnya, dan
+    harus menjaga kepercayaan klien atau masyarakat.
+10. Dalam melakukan pekerjaan, saya harus memperhatikan kepentingan masyarakat dan memperhatikan seluruh
+      aspek kesehatan lingkungan secara menyeluruh, baik fisik, biologi maupun sosial, serta berusaha menjadi pendidik
+     dan pengabdi masyarakat yang sebenar- benarnya.
+11. Dalam bekerja sama dengan para pejabat di bidang kesehatan dan bidang lainnya serta masyarakat, harus saling
+     menghormati.
+12. Wajib bersikap tulus ikhlas dan mempergunakan segala ilmu dan keterampilannya untuk kepentingan penyelesaian
+     masalah klien atau masyarakat. Dalam hal ia tidak mampu melakukan suatu pemeriksaan atau penyelesaian masalah,
+     maka saya wajib berkonsultasi, bekerjasama dan atau merujuk pekerjaan tersebut kepada teman sejawat lain yang
+     mempunyai keahlian dalam penyelesaian masalah tersebut.
+13. Wajib melaksanakan tugas profesi secara sungguh-sungguh dan bertanggung jawab.
+14. Wajib melakukan penyelesaian masalah sanitasi secara tuntas dan keseluruhan.
+15. Wajib memberikan informasi kepada kliennya atas pelayanan yang diberikannya.
+16. Mendapatkan perlindungan atas praktek pemberian pelayanan.
+17. Memperlakukan teman seprofesi saya sebagai bagian dari penyelesaian masalah.
+18. Tidak boleh saling mengambil alih pekerjaan dari teman seprofesi saya, kecuali dengan persetujuan, atau
+     berdasarkan prosedur yang ada.
+19. Harus memperhatikan dan mempraktekan hidup bersih dan sehat supaya dapat bekerja dengan baik.
+20. Harus senantiasa mengikuti perkembangan ilmu pengetahuan dan teknologi kesehatan lingkungan, kesehatan dan
+     bidang-bidang lain yang terkait. ]]></text>
 			</staticText>
 		</band>
 	</detail>
