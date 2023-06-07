@@ -3,7 +3,6 @@ package com.sds.hakli.viewmodel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,18 +48,22 @@ import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.TeventregDAO;
-import com.sds.hakli.domain.Tanggota;
+import com.sds.hakli.dao.TpekerjaanDAO;
+import com.sds.hakli.dao.TpendidikanDAO;
 import com.sds.hakli.domain.Tevent;
 import com.sds.hakli.domain.Teventreg;
 import com.sds.hakli.domain.Tpekerjaan;
 import com.sds.hakli.domain.Tpendidikan;
 import com.sds.hakli.domain.Veventamount;
 import com.sds.hakli.model.TeventregListModel;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
 public class EventDetailVm {
 
 	private TeventregDAO eventregDao = new TeventregDAO();
+	private TpekerjaanDAO pekerjaanDao = new TpekerjaanDAO();
+	private TpendidikanDAO pendidikanDao = new TpendidikanDAO();
 	private TeventregListModel model;
 	private Tevent obj;
 	
@@ -75,6 +78,7 @@ public class EventDetailVm {
 	private String gender;
 	private String agama;
 	
+	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	private SimpleDateFormat datetimeLocalFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	
 	@Wire
@@ -243,7 +247,7 @@ public class EventDetailVm {
 	@Command
 	public void doExport() {
 		try {
-			List<Teventreg> objList = new ArrayList<>();
+			List<Teventreg> objList = eventregDao.listNative(filter, "nama");
 			if (objList.size() > 0) {
 				XSSFWorkbook workbook = new XSSFWorkbook();
 				XSSFSheet sheet = workbook.createSheet();
@@ -256,20 +260,42 @@ public class EventDetailVm {
 				int rownum = 0;
 				int cellnum = 0;
 				Integer no = 0;
-				//org.apache.poi.ss.usermodel.Row row = sheet.createRow(rownum++);
-				//Cell cell = row.createCell(0);
-				org.apache.poi.ss.usermodel.Row row = null;
-				Cell cell = null;
+				org.apache.poi.ss.usermodel.Row row = sheet.createRow(rownum++);
+				Cell cell = row.createCell(1);
+				cell.setCellValue("Event");
+				cell = row.createCell(2);
+				cell.setCellValue(obj.getEventname());
+				row = sheet.createRow(rownum++);
+				cell = row.createCell(1);
+				cell.setCellValue("Tipe Event");
+				cell = row.createCell(2);
+				cell.setCellValue(AppData.getEventType(obj.getEventtype()));
+				row = sheet.createRow(rownum++);
+				cell = row.createCell(1);
+				cell.setCellValue("Tanggal Pelaksanaan");
+				cell = row.createCell(2);
+				cell.setCellValue(dateLocalFormatter.format(obj.getEventdate()));
+				row = sheet.createRow(rownum++);
+				cell = row.createCell(1);
+				cell.setCellValue("Lokasi");
+				cell = row.createCell(2);
+				cell.setCellValue(obj.getEventlocation());
+				row = sheet.createRow(rownum++);
+				cell = row.createCell(1);
+				cell.setCellValue("Biaya");
+				cell = row.createCell(2);
+				cell.setCellValue(obj.getEventprice().doubleValue());
 				rownum++;
 				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
 				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "No STR", "E-Mail", "Region", "Cabang",
 						"Provinsi Domisili", "Kabupaten Domisili", "Alamat Domisili", 
 						"Tempat Kerja", "Provinsi", "Kabupaten", "Alamat", "Rumpun", "Kepegawaian", "Sub Kepegawian", 
-						"Perguruan Tinggi", "Jenjang", "Peminatan 1", "Peminatan 2", "Periode Awal", "Periode Akhir", "No Ijazah" });
+						"Perguruan Tinggi", "Jenjang", "Peminatan 1", "Peminatan 2", "Periode Awal", "Periode Akhir", "No Ijazah", 
+						"Nomor VA", "Status Bayar", "Jumlah Bayar", "Waktu Bayar"});
 				no = 2;
-				for (Tanggota data : objList) {
-					List<Tpekerjaan> pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + data.getTanggotapk(), "tpekerjaanpk desc");
-					List<Tpendidikan> pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + data.getTanggotapk(), "tpendidikanpk desc");
+				for (Teventreg data : objList) {
+					List<Tpekerjaan> pekerjaans = pekerjaanDao.listByFilter("tanggota.tanggotapk = " + data.getTanggota().getTanggotapk(), "tpekerjaanpk desc");
+					List<Tpendidikan> pendidikans = pendidikanDao.listByFilter("tanggota.tanggotapk = " + data.getTanggota().getTanggotapk(), "tpendidikanpk desc");
 					Tpekerjaan pekerjaan = new Tpekerjaan();
 					if (pekerjaans.size() > 0)
 						pekerjaan = pekerjaans.get(0);
@@ -278,15 +304,15 @@ public class EventDetailVm {
 						pendidikan = pendidikans.get(0);
 					
 					datamap.put(no,
-							new Object[] { no - 1, data.getNoanggota(), data.getNama(), data.getNostr(), data.getEmail(), 
-									data.getMcabang().getMprov().getProvname(), data.getMcabang().getCabang(), data.getProvname(), data.getKabname(), data.getAlamat(), 
+							new Object[] { no - 1, data.getTanggota().getNoanggota(), data.getTanggota().getNama(), data.getTanggota().getNostr(), data.getTanggota().getEmail(), 
+									data.getTanggota().getMcabang().getMprov().getProvname(), data.getTanggota().getMcabang().getCabang(), data.getTanggota().getProvname(), data.getTanggota().getKabname(), data.getTanggota().getAlamat(), 
 									pekerjaan.getNamakantor(), pekerjaan.getProvname(), pekerjaan.getKabname(), pekerjaan.getAlamatkantor(), 
 									pekerjaan.getMrumpun() != null ? pekerjaan.getMrumpun().getRumpun() : "", 
 									pekerjaan.getMkepegawaian() != null ? pekerjaan.getMkepegawaian().getKepegawaian() : "",
 									pekerjaan.getMkepegawaiansub() != null ? pekerjaan.getMkepegawaiansub().getKepegawaiansub() : "",
 									pendidikan.getMuniversitas() != null ? pendidikan.getMuniversitas().getUniversitas() : "", 
 									pendidikan.getMjenjang() != null ? pendidikan.getMjenjang().getJenjang() : "", pendidikan.getPeminatan1(), pendidikan.getPeminatan2(), 
-									pendidikan.getPeriodethawal(), pendidikan.getPeriodethakhir(), pendidikan.getNoijazah() });
+									pendidikan.getPeriodethawal(), pendidikan.getPeriodethakhir(), pendidikan.getNoijazah(), data.getVano(), data.getIspaid().equals("Y") ? "Sudah Bayar" : "Belum Bayar", data.getPaidamount() != null ? data.getPaidamount().doubleValue() : "", data.getPaidat() != null ? datetimeLocalFormatter.format(data.getPaidat()) : "" });
 					no++;
 				}
 				Set<Integer> keyset = datamap.keySet();
@@ -294,25 +320,18 @@ public class EventDetailVm {
 					row = sheet.createRow(rownum++);
 					Object[] objArr = datamap.get(key);
 					cellnum = 0;
-					if (rownum == 6) {
-						XSSFCellStyle styleHeader = workbook.createCellStyle();
-						styleHeader.setBorderTop(BorderStyle.MEDIUM);
-						styleHeader.setBorderBottom(BorderStyle.MEDIUM);
-						styleHeader.setBorderLeft(BorderStyle.MEDIUM);
-						styleHeader.setBorderRight(BorderStyle.MEDIUM);
-						styleHeader.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-						//styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
+					if (rownum == 7) {
 						for (Object obj : objArr) {
 							cell = row.createCell(cellnum++);
 							if (obj instanceof String) {
 								cell.setCellValue((String) obj);
-								cell.setCellStyle(styleHeader);
+								cell.setCellStyle(style);
 							} else if (obj instanceof Integer) {
 								cell.setCellValue((Integer) obj);
-								cell.setCellStyle(styleHeader);
+								cell.setCellStyle(style);
 							} else if (obj instanceof Double) {
 								cell.setCellValue((Double) obj);
-								cell.setCellStyle(styleHeader);
+								cell.setCellStyle(style);
 							}
 						}
 					} else {
@@ -320,13 +339,13 @@ public class EventDetailVm {
 							cell = row.createCell(cellnum++);
 							if (obj instanceof String) {
 								cell.setCellValue((String) obj);
-								cell.setCellStyle(style);
+								//cell.setCellStyle(style);
 							} else if (obj instanceof Integer) {
 								cell.setCellValue((Integer) obj);
-								cell.setCellStyle(style);
+								//cell.setCellStyle(style);
 							} else if (obj instanceof Double) {
 								cell.setCellValue((Double) obj);
-								cell.setCellStyle(style);
+								//cell.setCellStyle(style);
 							}
 						}
 					}
@@ -334,7 +353,7 @@ public class EventDetailVm {
 
 				String path = Executions.getCurrent().getDesktop().getWebApp()
 						.getRealPath(AppUtils.PATH_REPORT);
-				String filename = "HAKLI_ANGGOTA_" + new SimpleDateFormat("yyMMddHHmm").format(new Date()) + ".xlsx";
+				String filename = "HAKLI_EVENT_" + new SimpleDateFormat("yyMMddHHmm").format(new Date()) + ".xlsx";
 				FileOutputStream out = new FileOutputStream(new File(path + "/" + filename));
 				workbook.write(out);
 				out.close();

@@ -50,6 +50,17 @@ public class TeventregDAO {
         return oList;
     }	
 	
+	@SuppressWarnings("unchecked")
+	public List<Teventreg> listNative(String filter, String orderby) throws Exception {		
+    	List<Teventreg> oList = null;
+    	if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from teventreg join Tanggota on tanggotafk = tanggotapk where " + filter + " order by " + orderby).addEntity(Teventreg.class).list();
+		session.close();
+        return oList;
+    }	
+	
 	public Teventreg findByPk(Integer pk) throws Exception {
 		session = StoreHibernateUtil.openSession();
 		Teventreg oForm = (Teventreg) session.createQuery("from Teventreg where teventregpk = " + pk).uniqueResult();
