@@ -173,6 +173,9 @@
 					style="font-weight: bold" />
 				<label value="@load(vm.pageTotalSize)"
 					style="font-weight: bold" />
+				<button autodisable="self" iconSclass="z-icon-download"
+					tooltiptext="Download Data" sclass="btn btn-success btn-sm"
+					onClick="@command('doExport')" />
 			</div>
 		</div>
 		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
@@ -181,6 +184,8 @@
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.nama}" />
 				<column label="${labels.anggota.email}" />
+				<column label="${labels.area.prov}" />
+				<column label="${labels.anggota.cabang}" />
 				<column label="Waktu Registrasi" align="center" />
 				<column label="Nomor VA" align="center" />
 				<column label="VA Jatuh Tempo" align="center" />
