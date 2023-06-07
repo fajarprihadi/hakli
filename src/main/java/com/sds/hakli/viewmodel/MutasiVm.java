@@ -97,7 +97,7 @@ public class MutasiVm {
 		if (item != null) {
 			try {
 				mcabangmodel = new ListModelList<Mcabang>(
-						new McabangDAO().listByFilter("mprovinsifk = " + mprov.getMprovpk(), "cabang"));
+						new McabangDAO().listByFilter("mprovfk = " + mprov.getMprovpk(), "cabang"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
