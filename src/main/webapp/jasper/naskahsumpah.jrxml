@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e09c74e-ba1b-4239-a24e-7de27df87915">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="153"/>
 	<parameter name="SUMPAHAGAMA" class="java.lang.String"/>
 	<parameter name="AGAMA" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.String"/>
@@ -10,6 +10,7 @@
 	<parameter name="TGLLAHIR" class="java.lang.String"/>
 	<parameter name="LOCALDATE" class="java.lang.String"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
+	<parameter name="LOCATION" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
@@ -154,7 +155,7 @@ Saya tidak akan menginformasikan kepada siapapun segala rahasia yang berhubungan
 			</staticText>
 			<textField>
 				<reportElement x="0" y="0" width="553" height="26" uuid="c9cf2c9a-97a2-4f11-8134-d1308facf62f"/>
-				<textFieldExpression><![CDATA["Pada hari ini " + $P{LOCALDATE} + ", bertempat di Institut Kesehatan dan Teknologi Al Insyirah "]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Pada hari ini " + $P{LOCALDATE} + ", bertempat di " + $P{LOCATION}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="25" width="555" height="15" uuid="6b75a035-cd1a-42cb-80be-181311b15bce"/>

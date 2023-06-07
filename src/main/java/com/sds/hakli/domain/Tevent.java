@@ -32,6 +32,10 @@ public class Tevent {
 	
 	private BigDecimal eventprice;
 	
+	private String eventtype;
+	
+	private String eventlocation;
+	
 	@Id
 	@SequenceGenerator(name = "tevent_seq", sequenceName = "tevent_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tevent_seq")
