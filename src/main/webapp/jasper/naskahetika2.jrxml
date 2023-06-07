@@ -5,6 +5,8 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="FOTO" class="java.lang.String"/>
 	<parameter name="CURRENTDATE" class="java.lang.String"/>
+	<parameter name="GELARDEPAN" class="java.lang.String"/>
+	<parameter name="GELARBELAKANG" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="gelarbelakang" class="java.lang.String"/>
 	<field name="noanggota" class="java.lang.String"/>
@@ -45,10 +47,10 @@ materai 10000
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="369" y="166" width="186" height="14" uuid="e65a2921-db99-4b7e-a1f9-35f3e75c669a"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{nama} + " " + $F{gelarbelakang}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{GELARDEPAN} + $F{nama} + $P{GELARBELAKANG}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

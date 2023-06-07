@@ -44,6 +44,10 @@ public class Teventreg {
 	
 	private String vaterminalid;
 	
+	private String spno;
+	
+	private String keno;
+	
 	@Id
 	@SequenceGenerator(name = "teventreg_seq", sequenceName = "teventreg_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "teventreg_seq")
@@ -161,6 +165,23 @@ public class Teventreg {
 
 	public void setVaterminalid(String vaterminalid) {
 		this.vaterminalid = vaterminalid;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getKeno() {
+		return keno;
+	}
+
+	public void setKeno(String keno) {
+		this.keno = keno;
+	}
+
+	public String getSpno() {
+		return spno;
+	}
+
+	public void setSpno(String spno) {
+		this.spno = spno;
 	}
 
 	

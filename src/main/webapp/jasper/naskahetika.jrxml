@@ -2,9 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahetika" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4701e50e-fca1-4ca4-a284-7ce19de67303">
 	<property name="ireport.zoom" value="1.7715610000000013"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
 	<parameter name="TGLLAHIR" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
@@ -30,7 +31,7 @@ Phone +62 21 2965 1162 Fax +62 21 2965 1222 WA : +62 812 8379 9257
 Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="90" width="555" height="1" uuid="11a07beb-5ab1-4ab5-827b-db04e3336d9d"/>
+				<reportElement x="0" y="89" width="555" height="1" uuid="11a07beb-5ab1-4ab5-827b-db04e3336d9d"/>
 			</line>
 			<line>
 				<reportElement x="0" y="93" width="555" height="1" uuid="e8971189-eea6-4243-8a86-19e57f6f9dea"/>
@@ -39,8 +40,8 @@ Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 				<reportElement x="0" y="95" width="555" height="1" uuid="3f3b4d4f-efd3-4279-b1bc-7fad3b3a5cf2"/>
 			</line>
 			<image>
-				<reportElement x="1" y="6" width="101" height="84" uuid="8e788b98-02be-480b-ae35-4a0ee16ca2b5"/>
-				<imageExpression><![CDATA["C:\\Users\\SDD-SWD\\Pictures\\hakli-min.png"]]></imageExpression>
+				<reportElement x="3" y="8" width="82" height="71" uuid="e1393431-26ad-44ed-8f8c-597b47289315"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
 			</image>
 		</band>
 	</title>

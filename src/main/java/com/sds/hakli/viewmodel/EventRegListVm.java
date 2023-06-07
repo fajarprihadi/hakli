@@ -99,10 +99,12 @@ public class EventRegListVm {
 
 				Div div = new Div();
 				if (data.getIspaid().equals("Y")) {
-					div.appendChild(btNaskah);
-					Separator separator = new Separator();
-					div.appendChild(separator);
-					div.appendChild(btEtika);
+					if (data.getTevent().getEventtype().equals("SP")) {
+						div.appendChild(btNaskah);
+						Separator separator = new Separator();
+						div.appendChild(separator);
+						div.appendChild(btEtika);
+					}
 				}
 
 				row.getChildren().add(div);
@@ -165,9 +167,20 @@ public class EventRegListVm {
 				photoname = "default.png";
 			}
 
-			String nosurat = data.getTevent().getEventid().trim();
+			String nosurat = data.getSpno();
 			String location = data.getTevent().getEventlocation();
 
+			String gelardepan = "";
+			String gelarbelakang = "";
+
+			if (obj.getGelarbelakang() != null)
+				gelarbelakang = " " + obj.getGelarbelakang();
+
+			if (obj.getGelardepan() != null)
+				gelardepan = obj.getGelardepan() + ". ";
+
+			parameters.put("GELARBELAKANG", gelarbelakang);
+			parameters.put("GELARDEPAN", gelardepan);
 			parameters.put("NOSURAT", nosurat);
 			parameters.put("LOCATION", location);
 			parameters.put("CURRENTDATE", currentdate);
