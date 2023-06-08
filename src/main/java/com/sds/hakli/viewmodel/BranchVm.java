@@ -34,6 +34,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Separator;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.McabangDAO;
@@ -54,6 +55,7 @@ public class BranchVm {
 	private Mcabang objForm;
 	private List<Mcabang> objList;
 	private String filter;
+	private String kodecabang;
 	private String cabang;
 	private String prov;
 	private Integer totalrecords;
@@ -73,6 +75,8 @@ public class BranchVm {
 	private Combobox cbRegion;
 	@Wire
 	private Combobox cbBank;
+	@Wire
+	private Textbox tbCode;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -84,6 +88,7 @@ public class BranchVm {
 			@Override
 			public void render(Row row, Mcabang data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index+1)));
+				row.getChildren().add(new Label(data.getKodecabang()));
 				row.getChildren().add(new Label(data.getCabang()));
 				row.getChildren().add(new Label(data.getMprov() != null ? data.getMprov().getProvname() : ""));
 				row.getChildren().add(new Label(data.getBankname()));
@@ -157,6 +162,7 @@ public class BranchVm {
 	public void doReset() {
 		cabang = null;
 		prov = null;
+		kodecabang = null;
 		doSearch();
 		divForm.setVisible(false);
 		btAdd.setLabel("Tambah Cabang");
@@ -180,6 +186,8 @@ public class BranchVm {
 	@NotifyChange("totalrecords")
 	public void doSearch() {
 		filter = "0=0";
+		if (kodecabang != null && kodecabang.trim().length() > 0)
+			filter += " and upper(kodecabang) like '%" + kodecabang.trim().toUpperCase() + "%'";
 		if (cabang != null && cabang.trim().length() > 0)
 			filter += " and upper(cabang) like '%" + cabang.trim().toUpperCase() + "%'";
 		if (prov != null && prov.trim().length() > 0)
@@ -200,6 +208,7 @@ public class BranchVm {
 			
 			cbRegion.setValue(objForm.getMprov().getProvname());
 			cbBank.setValue(objForm.getBankname());
+			tbCode.setDisabled(true);
 		} else if (btAdd.getLabel().equals("Tambah Cabang")) {
 			isInsert = true;
 			objForm = new Mcabang();
@@ -209,10 +218,12 @@ public class BranchVm {
 			btSave.setLabel("Submit");
 			
 			cbRegion.setValue(null);
+			tbCode.setDisabled(false);
 		} else {
 			divForm.setVisible(false);
 			btAdd.setLabel("Tambah Cabang");
 			btAdd.setIconSclass("z-icon-plus-square");
+			tbCode.setDisabled(false);
 		}
 	}
 	
@@ -313,6 +324,14 @@ public class BranchVm {
 
 	public void setProvinsi(String prov) {
 		this.prov = prov;
+	}
+
+	public String getKodecabang() {
+		return kodecabang;
+	}
+
+	public void setKodecabang(String kodecabang) {
+		this.kodecabang = kodecabang;
 	}
 
 }

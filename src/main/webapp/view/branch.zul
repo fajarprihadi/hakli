@@ -31,6 +31,15 @@
 					</columns>
 					<rows>
 						<row>
+							<label value="Kode Cabang (*)" />
+							<vlayout>
+								<textbox id="tbCode" value="@bind(e.kodecabang)"
+									width="100%" maxlength="4" />
+								<label style="color:gray"
+									value="@load(vmsgs['kodecabang'])" />
+							</vlayout>
+						</row>
+						<row>
 							<label value="Nama Cabang (*)" />
 							<vlayout>
 								<textbox value="@bind(e.cabang)"
@@ -113,6 +122,12 @@
 		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true">
 			<columns>
 				<column label="No" align="right" width="40px" />
+				<column align="center">
+					<textbox inplace="true" value="@bind(vm.kodecabang)" style="text-align: center"
+						width="100%" maxlength="100" placeholder="Kode Cabang"
+						tooltiptext="${labels.common.searchonheader}"
+						onOK="@command('doSearch')" />
+				</column>
 				<column>
 					<textbox inplace="true" value="@bind(vm.cabang)"
 						width="100%" maxlength="100" placeholder="Cabang"

@@ -543,7 +543,8 @@ public class EventRegVm {
 										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 									else briva.setCustCode(objForm.getPribadi().getVaevent().substring(5));
 									briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
-									briva.setNama(objForm.getPribadi().getNama());
+									briva.setNama(objForm.getPribadi().getNama().trim().length() > 40 ? objForm.getPribadi().getNama().trim().substring(0, 40) : objForm.getPribadi().getNama().trim());
+									
 									Calendar cal = Calendar.getInstance();
 									cal.add(Calendar.DAY_OF_MONTH, 10);
 									vaexpdate = cal.getTime();

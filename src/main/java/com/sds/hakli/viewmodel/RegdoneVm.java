@@ -98,7 +98,7 @@ public class RegdoneVm {
 				briva.setBrivaNo(bean.getBriva_cid());
 				briva.setCustCode(inv.getVano().substring(5));
 				briva.setKeterangan(inv.getInvoicedesc().trim().length() > 40 ? inv.getInvoicedesc().substring(0, 40) : inv.getInvoicedesc());
-				briva.setNama(inv.getTanggota().getNama());
+				briva.setNama(inv.getTanggota().getNama().trim().length() > 40 ? inv.getTanggota().getNama().trim().substring(0, 40) : inv.getTanggota().getNama().trim());
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.DAY_OF_MONTH, 10);
 				Date vaexpdate = cal.getTime();
