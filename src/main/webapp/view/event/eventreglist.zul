@@ -3,8 +3,8 @@
 	<window id="winAnggotaRegList" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.EventRegListVm')">
 		<caption>
-			<n:i class="fas fa-check-double"></n:i>
-			<n:span>Daftar Registrasi Event</n:span>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Daftar Event Saya</n:span>
 		</caption>
 		<groupbox mold="3d">
 			<caption label="Pencarian" iconSclass="z-icon-search" />
@@ -39,15 +39,20 @@
 						style="font-weight: bold" />
 				</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
-			<columns>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
+			<columns sizable="true">
 				<column label="${labels.common.no}" align="right" />
 				<column label="Event" />
+				<column label="Tipe Event" />
+				<column label="Tanggal Pelaksanaan" align="center" />
+				<column label="Lokasi" />
+				<column label="Biaya"  align="right"/>
 				<column label="Nomor VA" />
-				<column label="Waktu Berakhir VA" align="center"/>
-				<column label="Nominal"  align="right"/>
-				<column label="Status" align="center"/>
-				<column label="Aksi" align="center"/>
+				<column label="Tgl Jatuh Tempo VA" align="center"/>
+				<column label="Status Pembayaran" align="center"/>
+				<column label="Nominal Pembayaran" align="right"/>
+				<column label="Waktu Pembayaran" align="center"/>
+				<column label="Naskah" align="center"/>
 			</columns>
 		</grid>
 

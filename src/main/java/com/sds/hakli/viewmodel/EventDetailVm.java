@@ -40,11 +40,13 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
+import org.zkoss.zul.Separator;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
@@ -56,6 +58,7 @@ import com.sds.hakli.domain.Teventreg;
 import com.sds.hakli.domain.Tpekerjaan;
 import com.sds.hakli.domain.Tpendidikan;
 import com.sds.hakli.domain.Veventamount;
+import com.sds.hakli.handler.NaskahHandler;
 import com.sds.hakli.model.TeventregListModel;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
@@ -126,6 +129,43 @@ public class EventDetailVm {
 					row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
 					row.getChildren().add(new Label(data.getPaidamount() != null ? NumberFormat.getInstance().format(data.getPaidamount()) : ""));
 					row.getChildren().add(new Label(data.getPaidat() != null ? datetimeLocalFormatter.format(data.getPaidat()) : ""));
+					
+					if (data.getIspaid().equals("Y")) {
+						Button btNaskah = new Button("Sumpah Profesi");
+						btNaskah.setIconSclass("z-icon-download");
+						btNaskah.setSclass("btn btn-success btn-sm");
+						btNaskah.setAutodisable("self");
+						btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
+						btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								new NaskahHandler().downloadNaskah(data, "sumpah");
+							}
+						});
+
+						Button btEtika = new Button("Etika Profesi");
+						btEtika.setIconSclass("z-icon-download");
+						btEtika.setSclass("btn btn-success btn-sm");
+						btEtika.setAutodisable("self");
+						btEtika.setTooltiptext("Download Naskah Etika");
+						btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								new NaskahHandler().downloadNaskah(data, "etik");
+							}
+						});
+						
+						Hlayout hlayout = new Hlayout();
+						hlayout.appendChild(btNaskah);
+						hlayout.appendChild(new Separator("vertical"));
+						hlayout.appendChild(btEtika);
+						row.getChildren().add(hlayout);
+					} else {
+						row.getChildren().add(new Label());
+					}
+					
 					Button btProcess = new Button();
 					btProcess.setIconSclass("z-icon-eye");
 					btProcess.setSclass("btn btn-primary btn-sm");
@@ -289,7 +329,7 @@ public class EventDetailVm {
 				cell.setCellValue(obj.getEventprice().doubleValue());
 				rownum++;
 				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
-				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "No STR", "E-Mail", "Region", "Cabang",
+				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "No STR", "E-Mail", "Agama", "Region", "Cabang",
 						"Provinsi Domisili", "Kabupaten Domisili", "Alamat Domisili", 
 						"Tempat Kerja", "Provinsi", "Kabupaten", "Alamat", "Rumpun", "Kepegawaian", "Sub Kepegawian", 
 						"Perguruan Tinggi", "Jenjang", "Peminatan 1", "Peminatan 2", "Periode Awal", "Periode Akhir", "No Ijazah", 
@@ -306,7 +346,7 @@ public class EventDetailVm {
 						pendidikan = pendidikans.get(0);
 					
 					datamap.put(no,
-							new Object[] { no - 1, data.getTanggota().getNoanggota(), data.getTanggota().getNama(), data.getTanggota().getNostr(), data.getTanggota().getEmail(), 
+							new Object[] { no - 1, data.getTanggota().getNoanggota(), data.getTanggota().getNama(), data.getTanggota().getNostr(), data.getTanggota().getEmail(), data.getTanggota().getAgama(),
 									data.getTanggota().getMcabang().getMprov().getProvname(), data.getTanggota().getMcabang().getCabang(), data.getTanggota().getProvname(), data.getTanggota().getKabname(), data.getTanggota().getAlamat(), 
 									pekerjaan.getNamakantor(), pekerjaan.getProvname(), pekerjaan.getKabname(), pekerjaan.getAlamatkantor(), 
 									pekerjaan.getMrumpun() != null ? pekerjaan.getMrumpun().getRumpun() : "", 

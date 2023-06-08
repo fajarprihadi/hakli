@@ -147,7 +147,7 @@ public class EventVm {
 				li0.setParent(ul);
 				HtmlNativeComponent liEventtype = new HtmlNativeComponent("li");
 				liEventtype.setClientAttribute("class", "list-group-item px-4");
-				liEventtype.appendChild(new Html("Tipe Event" + AppData.getEventType(obj.getEventtype())));
+				liEventtype.appendChild(new Html("Tipe Event " + AppData.getEventType(obj.getEventtype())));
 				liEventtype.setParent(ul);
 				HtmlNativeComponent li11 = new HtmlNativeComponent("li");
 				li11.setClientAttribute("class", "list-group-item px-4");

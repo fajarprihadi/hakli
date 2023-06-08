@@ -192,6 +192,7 @@
 				<column label="Status Bayar" align="center" />
 				<column label="Jumlah Bayar" align="center" />
 				<column label="Waktu Bayar" align="center" />
+				<column label="Naskah" align="center"/>
 				<column label="${labels.common.action}" align="center" />
 			</columns>
 		</grid>
