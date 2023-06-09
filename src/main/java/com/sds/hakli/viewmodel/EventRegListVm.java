@@ -194,7 +194,7 @@ public class EventRegListVm {
 			parameters.put("FOTO", Executions.getCurrent().getDesktop().getWebApp()
 					.getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
 			parameters.put("TTD_KETUAUMUM",
-					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
+					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
 			parameters.put("TTD_SAKSI",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_saksi.jpg"));
 			parameters.put("LOGO", Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));

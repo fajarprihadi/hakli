@@ -26,7 +26,7 @@ public class NaskahHandler {
 			List<Tanggota> objList = new ArrayList<>();
 			objList.add(data.getTanggota());
 			zkSession.setAttribute("objList", objList);
-			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
+			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getPaidat());
 			String localdate = new SimpleDateFormat("EEEE, dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 			String tgllahir = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getTanggota().getTgllahir());
 
@@ -98,7 +98,7 @@ public class NaskahHandler {
 			parameters.put("FOTO", Executions.getCurrent().getDesktop().getWebApp()
 					.getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
 			parameters.put("TTD_KETUAUMUM",
-					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
+					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
 			parameters.put("TTD_SAKSI",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_saksi.jpg"));
 			parameters.put("LOGO", Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
