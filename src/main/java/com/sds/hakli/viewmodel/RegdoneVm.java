@@ -115,7 +115,7 @@ public class RegdoneVm {
 						
 						String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 								.getRealPath("/themes/mail/mailinv.html");
-						new Thread(new MailHandler(inv, bodymail_path)).start();
+						new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path)).start();
 						
 						HtmlNativeComponent table = new HtmlNativeComponent("table");
 						table.setClientAttribute("class", "table table-sm table-striped mb-0");

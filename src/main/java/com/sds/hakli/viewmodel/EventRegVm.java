@@ -584,7 +584,7 @@ public class EventRegVm {
 								
 								String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 										.getRealPath("/themes/mail/mailinv.html");
-								new Thread(new MailHandler(inv, bodymail_path)).start();
+								new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path)).start();
 								
 							} catch (Exception e) {
 								trx.rollback();

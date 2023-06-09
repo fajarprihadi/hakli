@@ -20,16 +20,15 @@ public class MailHandler implements Runnable {
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	
 	private Object obj;
+	private String subject;
+	private String recipient;
 	private String bodymail;
 	
-	public MailHandler(Object obj, String bodymail) {
+	public MailHandler(Object obj, String subject, String recipient, String bodymail) {
 		this.obj = obj;
+		this.subject = subject;
+		this.recipient = recipient;
 		this.bodymail = bodymail;
-	}
-	
-	public static void main(String[] args) {
-		MailHandler mail = new MailHandler(null, null);
-		mail.run();
 	}
 	
 	@Override
@@ -51,9 +50,12 @@ public class MailHandler implements Runnable {
 					br.close();
 					String bodymsg = template.toString();
 					
+					mailbean.setRecipient(recipient);
+					mailbean.setSubject(subject);
+					
 					if (obj instanceof Tinvoice) {
-						mailbean.setRecipient(((Tinvoice)obj).getTanggota().getEmail());
-						mailbean.setSubject(((Tinvoice)obj).getInvoicedesc());
+						//mailbean.setRecipient(((Tinvoice)obj).getTanggota().getEmail());
+						//mailbean.setSubject(((Tinvoice)obj).getInvoicedesc());
 						
 						bodymsg = bodymsg.replaceAll("%nama%", ((Tinvoice)obj).getTanggota().getNama());
 						bodymsg = bodymsg.replaceAll("%noanggota%", ((Tinvoice)obj).getTanggota().getNoanggota());
@@ -66,8 +68,8 @@ public class MailHandler implements Runnable {
 						bodymsg = bodymsg.replaceAll("%invoiceduedate%", dateLocalFormatter.format(((Tinvoice)obj).getInvoiceduedate()));
 						
 					} else if (obj instanceof Tanggota) {
-						mailbean.setRecipient(((Tanggota)obj).getEmail());
-						mailbean.setSubject("Penolakan Permohonan Pendaftaran Keanggotaan HAKLI");
+						//mailbean.setRecipient(((Tanggota)obj).getEmail());
+						//mailbean.setSubject("Penolakan Permohonan Pendaftaran Keanggotaan HAKLI");
 						bodymsg = bodymsg.replaceAll("%nama%", ((Tanggota)obj).getNama());
 						bodymsg = bodymsg.replaceAll("%noanggota%", ((Tanggota)obj).getNoanggota());
 						bodymsg = bodymsg.replaceAll("%password%", ((Tanggota)obj).getPassword());

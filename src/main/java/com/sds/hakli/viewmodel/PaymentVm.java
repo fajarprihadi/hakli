@@ -315,7 +315,7 @@ public class PaymentVm {
 											
 											String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 													.getRealPath("/themes/mail/mailinv.html");
-											new Thread(new MailHandler(inv, bodymail_path)).start();
+											new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path)).start();
 
 											processinfo = "Proses generate pembayaran berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
 													+ briva.getBrivaNo() + briva.getCustCode();

@@ -57,7 +57,7 @@ public class BriapiRekonHandler implements InterruptableJob  {
 					Session session = null;
 					Transaction trx = null;
 					for (BrivaReport report: obj.getData()) {
-						 List<Tinvoice> oList = invDao.listByFilter("vano = '" + report.getBrivaNo() + report.getCustCode() + " and ispaid = 'N'", "tinvoicepk desc");
+						 List<Tinvoice> oList = invDao.listByFilter("vano = '" + report.getBrivaNo() + report.getCustCode() + "' and ispaid = 'N'", "tinvoicepk desc");
 						if (oList.size() > 0) {
 							Tinvoice inv = oList.get(0);
 							inv.setIspaid("Y");
