@@ -26,11 +26,11 @@ public class Tevent {
 	
 	private String eventimg;
 	
-	private BigDecimal eventprice;
-	
 	private String eventtype;
 	
 	private String eventlocation;
+	
+	private BigDecimal eventprice;
 	
 	@Id
 	@SequenceGenerator(name = "tevent_seq", sequenceName = "tevent_seq", allocationSize = 1)

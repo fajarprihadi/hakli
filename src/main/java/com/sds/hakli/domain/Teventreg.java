@@ -168,20 +168,21 @@ public class Teventreg {
 	}
 
 	@Type(type = "com.sds.utils.usertype.TrimUserType")
-	public String getKeno() {
-		return keno;
-	}
-
-	public void setKeno(String keno) {
-		this.keno = keno;
-	}
-
 	public String getSpno() {
 		return spno;
 	}
 
 	public void setSpno(String spno) {
 		this.spno = spno;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getKeno() {
+		return keno;
+	}
+
+	public void setKeno(String keno) {
+		this.keno = keno;
 	}
 
 	

@@ -287,7 +287,7 @@ public class PaymentVm {
 										String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(cal.getTime());
 										
 										briva.setKeterangan(invdesc);
-										briva.setNama(anggota.getNama());
+										briva.setNama(anggota.getNama().trim().length() > 40 ? anggota.getNama().trim().substring(0, 40) : anggota.getNama().trim());
 										cal.setTime(new Date());
 										cal.add(Calendar.DAY_OF_MONTH, 10);
 										vaexpdate = cal.getTime();

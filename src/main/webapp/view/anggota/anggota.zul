@@ -44,13 +44,13 @@
 					<row>
 						<label value="Agama" />
 						<textbox placeholder="Agama"
-							value="@bind(vm.agama)" cols="50" onOK="@command('doSearch')"
+							value="@bind(vm.agama)" cols="50" 
 							maxlength="40" />
 					</row>
 					<row visible="false">
 						<label value="Jenjang" />
 						<textbox placeholder="Jenjang"
-							value="@bind(vm.jenjang)" cols="5" onOK="@command('doSearch')"
+							value="@bind(vm.jenjang)" cols="5" 
 							maxlength="40" />
 					</row>
 				</rows>

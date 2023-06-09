@@ -34,6 +34,7 @@ import com.sds.hakli.dao.TeventDAO;
 import com.sds.hakli.dao.TeventregDAO;
 import com.sds.hakli.domain.Tevent;
 import com.sds.hakli.domain.Veventamount;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
 public class EventVm {
@@ -144,10 +145,18 @@ public class EventVm {
 				li0.setClientAttribute("class", "list-group-item px-4");
 				li0.appendChild(new Html("Event ID " + obj.getEventid()));
 				li0.setParent(ul);
+				HtmlNativeComponent liEventtype = new HtmlNativeComponent("li");
+				liEventtype.setClientAttribute("class", "list-group-item px-4");
+				liEventtype.appendChild(new Html("Tipe Event " + AppData.getEventType(obj.getEventtype())));
+				liEventtype.setParent(ul);
 				HtmlNativeComponent li11 = new HtmlNativeComponent("li");
 				li11.setClientAttribute("class", "list-group-item px-4");
 				li11.appendChild(new Html("Tanggal Pelaksanaan " + new SimpleDateFormat("dd-MM-yyyy").format(obj.getEventdate())));
 				li11.setParent(ul);
+				HtmlNativeComponent liEventlocation = new HtmlNativeComponent("li");
+				liEventlocation.setClientAttribute("class", "list-group-item px-4");
+				liEventlocation.appendChild(new Html("Lokasi " + obj.getEventlocation()));
+				liEventlocation.setParent(ul);
 				HtmlNativeComponent li12 = new HtmlNativeComponent("li");
 				li12.setClientAttribute("class", "list-group-item px-4");
 				li12.appendChild(new Html("Biaya Pendaftaran Rp. " + NumberFormat.getInstance().format(obj.getEventprice())));

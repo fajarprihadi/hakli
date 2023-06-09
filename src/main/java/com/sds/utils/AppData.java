@@ -101,6 +101,17 @@ public class AppData {
 		return password;
 	}
 	
+	public static String getEventType(String code) {
+		String name = "";
+		if (code.equals(AppUtils.EVENTTYPE_SUMPAHPROFESI))
+			name = "Sumpah Profesi";
+		else if (code.equals(AppUtils.EVENTTYPE_SEMINAR))
+			name = "Seminar";
+		else if (code.equals(AppUtils.EVENTTYPE_WORKSHOP))
+			name = "Workshop";
+		return name;
+	}
+	
 	public static String getInvoiceType(String code) {
 		String name = "";
 		if (code.equals(AppUtils.INVOICETYPE_REG))

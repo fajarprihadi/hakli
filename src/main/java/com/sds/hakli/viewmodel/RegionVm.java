@@ -32,6 +32,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Separator;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.MprovDAO;
@@ -64,6 +65,10 @@ public class RegionVm {
 	private Button btSave;
 	@Wire
 	private Div divForm;
+	@Wire
+	private Textbox tbCode;
+	@Wire
+	private Textbox tbName;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -183,6 +188,7 @@ public class RegionVm {
 			btAdd.setLabel("Cancel");
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Perbarui");
+			tbCode.setDisabled(true);
 		} else if (btAdd.getLabel().equals("Tambah Region")) {
 			isInsert = true;
 			objForm = new Mprov();
@@ -190,10 +196,12 @@ public class RegionVm {
 			btAdd.setLabel("Cancel");
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Submit");
+			tbCode.setDisabled(false);
 		} else {
 			divForm.setVisible(false);
 			btAdd.setLabel("Tambah Region");
 			btAdd.setIconSclass("z-icon-plus-square");
+			tbCode.setDisabled(false);
 		}
 	}
 	

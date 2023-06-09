@@ -980,7 +980,8 @@ public class AnggotaFormVm {
 								custcode_cabang.length());
 						briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
 						briva.setKeterangan("Pendaftaran Anggota HAKLI");
-						briva.setNama(pribadi.getNama());
+						briva.setNama(pribadi.getNama().trim().length() > 40 ? pribadi.getNama().trim().substring(0, 40) : pribadi.getNama().trim());
+						
 						Calendar cal = Calendar.getInstance();
 						cal.add(Calendar.DAY_OF_MONTH, 10);
 						vaexpdate = cal.getTime();

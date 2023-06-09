@@ -26,6 +26,18 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Tipe Event" />
+						<vlayout>
+							<combobox selectedItem="@bind(e.eventtype)" readonly="true">
+								<comboitem value="SP" label="Sumpah Profesi" />
+								<comboitem value="SM" label="Seminar" />
+								<comboitem value="WS" label="Workshop" />
+							</combobox>
+							<label style="color:gray"
+								value="@load(vmsgs['eventtype'])" />
+						</vlayout>
+					</row>
+					<row>
 						<label value="Keterangan" />
 						<vlayout>
 							<textbox value="@bind(e.eventdesc)"
@@ -41,6 +53,15 @@
 								maxlength="10" cols="12" format="dd-MM-yyyy" />
 							<label style="color:gray"
 								value="@load(vmsgs['eventdate'])" />
+						</vlayout>
+					</row>
+					<row>
+						<label value="Lokasi" />
+						<vlayout>
+							<textbox value="@bind(e.eventlocation)"
+								maxlength="100" width="100%" />
+							<label style="color:gray"
+								value="@load(vmsgs['eventlocation'])" />
 						</vlayout>
 					</row>
 					<row>

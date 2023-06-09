@@ -22,7 +22,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
@@ -34,6 +33,8 @@ import org.zkoss.zul.Separator;
 import com.sds.hakli.dao.TeventregDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Teventreg;
+import com.sds.hakli.handler.NaskahHandler;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
 public class EventRegListVm {
@@ -48,7 +49,7 @@ public class EventRegListVm {
 	private String eventname;
 
 	private Integer pageTotalSize;
-
+	private SimpleDateFormat dateLocalFormatted = new SimpleDateFormat("dd-MM-yyyy");
 	private SimpleDateFormat localDateFormatted = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 	@Wire
@@ -66,48 +67,50 @@ public class EventRegListVm {
 			public void render(Row row, Teventreg data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index + 1)));
 				row.getChildren().add(new Label(data.getTevent().getEventname()));
+				row.getChildren().add(new Label(AppData.getEventType(data.getTevent().getEventtype())));
+				row.getChildren().add(new Label(dateLocalFormatted.format(data.getTevent().getEventdate())));
+				row.getChildren().add(new Label(data.getTevent().getEventlocation()));
+				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getVaamount())));
 				row.getChildren().add(new Label(data.getVano()));
 				row.getChildren().add(new Label(localDateFormatted.format(data.getVaexpdate())));
-				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getVaamount())));
-				row.getChildren().add(new Label(data.getIspaid().equals("N") ? "BELUM LUNAS" : "LUNAS"));
-
-				Button btNaskah = new Button("Sumpah Profesi");
-				btNaskah.setIconSclass("z-icon-download");
-				btNaskah.setSclass("btn btn-success btn-sm");
-				btNaskah.setAutodisable("self");
-				btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
-				btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						downloadNaskah(data, "sumpah");
-					}
-				});
-
-				Button btEtika = new Button("Etika Profesi");
-				btEtika.setIconSclass("z-icon-download");
-				btEtika.setSclass("btn btn-success btn-sm");
-				btEtika.setAutodisable("self");
-				btEtika.setTooltiptext("Download Naskah Etika");
-				btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						downloadNaskah(data, "etik");
-					}
-				});
-
-				Div div = new Div();
+				row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
+				row.getChildren().add(new Label(data.getPaidamount() != null ? DecimalFormat.getInstance().format(data.getPaidamount()) : ""));
+				row.getChildren().add(new Label(data.getPaidat() != null ? localDateFormatted.format(data.getPaidat()) : ""));
 				if (data.getIspaid().equals("Y")) {
-					if (data.getTevent().getEventtype().equals("SP")) {
-						div.appendChild(btNaskah);
-						Separator separator = new Separator();
-						div.appendChild(separator);
-						div.appendChild(btEtika);
-					}
-				}
+					Button btNaskah = new Button("Sumpah Profesi");
+					btNaskah.setIconSclass("z-icon-download");
+					btNaskah.setSclass("btn btn-success btn-sm");
+					btNaskah.setAutodisable("self");
+					btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
+					btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-				row.getChildren().add(div);
+						@Override
+						public void onEvent(Event event) throws Exception {
+							new NaskahHandler().downloadNaskah(data, "sumpah");
+						}
+					});
+
+					Button btEtika = new Button("Etika Profesi");
+					btEtika.setIconSclass("z-icon-download");
+					btEtika.setSclass("btn btn-success btn-sm");
+					btEtika.setAutodisable("self");
+					btEtika.setTooltiptext("Download Naskah Etika");
+					btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							new NaskahHandler().downloadNaskah(data, "etik");
+						}
+					});
+					
+					Hlayout hlayout = new Hlayout();
+					hlayout.appendChild(btNaskah);
+					hlayout.appendChild(new Separator("vertical"));
+					hlayout.appendChild(btEtika);
+					row.getChildren().add(hlayout);
+				} else {
+					row.getChildren().add(new Label());
+				}
 			}
 
 		});
@@ -213,7 +216,7 @@ public class EventRegListVm {
 
 	public void doSearch() {
 		try {
-			orderby = "tevent.eventname, ispaid";
+			orderby = "teventregpk";
 			filter = "tanggotafk = " + obj.getTanggotapk();
 
 			if (eventname != null && eventname.trim().length() > 0)

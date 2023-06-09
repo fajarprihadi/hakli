@@ -285,7 +285,7 @@ public class AnggotaVm {
 				Cell cell = null;
 				rownum++;
 				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
-				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "No STR", "E-Mail", "Region", "Cabang",
+				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "No STR", "E-Mail", "Agama", "Region", "Cabang",
 						"Provinsi Domisili", "Kabupaten Domisili", "Alamat Domisili", 
 						"Tempat Kerja", "Provinsi", "Kabupaten", "Alamat", "Rumpun", "Kepegawaian", "Sub Kepegawian", 
 						"Perguruan Tinggi", "Jenjang", "Peminatan 1", "Peminatan 2", "Periode Awal", "Periode Akhir", "No Ijazah" });
@@ -301,7 +301,7 @@ public class AnggotaVm {
 						pendidikan = pendidikans.get(0);
 					
 					datamap.put(no,
-							new Object[] { no - 1, data.getNoanggota(), data.getNama(), data.getNostr(), data.getEmail(), 
+							new Object[] { no - 1, data.getNoanggota(), data.getNama(), data.getNostr(), data.getEmail(), data.getAgama(), 
 									data.getMcabang().getMprov().getProvname(), data.getMcabang().getCabang(), data.getProvname(), data.getKabname(), data.getAlamat(), 
 									pekerjaan.getNamakantor(), pekerjaan.getProvname(), pekerjaan.getKabname(), pekerjaan.getAlamatkantor(), 
 									pekerjaan.getMrumpun() != null ? pekerjaan.getMrumpun().getRumpun() : "", 

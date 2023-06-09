@@ -33,7 +33,7 @@
 						<row>
 							<label value="Kode Region (*)" />
 							<vlayout>
-								<textbox value="@bind(e.provcode)"
+								<textbox id="tbCode" value="@bind(e.provcode)"
 									width="100%" maxlength="2" />
 								<label style="color:gray"
 									value="@load(vmsgs['provcode'])" />
@@ -42,7 +42,7 @@
 						<row>
 							<label value="Nama Region (*)" />
 							<vlayout>
-								<textbox value="@bind(e.provname)"
+								<textbox id="tbName" value="@bind(e.provname)"
 									width="100%" maxlength="30" />
 								<label style="color:gray"
 									value="@load(vmsgs['provname'])" />
