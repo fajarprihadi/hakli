@@ -68,7 +68,8 @@ public class NaskahHandler {
 
 			String photoname = "";
 
-			File file = new File(AppUtils.PATH_PHOTO + "/" + data.getTanggota().getPhotolink());
+			File file = new File(Executions.getCurrent().getDesktop().getWebApp()
+					.getRealPath(AppUtils.PATH_PHOTO + "/" + data.getTanggota().getPhotolink()));
 			if (file.exists()) {
 				//System.out.println("ADA FOTO");
 				photoname = data.getTanggota().getPhotolink();

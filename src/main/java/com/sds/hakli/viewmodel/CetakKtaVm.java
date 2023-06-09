@@ -33,18 +33,20 @@ public class CetakKtaVm {
 
 	@Wire
 	private Div div;
-	
+
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		obj = (Tanggota) zkSession.getAttribute("anggota");
 		objList.add(obj);
 		String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
-		String localdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getTgllahir());;
-		
+		String localdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getTgllahir());
+		;
+
 		String photoname = "";
 
-		File file = new File(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink());
+		File file = new File(Executions.getCurrent().getDesktop().getWebApp()
+				.getRealPath(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink()));
 		if (file.exists()) {
 			System.out.println("ADA FOTO");
 			photoname = obj.getPhotolink();
@@ -52,23 +54,21 @@ public class CetakKtaVm {
 			System.out.println("TIDAK ADA FOTO");
 			photoname = "default.png";
 		}
-		
+
 		parameters.put("TGLLAHIR", localdate);
 		parameters.put("CURRENTDATE", currentdate);
-		parameters.put("FOTO", Executions.getCurrent().getDesktop().getWebApp()
-				.getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
-		parameters.put("CARD1",
-				Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/cetakkta1.jpg"));
-		parameters.put("CARD2",
-				Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/cetakkta2.jpg"));
-		
+		parameters.put("FOTO",
+				Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
+		parameters.put("CARD1", Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/cetakkta1.jpg"));
+		parameters.put("CARD2", Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/cetakkta2.jpg"));
+
 		filepath = Executions.getCurrent().getDesktop().getWebApp()
 				.getRealPath(AppUtils.PATH_JASPER + "/cetakkta.jasper");
-		
+
 		zkSession.setAttribute("parameters", parameters);
 		zkSession.setAttribute("reportPath", filepath);
 		zkSession.setAttribute("objList", objList);
-		
+
 		Executions.createComponents("/view/jasperviewer.zul", div, null);
 
 	}

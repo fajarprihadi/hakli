@@ -15,6 +15,7 @@
 	<field name="agama" class="java.lang.String"/>
 	<field name="alamat" class="java.lang.String"/>
 	<field name="kota" class="java.lang.String"/>
+	<field name="mcabang.cabang" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -110,7 +111,7 @@
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[": " + $F{kota}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[": " + $F{mcabang.cabang}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="207" y="77" width="49" height="11" uuid="ec2a9171-81a0-41ba-a313-2e09dde42d83"/>
