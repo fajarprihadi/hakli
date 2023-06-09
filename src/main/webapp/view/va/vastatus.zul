@@ -10,10 +10,10 @@
 			<div class="col">
 				<textbox value="@bind(vm.vano)" maxlength="20"
 					placeholder="Nomor Virtual Account" cols="20" />
-				<button label="Cek" autodisable="self" sclass="btn btn-success btn-sm"
-					onClick="@command('doSubmit')" />
-				<button label="Reset" autodisable="self" sclass="btn btn-success btn-sm"
-					onClick="@command('doReset')" />
+				<button label="Cek" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doSubmit')" />
+				<button label="Reset" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
 			</div>
 		</div>
 		<n:hr />
@@ -21,7 +21,7 @@
 			<caption label="Data Hasil Pengecekan Virtual Account" />
 			<n:table class="table table-sm table-striped mb-0">
 				<n:tr>
-					<n:td>
+					<n:td width="30%">
 						<label value="Nomor Virtual Account" />
 					</n:td>
 					<n:td>
@@ -69,6 +69,89 @@
 					</n:td>
 				</n:tr>
 			</n:table>
+		</groupbox>
+		<separator />
+		<button id="btCheckInvoice" label="Cek Tagihan Belum Terupdate"
+			autodisable="self" sclass="btn btn-success btn-sm"
+			onClick="@command('doCheckInvoice')" visible="false" />
+		<separator />
+		<groupbox id="gbInvoice" mold="3d" visible="false">
+			<caption label="Data Tagihan" />
+			<n:table class="table table-sm table-striped mb-0">
+				<n:tr>
+					<n:td width="30%">
+						<label value="Nomor Tagihan" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.objInvoice.invoiceno)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Nama" />
+					</n:td>
+					<n:td>
+						<label
+							value="@load(vm.objInvoice.tanggota.nama)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="E-Mail" />
+					</n:td>
+					<n:td>
+						<label
+							value="@load(vm.objInvoice.tanggota.email)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Nomor Virtual Account" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.objInvoice.vano)" />
+					</n:td>
+				</n:tr>
+
+				<n:tr>
+					<n:td>
+						<label value="Nominal Tagihan" />
+					</n:td>
+					<n:td>
+						<label
+							value="@load(vm.objInvoice.invoiceamount)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Keterangan" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.objInvoice.invoicedesc)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Status Bayar" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.objInvoice.ispaid)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Tagihan Jatuh Tempo" />
+					</n:td>
+					<n:td>
+						<label
+							value="@load(vm.objInvoice.invoiceduedate)" />
+					</n:td>
+				</n:tr>
+			</n:table>
+			<separator />
+			<button label="Update Status Tagihan Menjadi Terbayar" id="btFlagInvoice"
+				autodisable="self" sclass="btn btn-primary btn-sm"
+				onClick="@command('doFlagInvoice')" />
 		</groupbox>
 	</window>
 </zk>

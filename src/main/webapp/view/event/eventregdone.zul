@@ -9,13 +9,13 @@
 		<n:section class="text-center">
 			<!-- Background image -->
 			<!-- 
-			<div class="p-5 bg-image"
+				<div class="p-5 bg-image"
 				style="
-        background-image: url('/hakli/img/sumpahprofesi.png');
-        height: 300px;
-        ">
-			</div>
-			 -->
+				background-image: url('/hakli/img/sumpahprofesi.png');
+				height: 300px;
+				">
+				</div>
+			-->
 			<!-- Background image -->
 			<n:br />
 			<n:br />
@@ -28,8 +28,8 @@
         background: hsla(0, 0%, 100%, 0.8);
         backdrop-filter: blur(30px);
         ">
-        
-        <image src="@load(vm.eventimg)" width="100%" />
+
+				<image src="@load(vm.eventimg)" width="100%" />
 
 				<div class="card-body py-5 px-md-5">
 
@@ -42,6 +42,10 @@
 									class="note note-warning mb-3">
 								</div>
 
+								<button id="btInv" visible="false"
+									label="Re-Generate Virtual Account" autodisable="self"
+									sclass="btn btn-primary btn-block my-4 rounded-pill"
+									onClick="@command('doReInvoice')" />
 							</n:form>
 						</div>
 					</div>
@@ -49,8 +53,8 @@
 			</div>
 		</n:section>
 		<!-- Section: Design Block -->
-		
-		<n:br/>
+
+		<n:br />
 		<include src="/footer.zul" />
 	</window>
 </zk>

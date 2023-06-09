@@ -70,7 +70,7 @@ public class EventRegListVm {
 				row.getChildren().add(new Label(AppData.getEventType(data.getTevent().getEventtype())));
 				row.getChildren().add(new Label(dateLocalFormatted.format(data.getTevent().getEventdate())));
 				row.getChildren().add(new Label(data.getTevent().getEventlocation()));
-				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getVaamount())));
+				row.getChildren().add(new Label(data.getVaamount() != null ? DecimalFormat.getInstance().format(data.getVaamount()) : ""));
 				row.getChildren().add(new Label(data.getVano()));
 				row.getChildren().add(new Label(localDateFormatted.format(data.getVaexpdate())));
 				row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
