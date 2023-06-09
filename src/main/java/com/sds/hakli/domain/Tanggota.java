@@ -194,12 +194,15 @@ public class Tanggota {
 		this.warganegara = warganegara;
 	}
 	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getGelardepan() {
 		return gelardepan;
 	}
 	public void setGelardepan(String gelardepan) {
 		this.gelardepan = gelardepan;
 	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getGelarbelakang() {
 		return gelarbelakang;
 	}
