@@ -26,7 +26,7 @@ public class NaskahHandler {
 			List<Tanggota> objList = new ArrayList<>();
 			objList.add(data.getTanggota());
 			zkSession.setAttribute("objList", objList);
-			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
+			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getPaidat());
 			String localdate = new SimpleDateFormat("EEEE, dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 			String tgllahir = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getTanggota().getTgllahir());
 
@@ -68,7 +68,8 @@ public class NaskahHandler {
 
 			String photoname = "";
 
-			File file = new File(AppUtils.PATH_PHOTO + "/" + data.getTanggota().getPhotolink());
+			File file = new File(Executions.getCurrent().getDesktop().getWebApp()
+					.getRealPath(AppUtils.PATH_PHOTO + "/" + data.getTanggota().getPhotolink()));
 			if (file.exists()) {
 				//System.out.println("ADA FOTO");
 				photoname = data.getTanggota().getPhotolink();
@@ -98,7 +99,7 @@ public class NaskahHandler {
 			parameters.put("FOTO", Executions.getCurrent().getDesktop().getWebApp()
 					.getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
 			parameters.put("TTD_KETUAUMUM",
-					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
+					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
 			parameters.put("TTD_SAKSI",
 					Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_saksi.jpg"));
 			parameters.put("LOGO", Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
