@@ -179,8 +179,8 @@
 			</div>
 		</div>
 		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
-			sizedByContent="true">
-			<columns>
+			sizedByContent="true" span="true">
+			<columns sizable="true">
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.nama}" />
 				<column label="${labels.anggota.email}" />

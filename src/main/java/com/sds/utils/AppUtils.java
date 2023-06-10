@@ -58,6 +58,9 @@ public class AppUtils {
 	public static final String SYSPARAM_BRIVA_PATH_UPDATEVA = "BRIVA_PATH_UPDATEVA";
 	public static final String SYSPARAM_BRIVA_PATH_REPORT = "BRIVA_PATH_REPORT";
 	
+	public static final String SYSPARAM_CALLBACK_PATH = "CALLBACK_PATH";
+	public static final String SYSPARAM_CALLBACK_URL = "CALLBACK_URL";
+	
 	public static final String SYSPARAM_GROUP_SISDMK = "SISDMK";
 	public static final String SYSPARAM_SISDMK_URL = "SISDMK_URL";
 	public static final String SYSPARAM_SISDMK_USERNAME = "SISDMK_USERNAME";

@@ -203,11 +203,11 @@ public class DashboardInvoiceVm {
 		if (invoicetype != null)
 			filter += " and invoicetype = '" + invoicetype + "'";
 		if (vano != null  && vano.trim().length() > 0)
-			filter += " and vano = '" + vano.trim() + "'";
+			filter += " and tinvoice.vano = '" + vano.trim() + "'";
 		if (invno != null  && invno.trim().length() > 0)
 			filter += " and invoiceno = '" + invno.trim() + "'";
 		if (invstatus != null  && invstatus.trim().length() > 0)
-			filter += " and ispaid = '" + invstatus.trim() + "'";
+			filter += " and tinvoice.ispaid = '" + invstatus.trim() + "'";
 		if (begindate != null && enddate != null) {
 			filter += " and invoicedate between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "'";
 		}

@@ -1,30 +1,43 @@
 package com.sds.hakli.viewmodel;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Window;
 
 import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.bean.CallbackBean;
 import com.sds.hakli.bean.CallbackResp;
+import com.sds.hakli.dao.MsysparamDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.extension.BriApiExt;
 import com.sds.hakli.extension.CallbackExt;
 import com.sds.hakli.pojo.BriApiToken;
+import com.sds.hakli.pojo.BrivaCreateResp;
+import com.sds.hakli.pojo.BrivaData;
 import com.sds.hakli.pojo.BrivaInquiryResp;
 import com.sds.utils.AppData;
+import com.sds.utils.AppUtils;
 
 public class VaStatusVm {
 	
@@ -33,6 +46,7 @@ public class VaStatusVm {
 	private Tinvoice objInvoice;
 	
 	private TinvoiceDAO invDao = new TinvoiceDAO();
+	private MsysparamDAO sysparamDao = new MsysparamDAO();
 	
 	private BriapiBean bean;
 	
@@ -44,6 +58,8 @@ public class VaStatusVm {
 	private Groupbox gbInvoice;
 	@Wire
 	private Button btFlagInvoice;
+	@Wire
+	private Button btUpdateVA;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -68,8 +84,14 @@ public class VaStatusVm {
 					obj = briapi.getBriva(briapiToken.getAccess_token(), custcode);
 					if (obj != null && obj.getStatus() != null && obj.getStatus()) {
 						gbResult.setVisible(true);
-						if (obj.getData().getStatusBayar().equals("Y"))
-							btCheckInvoice.setVisible(true);
+						btCheckInvoice.setVisible(true);
+//						if (obj.getData().getStatusBayar().equals("Y")) {
+//							btFlagInvoice.setDisabled(false);
+//							btUpdateVA.setDisabled(true);
+//						} else {
+//							btFlagInvoice.setDisabled(true);
+//							btUpdateVA.setDisabled(false);
+//						}
 					} else 
 						Messagebox.show("Nomor virtual account tidak dikenal", WebApps.getCurrent().getAppName(), Messagebox.OK,
 							Messagebox.INFORMATION);
@@ -90,7 +112,7 @@ public class VaStatusVm {
 	@NotifyChange("objInvoice")
 	public void doCheckInvoice() {
 		try {
-			//vano = "77777327600015";
+			vano = "77777327600015";
 			List<Tinvoice> objList = invDao.listByFilter("vano = '" + vano.trim() + "' and ispaid = 'N'", "tinvoicepk desc");
 			if (objList.size() > 0) {
 				objInvoice = objList.get(0);
@@ -107,28 +129,81 @@ public class VaStatusVm {
 	@Command
 	@NotifyChange("*")
 	public void doFlagInvoice() {
-		try {
-			CallbackBean data = new CallbackBean();
-			data.setBrivaNo(obj.getData().getBrivaNo());
-			data.setBillAmount(String.valueOf(obj.getData().getAmount()));
-			data.setTransactionDateTime("");
-			data.setJournalSeq("");
-			data.setTerminalId("1");
-			CallbackResp objResp = new CallbackExt().notifPayment(data);
-			if (objResp != null) {
-				if (objResp.getResponseCode().equals("0000")) {
-					Messagebox.show("Proses update status pembayaran berhasil", WebApps.getCurrent().getAppName(), Messagebox.OK,
-							Messagebox.EXCLAMATION);
-					
-					btFlagInvoice.setDisabled(true);
-				} else {
-					Messagebox.show("Proses update status pembayaran gagal : " + objResp.getResponseDescription(), WebApps.getCurrent().getAppName(), Messagebox.OK,
-							Messagebox.EXCLAMATION);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Messagebox.show("Anda ingin melakukan update status tagihan menjadi terbayar dan sistem akan mengirim notifikasi pembayaran via e-mail ke anggota yang bersangkutan?", "Konfirmasi", Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						if (event.getName().equals("onOK")) {
+							try {
+								Map<String, Object> map = new HashMap<String, Object>();
+								map.put("objInvoice", objInvoice);
+								Window win = (Window) Executions
+										.createComponents("/view/va/invoiceflag.zul", null, map);
+								win.setClosable(true);
+								win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+
+									@Override
+									public void onEvent(Event event) throws Exception {
+										if (event.getData() != null) {
+											Boolean isUpdate = (Boolean) event.getData();
+											if (isUpdate) {
+												doCheckInvoice();
+												btFlagInvoice.setDisabled(true);
+												BindUtils.postNotifyChange(VaStatusVm.this, "objInvoice");
+											}
+										}
+									}
+								});
+								win.doModal();
+								
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+		});
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void doUpdateVA() {
+		Messagebox.show("Anda ingin melakukan pembaruan data virtual account sesuai dengan data tagihan yang tertera?", "Konfirmasi", Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						if (event.getName().equals("onOK")) {
+							try {
+								BriApiExt briapi = new BriApiExt(bean);
+								BriApiToken briapiToken = briapi.getToken();
+								BrivaData briva = new BrivaData();
+								if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+									briva.setAmount(objInvoice.getInvoiceamount().toString());
+									briva.setInstitutionCode(bean.getBriva_institutioncode());
+									briva.setBrivaNo(bean.getBriva_cid());
+									briva.setCustCode(vano.substring(5));
+									briva.setKeterangan(objInvoice.getInvoicedesc().trim().length() > 40 ? objInvoice.getInvoicedesc().substring(0, 40) : objInvoice.getInvoicedesc().trim());
+									briva.setNama(objInvoice.getTanggota().getNama().trim().length() > 40 ? objInvoice.getTanggota().getNama().trim().substring(0, 40) : objInvoice.getTanggota().getNama().trim());
+									briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(objInvoice.getInvoiceduedate()));
+									
+									BrivaCreateResp brivaCreated = briapi.updateDataBriva(briapiToken.getAccess_token(), briva);
+									if (brivaCreated != null && brivaCreated.getStatus()) {
+										Messagebox.show("Update data virtual account berhasil", WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.INFORMATION);
+										doReset();
+										BindUtils.postNotifyChange(VaStatusVm.this, "*");
+									} else {
+										btUpdateVA.setDisabled(true);
+										Messagebox.show("Update data virtual account gagal : " + brivaCreated.getErrDesc(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+									}	
+								}
+							} catch (Exception e) {	
+								Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+								e.printStackTrace();
+							} 
+						}
+					}
+		});
 	}
 	
 	@Command

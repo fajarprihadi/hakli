@@ -1,0 +1,49 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<window id="winInvoiceFlag" border="normal" width="75%"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InvoiceFlagVm')">
+		<caption>
+			<n:i class="fas fa-check"></n:i>
+			<n:span>Update Status Tagihan</n:span>
+		</caption>
+		<grid>
+			<columns>
+				<column align="right" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label value="${labels.anggota.nama}" />
+					<label value="@load(vm.objInvoice.tanggota.nama)" />
+				</row>
+				<row>
+					<label value="${labels.anggota.email}" />
+					<label value="@load(vm.objInvoice.tanggota.email)" />
+				</row>
+				<row>
+					<label value="Nomor VA" />
+					<label value="@load(vm.objInvoice.vano)" />
+				</row>
+				<row>
+					<label value="Tanggal Tagihan" />
+					<label value="@load(vm.objInvoice.invoicedate) @converter('formatedDate', format='dd-MM-yyyy')" />
+				</row>
+				<row>
+					<label value="Nominal Tagihan" />
+					<label value="@load(vm.objInvoice.invoiceamount) @converter('formatedNumber', format='###,##0')" />
+				</row>
+				<row>
+					<label value="Input Tanggal Pembayaran" />
+					<datebox value="@bind(vm.trxdate)" />
+				</row>
+			</rows>
+			<foot>
+				<footer span="2">
+					<button width="100%" label="Submit"
+						autodisable="self" sclass="btn btn-primary btn-sm"
+						iconSclass="z-icon-save" onClick="@command('doSubmit')" />
+				</footer>
+			</foot>
+		</grid>
+	</window>
+</zk>

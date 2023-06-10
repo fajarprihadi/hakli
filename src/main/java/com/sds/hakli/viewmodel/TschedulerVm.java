@@ -15,7 +15,6 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.AfterCompose;
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -127,7 +126,7 @@ public class TschedulerVm {
 											transaction.commit();
 											session.close();		
 											
-											Clients.showNotification(Labels.getLabel("common.update.success"), "info", null, "middle_center", 3000);
+											Clients.showNotification("Pembaruan penjadwalan sistem berhasil", "info", null, "middle_center", 3000);
 											
 											SchedulerFactory factory = new StdSchedulerFactory();
 											Scheduler scheduler = factory.getScheduler();

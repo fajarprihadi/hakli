@@ -780,7 +780,7 @@ public class AnggotaAddVm {
 						isValid = false;
 						e.printStackTrace();
 					}
-				}
+				} else this.addInvalidMessage(ctx, "tgllahir", Labels.getLabel("common.validator.empty"));
 
 				if (provrumah == null) {
 					this.addInvalidMessage(ctx, "provrumah", Labels.getLabel("common.validator.empty"));
