@@ -83,7 +83,7 @@ public class BriapiRekonHandler implements InterruptableJob  {
 					}
 					
 					cal.add(Calendar.DAY_OF_MONTH, -1);
-				} while (cal.getTime().compareTo(enddate) <= 0);
+				} while (cal.getTime().compareTo(enddate) > 0);
 				
 				
 			}

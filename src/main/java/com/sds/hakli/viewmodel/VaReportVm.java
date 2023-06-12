@@ -145,7 +145,7 @@ public class VaReportVm {
 				no = 2;
 				for (BrivaReport data: obj.getData()) {
 					datamap.put(no,
-							new Object[] { no - 1, data.getBrivaNo(), data.getNama(), data.getAmount(), data.getKeterangan(), data.getPaymentDate(), 
+							new Object[] { no - 1, data.getBrivaNo() + data.getCustCode(), data.getNama(), data.getAmount(), data.getKeterangan(), data.getPaymentDate(), 
 									data.getTellerid(), data.getNo_rek()
 							});
 					no++;

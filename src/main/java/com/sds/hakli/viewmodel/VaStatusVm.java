@@ -85,13 +85,13 @@ public class VaStatusVm {
 					if (obj != null && obj.getStatus() != null && obj.getStatus()) {
 						gbResult.setVisible(true);
 						btCheckInvoice.setVisible(true);
-//						if (obj.getData().getStatusBayar().equals("Y")) {
-//							btFlagInvoice.setDisabled(false);
-//							btUpdateVA.setDisabled(true);
-//						} else {
-//							btFlagInvoice.setDisabled(true);
-//							btUpdateVA.setDisabled(false);
-//						}
+						if (obj.getData().getStatusBayar().equals("Y")) {
+							btFlagInvoice.setDisabled(false);
+							btUpdateVA.setDisabled(true);
+						} else {
+							btFlagInvoice.setDisabled(true);
+							btUpdateVA.setDisabled(false);
+						}
 					} else 
 						Messagebox.show("Nomor virtual account tidak dikenal", WebApps.getCurrent().getAppName(), Messagebox.OK,
 							Messagebox.INFORMATION);
@@ -112,7 +112,7 @@ public class VaStatusVm {
 	@NotifyChange("objInvoice")
 	public void doCheckInvoice() {
 		try {
-			vano = "77777327600015";
+			//vano = "77777327600015";
 			List<Tinvoice> objList = invDao.listByFilter("vano = '" + vano.trim() + "' and ispaid = 'N'", "tinvoicepk desc");
 			if (objList.size() > 0) {
 				objInvoice = objList.get(0);
@@ -148,9 +148,8 @@ public class VaStatusVm {
 										if (event.getData() != null) {
 											Boolean isUpdate = (Boolean) event.getData();
 											if (isUpdate) {
-												doCheckInvoice();
-												btFlagInvoice.setDisabled(true);
-												BindUtils.postNotifyChange(VaStatusVm.this, "objInvoice");
+												doReset();
+												BindUtils.postNotifyChange(VaStatusVm.this, "*");
 											}
 										}
 									}
