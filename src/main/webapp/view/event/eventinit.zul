@@ -10,13 +10,13 @@
 		<n:section class="text-center">
 			<!-- Background image -->
 			<!-- 
-			<div class="p-5 bg-image"
+				<div class="p-5 bg-image"
 				style="
-        background-image: url('/hakli/img/sumpahprofesi.png');
-        height: 300px;
-        ">
-			</div>
-			 -->
+				background-image: url('/hakli/img/sumpahprofesi.png');
+				height: 300px;
+				">
+				</div>
+			-->
 			<!-- Background image -->
 			<n:br />
 			<n:br />
@@ -29,33 +29,47 @@
         background: hsla(0, 0%, 100%, 0.8);
         backdrop-filter: blur(30px);
         ">
-        
-        	<image src="@load(vm.eventimg)" width="100%" />
+
+				<image src="@load(vm.eventimg)" width="100%" />
 
 				<div class="card-body py-5 px-md-3">
 
 					<div class="row d-flex justify-content-center">
 						<div class="col-lg-8">
 							<x:h2 id="title" class="fw-bold mb-4">
-								
+
 							</x:h2>
 							<n:form>
 
-								<!-- Email input -->
-								<div class="form mb-4">
-									<textbox value="@bind(vm.nik)"
-										placeholder="Input NIK Anda untuk memulai pendaftaran"
-										sclass="form-control form-control-lg" />
-								</div>
-								
-								<n:p><n:em><checkbox id="chkSisdmk" /> Jika data belum terdaftar di keanggotaan HAKLI tapi sudah terdaftar di SISDMK, maka sistem HAKLI akan secara otomatis mengambil data Anda dari SISDMK untuk membantu Anda melengkapi data pendaftaran pada sistem HAKLI.</n:em></n:p>
+								<div id="divReg">
+									<div class="form mb-4">
+										<textbox value="@bind(vm.nik)"
+											placeholder="Input NIK Anda untuk memulai pendaftaran"
+											sclass="form-control form-control-lg" />
+									</div>
 
-								<!-- Submit button -->
-								<button label="Submit"
-									onClick="@command('doSubmit')" autodisable="self"
-									class="btn btn-primary btn-block mb-4">
-								</button>
-								
+									<n:p>
+										<n:em>
+											<checkbox id="chkSisdmk" />
+											Jika data belum terdaftar di
+											keanggotaan HAKLI tapi sudah
+											terdaftar di SISDMK, maka
+											sistem HAKLI akan secara
+											otomatis mengambil data Anda
+											dari SISDMK untuk membantu
+											Anda melengkapi data
+											pendaftaran pada sistem
+											HAKLI.
+										</n:em>
+									</n:p>
+
+									<!-- Submit button -->
+									<button label="Submit"
+										onClick="@command('doSubmit')" autodisable="self"
+										class="btn btn-primary btn-block mb-4">
+									</button>
+								</div>
+
 							</n:form>
 						</div>
 					</div>
@@ -63,9 +77,9 @@
 			</div>
 		</n:section>
 		<!-- Section: Design Block -->
-		
-		<n:br/>
-		
+
+		<n:br />
+
 		<include src="/footer.zul" />
 
 	</window>

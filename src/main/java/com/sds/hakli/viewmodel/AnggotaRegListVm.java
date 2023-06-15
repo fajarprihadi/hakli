@@ -130,7 +130,12 @@ public class AnggotaRegListVm {
 	@Command
 	@NotifyChange("pageTotalSize")
 	public void doSearch() {
-		filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG + "' and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || 
+				oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT)) {
+			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG + "'";
+		} else {
+			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG + "' and mcabangfk = " + oUser.getMcabang().getMcabangpk();
+		}
 		
 		if (nama != null && nama.trim().length() > 0)
 			filter += " and upper(nama) like '%" + nama.trim().toUpperCase() + "%'" ;

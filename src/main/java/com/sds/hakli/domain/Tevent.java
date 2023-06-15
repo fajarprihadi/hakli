@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
 
@@ -19,6 +21,8 @@ public class Tevent {
 	private String eventid;
 	
 	private Date eventdate;
+	
+	private Date closedate;
 	
 	private String eventdesc;
 	
@@ -59,6 +63,15 @@ public class Tevent {
 
 	public void setEventdate(Date eventdate) {
 		this.eventdate = eventdate;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getClosedate() {
+		return closedate;
+	}
+
+	public void setClosedate(Date closedate) {
+		this.closedate = closedate;
 	}
 
 	@Type(type = "com.sds.utils.usertype.TrimUserType")

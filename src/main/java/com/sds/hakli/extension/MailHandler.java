@@ -5,14 +5,20 @@ import java.io.File;
 import java.io.FileReader;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.zkoss.zk.ui.Executions;
 
+import com.sds.hakli.dao.TmailingDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
+import com.sds.hakli.domain.Tmailing;
 import com.sds.utils.AppData;
+import com.sds.utils.db.StoreHibernateUtil;
 
 public class MailHandler implements Runnable {
 
@@ -34,9 +40,9 @@ public class MailHandler implements Runnable {
 	@Override
 	public void run() {
 		String errormsg = "";
+		MailBean mailbean = null;
 		try {
-			MailBean mailbean = AppData.getSmtpParam();
-			
+			mailbean = AppData.getSmtpParam();	
 			try {
 				if (obj != null) {
 					File file = new File(bodymail);
@@ -81,6 +87,7 @@ public class MailHandler implements Runnable {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
+				errormsg = e.getMessage();
 			}
 			
 			mailbean.setAttachment(null);
@@ -93,5 +100,34 @@ public class MailHandler implements Runnable {
 			errormsg = e.getMessage();
 			e.printStackTrace();
 		}
+		
+		Session session = StoreHibernateUtil.openSession();
+		Transaction trx = session.beginTransaction();
+		try {
+			Tmailing mail = new Tmailing();
+			mail.setSubject(mailbean.getSubject());
+			mail.setMailtime(new Date());
+			mail.setRecipient(recipient);
+			mail.setMailerror(errormsg);
+			if (errormsg.equals(""))
+				mail.setMailstatus(1);
+			else mail.setMailstatus(-1);
+			
+			if (obj instanceof Tinvoice) {
+				mail.setTinvoice((Tinvoice) obj);
+				mail.setTanggota(((Tinvoice) obj).getTanggota());
+			} else if (obj instanceof Tanggota) {
+				mail.setTanggota((Tanggota) obj);
+			}
+			
+			new TmailingDAO().save(session, mail);
+			trx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 	}
+	
+	
 }

@@ -74,6 +74,15 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Tanggal Tutup Pendaftaran" />
+						<vlayout>
+							<datebox value="@bind(e.closedate)" 
+								maxlength="16" cols="12" format="dd-MM-yyyy HH:mm" />
+							<label style="color:gray"
+								value="@load(vmsgs['closedate'])" />
+						</vlayout>
+					</row>
+					<row>
 						<button sclass="btn btn-info btn-sm"
 							label="Browse Gambar ..." upload="true,maxsize=10000"
 							onUpload="@command('doUploadPhoto', upEvent=event)"

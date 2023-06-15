@@ -1,5 +1,7 @@
 package com.sds.hakli.viewmodel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +14,12 @@ import org.zkoss.zhtml.H2;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlNativeComponent;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Html;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
@@ -46,6 +50,8 @@ public class EventInitVm {
 	private H2 title;
 	@Wire
 	private Checkbox chkSisdmk;
+	@Wire
+	private Div divReg;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -58,6 +64,15 @@ public class EventInitVm {
 		    	if (obj != null) {
 		    		eventimg = AppUtils.PATH_EVENT + "/" + obj.getEventimg();
 		    		title.appendChild(new Html("Pendaftaran " + obj.getEventname()));
+		    		
+		    		if (obj.getClosedate().compareTo(new Date()) == -1) {
+		    			divReg.getChildren().clear();
+		    			HtmlNativeComponent h3 = new HtmlNativeComponent("h3");
+		    			h3.appendChild(new Html("Maaf, Pendaftaran sudah ditutup per tanggal " + 
+		    					new SimpleDateFormat("dd-MM-yyyy HH:mm").format(obj.getClosedate()) + " WIB"));
+		    			divReg.appendChild(h3);
+		    		}
+		    		
 		    	} else Executions.sendRedirect("/timeout.zul");
 		    } else {
 		    	Executions.sendRedirect("/timeout.zul");

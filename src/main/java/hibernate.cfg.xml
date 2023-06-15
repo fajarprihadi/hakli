@@ -53,6 +53,7 @@
 		<mapping class="com.sds.hakli.domain.Tcounterengine" />
 		<mapping class="com.sds.hakli.domain.Tfeeshare" />
 		<mapping class="com.sds.hakli.domain.Tinvoice" />
+		<mapping class="com.sds.hakli.domain.Tmailing" />
 		<mapping class="com.sds.hakli.domain.Tmutasi" />
 		<mapping class="com.sds.hakli.domain.Tpendidikan" />
 		<mapping class="com.sds.hakli.domain.Tpekerjaan" />
