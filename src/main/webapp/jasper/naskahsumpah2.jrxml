@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49860e0c-7f12-4d79-a659-7d29003d4f62">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="212"/>
+	<property name="ireport.y" value="452"/>
 	<parameter name="SALAMNASKAH" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="TTD_SAKSI" class="java.lang.String"/>
@@ -75,7 +75,7 @@ mempertaruhkan kehormatan saya sebagai Tenaga Sanitasi Lingkungan (Sanitarian).
 				<imageExpression><![CDATA[$P{TTD_KETUAUMUM}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="1" y="209" width="181" height="34" uuid="b141aefd-72a9-452d-ba3b-772daa39a3bd"/>
+				<reportElement x="1" y="209" width="181" height="63" uuid="b141aefd-72a9-452d-ba3b-772daa39a3bd"/>
 				<text><![CDATA[Prof. Dr. H. Arif Sumantri, SKM. M.Kes.
 No.KTA:317410895]]></text>
 			</staticText>
