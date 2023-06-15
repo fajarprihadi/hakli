@@ -26,7 +26,7 @@ public class NaskahHandler {
 			List<Tanggota> objList = new ArrayList<>();
 			objList.add(data.getTanggota());
 			zkSession.setAttribute("objList", objList);
-			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getPaidat());
+			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getTevent().getEventdate());
 			String localdate = new SimpleDateFormat("EEEE, dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 			String tgllahir = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getTanggota().getTgllahir());
 
