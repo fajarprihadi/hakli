@@ -17,45 +17,50 @@ import com.sds.hakli.domain.Teventreg;
 import com.sds.utils.AppUtils;
 
 public class NaskahHandler {
-	
+
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	
+
 	public void downloadNaskah(Teventreg data, String arg) {
 		try {
 			Map<String, Object> parameters = new HashMap<>();
 			List<Tanggota> objList = new ArrayList<>();
 			objList.add(data.getTanggota());
 			zkSession.setAttribute("objList", objList);
-			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getTevent().getEventdate());
+			String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID"))
+					.format(data.getTevent().getEventdate());
 			String localdate = new SimpleDateFormat("EEEE, dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
-			String tgllahir = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getTanggota().getTgllahir());
+			String tgllahir = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID"))
+					.format(data.getTanggota().getTgllahir());
 
 			String nosurat = "";
 			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
 			if (arg.equals("sumpah")) {
 				nosurat = data.getSpno();
-				System.out.println("'" + data.getTanggota().getAgama() + "'");
-				if (data.getTanggota().getAgama().toUpperCase().equals("ISLAM")) {
-					parameters.put("SALAMNASKAH", "Semoga Allah Subhanahu wa ta’ala memberikan kekuatan kepada saya");
-					parameters.put("SUMPAHAGAMA", "Demi Allah saya bersumpah");
-					parameters.put("AGAMA", "Islam");
-				} else if (data.getTanggota().getAgama().toUpperCase().equals("KHATOLIK")) {
-					parameters.put("SALAMNASKAH", "Kiranya Tuhan menolong saya");
-					parameters.put("SUMPAHAGAMA", "Demi Tuhan saya berjanji");
-					parameters.put("AGAMA", "Khatolik");
-				} else if (data.getTanggota().getAgama().toUpperCase().equals("PROTESTAN")) {
-					parameters.put("SALAMNASKAH", "Kiranya Tuhan menolong saya");
-					parameters.put("SUMPAHAGAMA", "Demi Tuhan saya berjanji");
-					parameters.put("AGAMA", "Protestan");
-				} else if (data.getTanggota().getAgama().toUpperCase().equals("HINDU")) {
-					parameters.put("SALAMNASKAH", "Om Santi Santi Santi Om");
-					parameters.put("SUMPAHAGAMA", "Om Attah Paramawisesa saya bersumpah");
-					parameters.put("AGAMA", "Hindu");
-				} else if (data.getTanggota().getAgama().toUpperCase().equals("BUDHA")) {
-					parameters.put("SALAMNASKAH", "Om Santi Santi Santi Om");
-					parameters.put("SUMPAHAGAMA", "Demi yang Tiratana saya berjanji");
-					parameters.put("AGAMA", "Budha");
+				if (data.getTanggota().getAgama() != null) {
+					System.out.println("'" + data.getTanggota().getAgama() + "'");
+					if (data.getTanggota().getAgama().toUpperCase().equals("ISLAM")) {
+						parameters.put("SALAMNASKAH",
+								"Semoga Allah Subhanahu wa ta’ala memberikan kekuatan kepada saya");
+						parameters.put("SUMPAHAGAMA", "Demi Allah saya bersumpah");
+						parameters.put("AGAMA", "Islam");
+					} else if (data.getTanggota().getAgama().toUpperCase().equals("KATOLIK")) {
+						parameters.put("SALAMNASKAH", "Kiranya Tuhan menolong saya");
+						parameters.put("SUMPAHAGAMA", "Demi Tuhan saya berjanji");
+						parameters.put("AGAMA", "Katolik");
+					} else if (data.getTanggota().getAgama().toUpperCase().equals("PROTESTAN")) {
+						parameters.put("SALAMNASKAH", "Kiranya Tuhan menolong saya");
+						parameters.put("SUMPAHAGAMA", "Demi Tuhan saya berjanji");
+						parameters.put("AGAMA", "Protestan");
+					} else if (data.getTanggota().getAgama().toUpperCase().equals("HINDU")) {
+						parameters.put("SALAMNASKAH", "Om Santi Santi Santi Om");
+						parameters.put("SUMPAHAGAMA", "Om Attah Paramawisesa saya bersumpah");
+						parameters.put("AGAMA", "Hindu");
+					} else if (data.getTanggota().getAgama().toUpperCase().equals("BUDDHA")) {
+						parameters.put("SALAMNASKAH", "Om Santi Santi Santi Om");
+						parameters.put("SUMPAHAGAMA", "Demi yang Tiratana saya berjanji");
+						parameters.put("AGAMA", "Buddha");
+					}
 				}
 			} else if (arg.equals("etik")) {
 				nosurat = data.getKeno();
@@ -71,13 +76,13 @@ public class NaskahHandler {
 			File file = new File(Executions.getCurrent().getDesktop().getWebApp()
 					.getRealPath(AppUtils.PATH_PHOTO + "/" + data.getTanggota().getPhotolink()));
 			if (file.exists()) {
-				//System.out.println("ADA FOTO");
+				// System.out.println("ADA FOTO");
 				photoname = data.getTanggota().getPhotolink();
 			} else {
-				//System.out.println("TIDAK ADA FOTO");
+				// System.out.println("TIDAK ADA FOTO");
 				photoname = "default.png";
 			}
-			
+
 			String location = data.getTevent().getEventlocation();
 
 			String gelardepan = "";
