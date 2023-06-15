@@ -804,6 +804,11 @@ public class AnggotaAddVm {
 					this.addInvalidMessage(ctx, "hp", Labels.getLabel("common.validator.empty"));
 					isValid = false;
 				}
+				String agama = (String) ctx.getProperties("pribadi.agama")[0].getValue();
+				if (agama == null || "".equals(agama.trim())) {
+					this.addInvalidMessage(ctx, "agama", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
 //				if (noktp != null && provrumah != null && kabrumah != null && dob != null) {
 //					if (!StringUtils.ktpValidator(noktp, kabrumah.getKabcode(), new SimpleDateFormat("ddMMyy").format(dob), gender)) {
 //						this.addInvalidMessage(ctx, "noktp", "No KTP tidak sesuai dengan data diri Anda");
