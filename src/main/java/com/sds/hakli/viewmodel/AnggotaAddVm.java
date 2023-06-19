@@ -658,13 +658,13 @@ public class AnggotaAddVm {
 			boolean isVaUpdate = false;
 			if (objForm.getPribadi().getVaevent() == null || objForm.getPribadi().getVaevent().trim().length() == 0) {
 				isVaCreate = true;
-				isVaUpdate = true;
 			} else {
 				if (objForm.getPribadi().getVaeventstatus() == 1) {
 					isVaCreate = true;
 					isVaUpdate = false;
 				} else {
 					isVaCreate = false;
+					isVaUpdate = true;
 				}
 			}
 			
@@ -686,7 +686,11 @@ public class AnggotaAddVm {
 				else briva.setCustCode(objForm.getPribadi().getVaevent().substring(5));
 				briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
 				briva.setNama(objForm.getPribadi().getNama().trim().length() > 40 ? objForm.getPribadi().getNama().trim().substring(0, 40) : objForm.getPribadi().getNama().trim());
-				vaexpdate = tevent.getEventdate();
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(tevent.getEventdate());
+				cal.add(Calendar.DAY_OF_MONTH, 14);
+				
+				vaexpdate = cal.getTime();
 				briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 				
 				BrivaCreateResp brivaCreated = null;
@@ -780,7 +784,7 @@ public class AnggotaAddVm {
 						isValid = false;
 						e.printStackTrace();
 					}
-				}
+				} else this.addInvalidMessage(ctx, "tgllahir", Labels.getLabel("common.validator.empty"));
 
 				if (provrumah == null) {
 					this.addInvalidMessage(ctx, "provrumah", Labels.getLabel("common.validator.empty"));
@@ -798,6 +802,11 @@ public class AnggotaAddVm {
 				String hp = (String) ctx.getProperties("pribadi.hp")[0].getValue();
 				if (hp == null || "".equals(hp.trim())) {
 					this.addInvalidMessage(ctx, "hp", Labels.getLabel("common.validator.empty"));
+					isValid = false;
+				}
+				String agama = (String) ctx.getProperties("pribadi.agama")[0].getValue();
+				if (agama == null || "".equals(agama.trim())) {
+					this.addInvalidMessage(ctx, "agama", Labels.getLabel("common.validator.empty"));
 					isValid = false;
 				}
 //				if (noktp != null && provrumah != null && kabrumah != null && dob != null) {

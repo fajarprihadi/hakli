@@ -27,7 +27,7 @@ public class CallbackExt {
 		
 	}
 
-	public CallbackResp notifPayment(CallbackBean data) throws Exception {
+	public CallbackResp notifPayment(CallbackBean data, String path, String url, String token, String secret) throws Exception {
 		CallbackResp obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
@@ -73,11 +73,13 @@ public class CallbackExt {
 			String jsonReq = mapper.writeValueAsString(data);
 			
 			StringBuffer payload = new StringBuffer();
-			payload.append("path=http://103.224.65.71:8081/api/v1.0/notification");
+			//payload.append("path=http://103.224.65.71:8081/api/v1.0/notification");
+			payload.append("path=" + path.trim());
 			payload.append("&");
 			payload.append("verb=POST");
 			payload.append("&");
-			payload.append("token=Bearer dMc7msxH9AHSjhcCiFflVc2nVUVgCPZp");
+			//payload.append("token=Bearer dMc7msxH9AHSjhcCiFflVc2nVUVgCPZp");
+			payload.append("token=Bearer " + token.trim());
 			payload.append("&");
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
@@ -85,7 +87,8 @@ public class CallbackExt {
 			
 			System.out.println("payload : " + payload.toString());
 			
-			String signature = BriApiExt.encode("Zi1EjzAjL2BuQIQ6", payload.toString());
+			//String signature = BriApiExt.encode("Zi1EjzAjL2BuQIQ6", payload.toString());
+			String signature = BriApiExt.encode(secret.trim(), payload.toString());
 			
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - BRI-Signature : " + signature);
@@ -93,7 +96,8 @@ public class CallbackExt {
 			System.out.println("Request body : " + jsonReq);
 			System.out.println("Payload : " + payload.toString());
 			
-			WebResource webResource = client.resource("http://localhost:8081/api/v1.0/notification");
+			//WebResource webResource = client.resource("http://localhost:8081/api/v1.0/notification");
+			WebResource webResource = client.resource(url.trim());
 			ClientResponse response = webResource.header("BRI-Timestamp", xtimestamp)
 					.header("BRI-Signature", signature)
 					.type(MediaType.APPLICATION_JSON)

@@ -289,7 +289,7 @@ public class PaymentVm {
 										briva.setKeterangan(invdesc);
 										briva.setNama(anggota.getNama().trim().length() > 40 ? anggota.getNama().trim().substring(0, 40) : anggota.getNama().trim());
 										cal.setTime(new Date());
-										cal.add(Calendar.DAY_OF_MONTH, 10);
+										cal.add(Calendar.DAY_OF_MONTH, 14);
 										vaexpdate = cal.getTime();
 										briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 										

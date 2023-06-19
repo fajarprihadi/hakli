@@ -72,9 +72,9 @@ public class MsysparamDAO {
 		session.delete(oForm);    
     }
 	
-	public String findByFilter(String fieldname, String filter) throws Exception {
+	public String getParamvalue(String paramcode) throws Exception {
 		session = StoreHibernateUtil.openSession();
-		String oList = (String) session.createSQLQuery("select " + fieldname + " from Msysparam where paramname = '" + filter +"'").uniqueResult();
+		String oList = (String) session.createSQLQuery("select paramvalue from Msysparam where paramcode = '" + paramcode +"'").uniqueResult();
 		session.close();
 		return oList;
 	}

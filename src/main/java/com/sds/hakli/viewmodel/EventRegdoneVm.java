@@ -15,13 +15,11 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlNativeComponent;
-import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Html;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Separator;
 
 import com.sds.hakli.bean.BriapiBean;
@@ -179,13 +177,13 @@ public class EventRegdoneVm {
 			boolean isVaUpdate = false;
 			if (obj.getTanggota().getVaevent() == null || obj.getTanggota().getVaevent().trim().length() == 0) {
 				isVaCreate = true;
-				isVaUpdate = true;
 			} else {
 				if (obj.getTanggota().getVaeventstatus() == 1) {
 					isVaCreate = true;
 					isVaUpdate = false;
 				} else {
 					isVaCreate = false;
+					isVaUpdate = true;
 				}
 			}
 			
@@ -210,9 +208,12 @@ public class EventRegdoneVm {
 					else briva.setCustCode(obj.getTanggota().getVaevent().substring(5));
 					briva.setKeterangan(obj.getTevent().getEventname().trim().length() > 40 ? obj.getTevent().getEventname().substring(0, 40) : obj.getTevent().getEventname());
 					briva.setNama(obj.getTanggota().getNama().trim().length() > 40 ? obj.getTanggota().getNama().trim().substring(0, 40) : obj.getTanggota().getNama().trim());
+					
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(obj.getTevent().getEventdate());
+					cal.add(Calendar.DAY_OF_MONTH, 14);
 					vaexpdate = cal.getTime();
+					
 					briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 					
 					BrivaCreateResp brivaCreated = null;
