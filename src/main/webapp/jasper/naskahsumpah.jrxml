@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e09c74e-ba1b-4239-a24e-7de27df87915">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="539"/>
+	<property name="ireport.y" value="144"/>
 	<parameter name="SUMPAHAGAMA" class="java.lang.String"/>
 	<parameter name="AGAMA" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.String"/>
@@ -64,7 +64,7 @@ SUMPAH PROFESI TENAGA SANITASI LINGKUNGAN (SANITARIAN)]]></text>
 			<textField>
 				<reportElement x="116" y="38" width="307" height="15" uuid="2a2ca343-c124-4a34-bad6-3bc305c74c2e"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Nomor : " + $P{NOSURAT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nomor Test : " + $P{NOSURAT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
