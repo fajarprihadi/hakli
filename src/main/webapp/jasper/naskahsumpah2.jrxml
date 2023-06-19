@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49860e0c-7f12-4d79-a659-7d29003d4f62">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="452"/>
+	<property name="ireport.y" value="116"/>
 	<parameter name="SALAMNASKAH" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="TTD_SAKSI" class="java.lang.String"/>
@@ -53,13 +53,13 @@ Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
 	<pageHeader>
 		<band height="575" splitType="Stretch">
 			<staticText>
-				<reportElement x="1" y="18" width="554" height="32" uuid="dfa5ce5c-5d87-4417-89a9-8c90a1c72125"/>
+				<reportElement x="1" y="13" width="554" height="48" uuid="dfa5ce5c-5d87-4417-89a9-8c90a1c72125"/>
 				<text><![CDATA[Sumpah ini saya ikrarkan dengan sungguh-sungguh penuh kesadaran dan penuh rasa tanggung jawab dengan
 mempertaruhkan kehormatan saya sebagai Tenaga Sanitasi Lingkungan (Sanitarian).
 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="51" width="554" height="15" uuid="58c8c5e2-8e7e-42f8-81a5-d2dc5b48dbe8"/>
+				<reportElement x="0" y="61" width="554" height="15" uuid="58c8c5e2-8e7e-42f8-81a5-d2dc5b48dbe8"/>
 				<textFieldExpression><![CDATA['"' + $P{SALAMNASKAH} + '"' + " :"]]></textFieldExpression>
 			</textField>
 			<staticText>

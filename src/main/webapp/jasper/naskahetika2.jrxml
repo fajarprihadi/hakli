@@ -16,7 +16,7 @@
 	<title>
 		<band height="195" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="555" height="15" uuid="d777ec50-b054-465f-9c59-2a946cef1117"/>
+				<reportElement x="0" y="0" width="555" height="30" uuid="d777ec50-b054-465f-9c59-2a946cef1117"/>
 				<text><![CDATA[Demikian pernyataan ini saya buat dengan sungguh-sungguh, penuh kesadaran dan penuh rasa tanggung jawab.
 ]]></text>
 			</staticText>

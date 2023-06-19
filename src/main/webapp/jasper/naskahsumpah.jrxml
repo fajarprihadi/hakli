@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e09c74e-ba1b-4239-a24e-7de27df87915">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="145"/>
+	<property name="ireport.y" value="251"/>
 	<parameter name="SUMPAHAGAMA" class="java.lang.String"/>
 	<parameter name="AGAMA" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.lang.String"/>
@@ -64,7 +64,7 @@ SUMPAH PROFESI TENAGA SANITASI LINGKUNGAN (SANITARIAN)]]></text>
 			<textField>
 				<reportElement x="116" y="38" width="307" height="15" uuid="2a2ca343-c124-4a34-bad6-3bc305c74c2e"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Nomor. : " + $P{NOSURAT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nomor : " + $P{NOSURAT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -103,18 +103,18 @@ SUMPAH PROFESI TENAGA SANITASI LINGKUNGAN (SANITARIAN)]]></text>
 				<textFieldExpression><![CDATA[$P{AGAMA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="125" width="555" height="49" uuid="a2b6e509-de60-401d-b12d-c97428cb0613"/>
+				<reportElement x="0" y="125" width="555" height="63" uuid="a2b6e509-de60-401d-b12d-c97428cb0613"/>
 				<textElement textAlignment="Justified"/>
 				<text><![CDATA[Telah mengucapkan sumpah profesi Tenaga Sanitasi Lingkungan (Sanitarian) di hadapan Ketua Umum Pengurus Pusat
 Himpunan Ahli Kesehatan Lingkungan Indonesia dan Rohaniwan sebagaimana diamanatkan dalam Undang-Undang
 Nomor 36 Tahun 2014 tentang Tenaga Kesehatan, dengan lafal sumpah sebagai berikut ini.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="1" y="174" width="554" height="15" uuid="c2ed193a-cc36-4bbe-bcbe-e0fb67db6c03"/>
+				<reportElement x="1" y="188" width="554" height="15" uuid="c2ed193a-cc36-4bbe-bcbe-e0fb67db6c03"/>
 				<textFieldExpression><![CDATA['"' + $P{SUMPAHAGAMA} + '"' + " :"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="29" y="201" width="526" height="255" uuid="a35230b2-80d9-474a-b201-7f81c807c421"/>
+				<reportElement x="29" y="215" width="526" height="255" uuid="a35230b2-80d9-474a-b201-7f81c807c421"/>
 				<textElement textAlignment="Justified"/>
 				<text><![CDATA[Saya akan melaksanakan tugas saya sebaik-baiknya menurut peraturan perundang-undangan yang berlaku dengan penuh rasa tanggung jawab dan kesungguhan.
 
@@ -132,7 +132,7 @@ Saya tidak akan menginformasikan kepada siapapun segala rahasia yang berhubungan
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="16" y="201" width="14" height="255" uuid="d605c12e-01d1-4608-8674-1b6d164804c3"/>
+				<reportElement x="16" y="215" width="14" height="255" uuid="d605c12e-01d1-4608-8674-1b6d164804c3"/>
 				<text><![CDATA[1.
 
 
