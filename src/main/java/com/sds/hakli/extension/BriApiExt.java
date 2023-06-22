@@ -35,7 +35,9 @@ import com.sds.hakli.pojo.BrivaReport;
 import com.sds.hakli.pojo.BrivaReportResp;
 import com.sds.hakli.pojo.BrivaStatus;
 import com.sds.hakli.pojo.BrivaUpdateResp;
-
+import com.sds.hakli.pojo.FundInqReq;
+import com.sds.hakli.pojo.FundInqResp;
+import com.sds.utils.AppData;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -47,11 +49,37 @@ public class BriApiExt {
 //	String client_id = "P0HhD42Hk5zNQ8Me58gxRA9XIznRBQkN";
 //	String client_secret = "nUmPkHfO5qnxgZ9a";
 	
+	String url_fund = "https://sandbox.partner.api.bri.co.id/v3.1/transfer/internal";
+	
 	private BriapiBean bean;
 	
 	public BriApiExt(BriapiBean bean) {
 		this.bean = bean;
 	}
+	
+	public static void main(String[] args) {
+		try {
+			System.out.println(new Date().toString());
+			BriapiBean bean = AppData.getBriapibean();
+			bean.setConsumerkey("HwsO7wCvFZY3lPNsXXGrwMzHi3roBvDC");
+			bean.setConsumersecret("LP4yghyt4hwGSsjX");
+			BriApiExt briapi = new BriApiExt(bean);
+			BriApiToken briapiToken = briapi.getToken();
+			
+			if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+				FundInqReq inqReq = new FundInqReq();
+				inqReq.setSourceAccount("888801000157508");
+				inqReq.setBeneficiaryAccount("888809999999918");
+				briapi.fundInq(briapiToken.getAccess_token(), inqReq);
+				
+			} else {
+				System.out.println("NOT OK");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public BriApiToken getToken() throws Exception {
 		BriApiToken obj = null;
@@ -567,6 +595,94 @@ public class BriApiExt {
 			}
 			client.destroy();
 			System.out.println("***End Get BRIVA Report***");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
+	
+	public FundInqResp fundInq(String token, FundInqReq req) throws Exception {
+		FundInqResp obj = new FundInqResp();
+		ObjectMapper mapper = new ObjectMapper();
+		String output = null;
+		try {
+			 // Create a trust manager that does not validate certificate chains
+		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+		            return null;
+		        }
+		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+		        }
+		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+		        }
+		    }
+		    };
+
+		    // Install the all-trusting trust manager
+		    SSLContext sc = SSLContext.getInstance("SSL");
+		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+		    // Create all-trusting host name verifier
+		    HostnameVerifier allHostsValid = new HostnameVerifier() {
+				
+				@Override
+				public boolean verify(String hostname, SSLSession session) {
+					return false;
+				}
+			};
+
+		    // Install the all-trusting host verifier
+		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+		    
+		    System.out.println("***Begin Fund Inquiry***");
+			
+		    Client client = Client.create();
+			client.setConnectTimeout(60 * 1000);
+			client.setReadTimeout(60 * 1000);
+			
+			String auth = "Bearer " + token;
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+			String xtimestamp = dateFormatter.format(new Date());
+			
+			String jsonReq = mapper.writeValueAsString(req);
+			
+			StringBuffer payload = new StringBuffer();
+			//payload.append("path=" + bean.getBriva_pathget() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + custcode);
+			payload.append("path=/v3.1/transfer/internal/accounts");
+			payload.append("&");
+			payload.append("verb=POST");
+			payload.append("&");
+			payload.append("token=" + auth);
+			payload.append("&");
+			payload.append("timestamp=" + xtimestamp);
+			payload.append("&");
+			payload.append("body=" + jsonReq);
+			
+			String signature = encode(bean.getConsumersecret(), payload.toString());
+			
+			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			System.out.println("Header - Authorization : " + auth);
+			System.out.println("Header - BRI-Signature : " + signature);
+			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
+			System.out.println("Payload : " + payload.toString());
+			
+			WebResource webResource = client.resource(url_fund + "/accounts");
+			ClientResponse response = webResource.header("Authorization", auth)
+					.header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature)
+					.type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON)
+					.post(ClientResponse.class, jsonReq);
+
+			output = response.getEntity(String.class);
+			System.out.println("Response : " + output);
+			
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			obj = mapper.readValue(output, FundInqResp.class);
+			client.destroy();
+			System.out.println("***End Fund Inquiry***");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

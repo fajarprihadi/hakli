@@ -45,7 +45,7 @@
 				<n:li class="nav-item" role="presentation">
 					<n:a class="nav-link" id="ex1-tab-5"
 						data-mdb-toggle="tab" href="#ex1-tabs-5" role="tab"
-						aria-controls="ex1-tabs-7" aria-selected="false">
+						aria-controls="ex1-tabs-5" aria-selected="false">
 						<n:i class="fas fa-address-book"></n:i>
 						Info Kontak
 					</n:a>
@@ -54,9 +54,18 @@
 					id="tabApproval">
 					<n:a class="nav-link" id="ex1-tab-6"
 						data-mdb-toggle="tab" href="#ex1-tabs-6" role="tab"
-						aria-controls="ex1-tabs-7" aria-selected="false">
+						aria-controls="ex1-tabs-6" aria-selected="false">
 						<n:i class="fas fa-check"></n:i>
 						Approval
+					</n:a>
+				</x:li>
+				<x:li class="nav-item" role="presentation"
+					id="tabAkun">
+					<n:a class="nav-link" id="ex1-tab-7"
+						data-mdb-toggle="tab" href="#ex1-tabs-7" role="tab"
+						aria-controls="ex1-tabs-7" aria-selected="false">
+						<n:i class="fas fa-user"></n:i>
+						Info Akun
 					</n:a>
 				</x:li>
 			</n:ul>
@@ -957,6 +966,49 @@
 							Status Hasil Proses Verifikasi :
 						</n:strong>
 						<label value="@load(vm.processinfo)" />
+					</div>
+				</n:div>
+				
+				<n:div class="tab-pane fade" id="ex1-tabs-7"
+					role="tabpanel" aria-labelledby="ex1-tab-7">
+					<div
+						form="@id('z') @load(vm.pribadi)">
+						<n:table
+							class="table table-sm table-striped mb-0">
+							<n:tr>
+								<n:td width="30%">
+									<label value="User Id" />
+								</n:td>
+								<n:td>
+									<textbox value="@load(z.noanggota)" readonly="true" width="100%" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label value="Password" />
+								</n:td>
+								<n:td>
+									<textbox id="tbPass" value="@load(z.password)" readonly="true" type="password" />
+									<checkbox onCheck="@command('doShowPassword')" mold="switch" label="Show Password" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label value="Kewenangan" />
+								</n:td>
+								<n:td>
+									<textbox value="@load(z.musergroup.usergroupname)" readonly="true" width="100%" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label value="Last Login" />
+								</n:td>
+								<n:td>
+									<textbox value="@load(z.lastlogin)" readonly="true" width="100%" />
+								</n:td>
+							</n:tr>
+						</n:table>
 					</div>
 				</n:div>
 			</div>

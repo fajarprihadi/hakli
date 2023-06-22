@@ -219,6 +219,8 @@ public class AnggotaFormVm {
 	@Wire
 	private Li tabApproval;
 	@Wire
+	private Li tabAkun;
+	@Wire
 	private Radiogroup rgDecision;
 	@Wire
 	private Radio rdVerDecYes;
@@ -228,6 +230,8 @@ public class AnggotaFormVm {
 	private Textbox tbMemo;
 	@Wire
 	private Button btSaveApproval;
+	@Wire
+	private Textbox tbPass;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
@@ -533,6 +537,10 @@ public class AnggotaFormVm {
 			} else if (this.acttype != null && this.acttype.equals("edit")) {
 				tabApproval.setVisible(false);
 			}
+			
+			if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN))
+				tabAkun.setVisible(true);
+			else tabAkun.setVisible(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1069,6 +1077,13 @@ public class AnggotaFormVm {
 			e.printStackTrace();
 			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
 		}
+	}
+	
+	@Command
+	public void doShowPassword() {
+		if (tbPass.getType().equals("password"))
+			tbPass.setType("text");
+		else tbPass.setType("password");;
 	}
 
 	public Validator getValidator() {
