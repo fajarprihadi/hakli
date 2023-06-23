@@ -1,47 +1,50 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winBorang" border="normal" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BorangPengisianVm')">
+	<window id="winBorang" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BorangPengisianVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
 			<n:span>Borang Pengisian</n:span>
 		</caption>
+		<grid>
+			<columns>
+				<column width="20%" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label value="Nama Anggota" />
+					<label value="@load(vm.tpb.tanggota.nama)" style="font-weight: bold" />
+				</row>
+				<row>
+					<label value="Nomor STR" />
+					<label value="@load(vm.tpb.nostr)" style="font-weight: bold" />
+				</row>
+				<row>
+					<label value="Cabang" />
+					<label
+						value="@load(vm.tpb.tanggota.mcabang.cabang)" style="font-weight: bold" />
+				</row>
+				<row>
+					<label value="Periode" />
+					<hlayout>
+						<label value="@load(vm.startdate)" style="font-weight: bold" />
+						<separator />
+						<label value="s/d" style="font-weight: bold" />
+						<label value="@load(vm.enddate)" style="font-weight: bold" />
+					</hlayout>
+				</row>
+
+			</rows>
+		</grid>
+		<separator />
 		<groupbox mold="3d">
 			<caption label="Pencarian" iconSclass="z-icon-search" />
-			<grid>
-				<columns>
-					<column width="20%" />
-					<column />
-				</columns>
-				<rows>
-					<row>
-						<label value="Nama Anggota" />
-						<label value="@load(vm.tpb.tanggota.nama)" />
-					</row>
-					<row>
-						<label value="Nomor STR" />
-						<label value="@load(vm.tpb.nostr)" />
-					</row>
-					<row>
-						<label value="Cabang" />
-						<label value="@load(vm.tpb.tanggota.mcabang.cabang)" />
-					</row>
-					<row>
-						<label value="Periode" />
-						<hlayout>
-							<label value="@load(vm.startdate)" />
-							<separator />
-							<label value="s/d" />
-							<label value="@load(vm.enddate)" />
-						</hlayout>
-					</row>
-
-				</rows>
-			</grid>
-			<separator/>
 			<div class="row">
 				<div class="col">
-					<textbox placeholder="Nama Kegiatan" value="@bind(vm.kegiatan)"
-						width="100%" maxlength="40" onOK="@command('doSearch')" />
+					<textbox placeholder="Nama Kegiatan"
+						value="@bind(vm.kegiatan)" width="100%" maxlength="40"
+						onOK="@command('doSearch')" />
 				</div>
 				<div class="col">
 					<combobox id="cbRanah" placeholder="Ranah"

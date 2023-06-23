@@ -155,7 +155,7 @@ public class EventVm {
 				li11.setParent(ul);
 				HtmlNativeComponent liEventlocation = new HtmlNativeComponent("li");
 				liEventlocation.setClientAttribute("class", "list-group-item px-4");
-				liEventlocation.appendChild(new Html("Lokasi " + obj.getEventlocation()));
+				liEventlocation.appendChild(new Html("Kota Pelaksanaan " + obj.getEventcity()));
 				liEventlocation.setParent(ul);
 				HtmlNativeComponent li12 = new HtmlNativeComponent("li");
 				li12.setClientAttribute("class", "list-group-item px-4");

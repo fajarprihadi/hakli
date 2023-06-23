@@ -24,10 +24,14 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
+import com.sds.hakli.dao.MuniversitasDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
+import com.sds.hakli.domain.Muniversitas;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.db.StoreHibernateUtil;
@@ -44,6 +48,8 @@ public class BukuLogFormVm {
 
 	@Wire
 	private Window winLogForm;
+	@Wire
+	private Combobox cbUniversitas;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
@@ -59,6 +65,7 @@ public class BukuLogFormVm {
 
 		if (objForm != null) {
 			this.objForm = objForm;
+			cbUniversitas.setValue(objForm.getMuniversitas().getUniversitas());
 			isInsert = false;
 		}
 
@@ -136,8 +143,27 @@ public class BukuLogFormVm {
 				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
 				if (tglakhir == null)
 					this.addInvalidMessage(ctx, "tglakhir", Labels.getLabel("common.validator.empty"));
+				
+				Date tgllulus = (Date) ctx.getProperties("tgllulus")[0].getValue();
+				if (tgllulus == null)
+					this.addInvalidMessage(ctx, "tgllulus", Labels.getLabel("common.validator.empty"));
+				
+				Muniversitas muniversitas = (Muniversitas) ctx.getProperties("muniversitas")[0].getValue();
+				if (muniversitas == null)
+					this.addInvalidMessage(ctx, "muniversitas", Labels.getLabel("common.validator.empty"));
+				
 			}
 		};
+	}
+	
+	public ListModelList<Muniversitas> getUniversitasModel() {
+		ListModelList<Muniversitas> oList = null;
+		try {
+			oList = new ListModelList<>(new MuniversitasDAO().listAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return oList;
 	}
 
 	public Tanggota getObj() {

@@ -65,6 +65,15 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Kota Pelaksanaan" />
+						<vlayout>
+							<textbox value="@bind(e.eventcity)"
+								maxlength="100" width="100%" />
+							<label style="color:gray"
+								value="@load(vmsgs['eventcity'])" />
+						</vlayout>
+					</row>
+					<row>
 						<label value="Biaya Pendaftaran" />
 						<vlayout>
 							<decimalbox value="@bind(e.eventprice)"

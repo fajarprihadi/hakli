@@ -6,7 +6,8 @@
 			<n:i class="fas fa-book"></n:i>
 			<n:span>Buku Log</n:span>
 		</caption>
-		<groupbox>
+		<div id="divTitle" />
+		<groupbox mold="3d">
 			<caption label="Informasi" />
 			<grid>
 				<columns>

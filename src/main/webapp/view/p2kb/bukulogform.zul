@@ -4,23 +4,46 @@
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BukuLogFormVm')"
 		validationMessages="@id('vmsgs')">
 		<caption>
-			<n:i class="fas fa-edit"></n:i>
+			<n:i class="fas fa-book"></n:i>
 			<n:span>Permohonan P2KB</n:span>
 		</caption>
-		<groupbox mold="3d" closable="false"
-			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')
+
+		<n:h3>Formulir Permohonan Melakukan P2KB</n:h3>
+		<n:hr />
+
+		<groupbox mold="3d">
+			<caption>
+				<n:i class="fas fa-info"></n:i>
+				<n:span>Info</n:span>
+			</caption>
+			<label
+				value="Fasilitas permohonan untuk melakukan P2KB ini digunakan sebagai batasan dalam melakukan pencatatan kegiatan P2KB yang dikelompokkan berdasarkan tahun periode selama 5 tahun." />
+			<separator />
+			<label
+				value="Setiap perubahan permohonan untuk melakukan P2KB akan dievaluasi kembali oleh Tim P2KB wilayah" />
+			<separator />
+			<label
+				value="Untuk memulai pencatatan kegiatan P2KB maka permohonan untuk melakukan P2KB ini wajib diisi sesuai dengan data STR terakhir yang berlaku dan selanjutnya akan di setujui oleh Tim Wilayah tempat anda tinggal." />
+		</groupbox>
+		<separator />
+		<groupbox mold="3d">
+			<caption>
+				<n:i class="fas fa-edit"></n:i>
+				<n:span>Formulir P2KB</n:span>
+			</caption>
+			<grid
+				form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')
 			@validator(vm.validator) ">
-			<caption label="Formulir Permohonan Melakukan P2KB" />
-			<grid>
 				<columns>
-					<column width="30%" valign="top"/>
+					<column width="30%" valign="top" />
 					<column />
 				</columns>
 				<rows>
 					<row>
-						<label value="Nomor STR Terakhir" />
+						<label
+							value="Nomor STR Terakhir" />
 						<vlayout>
-							<textbox hflex="1" value="@bind(e.nostr)"
+							<textbox hflex="1" value="@bind(e.nostr)" 
 								maxlength="70" />
 							<label style="color:gray"
 								value="@load(vmsgs['nostr'])" />
@@ -34,18 +57,46 @@
 						</vlayout>
 					</row>
 					<row>
-						<label value="Tempat/Tgl Lahir" />
+						<label value="Tempat / Tanggal Lahir" />
 						<vlayout>
 							<textbox hflex="1"
 								value="@bind(vm.tgllahir)" readonly="true" maxlength="70" />
 						</vlayout>
 					</row>
 					<row>
+						<label
+							value="${labels.pendidikan.universitas}" />
+						<vlayout>
+							<combobox id="cbUniversitas"
+								selectedItem="@bind(e.muniversitas)"
+								model="@load(vm.universitasModel)" width="100%">
+								<template name="model"
+									var="universitas">
+									<comboitem
+										label="@load(universitas.universitas)" />
+								</template>
+							</combobox>
+							<label style="color:gray"
+								value="@load(vmsgs['muniversitas'])" />
+						</vlayout>
+					</row>
+					<row>
+						<label value="Tanggal Lulus" />
+						<vlayout>
+							<datebox value="@bind(e.tgllulus)" cols="25"
+								maxlength="20" format="dd MMMMM yyyy"
+								placeholder="Tanggal Lulus" />
+							<label style="color:gray"
+								value="@load(vmsgs['tgllulus'])" />
+						</vlayout>
+					</row>
+					<row>
 						<label value="Tanggal Selesai Kegiatan" />
 						<vlayout>
 							<datebox value="@bind(e.tglakhir)" cols="25"
-								maxlength="20" format="dd MMMMM yyyy" placeholder="Tanggal Selesai Kegiatan" />
-						<label style="color:gray"
+								maxlength="20" format="dd MMMMM yyyy"
+								placeholder="Tanggal Selesai Kegiatan" />
+							<label style="color:gray"
 								value="@load(vmsgs['tglakhir'])" />
 						</vlayout>
 					</row>
@@ -54,7 +105,7 @@
 					<footer />
 					<footer>
 						<button id="btSave" width="100%"
-							iconSclass="z-icon-save" label="Simpan" autodisable="self"
+							iconSclass="z-icon-save" label="Submit" autodisable="self"
 							sclass="btn btn-primary btn-sm" onClick="@command('doSave')" />
 					</footer>
 				</foot>

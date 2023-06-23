@@ -22,6 +22,7 @@ public class Tp2kbbook {
 	private String nostr;
 	private Date tglmulai;
 	private Date tglakhir;
+	private Date tgllulus;
 	private String status;
 	private Date createtime;
 	private String createdby;
@@ -30,6 +31,7 @@ public class Tp2kbbook {
 	private Integer totalkegiatan = 0;
 	private BigDecimal totalskp = new BigDecimal(0);
 	private Tanggota tanggota;
+	private Muniversitas muniversitas;
 	
 	
 	@Id
@@ -125,6 +127,20 @@ public class Tp2kbbook {
 	}
 	public void setTotalskp(BigDecimal totalskp) {
 		this.totalskp = totalskp;
+	}
+	public Date getTgllulus() {
+		return tgllulus;
+	}
+	public void setTgllulus(Date tgllulus) {
+		this.tgllulus = tgllulus;
+	}
+	@ManyToOne
+	@JoinColumn(name = "muniversitasfk")
+	public Muniversitas getMuniversitas() {
+		return muniversitas;
+	}
+	public void setMuniversitas(Muniversitas muniversitas) {
+		this.muniversitas = muniversitas;
 	}
 	
 	

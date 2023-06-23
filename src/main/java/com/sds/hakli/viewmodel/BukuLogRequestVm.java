@@ -121,17 +121,23 @@ public class BukuLogRequestVm {
 
 						System.out.println(d1 + ", " + d2);
 						if (d1.compareTo(d2) < 0) {
-							win = (Window) Executions.createComponents("/view/p2kb/bukulog.zul", null, map);
-							win.setWidth("90%");
-							win.setClosable(true);
-							win.doModal();
-							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-								@Override
-								public void onEvent(Event event) throws Exception {
-									doReset();
-								}
-
-							});
+//							win = (Window) Executions.createComponents("/view/p2kb/bukulog.zul", null, map);
+//							win.setWidth("90%");
+//							win.setClosable(true);
+//							win.doModal();
+//							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+//								@Override
+//								public void onEvent(Event event) throws Exception {
+//									doReset();
+//								}
+//
+//							});
+							
+							Component comp = winBookLogReq.getParent();
+							comp.getChildren().clear();
+							//Map<String, Object> map = new HashMap<>();
+							//map.put("obj", obj);
+							Executions.createComponents("/view/p2kb/bukulog.zul", comp, map);
 						} else {
 							win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
 							win.setWidth("50%");

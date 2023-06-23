@@ -17,6 +17,7 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlNativeComponent;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
@@ -25,7 +26,9 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Html;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
@@ -59,6 +62,8 @@ public class LogbookVm {
 	private String enddate;
 
 	@Wire
+	private Div divTitle;
+	@Wire
 	private Grid grid;
 
 	@AfterCompose
@@ -71,6 +76,10 @@ public class LogbookVm {
 			this.tpb = tpb;
 			startdate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglmulai());
 			enddate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglakhir());
+			
+			HtmlNativeComponent h4 = new HtmlNativeComponent("h4");
+			h4.appendChild(new Html("Buku Log P2KB Periode " + startdate + " S/D " + enddate));
+			divTitle.appendChild(h4);
 		}
 
 		grid.setRowRenderer(new RowRenderer<Tp2kb>() {

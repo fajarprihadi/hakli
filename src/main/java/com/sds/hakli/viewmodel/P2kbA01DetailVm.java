@@ -167,7 +167,8 @@ public class P2kbA01DetailVm {
 
 				Textbox tb1 = new Textbox();
 				tb1.setRows(2);
-				tb1.setCols(30);
+				//tb1.setCols(30);
+				tb1.setWidth("100%");
 
 				if (approvetype != null && approvetype.equals("T"))
 					hlayout.appendChild(tb1);

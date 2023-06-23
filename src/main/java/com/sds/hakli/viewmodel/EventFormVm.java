@@ -157,6 +157,9 @@ public class EventFormVm {
 				String eventlocation = (String) ctx.getProperties("eventlocation")[0].getValue();
 				if (eventlocation == null || "".equals(eventlocation.trim()))
 					this.addInvalidMessage(ctx, "eventlocation", Labels.getLabel("common.validator.empty"));
+				String eventcity = (String) ctx.getProperties("eventcity")[0].getValue();
+				if (eventcity == null || "".equals(eventcity.trim()))
+					this.addInvalidMessage(ctx, "eventcity", Labels.getLabel("common.validator.empty"));
 				BigDecimal eventprice = (BigDecimal) ctx.getProperties("eventprice")[0].getValue();
 				if (eventprice == null)
 					this.addInvalidMessage(ctx, "eventprice", Labels.getLabel("common.validator.empty"));

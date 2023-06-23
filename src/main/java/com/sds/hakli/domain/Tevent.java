@@ -34,6 +34,8 @@ public class Tevent {
 	
 	private String eventlocation;
 	
+	private String eventcity;
+	
 	private BigDecimal eventprice;
 	
 	@Id
@@ -127,4 +129,14 @@ public class Tevent {
 		this.eventlocation = eventlocation;
 	}
 
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getEventcity() {
+		return eventcity;
+	}
+
+	public void setEventcity(String eventcity) {
+		this.eventcity = eventcity;
+	}
+	
+	
 }
