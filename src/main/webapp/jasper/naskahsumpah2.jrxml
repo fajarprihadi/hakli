@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49860e0c-7f12-4d79-a659-7d29003d4f62">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="116"/>
+	<property name="ireport.y" value="308"/>
 	<parameter name="SALAMNASKAH" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="TTD_SAKSI" class="java.lang.String"/>
@@ -16,6 +16,7 @@
 	<field name="gelardepan" class="java.lang.String"/>
 	<field name="gelarbelakang" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
+	<field name="tevent.eventcity" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -80,7 +81,7 @@ mempertaruhkan kehormatan saya sebagai Tenaga Sanitasi Lingkungan (Sanitarian).
 No.KTA:317410895]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="355" y="108" width="194" height="100" uuid="57a68a26-8ecf-44b5-a16f-f043f9f90ac9"/>
+				<reportElement x="336" y="108" width="213" height="100" uuid="57a68a26-8ecf-44b5-a16f-f043f9f90ac9"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Yang Menyatakan
 
@@ -93,17 +94,17 @@ materai 10000
 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="355" y="221" width="194" height="16" uuid="e533828f-773c-487b-a051-3228bfd55421"/>
+				<reportElement x="336" y="221" width="213" height="16" uuid="e533828f-773c-487b-a051-3228bfd55421"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["No. KTA : " + $F{noanggota}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="355" y="94" width="194" height="15" uuid="78cec1ff-baa8-4ba8-960b-6c3e3eea5f86"/>
+				<reportElement x="336" y="94" width="213" height="15" uuid="78cec1ff-baa8-4ba8-960b-6c3e3eea5f86"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tevent.eventcity} + ", " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="355" y="208" width="194" height="14" uuid="72385995-b82c-4fbf-86fd-7095fefbe75e"/>
+				<reportElement x="336" y="208" width="213" height="14" uuid="72385995-b82c-4fbf-86fd-7095fefbe75e"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{GELARDEPAN} + $F{nama} + $P{GELARBELAKANG}]]></textFieldExpression>
 			</textField>

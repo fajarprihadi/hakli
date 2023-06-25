@@ -53,14 +53,27 @@
 			pagingPosition="both">
 			<columns>
 				<column label="${labels.common.no}" align="right" />
+				<column align="center" width="50px">
+					<checkbox id="chkAll"
+						onCheck="@command('doCheckedall', checked=self.checked)" />
+				</column>
+				<column label="Nomor STR" />
 				<column label="${labels.anggota.cabang}" />
 				<column label="${labels.anggota.noanggota}"
-					align="center" width="150px" />
+					align="center" />
 				<column label="${labels.anggota.nama}" />
-				<column label="Alamat" />
-				<column label="Total Waiting" align="right" />
+				<column label="Tgl Mulai" align="center" />
+				<column label="Tgl Berakhir" align="center" />
+				<column label="Total SKP" align="right"/>
 			</columns>
 		</grid>
-
+		<separator />
+		<div align="right" width="30%">
+			<div class="col">
+				<button label="Submit" autodisable="self"
+					iconSclass="z-icon-save" width="100%"
+					sclass="btn btn-primary btn-sm" onClick="@command('doSave')" />
+			</div>
+		</div>
 	</window>
 </zk>

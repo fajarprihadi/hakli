@@ -169,7 +169,7 @@ public class P2kbB07DetailVm {
 
 				Textbox tb1 = new Textbox();
 				tb1.setRows(2);
-				tb1.setCols(30);
+				tb1.setCols(70);
 
 				if (approvetype != null && approvetype.equals("T"))
 					hlayout.appendChild(tb1);
@@ -178,47 +178,6 @@ public class P2kbB07DetailVm {
 
 				divKet3.appendChild(hlayout);
 				vlayoutKet.appendChild(divKet3);
-
-				Div divKet5 = new Div();
-				divKet5.setSclass("note note-light");
-				Label lblCheckdatekomisi = new Label("Tanggal Pemeriksaan Komisi : ");
-				lblCheckdatekomisi.setStyle("font-weight: bold");
-				divKet5.appendChild(lblCheckdatekomisi);
-				Label lblCheckeddateValkomisi = new Label(data.getChecktimekomisi() != null
-						? new SimpleDateFormat("dd MMM yyyy").format(data.getChecktimekomisi())
-						: "");
-				divKet5.appendChild(lblCheckeddateValkomisi);
-				vlayoutKet.appendChild(divKet5);
-
-				Div divKet6 = new Div();
-				divKet6.setSclass("note note-light");
-				Label lblCheckedbykomisi = new Label("Pemeriksa Komisi : ");
-				lblCheckedbykomisi.setStyle("font-weight: bold");
-				divKet6.appendChild(lblCheckedbykomisi);
-				Label lblCheckedbyValkomisi = new Label(data.getCheckedbykomisi());
-				divKet6.appendChild(lblCheckedbyValkomisi);
-				vlayoutKet.appendChild(divKet6);
-
-				Div divKet4 = new Div();
-				hlayout = new Hlayout();
-				
-				divKet4.setSclass("note note-light");
-				Label lblMemoKomisi = new Label("Catatan Komisi P2KB :");
-				lblMemoKomisi.setStyle("font-weight: bold");
-				hlayout.appendChild(lblMemoKomisi);
-				
-				separator = new Separator();
-				hlayout.appendChild(separator);
-				
-				Label lblMemoKomisiVal = new Label(data.getMemokomisi());
-				
-				if (approvetype != null && approvetype.equals("K"))
-					hlayout.appendChild(tb1);
-				else
-					hlayout.appendChild(lblMemoKomisiVal);
-				
-				divKet4.appendChild(hlayout);
-				vlayoutKet.appendChild(divKet4);
 
 				Button btApproved = new Button("Submit");
 				btApproved.setIconSclass("z-icon-check");
@@ -417,7 +376,7 @@ public class P2kbB07DetailVm {
 				obj.setChecktimekomisi(new Date());
 			}
 
-			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action);
+			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action, obj.getNilaiskp());
 			new Tp2kbDAO().save(session, p2kb);
 
 			new Tp2kbB07DAO().save(session, obj);

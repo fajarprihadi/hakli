@@ -152,14 +152,19 @@ public class P2kbD01Vm {
 					book.setTotalkegiatan(0);
 					book.setTotalskp(new BigDecimal(0));
 					book.setTotalwaiting(0);
+					book.setTotalskpwaiting(new BigDecimal(0));
 				}
+
 				if (isInsert) {
 					book.setTotalkegiatan(book.getTotalkegiatan() + 1);
 					book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
+					book.setTotalskpwaiting(book.getTotalskpwaiting().add(objForm.getNilaiskp()));
 					book.setTotalwaiting(book.getTotalwaiting() + 1);
 				} else {
 					book.setTotalskp(book.getTotalskp().subtract(nilaiskp_curr));
 					book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
+					book.setTotalskpwaiting(book.getTotalskpwaiting().subtract(nilaiskp_curr));
+					book.setTotalskpwaiting(book.getTotalskpwaiting().add(objForm.getNilaiskp()));
 				}
 				book.setLastupdated(new Date());
 				p2kbDao.save(session, book);

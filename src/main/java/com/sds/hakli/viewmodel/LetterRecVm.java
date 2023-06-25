@@ -3,8 +3,6 @@ package com.sds.hakli.viewmodel;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -30,10 +28,8 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 
-import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tp2kbbook;
-import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
 public class LetterRecVm {
@@ -81,22 +77,16 @@ public class LetterRecVm {
 						List<Tp2kbbook>dataList = new ArrayList<>();
 						String currentdate = "";
 						
-						Map<Integer, String> mapRomawi = new HashMap<>();
+						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getReviewtime());
 						
-						int year = Calendar.getInstance().get(Calendar.YEAR);
-						int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-						
-						mapRomawi = AppData.getAngkaRomawi();
-						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
-						
-						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
+						String nosurat = data.getLetterno();
 						dataList.add(data);
 						zkSession.setAttribute("objList", dataList);
 						
 						parameters.put("NOSURAT", nosurat);
 						parameters.put("CURRENTDATE", currentdate);
 						parameters.put("TTD_KETUAUMUM",
-								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
 						parameters.put("LOGO",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
 						
@@ -117,7 +107,7 @@ public class LetterRecVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "TOTALSKP > 5";
+			filter = "status = 'C'";
 			orderby = "tp2kbbookpk";
 
 			if (nama != null && nama.trim().length() > 0)
