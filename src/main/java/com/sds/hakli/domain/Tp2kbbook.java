@@ -32,6 +32,13 @@ public class Tp2kbbook {
 	private BigDecimal totalskp = new BigDecimal(0);
 	private Tanggota tanggota;
 	private Muniversitas muniversitas;
+	private String vano;
+	private Date vacreatedat;
+	private String ispaid;
+	private String letterno;
+	private String reviewerid;
+	private String reviewername;
+	private Date reviewtime;
 	
 	
 	@Id
@@ -141,6 +148,62 @@ public class Tp2kbbook {
 	}
 	public void setMuniversitas(Muniversitas muniversitas) {
 		this.muniversitas = muniversitas;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getReviewtime() {
+		return reviewtime;
+	}
+	public void setReviewtime(Date reviewtime) {
+		this.reviewtime = reviewtime;
+	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getVano() {
+		return vano;
+	}
+	public void setVano(String vano) {
+		this.vano = vano;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getVacreatedat() {
+		return vacreatedat;
+	}
+	public void setVacreatedat(Date vacreatedat) {
+		this.vacreatedat = vacreatedat;
+	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getIspaid() {
+		return ispaid;
+	}
+	public void setIspaid(String ispaid) {
+		this.ispaid = ispaid;
+	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getLetterno() {
+		return letterno;
+	}
+	public void setLetterno(String letterno) {
+		this.letterno = letterno;
+	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getReviewerid() {
+		return reviewerid;
+	}
+	public void setReviewerid(String reviewerid) {
+		this.reviewerid = reviewerid;
+	}
+	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getReviewername() {
+		return reviewername;
+	}
+	public void setReviewername(String reviewername) {
+		this.reviewername = reviewername;
 	}
 	
 	

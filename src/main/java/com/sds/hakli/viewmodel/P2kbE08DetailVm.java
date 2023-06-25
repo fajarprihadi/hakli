@@ -385,7 +385,7 @@ public class P2kbE08DetailVm {
 				obj.setChecktimekomisi(new Date());
 			}
 
-			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action);
+			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action, obj.getNilaiskp());
 			new Tp2kbDAO().save(session, p2kb);
 
 			new Tp2kbE08DAO().save(session, obj);

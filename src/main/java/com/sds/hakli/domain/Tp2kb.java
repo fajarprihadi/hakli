@@ -34,6 +34,8 @@ public class Tp2kb {
 	
 	private Tp2kbbook tp2kbbook;
 	
+	private BigDecimal totalskpwaiting = new BigDecimal(0);
+	
 	@Id
 	@SequenceGenerator(name = "tp2kb_seq", sequenceName = "tp2kb_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kb_seq")
@@ -114,6 +116,14 @@ public class Tp2kb {
 
 	public void setTp2kbbook(Tp2kbbook tp2kbbook) {
 		this.tp2kbbook = tp2kbbook;
+	}
+
+	public BigDecimal getTotalskpwaiting() {
+		return totalskpwaiting;
+	}
+
+	public void setTotalskpwaiting(BigDecimal totalskpwaiting) {
+		this.totalskpwaiting = totalskpwaiting;
 	}
 	
 }

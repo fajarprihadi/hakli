@@ -92,7 +92,7 @@ public class BukuLogFormVm {
 				Transaction trx = session.beginTransaction();
 				
 				objForm.setTanggota(obj);
-				objForm.setStatus("Y");
+				objForm.setStatus("O");
 
 				objForm.setTglmulai(cal.getTime());
 				if (isInsert) {

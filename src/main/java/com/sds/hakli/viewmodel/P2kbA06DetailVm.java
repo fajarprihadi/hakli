@@ -397,7 +397,7 @@ public class P2kbA06DetailVm {
 				obj.setChecktimekomisi(new Date());
 			}
 
-			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action);
+			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action, obj.getNilaiskp());
 			new Tp2kbDAO().save(session, p2kb);
 
 			new Tp2kbA06DAO().save(session, obj);

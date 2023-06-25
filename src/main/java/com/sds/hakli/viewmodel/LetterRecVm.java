@@ -87,16 +87,16 @@ public class LetterRecVm {
 						int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 						
 						mapRomawi = AppData.getAngkaRomawi();
-						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
+						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getReviewtime());
 						
-						String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
+						String nosurat = data.getLetterno();
 						dataList.add(data);
 						zkSession.setAttribute("objList", dataList);
 						
 						parameters.put("NOSURAT", nosurat);
 						parameters.put("CURRENTDATE", currentdate);
 						parameters.put("TTD_KETUAUMUM",
-								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_mengangkatsumpah.png"));
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
 						parameters.put("LOGO",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
 						
@@ -117,7 +117,7 @@ public class LetterRecVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "TOTALSKP > 5";
+			filter = "reviewtime != null";
 			orderby = "tp2kbbookpk";
 
 			if (nama != null && nama.trim().length() > 0)
