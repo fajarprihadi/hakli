@@ -64,7 +64,7 @@
 				<column label="${labels.anggota.nama}" />
 				<column label="Tgl Mulai" align="center" />
 				<column label="Tgl Berakhir" align="center" />
-				<column label="Total SKP" />
+				<column label="Total SKP" align="right"/>
 			</columns>
 		</grid>
 		<separator />

@@ -155,7 +155,7 @@ public class VerifikasiKomisiVm {
 
 									for (Entry<Integer, Tp2kbbook> entry : mapData.entrySet()) {
 										String nosurat = new TcounterengineDAO().generateSeqnum()
-												+ " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
+												+ "/REKOM/PP-HAKLI/" + mapRomawi.get(month) + "/" + year;
 
 										Tp2kbbook obj = entry.getValue();
 										obj.setLetterno(nosurat);
@@ -187,8 +187,8 @@ public class VerifikasiKomisiVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "totalskp > 50";
-			orderby = "nama";
+			filter = "totalskp > 50 and status != 'C'";
+			orderby = "tglmulai";
 
 			if (nama != null && nama.trim().length() > 0)
 				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
