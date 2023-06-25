@@ -46,7 +46,7 @@ import com.sds.utils.db.StoreHibernateUtil;
 public class VerifikasiKomisiVm {
 	private static org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private static Tanggota anggota = (Tanggota) zkSession.getAttribute("anggota");
-	
+
 	private List<Tp2kbbook> objList = new ArrayList<>();
 
 	private String filter;
@@ -54,12 +54,12 @@ public class VerifikasiKomisiVm {
 
 	private String nama;
 	private Mprov region;
-	
+
 	private String action;
-	
+
 	private Integer pageTotalSize;
 	private Map<Integer, Tp2kbbook> mapData = new HashMap<>();
-	
+
 	@Wire
 	private Grid grid;
 
@@ -80,7 +80,12 @@ public class VerifikasiKomisiVm {
 					public void onEvent(Event event) throws Exception {
 						Checkbox checked = (Checkbox) event.getTarget();
 						if (checked.isChecked()) {
-							mapData.put(data.getTp2kbbookpk(), data);
+							if (data.getIspaid() != null && data.getIspaid().trim().equals("Y"))
+								mapData.put(data.getTp2kbbookpk(), data);
+							else {
+								check.setChecked(false);
+								Messagebox.show("Status belum melakukan pembayaran.");
+							}
 						} else {
 							mapData.remove(data.getTp2kbbookpk());
 						}
@@ -100,22 +105,24 @@ public class VerifikasiKomisiVm {
 			}
 		});
 	}
-	
+
 	@Command
 	public void doCheckedall(@BindingParam("checked") Boolean checked) {
 		try {
 			List<Row> components = grid.getRows().getChildren();
 			for (Row comp : components) {
 				Checkbox chk = (Checkbox) comp.getChildren().get(1);
-				Tp2kbbook torder = (Tp2kbbook) chk.getAttribute("obj");
+				Tp2kbbook obj = (Tp2kbbook) chk.getAttribute("obj");
 				if (checked) {
 					if (!chk.isChecked()) {
-						chk.setChecked(true);
-						mapData.put(torder.getTp2kbbookpk(), torder);
+						if (obj.getIspaid() != null && obj.getIspaid().trim().equals("Y")) {
+							chk.setChecked(true);
+							mapData.put(obj.getTp2kbbookpk(), obj);
+						}
 					}
 				} else {
-					if (mapData.get(torder.getTp2kbbookpk()) != null) {
-						mapData.remove(torder.getTp2kbbookpk());
+					if (mapData.get(obj.getTp2kbbookpk()) != null) {
+						mapData.remove(obj.getTp2kbbookpk());
 						chk.setChecked(false);
 					}
 				}
@@ -124,11 +131,11 @@ public class VerifikasiKomisiVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSave() {
-		if(mapData.size() > 0) {
+		if (mapData.size() > 0) {
 			Messagebox.show("Apakah anda yakin untuk menyetujui data ini?", "Confirm Dialog",
 					Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
 
@@ -137,18 +144,19 @@ public class VerifikasiKomisiVm {
 							if (event.getName().equals("onOK")) {
 								try {
 									Map<Integer, String> mapRomawi = new HashMap<>();
-									
+
 									Session session = StoreHibernateUtil.openSession();
 									Transaction trx = session.beginTransaction();
-									
+
 									int year = Calendar.getInstance().get(Calendar.YEAR);
 									int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-									
+
 									mapRomawi = AppData.getAngkaRomawi();
-									
-									for(Entry<Integer, Tp2kbbook> entry : mapData.entrySet()) {
-										String nosurat = new TcounterengineDAO().generateSeqnum() + " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
-										
+
+									for (Entry<Integer, Tp2kbbook> entry : mapData.entrySet()) {
+										String nosurat = new TcounterengineDAO().generateSeqnum()
+												+ " / REKOM / PP-HAKLI / " + mapRomawi.get(month) + " / " + year;
+
 										Tp2kbbook obj = entry.getValue();
 										obj.setLetterno(nosurat);
 										obj.setReviewerid(anggota.getNoanggota());
@@ -157,32 +165,34 @@ public class VerifikasiKomisiVm {
 										obj.setStatus("C");
 										new Tp2kbbookDAO().save(session, obj);
 									}
-									
+
 									trx.commit();
 									session.close();
 									doReset();
-									Clients.showNotification("Data berhasil disetujui.", "info", null, "middle_center", 1500);
+									Clients.showNotification("Data berhasil disetujui.", "info", null, "middle_center",
+											1500);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
-								
+
 							}
 						}
-			});
+					});
 		} else {
 			Messagebox.show("Tidak ada data yang dipilih.");
 		}
 	}
+
 	@Command
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "ispaid = 'Y'";
+			filter = "totalskp > 50";
 			orderby = "nama";
-			
-			if(nama != null && nama.trim().length() > 0)
+
+			if (nama != null && nama.trim().length() > 0)
 				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
-			
+
 			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
@@ -190,7 +200,7 @@ public class VerifikasiKomisiVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doReset() {
@@ -200,8 +210,8 @@ public class VerifikasiKomisiVm {
 
 		doSearch();
 	}
-	
-	public ListModelList<Mprov> getRegionmodel(){
+
+	public ListModelList<Mprov> getRegionmodel() {
 		ListModelList<Mprov> lm = null;
 		try {
 			lm = new ListModelList<Mprov>(new MprovDAO().listAll());

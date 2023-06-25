@@ -3,8 +3,6 @@ package com.sds.hakli.viewmodel;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -30,10 +28,8 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 
-import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tp2kbbook;
-import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
 public class LetterRecVm {
@@ -81,12 +77,6 @@ public class LetterRecVm {
 						List<Tp2kbbook>dataList = new ArrayList<>();
 						String currentdate = "";
 						
-						Map<Integer, String> mapRomawi = new HashMap<>();
-						
-						int year = Calendar.getInstance().get(Calendar.YEAR);
-						int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-						
-						mapRomawi = AppData.getAngkaRomawi();
 						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getReviewtime());
 						
 						String nosurat = data.getLetterno();
@@ -117,7 +107,7 @@ public class LetterRecVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "reviewtime != null";
+			filter = "status = 'C'";
 			orderby = "tp2kbbookpk";
 
 			if (nama != null && nama.trim().length() > 0)
