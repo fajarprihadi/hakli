@@ -407,7 +407,8 @@ public class P2kbB08DetailVm {
 		try {
 			totalskp = new BigDecimal(0);
 			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
-					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk();
+					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk() + " and (tglkegiatan between '"
+							+ p2kb.getTp2kbbook().getTglmulai() + "' and '" + p2kb.getTp2kbbook().getTglakhir() + "')";
 
 			if (approvetype != null && approvetype.equals("T"))
 				filter += " and status = 'WC'";
@@ -448,18 +449,19 @@ public class P2kbB08DetailVm {
 							try {
 								oDao.delete(session, obj);
 
-								Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk()
-										+ " and mp2kbkegiatan.mp2kbkegiatanpk = "
-										+ obj.getMp2kbkegiatan().getMp2kbkegiatanpk());
-								if (book != null) {
-									if (book.getTotalkegiatan() > 1) {
-										book.setTotalkegiatan(book.getTotalkegiatan() - 1);
-										book.setTotalskp(book.getTotalskp().subtract(obj.getNilaiskp()));
-										book.setLastupdated(new Date());
-										p2kbDao.save(session, book);
+								if (p2kb != null) {
+									if (p2kb.getTotalkegiatan() > 1) {
+										p2kb.setTotalkegiatan(p2kb.getTotalkegiatan() - 1);
+										p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
+										p2kb.setTotalskpwaiting(p2kb.getTotalskpwaiting().subtract(obj.getNilaiskp()));
+										p2kb.setTotalskp(p2kb.getTotalskp().subtract(obj.getNilaiskp()));
+										p2kb.setLastupdated(new Date());
+										p2kbDao.save(session, p2kb);
 									} else {
-										p2kbDao.delete(session, book);
+										p2kbDao.delete(session, p2kb);
 									}
+								} else {
+									System.out.println("P2KB NULL");
 								}
 
 								trx.commit();
