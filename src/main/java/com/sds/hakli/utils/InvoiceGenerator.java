@@ -7,6 +7,7 @@ import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Teventreg;
 import com.sds.hakli.domain.Tinvoice;
+import com.sds.hakli.domain.Tp2kbbook;
 
 public class InvoiceGenerator {
 
@@ -18,6 +19,8 @@ public class InvoiceGenerator {
 				inv.setTanggota((Tanggota) obj);
 			else if (obj instanceof Teventreg)
 				inv.setTeventreg((Teventreg) obj);
+			else if (obj instanceof Tp2kbbook)
+				inv.setTp2kbbook((Tp2kbbook) obj);
 			//inv.setCreatedby(anggota.getCreatedby());
 			inv.setCreatetime(new Date());
 			inv.setInvoiceamount(amount);
