@@ -286,14 +286,14 @@ public class BorangPengisianVm {
 				map.put("book", tpb);
 				Window win = (Window) Executions.createComponents("/view/p2kb/" + page, null, map);
 				win.setClosable(true);
-				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-
-					@Override
-					public void onEvent(Event event) throws Exception {
-						Event closeEvent = new Event("onClose", winBorang, map);
-						Events.postEvent(closeEvent);
-					}
-				});
+//				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+//
+//					@Override
+//					public void onEvent(Event event) throws Exception {
+//						Event closeEvent = new Event("onClose", winBorang, map);
+//						Events.postEvent(closeEvent);
+//					}
+//				});
 				win.doModal();
 			}
 

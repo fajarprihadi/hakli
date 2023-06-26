@@ -235,15 +235,6 @@ public class P2kbB05DetailVm {
 				divKegiatan1.appendChild(lbl2);
 				vlayoutKegiatan.appendChild(divKegiatan1);
 				
-				Div divKegiatan2 = new Div();
-				divKegiatan2.setSclass("note note-light");
-				Label lbl3 = new Label("Status Dalam Kegiatan");
-				lbl3.setStyle("font-weight: bold");
-				divKegiatan2.appendChild(lbl3);
-				Label lbl4 = new Label(": " + data.getStatuspeserta());
-				divKegiatan2.appendChild(lbl4);
-				vlayoutKegiatan.appendChild(divKegiatan2);
-				
 				Div divKegiatan3 = new Div();
 				divKegiatan3.setSclass("note note-light");
 				Label lbl5 = new Label("Jenis Kegiatan");
@@ -252,6 +243,15 @@ public class P2kbB05DetailVm {
 				Label lbl6 = new Label(": " + data.getJeniskegiatan());
 				divKegiatan3.appendChild(lbl6);
 				vlayoutKegiatan.appendChild(divKegiatan3);
+				
+				Div divKegiatan2 = new Div();
+				divKegiatan2.setSclass("note note-light");
+				Label lbl3 = new Label("Status Dalam Kegiatan");
+				lbl3.setStyle("font-weight: bold");
+				divKegiatan2.appendChild(lbl3);
+				Label lbl4 = new Label(": " + data.getStatuspeserta());
+				divKegiatan2.appendChild(lbl4);
+				vlayoutKegiatan.appendChild(divKegiatan2);
 				
 //				Div divKegiatan31 = new Div();
 //				divKegiatan31.setSclass("note note-light");

@@ -56,6 +56,7 @@
 				<column label="Ranah" />
 				<column label="Jumlah Kegiatan" align="right" />
 				<column label="Nilai SKP" align="right" />
+				<column label="SKP Waiting" align="right" />
 				<column label="Aksi" align="center" width="70px" />
 			</columns>
 			<foot>
@@ -71,6 +72,11 @@
 				</footer>
 				<footer>
 					<decimalbox value="@load(vm.totalskp)"
+						format="#,##0.0" readonly="true"
+						style="text-align: right; font-size: 20px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalwaitingskp)"
 						format="#,##0.0" readonly="true"
 						style="text-align: right; font-size: 20px" />
 				</footer>
