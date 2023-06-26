@@ -24,6 +24,8 @@ public class Tinvoice {
 	
 	private Teventreg teventreg;
 	
+	private Tp2kbbook tp2kbbook;
+	
 	private Date createtime;
 	
 	private String createdby;
@@ -84,6 +86,16 @@ public class Tinvoice {
 
 	public void setTeventreg(Teventreg teventreg) {
 		this.teventreg = teventreg;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name = "tp2kbbookfk")
+	public Tp2kbbook getTp2kbbook() {
+		return tp2kbbook;
+	}
+
+	public void setTp2kbbook(Tp2kbbook tp2kbbook) {
+		this.tp2kbbook = tp2kbbook;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
