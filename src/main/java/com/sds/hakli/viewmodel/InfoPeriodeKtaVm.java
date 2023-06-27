@@ -28,21 +28,25 @@ public class InfoPeriodeKtaVm {
 	@Wire
 	private Label periodekta;
 	@Wire
-	private Div divPeriodekta, divPermohonan;
-	
+	private Div divPeriodekta, divPermohonan, divPeriode;
+
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("type") String type) {
 		Selectors.wireComponents(view, this, false);
-		
-		if(type != null && type.equals("permohonan")) {
+
+		if (type != null && type.equals("permohonan")) {
 			divPermohonan.setVisible(true);
 		} else {
 			divPeriodekta.setVisible(true);
-		anggota = (Tanggota) zkSession.getAttribute("anggota");
-		periodekta.setValue(new SimpleDateFormat("dd MMMMM yyyy").format(anggota.getPeriodekta()));
+			anggota = (Tanggota) zkSession.getAttribute("anggota");
+			if (anggota.getPeriodekta() != null) {
+				periodekta.setValue(new SimpleDateFormat("dd MMMMM yyyy").format(anggota.getPeriodekta()));
+			} else {
+				divPeriode.setVisible(false);
+			}
 		}
 	}
-	
+
 	@Command
 	public void doClose() {
 		Event closeEvent = new Event("onClose", winKtaDue, null);

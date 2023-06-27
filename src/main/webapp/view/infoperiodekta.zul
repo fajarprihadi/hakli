@@ -5,7 +5,7 @@
 		<caption />
 		<div id="divPeriodekta" visible="false" class="card text-center">
 			<div class="card-header"><n:h3>INFO PENTING!!!</n:h3></div>
-			<div class="card-body">
+			<div id="divPeriode" class="card-body">
 				<n:h5 class="card-title">Pemberitahuan</n:h5>
 				<n:p class="card-text">
 					Kontribusi iuran keanggotaan HAKLI Berakhir Pada Tanggal <n:br/>

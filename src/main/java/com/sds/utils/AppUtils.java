@@ -96,6 +96,10 @@ public class AppUtils {
 			return "DITOLAK KOMISI";
 		else if (code.trim().equals(AppUtils.STATUS_WAITCONFIRM))
 			return "MENUNGGU KONFIRMASI";
+		else if (code.trim().equals("A"))
+			return "DISETUJUI";
+		else if (code.trim().equals("R"))
+			return "DITOLAK";
 		else
 			return code;
 	}
