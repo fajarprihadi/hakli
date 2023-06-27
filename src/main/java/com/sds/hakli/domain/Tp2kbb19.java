@@ -28,6 +28,8 @@ public class Tp2kbb19 {
 	
 	private String jenislimbah;
 	
+	private String institusi;
+	
 	private String docid;
 	
 	private String docpath;
@@ -105,6 +107,15 @@ public class Tp2kbb19 {
 		this.jenislimbah = jenislimbah;
 	}
 	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getInstitusi() {
+		return institusi;
+	}
+
+	public void setInstitusi(String institusi) {
+		this.institusi = institusi;
+	}
+
 	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getDocid() {
 		return docid;
