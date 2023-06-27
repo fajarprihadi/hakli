@@ -206,7 +206,7 @@ public class PaymentVm {
 	@NotifyChange("pageTotalSize")
 	public void refreshModel(int activePage) {
 		paging.setPageSize(AppUtils.PAGESIZE);
-		filter = "tanggotafk = " + anggota.getTanggotapk();
+		filter = "tanggotafk = " + anggota.getTanggotapk() + " and invoicetype = '" + AppUtils.INVOICETYPE_IURAN + "'";
 		model = new TinvoiceListModel(activePage, AppUtils.PAGESIZE, filter, "tinvoicepk desc");
 		pageTotalSize = model.getTotalSize(filter);
 		paging.setTotalSize(pageTotalSize);

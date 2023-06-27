@@ -40,7 +40,7 @@
 					</caption>
 					<separator />
 					<button id="btAddReg"
-						label="Tambah Komponen Biaya Pendaftaran" width="300px"
+						label="Tambah Komponen Biaya Pendaftaran" width="350px"
 						autodisable="self" sclass="btn btn-success btn-sm"
 						iconSclass="z-icon-plus-square" onClick="@command('doAddReg')" />
 					<separator />
@@ -116,7 +116,7 @@
 					</caption>
 					<separator />
 					<button id="btAddIuran"
-						label="Tambah Komponen Biaya Iuran" width="300px"
+						label="Tambah Komponen Biaya Iuran" width="350px"
 						autodisable="self" sclass="btn btn-success btn-sm"
 						iconSclass="z-icon-plus-square" onClick="@command('doAddIuran')" />
 					<separator />
@@ -175,6 +175,82 @@
 							<footer label="TOTAL BIAYA" />
 							<footer>
 								<decimalbox value="@load(vm.totaliuran)"
+									format="#,##0" readonly="true" style="text-align: right" />
+							</footer>
+							<footer />
+						</foot>
+					</grid>
+				</groupbox>
+				
+				<separator />
+				<groupbox mold="3d">
+					<caption>
+						<n:span class="h5 fw-bold mb-0">
+							<n:i class="fas fa-cog"></n:i>
+							Biaya Rekomendasi STR
+						</n:span>
+					</caption>
+					<separator />
+					<button id="btAddP2kb"
+						label="Tambah Komponen Biaya Rekomendasi STR" width="350px"
+						autodisable="self" sclass="btn btn-success btn-sm"
+						iconSclass="z-icon-plus-square" onClick="@command('doAddP2kb')" />
+					<separator />
+					<groupbox id="gbP2kb" mold="3d" visible="false"
+						form="@id('f') @load(vm.objP2kb) @save(vm.objP2kb, before='doSaveP2kb')
+			@validator(vm.validatorP2kb) ">
+						<caption label="Form Komponen Biaya Rekomendasi STR" />
+						<grid>
+							<columns>
+								<column width="30%" />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									<label value="Komponen" />
+									<vlayout>
+										<textbox
+											value="@bind(f.chargedesc)" maxlength="40" width="100%" />
+										<label style="color:gray"
+											value="@load(vmsgs['chargedescp2kb'])" />
+									</vlayout>
+								</row>
+								<row>
+									<label value="Biaya" />
+									<vlayout>
+										<decimalbox
+											value="@bind(f.chargeamount)" format="#,##0" maxlength="20"
+											width="100%" />
+										<label style="color:gray"
+											value="@load(vmsgs['chargeamountp2kb'])" />
+									</vlayout>
+								</row>
+							</rows>
+							<foot>
+								<footer />
+								<footer>
+									<button id="btSaveP2kb"
+										width="100%" iconSclass="z-icon-save" label="Perbarui"
+										autodisable="self" sclass="btn btn-primary btn-sm"
+										onClick="@command('doSaveP2kb')" />
+								</footer>
+							</foot>
+						</grid>
+					</groupbox>
+					<separator />
+					<grid id="gridP2kb">
+						<columns>
+							<column label="No" align="right"
+								width="40px" />
+							<column label="Keterangan" />
+							<column label="Biaya" align="right" />
+							<column label="Aksi" align="center" />
+						</columns>
+						<foot>
+							<footer />
+							<footer label="TOTAL BIAYA" />
+							<footer>
+								<decimalbox value="@load(vm.totalp2kb)"
 									format="#,##0" readonly="true" style="text-align: right" />
 							</footer>
 							<footer />

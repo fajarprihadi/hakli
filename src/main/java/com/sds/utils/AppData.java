@@ -120,6 +120,8 @@ public class AppData {
 			name = "Iuran";
 		else if (code.equals(AppUtils.INVOICETYPE_EVENT))
 			name = "Event";
+		else if (code.equals(AppUtils.INVOICETYPE_P2KB))
+			name = "Rekomendasi STR";
 		return name;
 	}
 	

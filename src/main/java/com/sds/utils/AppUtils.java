@@ -36,6 +36,7 @@ public class AppUtils {
 
 	public static final String CHARGETYPE_REG = "01";
 	public static final String CHARGETYPE_IURAN = "02";
+	public static final String CHARGETYPE_P2KB = "04";
 	
 	public static final String INVOICETYPE_REG = "01";
 	public static final String INVOICETYPE_IURAN = "02";

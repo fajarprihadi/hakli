@@ -84,6 +84,8 @@ public class P2KBEvalVm {
 	@Wire
 	private Combobox cbPeriod;
 	@Wire
+	private Grid gridCharge;
+	@Wire
 	private Groupbox gbForm;
 	@Wire
 	private Button btSave;
@@ -95,17 +97,20 @@ public class P2KBEvalVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			anggota = (Tanggota) zkSession.getAttribute("anggota");
+			gridCharge.setRowRenderer(new RowRenderer<Mcharge>() {
 
-			if (anggota.getVaregstatus() == 1) {
-				Tinvoice inv = invDao.findByFilter("vano = '" + anggota.getVareg() + "' and ispaid = 'N'");
-				if (inv != null && inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)
-						&& inv.getInvoiceduedate().compareTo(new Date()) >= 0) {
-					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar. \n Silahkan lihat di tabel riwayat tagihan dihalaman bawah.";
-					btSave.setDisabled(true);
+				@Override
+				public void render(Row row, Mcharge data, int index) throws Exception {
+					row.getChildren().add(new Label(data.getChargedesc()));
+					row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getChargeamount())));
+
+					totalpayment = totalpayment.add(data.getChargeamount());
+					BindUtils.postNotifyChange(P2KBEvalVm.this, "totalpayment");
 				}
-
-			}
-
+			});
+			
+			objList = chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_P2KB+ "'", "isbase desc");
+			gridCharge.setModel(new ListModelList<>(objList));
 			doRefreshModel();
 
 		} catch (Exception e) {
@@ -156,7 +161,6 @@ public class P2KBEvalVm {
 									Date vaexpdate = null;
 									BrivaData briva = new BrivaData();
 									if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
-										totalpayment = new BigDecimal(150000);
 										briva.setAmount(totalpayment.toString());
 										briva.setInstitutionCode(bean.getBriva_institutioncode());
 										briva.setBrivaNo(bean.getBriva_cid());
@@ -182,9 +186,10 @@ public class P2KBEvalVm {
 										if (brivaCreated != null && brivaCreated.getStatus()) {
 											trx = session.beginTransaction();
 											
-											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota,
+											Tinvoice inv = new InvoiceGenerator().doInvoice(p2kbbook,
 													briva.getBrivaNo() + briva.getCustCode(),
 													AppUtils.INVOICETYPE_P2KB, totalpayment, invdesc, vaexpdate);
+											inv.setTanggota(anggota);
 											invDao.save(session, inv);
 											
 											p2kbbook.setStatus("R");

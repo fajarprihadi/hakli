@@ -55,9 +55,11 @@ public class ChargeVm {
 	
 	private Mcharge objReg;
 	private Mcharge objIuran;
+	private Mcharge objP2kb;
 	
 	private BigDecimal totalreg;
 	private BigDecimal totaliuran;
+	private BigDecimal totalp2kb;
 	
 	private Mfee objFee;
 	private BigDecimal totalfeepercent;
@@ -71,17 +73,25 @@ public class ChargeVm {
 	@Wire
 	private Groupbox gbIuran;
 	@Wire
+	private Groupbox gbP2kb;
+	@Wire
 	private Grid gridReg;
 	@Wire
 	private Grid gridIuran;
+	@Wire
+	private Grid gridP2kb;
 	@Wire
 	private Button btAddReg;
 	@Wire
 	private Button btAddIuran;
 	@Wire
+	private Button btAddP2kb;
+	@Wire
 	private Button btSaveReg;
 	@Wire
 	private Button btSaveIuran;
+	@Wire
+	private Button btSaveP2kb;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -237,8 +247,83 @@ public class ChargeVm {
 				}
 			});
 			
+			gridP2kb.setRowRenderer(new RowRenderer<Mcharge>() {
+
+				@Override
+				public void render(Row row, Mcharge data, int index) throws Exception {
+					row.getChildren().add(new Label(String.valueOf(index + 1)));
+					row.getChildren().add(new Label(data.getIsbase().equals("Y") ? data.getChargedesc() + " *" : data.getChargedesc()));
+					row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getChargeamount())));
+					Button btEdit = new Button();
+					btEdit.setIconSclass("z-icon-edit");
+					btEdit.setSclass("btn btn-primary btn-sm");
+					btEdit.setAutodisable("self");
+					btEdit.setTooltiptext("Edit");
+					btEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							doAddP2kb(data);
+							BindUtils.postNotifyChange(ChargeVm.this, "objP2kb");
+						}
+					});
+
+					Button btDel = new Button();
+					btDel.setIconSclass("z-icon-trash-o");
+					btDel.setSclass("btn btn-danger btn-sm");
+					btDel.setAutodisable("self");
+					btDel.setTooltiptext("Hapus");
+					
+					btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							Messagebox.show("Anda ingin menghapus data ini?", "Confirm Dialog", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+
+								@Override
+								public void onEvent(Event event)
+										throws Exception {
+									if (event.getName().equals("onOK")) {
+										try {
+											Session session = StoreHibernateUtil.openSession();
+											Transaction trx = null;
+											try {
+												trx = session.beginTransaction();
+												chargeDao.delete(session, data);
+												trx.commit();
+												Clients.showNotification("Proses hapus data komponen biaya rekomendasi STR berhasil", "info", null, "middle_center", 1500);
+												doLoadP2kb();
+											} catch (Exception e) {	
+												Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+												e.printStackTrace();
+											} finally {
+												session.close();
+											}
+										} catch (Exception e) {	
+											Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+											e.printStackTrace();
+										}																													
+									} 									
+								}
+								
+							});
+						}
+					});
+					
+					Div div = new Div();
+					div.appendChild(btEdit);
+					div.appendChild(new Separator("vertical"));
+					div.appendChild(btDel);
+
+					row.getChildren().add(div);
+					totalp2kb = totalp2kb.add(data.getChargeamount());
+					BindUtils.postNotifyChange(ChargeVm.this, "totalp2kb");
+				}
+			});
+			
 			doLoadReg();
 			doLoadIuran();
+			doLoadP2kb();
 			
 			List<Mfee> fees = feeDao.listAll();
 			if (fees.size() == 0)
@@ -264,6 +349,15 @@ public class ChargeVm {
 		try {
 			totaliuran = new BigDecimal(0);
 			gridIuran.setModel(new ListModelList<>(chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_IURAN + "'", "mchargepk")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void doLoadP2kb() {
+		try {
+			totalp2kb = new BigDecimal(0);
+			gridP2kb.setModel(new ListModelList<>(chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_P2KB + "'", "mchargepk")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -317,6 +411,33 @@ public class ChargeVm {
 				gbIuran.setVisible(false);
 				btAddIuran.setLabel("Tambah Komponen Biaya Iuran");
 				btAddIuran.setIconSclass("z-icon-plus-square");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	@NotifyChange("objP2kb")
+	public void doAddP2kb(Mcharge obj) {
+		try {
+			if (obj != null) {
+				objP2kb= obj;
+				gbP2kb.setVisible(true);
+				btAddP2kb.setLabel("Cancel");
+				btAddP2kb.setIconSclass("z-icon-reply");
+				btSaveP2kb.setLabel("Perbarui");
+			} else if (btAddP2kb.getLabel().equals("Tambah Komponen Biaya Rekomendasi STR")) {
+				objP2kb = new Mcharge();
+				gbP2kb.setVisible(true);
+				btAddP2kb.setLabel("Cancel");
+				btAddP2kb.setIconSclass("z-icon-reply");
+				btSaveP2kb.setLabel("Submit");
+			} else {
+				objP2kb = null;
+				gbP2kb.setVisible(false);
+				btAddP2kb.setLabel("Tambah Komponen Biaya Rekomendasi STR");
+				btAddP2kb.setIconSclass("z-icon-plus-square");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -411,6 +532,50 @@ public class ChargeVm {
 		}
 	}
 	
+	@Command
+	@NotifyChange("objP2kb")
+	public void doSaveP2kb() {
+		Session session = StoreHibernateUtil.openSession();
+		Transaction trx = null;
+		try {
+			boolean isInsert = false;
+			if (objP2kb.getMchargepk() == null) {
+				isInsert = true;
+				objP2kb.setCreatetime(new Date());
+				objP2kb.setCreatedby(oUser.getNoanggota());
+				objP2kb.setIsbase("N");
+			} else {
+				objP2kb.setLastupdated(new Date());
+				objP2kb.setUpdatedby(oUser.getNoanggota());
+			}
+			
+			trx = session.beginTransaction();
+			
+			objP2kb.setChargetype(AppUtils.CHARGETYPE_P2KB);
+			chargeDao.save(session, objP2kb);
+			trx.commit();
+			
+			if (isInsert) {
+				Clients.showNotification("Proses tambah data komponen biaya rekomendasi STR berhasil", "info", null, "middle_center", 1500);
+			} else {
+				Clients.showNotification("Proses pembaruan data komponen biaya rekomendasi STR berhasil", "info", null, "middle_center", 1500);
+			}
+			
+			objP2kb = null;
+			gbP2kb.setVisible(false);
+			btAddP2kb.setLabel("Tambah Komponen Biaya Rekomendasi STR");
+			btAddP2kb.setIconSclass("z-icon-plus-square");
+			
+			doLoadIuran();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
+					Messagebox.OK, Messagebox.ERROR);
+		} finally {
+			session.close();
+		}
+	}
+	
 	public Validator getValidatorReg() {
 		return new AbstractValidator() {
 
@@ -437,6 +602,21 @@ public class ChargeVm {
 				BigDecimal chargeamount = (BigDecimal) ctx.getProperties("chargeamount")[0].getValue();
 				if (chargeamount == null)
 					this.addInvalidMessage(ctx, "chargeamountiuran", Labels.getLabel("common.validator.empty"));
+			}
+		};
+	}
+	
+	public Validator getValidatorP2kb() {
+		return new AbstractValidator() {
+
+			@Override
+			public void validate(ValidationContext ctx) {
+				String chargedesc = (String) ctx.getProperties("chargedesc")[0].getValue();
+				if (chargedesc == null || "".equals(chargedesc.trim()))
+					this.addInvalidMessage(ctx, "chargedescp2kb", Labels.getLabel("common.validator.empty"));
+				BigDecimal chargeamount = (BigDecimal) ctx.getProperties("chargeamount")[0].getValue();
+				if (chargeamount == null)
+					this.addInvalidMessage(ctx, "chargeamountp2kb", Labels.getLabel("common.validator.empty"));
 			}
 		};
 	}
@@ -571,5 +751,21 @@ public class ChargeVm {
 
 	public void setFeekab(BigDecimal feekab) {
 		this.feekab = feekab;
+	}
+
+	public Mcharge getObjP2kb() {
+		return objP2kb;
+	}
+
+	public void setObjP2kb(Mcharge objP2kb) {
+		this.objP2kb = objP2kb;
+	}
+
+	public BigDecimal getTotalp2kb() {
+		return totalp2kb;
+	}
+
+	public void setTotalp2kb(BigDecimal totalp2kb) {
+		this.totalp2kb = totalp2kb;
 	}
 }

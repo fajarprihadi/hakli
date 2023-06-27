@@ -40,6 +40,26 @@
 							cols="50" selectedItem="@bind(vm.p2kbbook)">
 						</combobox>
 					</row>
+					<row>
+						<label />
+						<grid id="gridCharge">
+							<columns>
+								<column label="Komponen" />
+								<column label="Biaya" align="right" />
+							</columns>
+							<foot>
+								<footer>
+									<label
+										value="Total Yang Harus Dibayar" />
+								</footer>
+								<footer>
+									<decimalbox
+										value="@load(vm.totalpayment)" format="#,##0" readonly="true"
+										style="text-align: right" />
+								</footer>
+							</foot>
+						</grid>
+					</row>
 				</rows>
 				<foot>
 					<footer />
