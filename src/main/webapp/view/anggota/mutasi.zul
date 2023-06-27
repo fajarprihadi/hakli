@@ -167,6 +167,8 @@
 				<column label="Tgl Pengajuan" align="center"/>
 				<column label="DPW Tujuan" />
 				<column label="Cabang Tujuan" />
+				<column label="Status" />
+				<column label="Tgl Disetujui" align="center"/>
 			</columns>
 		</grid>
 	</window>
