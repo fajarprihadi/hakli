@@ -163,7 +163,10 @@ public class MutasiApprovalVm {
 	@NotifyChange("pageTotalSize")
 	public void doRefresh() {
 		try {
-			objList = oDao.listByFilter("status = '" + AppUtils.STATUS_WAITCONFIRM + "' and mcabangfk = " + anggota.getMcabang().getMcabangpk(), "tmutasipk");
+			String filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "' and mcabangfk = " + anggota.getMcabang().getMcabangpk();
+			if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN))
+				filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "'";
+			objList = oDao.listByFilter(filter, "tmutasipk");
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
