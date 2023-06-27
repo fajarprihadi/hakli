@@ -1,6 +1,7 @@
 package com.sds.hakli.viewmodel;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class LogbookVm {
 	private String filter;
 	private Integer totalkegiatan;
 	private BigDecimal totalskp;
+	private BigDecimal totalwaitingskp;
 
 	private String startdate;
 	private String enddate;
@@ -92,6 +94,7 @@ public class LogbookVm {
 				row.getChildren().add(new Label(data.getMp2kbkegiatan().getMp2kbranah().getRanah()));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatan())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
+				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskpwaiting())));
 				Button btProcess = new Button();
 				btProcess.setIconSclass("z-icon-eye");
 				btProcess.setSclass("btn btn-primary btn-sm");
@@ -108,6 +111,7 @@ public class LogbookVm {
 
 				totalkegiatan = totalkegiatan + data.getTotalkegiatan();
 				totalskp = totalskp.add(data.getTotalskp());
+				totalwaitingskp = totalwaitingskp.add(data.getTotalskpwaiting());
 				BindUtils.postNotifyChange(LogbookVm.this, "*");
 			}
 		});
@@ -140,6 +144,7 @@ public class LogbookVm {
 		try {
 			totalkegiatan = 0;
 			totalskp = new BigDecimal(0);
+			totalwaitingskp = new BigDecimal(0);
 			objList = oDao.listByFilter(filter, "mp2kbkegiatan.idkegiatan");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
@@ -386,6 +391,14 @@ public class LogbookVm {
 
 	public void setTpb(Tp2kbbook tpb) {
 		this.tpb = tpb;
+	}
+
+	public BigDecimal getTotalwaitingskp() {
+		return totalwaitingskp;
+	}
+
+	public void setTotalwaitingskp(BigDecimal totalwaitingskp) {
+		this.totalwaitingskp = totalwaitingskp;
 	}
 
 }

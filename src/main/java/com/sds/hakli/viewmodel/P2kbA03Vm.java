@@ -141,7 +141,7 @@ public class P2kbA03Vm {
 
 				oDao.save(session, objForm);
 
-				Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk()
+				Tp2kb book = p2kbDao.findByFilter("tanggota.tanggotapk = " + anggota.getTanggotapk() + " and tp2kbbookfk = " + tpb.getTp2kbbookpk()
 						+ " and mp2kbkegiatan.mp2kbkegiatanpk = " + objForm.getMp2kbkegiatan().getMp2kbkegiatanpk());
 				if (book == null) {
 					book = new Tp2kb();

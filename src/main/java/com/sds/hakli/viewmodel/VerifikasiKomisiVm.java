@@ -100,7 +100,7 @@ public class VerifikasiKomisiVm {
 				row.getChildren().add(new Label(data.getTanggota().getNoanggota()));
 				row.getChildren().add(new Label(data.getTanggota().getNama()));
 				row.getChildren().add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglmulai())));
-				row.getChildren().add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglmulai())));
+				row.getChildren().add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglakhir())));
 				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
 			}
 		});

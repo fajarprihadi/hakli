@@ -74,6 +74,7 @@ public class BukuLogFormVm {
 	@Command
 	@NotifyChange("*")
 	public void doSave() {
+		boolean isValid = true;
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(objForm.getTglakhir());
 		cal.add(Calendar.YEAR, -5);
@@ -85,12 +86,23 @@ public class BukuLogFormVm {
 					+ new SimpleDateFormat("yyyy-MM-dd").format(objForm.getTglakhir())
 					+ "' BETWEEN TGLMULAI AND TGLAKHIR))", "tp2kbbookpk");
 
-			if (tpb.size() > 0) {
+			if (objForm.getTp2kbbookpk() != null) {
+				for (Tp2kbbook data : tpb) {
+					if(!data.getTp2kbbookpk().equals(objForm.getTp2kbbookpk())) {
+						isValid = false;
+					}
+				}
+			} else {
+				if(tpb.size() > 0)
+					isValid = false;
+			}
+			
+			if (!isValid) {
 				Messagebox.show("Tidak bisa menambah permohonan baru, karena terdapat permohonan yang masih aktif.");
 			} else {
 				Session session = StoreHibernateUtil.openSession();
 				Transaction trx = session.beginTransaction();
-				
+
 				objForm.setTanggota(obj);
 				objForm.setStatus("O");
 
@@ -106,7 +118,7 @@ public class BukuLogFormVm {
 				new Tp2kbbookDAO().save(session, objForm);
 				trx.commit();
 				session.close();
-				
+
 				if (isInsert) {
 					Clients.showNotification("Proses simpan data berhasil", "info", null, "middle_center", 1500);
 				} else {
@@ -143,19 +155,19 @@ public class BukuLogFormVm {
 				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
 				if (tglakhir == null)
 					this.addInvalidMessage(ctx, "tglakhir", Labels.getLabel("common.validator.empty"));
-				
+
 				Date tgllulus = (Date) ctx.getProperties("tgllulus")[0].getValue();
 				if (tgllulus == null)
 					this.addInvalidMessage(ctx, "tgllulus", Labels.getLabel("common.validator.empty"));
-				
+
 				Muniversitas muniversitas = (Muniversitas) ctx.getProperties("muniversitas")[0].getValue();
 				if (muniversitas == null)
 					this.addInvalidMessage(ctx, "muniversitas", Labels.getLabel("common.validator.empty"));
-				
+
 			}
 		};
 	}
-	
+
 	public ListModelList<Muniversitas> getUniversitasModel() {
 		ListModelList<Muniversitas> oList = null;
 		try {
