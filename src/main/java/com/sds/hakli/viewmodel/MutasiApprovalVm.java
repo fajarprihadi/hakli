@@ -164,7 +164,8 @@ public class MutasiApprovalVm {
 	public void doRefresh() {
 		try {
 			String filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "' and mcabangfk = " + anggota.getMcabang().getMcabangpk();
-			if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN))
+			if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || 
+					anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT))
 				filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "'";
 			objList = oDao.listByFilter(filter, "tmutasipk");
 			pageTotalSize = objList.size();
