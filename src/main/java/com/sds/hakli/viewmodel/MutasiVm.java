@@ -46,6 +46,7 @@ import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tmutasi;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -87,6 +88,8 @@ public class MutasiVm {
 				row.getChildren().add(new Label(new SimpleDateFormat("dd-MM-yyyy").format(data.getCreatetime())));
 				row.getChildren().add(new Label(data.getMcabang().getMprov().getProvname()));
 				row.getChildren().add(new Label(data.getMcabang().getCabang()));
+				row.getChildren().add(new Label(AppUtils.getStatusLabel(data.getStatus())));
+				row.getChildren().add(new Label(data.getChecktime() != null ? new SimpleDateFormat("dd-MM-yyyy").format(data.getChecktime()) : "-"));
 			}
 		});
 	}

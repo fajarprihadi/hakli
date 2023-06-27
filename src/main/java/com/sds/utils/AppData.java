@@ -132,6 +132,11 @@ public class AppData {
 			return code;
 	}
 	
+	public static String getStatus(String code) {
+		
+		return code;
+	}
+	
 	public static Map<Integer, String> getAngkaRomawi() throws Exception {
 		Map<Integer, String> map = new HashMap<>();
 		map.put(1, "I");
