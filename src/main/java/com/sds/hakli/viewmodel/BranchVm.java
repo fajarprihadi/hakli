@@ -165,7 +165,7 @@ public class BranchVm {
 		kodecabang = null;
 		doSearch();
 		divForm.setVisible(false);
-		btAdd.setLabel("Tambah Cabang");
+		btAdd.setLabel("Tambah Kabupaten/Kota");
 		btAdd.setIconSclass("z-icon-plus-square");
 		cbRegion.setValue(null);
 	}
@@ -209,7 +209,7 @@ public class BranchVm {
 			cbRegion.setValue(objForm.getMprov().getProvname());
 			cbBank.setValue(objForm.getBankname());
 			tbCode.setDisabled(true);
-		} else if (btAdd.getLabel().equals("Tambah Cabang")) {
+		} else if (btAdd.getLabel().equals("Tambah Kabupaten/Kota")) {
 			isInsert = true;
 			objForm = new Mcabang();
 			divForm.setVisible(true);
@@ -221,7 +221,7 @@ public class BranchVm {
 			tbCode.setDisabled(false);
 		} else {
 			divForm.setVisible(false);
-			btAdd.setLabel("Tambah Cabang");
+			btAdd.setLabel("Tambah Kabupaten/Kota");
 			btAdd.setIconSclass("z-icon-plus-square");
 			tbCode.setDisabled(false);
 		}

@@ -1,14 +1,14 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winCabang" border="normal"
+	<window id="winKabupaten/Kota" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BranchVm')" validationMessages="@id('vmsgs')">
 		<caption>
 			<n:i class="fas fa-university"></n:i>
-			<n:span>Cabang</n:span>
+			<n:span>Kabupaten/Kota</n:span>
 		</caption>
 		<div class="row">
 			<div class="col">
-				<button id="btAdd" label="Tambah Cabang"
+				<button id="btAdd" label="Tambah Kabupaten/Kota"
 					autodisable="self" sclass="btn btn-primary btn-sm"
 					iconSclass="z-icon-plus-square" onClick="@command('doAdd')" />
 			</div>
@@ -21,7 +21,7 @@
 				<caption>
 					<n:span class="h5 fw-bold mb-0">
 						<n:i class="fas fa-user-tag"></n:i>
-						Form Cabang
+						Form Kabupaten/Kota
 					</n:span>
 				</caption>
 				<grid>
@@ -31,7 +31,7 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Kode Cabang (*)" />
+							<label value="Kode Kabupaten/Kota (*)" />
 							<vlayout>
 								<textbox id="tbCode" value="@bind(e.kodecabang)"
 									width="100%" maxlength="4" />
@@ -40,7 +40,7 @@
 							</vlayout>
 						</row>
 						<row>
-							<label value="Nama Cabang (*)" />
+							<label value="Nama Kabupaten/Kota (*)" />
 							<vlayout>
 								<textbox value="@bind(e.cabang)"
 									width="100%" maxlength="40" />
@@ -119,18 +119,18 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true">
+		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true" span="true">
 			<columns>
 				<column label="No" align="right" width="40px" />
 				<column align="center">
 					<textbox inplace="true" value="@bind(vm.kodecabang)" style="text-align: center"
-						width="100%" maxlength="100" placeholder="Kode Cabang"
+						width="100%" maxlength="100" placeholder="Kode Kabupaten/Kota"
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />
 				</column>
 				<column>
 					<textbox inplace="true" value="@bind(vm.cabang)"
-						width="100%" maxlength="100" placeholder="Cabang"
+						width="100%" maxlength="100" placeholder="Kabupaten/Kota"
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />
 				</column>

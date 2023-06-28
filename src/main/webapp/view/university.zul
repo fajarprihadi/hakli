@@ -61,9 +61,9 @@
 			</div>
 		</div>
 		<grid id="grid" mold="paging" pageSize="20"
-			pagingPosition="top">
+			pagingPosition="top" sizedByContent="true" span="true" >
 			<columns>
-				<column label="No" align="right" width="50px" />
+				<column label="No" align="right" />
 				<column>
 					<textbox inplace="true" value="@bind(vm.universitas)"
 						cols="20" maxlength="100" placeholder="Nama Perguruan Tinggi"

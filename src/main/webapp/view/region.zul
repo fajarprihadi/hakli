@@ -4,11 +4,11 @@
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.RegionVm')" validationMessages="@id('vmsgs')">
 		<caption>
 			<n:i class="fas fa-university"></n:i>
-			<n:span>Region</n:span>
+			<n:span>Provinsi</n:span>
 		</caption>
 		<div class="row">
 			<div class="col">
-				<button id="btAdd" label="Tambah Region"
+				<button id="btAdd" label="Tambah Provinsi"
 					autodisable="self" sclass="btn btn-primary btn-sm"
 					iconSclass="z-icon-plus-square" onClick="@command('doAdd')" />
 			</div>
@@ -21,7 +21,7 @@
 				<caption>
 					<n:span class="h5 fw-bold mb-0">
 						<n:i class="fas fa-user-tag"></n:i>
-						Form Region
+						Form Provinsi
 					</n:span>
 				</caption>
 				<grid>
@@ -31,7 +31,7 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Kode Region (*)" />
+							<label value="Kode Provinsi (*)" />
 							<vlayout>
 								<textbox id="tbCode" value="@bind(e.provcode)"
 									width="100%" maxlength="2" />
@@ -40,7 +40,7 @@
 							</vlayout>
 						</row>
 						<row>
-							<label value="Nama Region (*)" />
+							<label value="Nama Provinsi (*)" />
 							<vlayout>
 								<textbox id="tbName" value="@bind(e.provname)"
 									width="100%" maxlength="30" />
@@ -68,18 +68,18 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true">
+		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true" span="true">
 			<columns>
 				<column label="No" align="right" width="40px" />
 				<column>
 					<textbox inplace="true" value="@bind(vm.provcode)"
-						width="100%" maxlength="100" placeholder="Kode Region"
+						width="100%" maxlength="100" placeholder="Kode Provinsi"
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />
 				</column>
 				<column>
 					<textbox inplace="true" value="@bind(vm.provname)"
-						width="100%" maxlength="100" placeholder="Nama Region"
+						width="100%" maxlength="100" placeholder="Nama Provinsi"
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />
 				</column>

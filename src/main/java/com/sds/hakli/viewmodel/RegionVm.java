@@ -151,7 +151,7 @@ public class RegionVm {
 		provname = null;
 		doSearch();
 		divForm.setVisible(false);
-		btAdd.setLabel("Tambah Region");
+		btAdd.setLabel("Tambah Provinsi");
 		btAdd.setIconSclass("z-icon-plus-square");
 	}
 	
@@ -189,7 +189,7 @@ public class RegionVm {
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Perbarui");
 			tbCode.setDisabled(true);
-		} else if (btAdd.getLabel().equals("Tambah Region")) {
+		} else if (btAdd.getLabel().equals("Tambah Provinsi")) {
 			isInsert = true;
 			objForm = new Mprov();
 			divForm.setVisible(true);
@@ -199,7 +199,7 @@ public class RegionVm {
 			tbCode.setDisabled(false);
 		} else {
 			divForm.setVisible(false);
-			btAdd.setLabel("Tambah Region");
+			btAdd.setLabel("Tambah Provinsi");
 			btAdd.setIconSclass("z-icon-plus-square");
 			tbCode.setDisabled(false);
 		}
