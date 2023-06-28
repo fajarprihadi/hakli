@@ -101,9 +101,23 @@ public class AppUtils {
 			return "DISETUJUI";
 		else if (code.trim().equals("R"))
 			return "DITOLAK";
+		else if (code.trim().equals("A"))
+			return "DISETUJUI";
+		else if (code.trim().equals("R"))
+			return "DITOLAK";
 		else
 			return code;
 	}
 	
+	public static String getStatusLogLabel(String code) {
+		if (code.trim().equals("O"))
+			return "OPEN";
+		else if (code.trim().equals("R"))
+			return "REVIEW";
+		else if (code.trim().equals("C"))
+			return "CLOSE";
+		else
+			return code;
+	}
 	
 }

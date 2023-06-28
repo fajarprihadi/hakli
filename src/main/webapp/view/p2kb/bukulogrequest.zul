@@ -31,6 +31,7 @@
 				<column label="Tgl Berakhir" align="center"
 					width="150px" />
 				<column label="Status" width="150px" align="center" />
+				<column label="Total SKP" width="150px" align="center" />
 				<column label="Action" align="center" width="250px" />
 			</columns>
 		</grid>

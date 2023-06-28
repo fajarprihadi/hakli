@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -27,10 +29,14 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
@@ -46,7 +52,6 @@ import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tmutasi;
-import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -88,6 +93,21 @@ public class MutasiVm {
 				row.getChildren().add(new Label(new SimpleDateFormat("dd-MM-yyyy").format(data.getCreatetime())));
 				row.getChildren().add(new Label(data.getMcabang().getMprov().getProvname()));
 				row.getChildren().add(new Label(data.getMcabang().getCabang()));
+				
+				A a = new A(data.getDocid());
+				a.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						Map<String, String> mapDocument = new HashMap<>();
+						mapDocument.put("src", data.getDocpath());
+						zkSession.setAttribute("mapDocument", mapDocument);
+						Executions.getCurrent().sendRedirect("/view/docviewer.zul", "_blank");
+					}
+				});
+				
+				row.getChildren().add(a);
+				row.getChildren().add(new Label(data.getMemo()));
 				row.getChildren().add(new Label(AppUtils.getStatusLabel(data.getStatus())));
 				row.getChildren().add(new Label(data.getChecktime() != null ? new SimpleDateFormat("dd-MM-yyyy").format(data.getChecktime()) : "-"));
 			}

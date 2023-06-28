@@ -1,5 +1,6 @@
 package com.sds.hakli.viewmodel;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +36,7 @@ import org.zkoss.zul.Window;
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
+import com.sds.utils.AppUtils;
 
 public class BukuLogRequestVm {
 	private Session session = Sessions.getCurrent();
@@ -68,7 +70,8 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(data.getNostr()));
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglmulai())));
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
-				row.getChildren().add(new Label(data.getStatus().equals("Y") ? "Yes" : "No"));
+				row.getChildren().add(new Label(AppUtils.getStatusLogLabel(data.getStatus())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
 
 				Div div = new Div();
 				Hlayout hlayout = new Hlayout();

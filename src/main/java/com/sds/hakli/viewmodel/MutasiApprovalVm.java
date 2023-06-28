@@ -17,6 +17,7 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
@@ -25,6 +26,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
@@ -92,6 +94,20 @@ public class MutasiApprovalVm {
 				row.getChildren().add(new Label(new SimpleDateFormat("dd-MM-yyyy").format(data.getCreatetime())));
 				row.getChildren().add(new Label(data.getMcabang().getMprov().getProvname()));
 				row.getChildren().add(new Label(data.getMcabang().getCabang()));
+				A a = new A(data.getDocid());
+				a.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						Map<String, String> mapDocument = new HashMap<>();
+						mapDocument.put("src", data.getDocpath());
+						zkSession.setAttribute("mapDocument", mapDocument);
+						Executions.getCurrent().sendRedirect("/view/docviewer.zul", "_blank");
+					}
+				});
+				
+				row.getChildren().add(a);
+				row.getChildren().add(new Label(data.getMemo()));
 			}
 		});
 	}
