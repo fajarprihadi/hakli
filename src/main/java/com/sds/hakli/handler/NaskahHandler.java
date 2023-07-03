@@ -33,6 +33,7 @@ public class NaskahHandler {
 					.format(data.getTanggota().getTgllahir());
 
 			String nosurat = "";
+			String eventcity = data.getTevent().getEventcity();
 			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
 			if (arg.equals("sumpah")) {
@@ -96,6 +97,7 @@ public class NaskahHandler {
 
 			parameters.put("GELARBELAKANG", gelarbelakang);
 			parameters.put("GELARDEPAN", gelardepan);
+			parameters.put("EVENTCITY", eventcity);
 			parameters.put("NOSURAT", nosurat);
 			parameters.put("LOCATION", location);
 			parameters.put("CURRENTDATE", currentdate);
