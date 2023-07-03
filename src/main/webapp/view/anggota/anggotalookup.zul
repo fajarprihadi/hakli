@@ -1,10 +1,10 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winAnggota" border="normal"
-		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaVm')">
+	<window id="winAnggotaRegList" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaLookupVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
-			<n:span>Daftar Anggota</n:span>
+			<n:span>Pencarian Data Anggota</n:span>
 		</caption>
 		<groupbox mold="3d">
 			<caption label="Pencarian" iconSclass="z-icon-search" />

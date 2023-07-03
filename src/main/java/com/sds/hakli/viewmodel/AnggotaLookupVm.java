@@ -62,7 +62,7 @@ import com.sds.hakli.model.TanggotaListModel;
 import com.sds.utils.AppUtils;
 import com.sds.utils.StringUtils;
 
-public class AnggotaVm {
+public class AnggotaLookupVm {
 	
 	private Session session = Sessions.getCurrent();
 	private Tanggota oUser;
@@ -86,8 +86,6 @@ public class AnggotaVm {
 	private Mcabang cabang;
 	
 	@Wire
-	private Window winAnggota;
-	@Wire
 	private Combobox cbRegion;
 	@Wire
 	private Combobox cbCabang;
@@ -97,7 +95,7 @@ public class AnggotaVm {
 	private Grid grid;
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("act") String act) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		oUser = (Tanggota) session.getAttribute("anggota");
 		
@@ -144,7 +142,7 @@ public class AnggotaVm {
 							@Override
 							public void onEvent(Event event) throws Exception {
 								doSearch();
-								BindUtils.postNotifyChange(AnggotaVm.this, "pageTotalSize");
+								BindUtils.postNotifyChange(AnggotaLookupVm.this, "pageTotalSize");
 							}
 						});
 						win.setWidth("98%");
@@ -155,57 +153,11 @@ public class AnggotaVm {
 				Hlayout hlayout = new Hlayout();
 				hlayout.appendChild(btView);
 				
-				if (act != null && act.equals("role")) {
-					Button btSetRoles = new Button();
-					btSetRoles.setIconSclass("z-icon-user-secret");
-					btSetRoles.setSclass("btn btn-danger btn-sm");
-					btSetRoles.setAutodisable("self");
-					btSetRoles.setTooltiptext("Set Kewenangan");
-					btSetRoles.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-						@Override
-						public void onEvent(Event event) throws Exception {
-							Map<String, Object> map = new HashMap<String, Object>();
-							map.put("obj", data);
-							Window win = (Window) Executions
-									.createComponents("/view/anggota/anggotarole.zul", null, map);
-							win.setClosable(true);
-							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-
-								@Override
-								public void onEvent(Event event) throws Exception {
-									doSearch();
-									BindUtils.postNotifyChange(AnggotaVm.this, "pageTotalSize");
-								}
-							});
-							win.doModal();
-						}
-					});
-					
-					hlayout.appendChild(btSetRoles);
-				} else if (act != null && act.equals("lookup")) {
-					Button btSetRoles = new Button("Pilih");
-					btSetRoles.setSclass("btn btn-warning btn-sm");
-					btSetRoles.setAutodisable("self");
-					//btSetRoles.setTooltiptext("Pilih");
-					btSetRoles.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-						@Override
-						public void onEvent(Event event) throws Exception {
-							Event closeEvent = new Event("onClose", winAnggota, data);
-							Events.postEvent(closeEvent);
-						}
-					});
-					
-					hlayout.appendChild(btSetRoles);
-				}
-				
 				row.getChildren().add(hlayout);
 			}
 		});
 		
-		if (act != null && !act.equals("lookup"))
-			doReset();
+		doReset();
 	}
 	
 	@NotifyChange("pageTotalSize")

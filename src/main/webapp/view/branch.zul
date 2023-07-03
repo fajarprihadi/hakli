@@ -1,7 +1,8 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
 	<window id="winKabupaten/Kota" border="normal"
-		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BranchVm')" validationMessages="@id('vmsgs')">
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BranchVm')"
+		validationMessages="@id('vmsgs')">
 		<caption>
 			<n:i class="fas fa-university"></n:i>
 			<n:span>Kabupaten/Kota</n:span>
@@ -33,8 +34,8 @@
 						<row>
 							<label value="Kode Kabupaten/Kota (*)" />
 							<vlayout>
-								<textbox id="tbCode" value="@bind(e.kodecabang)"
-									width="100%" maxlength="4" />
+								<textbox id="tbCode"
+									value="@bind(e.kodecabang)" width="100%" maxlength="4" />
 								<label style="color:gray"
 									value="@load(vmsgs['kodecabang'])" />
 							</vlayout>
@@ -52,7 +53,8 @@
 							<label value="Provinsi (*)" />
 							<vlayout>
 								<combobox id="cbRegion"
-									selectedItem="@bind(e.mprov)" model="@load(vm.provModel)" width="100%">
+									selectedItem="@bind(e.mprov)" model="@load(vm.provModel)"
+									width="100%">
 									<template name="model"
 										var="mprov">
 										<comboitem
@@ -64,18 +66,22 @@
 							</vlayout>
 						</row>
 						<row spans="2">
-						<vlayout>
-							<n:hr/>
-							<n:p><n:em>Data Rekening</n:em></n:p>
-						</vlayout>
+							<vlayout>
+								<n:hr />
+								<n:p>
+									<n:em>Data Rekening</n:em>
+								</n:p>
+							</vlayout>
 						</row>
 						<row>
 							<label value="Bank (*)" />
 							<vlayout>
-								<combobox id="cbBank" selectedItem="@bind(e.bankcode)"
-									width="100%" maxlength="40">
-									<comboitem value="BRINIDJA" label="Bank Rakyat Indonesia" />
-									<comboitem value="DJARIDJ1" label="Bank Syariah Indonesia" />
+								<combobox id="cbBank"
+									selectedItem="@bind(e.bankcode)" width="100%" maxlength="40">
+									<comboitem value="BRINIDJA"
+										label="Bank Rakyat Indonesia" />
+									<comboitem value="DJARIDJ1"
+										label="Bank Syariah Indonesia" />
 								</combobox>
 								<label style="color:gray"
 									value="@load(vmsgs['bankcode'])" />
@@ -99,6 +105,76 @@
 									value="@load(vmsgs['accname'])" />
 							</vlayout>
 						</row>
+						<row spans="2">
+							<vlayout>
+								<n:hr />
+								<n:p>
+									<n:em>Susunan Organisasi</n:em>
+								</n:p>
+							</vlayout>
+						</row>
+						<row>
+							<label value="Ketua" />
+							<hlayout>
+								<textbox value="@bind(vm.ketuaid)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox value="@bind(vm.ketuanama)"
+									width="100%" maxlength="70" readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='ketua')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Sekretaris 1" />
+							<hlayout>
+								<textbox value="@bind(vm.sekretaris1id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox
+									value="@bind(vm.sekretaris1nama)" width="100%" maxlength="70"
+									readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='sekretaris1')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Sekretaris 2" />
+							<hlayout>
+								<textbox value="@bind(vm.sekretaris2id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox
+									value="@bind(vm.sekretaris2nama)" width="100%" maxlength="70"
+									readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='sekretaris2')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Bendahara 1" />
+							<hlayout>
+								<textbox value="@bind(vm.bendahara1id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox value="@bind(vm.bendahara1nama)"
+									width="100%" maxlength="70" readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='bendahara1')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Bendahara 2" />
+							<hlayout>
+								<textbox value="@bind(vm.bendahara2id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox value="@bind(vm.bendahara2nama)"
+									width="100%" maxlength="70" readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='bendahara2')" />
+							</hlayout>
+						</row>
 					</rows>
 					<foot>
 						<footer />
@@ -119,12 +195,14 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true" span="true">
+		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top"
+			sizedByContent="true" span="true">
 			<columns>
 				<column label="No" align="right" width="40px" />
 				<column align="center">
-					<textbox inplace="true" value="@bind(vm.kodecabang)" style="text-align: center"
-						width="100%" maxlength="100" placeholder="Kode Kabupaten/Kota"
+					<textbox inplace="true" value="@bind(vm.kodecabang)"
+						style="text-align: center" width="100%" maxlength="100"
+						placeholder="Kode Kabupaten/Kota"
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />
 				</column>
@@ -143,6 +221,11 @@
 				<column label="Bank" align="center" />
 				<column label="Nomor Rekening" align="center" />
 				<column label="Nama Rekening" />
+				<column label="Ketua" />
+				<column label="Sekretaris 1" />
+				<column label="Sekretaris 2" />
+				<column label="Bendahara 1" />
+				<column label="Bendahara 2" />
 				<column label="Aksi" align="center" width="120px" />
 			</columns>
 		</grid>

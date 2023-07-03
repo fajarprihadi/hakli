@@ -237,7 +237,7 @@ public class AnggotaFormVm {
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
 			@ExecutionArgParam("pekerjaans") List<Tpekerjaan> pekerjaans,
 			@ExecutionArgParam("pendidikans") List<Tpendidikan> pendidikans,
-			@ExecutionArgParam("acttype") String acttype) {
+			@ExecutionArgParam("acttype") String acttype, @ExecutionArgParam("noanggota") String noanggota) {
 		Selectors.wireComponents(view, this, false);
 		try {
 			this.acttype = acttype;
@@ -249,7 +249,11 @@ public class AnggotaFormVm {
 
 			if (obj != null)
 				pribadi = obj;
-			else {
+			else if (noanggota != null) {
+				List<Tanggota> list = oDao.listByFilter("noanggota = '" + noanggota + "'", "tanggotapk desc");
+				if (list.size() > 0)
+					pribadi = list.get(0);
+			} else {
 				pribadi = oDao.findByPk(anggota.getTanggotapk());
 				if (pribadi == null)
 					pribadi = new Tanggota();
