@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="naskahsumpah2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49860e0c-7f12-4d79-a659-7d29003d4f62">
 	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="308"/>
+	<property name="ireport.y" value="260"/>
 	<parameter name="SALAMNASKAH" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="TTD_SAKSI" class="java.lang.String"/>
@@ -11,12 +11,12 @@
 	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<parameter name="GELARDEPAN" class="java.lang.String"/>
 	<parameter name="GELARBELAKANG" class="java.lang.String"/>
+	<parameter name="EVENTCITY" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="noanggota" class="java.lang.String"/>
 	<field name="gelardepan" class="java.lang.String"/>
 	<field name="gelarbelakang" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
-	<field name="tevent.eventcity" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -101,7 +101,7 @@ materai 10000
 			<textField>
 				<reportElement x="336" y="94" width="213" height="15" uuid="78cec1ff-baa8-4ba8-960b-6c3e3eea5f86"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{tevent.eventcity} + ", " + $P{CURRENTDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{EVENTCITY} + ", " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="336" y="208" width="213" height="14" uuid="72385995-b82c-4fbf-86fd-7095fefbe75e"/>

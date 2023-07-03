@@ -7,10 +7,10 @@
 	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<parameter name="GELARDEPAN" class="java.lang.String"/>
 	<parameter name="GELARBELAKANG" class="java.lang.String"/>
+	<parameter name="EVENTCITY" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="gelarbelakang" class="java.lang.String"/>
 	<field name="noanggota" class="java.lang.String"/>
-	<field name="tevent.eventcity" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -41,7 +41,7 @@ materai 10000
 			<textField>
 				<reportElement x="340" y="46" width="215" height="15" uuid="cab7723c-af1f-493d-9648-61d2fe52abb2"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{tevent.eventcity} + ", " + $P{CURRENTDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{EVENTCITY} + ", " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="340" y="179" width="215" height="16" uuid="de81ca3e-0f5d-4d99-9dc2-f6cb6466ebea"/>
