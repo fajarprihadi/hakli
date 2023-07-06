@@ -20,6 +20,7 @@ public class AppUtils {
 	public static final String ANGGOTA_ROLE_PENGURUSKABUPATEN = "PKA";
 	public static final String ANGGOTA_ROLE_KOMISIP2KB = "KP2";
 	public static final String ANGGOTA_ROLE_TIMP2KB = "TP2";
+	public static final String ANGGOTA_ROLE_VERIFICATORREG = "VER";
 
 	public static final String STATUS_ANGGOTA_REG = "1";
 	public static final String STATUS_ANGGOTA_REG_PAYMENT = "2";

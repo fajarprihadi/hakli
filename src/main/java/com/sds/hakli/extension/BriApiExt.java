@@ -37,6 +37,8 @@ import com.sds.hakli.pojo.BrivaStatus;
 import com.sds.hakli.pojo.BrivaUpdateResp;
 import com.sds.hakli.pojo.FundInqReq;
 import com.sds.hakli.pojo.FundInqResp;
+import com.sds.hakli.pojo.FundTrfReq;
+import com.sds.hakli.pojo.FundTrfResp;
 import com.sds.utils.AppData;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -71,6 +73,17 @@ public class BriApiExt {
 				inqReq.setSourceAccount("888801000157508");
 				inqReq.setBeneficiaryAccount("888809999999918");
 				briapi.fundInq(briapiToken.getAccess_token(), inqReq);
+				
+				FundTrfReq trfReq = new FundTrfReq();
+				trfReq.setSourceAccount("888801000157508");
+				trfReq.setBeneficiaryAccount("888809999999918");
+				trfReq.setAmount("10000.00");
+				trfReq.setFeeType("OUR");
+				trfReq.setNoReferral("99999999999999999918");
+				trfReq.setRemark("9999999999999999991801");
+				trfReq.setTransactionDateTime("04-07-2023 15:08:00");
+				
+				briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
 				
 			} else {
 				System.out.println("NOT OK");
@@ -683,6 +696,94 @@ public class BriApiExt {
 			obj = mapper.readValue(output, FundInqResp.class);
 			client.destroy();
 			System.out.println("***End Fund Inquiry***");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
+	
+	public FundTrfResp fundTrf(String token, FundTrfReq req) throws Exception {
+		FundTrfResp obj = new FundTrfResp();
+		ObjectMapper mapper = new ObjectMapper();
+		String output = null;
+		try {
+			 // Create a trust manager that does not validate certificate chains
+		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+		            return null;
+		        }
+		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+		        }
+		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+		        }
+		    }
+		    };
+
+		    // Install the all-trusting trust manager
+		    SSLContext sc = SSLContext.getInstance("SSL");
+		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+		    // Create all-trusting host name verifier
+		    HostnameVerifier allHostsValid = new HostnameVerifier() {
+				
+				@Override
+				public boolean verify(String hostname, SSLSession session) {
+					return false;
+				}
+			};
+
+		    // Install the all-trusting host verifier
+		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+		    
+		    System.out.println("***Begin Fund Trf***");
+			
+		    Client client = Client.create();
+			client.setConnectTimeout(60 * 1000);
+			client.setReadTimeout(60 * 1000);
+			
+			String auth = "Bearer " + token;
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+			String xtimestamp = dateFormatter.format(new Date());
+			
+			String jsonReq = mapper.writeValueAsString(req);
+			
+			StringBuffer payload = new StringBuffer();
+			//payload.append("path=" + bean.getBriva_pathget() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + custcode);
+			payload.append("path=/v3.1/transfer/internal");
+			payload.append("&");
+			payload.append("verb=POST");
+			payload.append("&");
+			payload.append("token=" + auth);
+			payload.append("&");
+			payload.append("timestamp=" + xtimestamp);
+			payload.append("&");
+			payload.append("body=" + jsonReq);
+			
+			String signature = encode(bean.getConsumersecret(), payload.toString());
+			
+			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			System.out.println("Header - Authorization : " + auth);
+			System.out.println("Header - BRI-Signature : " + signature);
+			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
+			System.out.println("Payload : " + payload.toString());
+			
+			WebResource webResource = client.resource(url_fund);
+			ClientResponse response = webResource.header("Authorization", auth)
+					.header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature)
+					.type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON)
+					.post(ClientResponse.class, jsonReq);
+
+			output = response.getEntity(String.class);
+			System.out.println("Response : " + output);
+			
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			obj = mapper.readValue(output, FundTrfResp.class);
+			client.destroy();
+			System.out.println("***End Fund Trf***");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

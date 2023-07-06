@@ -253,6 +253,16 @@ public class BranchVm {
 		cabang = null;
 		prov = null;
 		kodecabang = null;
+		ketuaid = null;
+		ketuanama = null;
+		sekretaris1id = null;
+		sekretaris1nama = null;
+		sekretaris2id = null;
+		sekretaris2nama = null;
+		bendahara1id = null;
+		bendahara1nama = null;
+		bendahara2id = null;
+		bendahara2nama = null;
 		doSearch();
 		divForm.setVisible(false);
 		btAdd.setLabel("Tambah Kabupaten/Kota");
@@ -390,7 +400,7 @@ public class BranchVm {
 	}
 	
 	@Command
-	@NotifyChange("objForm")
+	@NotifyChange("*")
 	public void doSave() {
 		Session session = StoreHibernateUtil.openSession();
 		Transaction trx = session.beginTransaction();

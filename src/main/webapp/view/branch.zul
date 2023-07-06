@@ -195,7 +195,7 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top"
+		<grid id="grid" mold="paging" pageSize="10" pagingPosition="top"
 			sizedByContent="true" span="true">
 			<columns>
 				<column label="No" align="right" width="40px" />

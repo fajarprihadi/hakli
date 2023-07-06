@@ -204,7 +204,7 @@ public class AnggotaVm {
 			}
 		});
 		
-		if (act != null && !act.equals("lookup"))
+		if (act == null || !act.equals("lookup"))
 			doReset();
 	}
 	

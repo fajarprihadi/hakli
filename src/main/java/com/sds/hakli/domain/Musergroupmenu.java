@@ -1,6 +1,8 @@
 package com.sds.hakli.domain;
 
 import java.io.Serializable;
+import java.util.Comparator;
+
 import javax.persistence.*;
 
 
@@ -56,5 +58,16 @@ public class Musergroupmenu implements Serializable {
 	public void setMusergroup(Musergroup musergroup) {
 		this.musergroup = musergroup;
 	}
+	
+	public static Comparator<Musergroupmenu> fieldComparator = new Comparator<Musergroupmenu>() {
+
+		public int compare(Musergroupmenu obj1, Musergroupmenu obj2) {
+			Integer id1 = obj1.getMmenu().getMenuorderno();
+			Integer id2 = obj2.getMmenu().getMenuorderno();
+			
+			return id1.compareTo(id2);
+		}
+
+	};
 
 }

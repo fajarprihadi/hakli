@@ -48,6 +48,116 @@
 									value="@load(vmsgs['provname'])" />
 							</vlayout>
 						</row>
+						<row spans="2">
+							<vlayout>
+								<n:hr />
+								<n:p>
+									<n:em>Data Rekening</n:em>
+								</n:p>
+							</vlayout>
+						</row>
+						<row>
+							<label value="Bank (*)" />
+							<vlayout>
+								<combobox id="cbBank"
+									selectedItem="@bind(e.bankcode)" width="100%" maxlength="40">
+									<comboitem value="BRINIDJA"
+										label="Bank Rakyat Indonesia" />
+									<comboitem value="DJARIDJ1"
+										label="Bank Syariah Indonesia" />
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['bankcode'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="Nomor Rekening (*)" />
+							<vlayout>
+								<textbox value="@bind(e.accno)"
+									width="100%" maxlength="20" />
+								<label style="color:gray"
+									value="@load(vmsgs['accno'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="Nama Rekening (*)" />
+							<vlayout>
+								<textbox value="@bind(e.accname)"
+									width="100%" maxlength="40" />
+								<label style="color:gray"
+									value="@load(vmsgs['accname'])" />
+							</vlayout>
+						</row>
+						<row spans="2">
+							<vlayout>
+								<n:hr />
+								<n:p>
+									<n:em>Susunan Organisasi</n:em>
+								</n:p>
+							</vlayout>
+						</row>
+						<row>
+							<label value="Ketua" />
+							<hlayout>
+								<textbox value="@bind(vm.ketuaid)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox value="@bind(vm.ketuanama)"
+									width="100%" maxlength="70" readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='ketua')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Sekretaris 1" />
+							<hlayout>
+								<textbox value="@bind(vm.sekretaris1id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox
+									value="@bind(vm.sekretaris1nama)" width="100%" maxlength="70"
+									readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='sekretaris1')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Sekretaris 2" />
+							<hlayout>
+								<textbox value="@bind(vm.sekretaris2id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox
+									value="@bind(vm.sekretaris2nama)" width="100%" maxlength="70"
+									readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='sekretaris2')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Bendahara 1" />
+							<hlayout>
+								<textbox value="@bind(vm.bendahara1id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox value="@bind(vm.bendahara1nama)"
+									width="100%" maxlength="70" readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='bendahara1')" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="Bendahara 2" />
+							<hlayout>
+								<textbox value="@bind(vm.bendahara2id)"
+									cols="15" maxlength="15" readonly="true" />
+								<textbox value="@bind(vm.bendahara2nama)"
+									width="100%" maxlength="70" readonly="true" />
+								<button label="..."
+									autodisable="self" width="100%"
+									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='bendahara2')" />
+							</hlayout>
+						</row>
 					</rows>
 					<foot>
 						<footer />
@@ -68,7 +178,7 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" mold="paging" pageSize="20" pagingPosition="top" sizedByContent="true" span="true">
+		<grid id="grid" mold="paging" pageSize="10" pagingPosition="top" sizedByContent="true" span="true">
 			<columns>
 				<column label="No" align="right" width="40px" />
 				<column>
@@ -83,6 +193,14 @@
 						tooltiptext="${labels.common.searchonheader}"
 						onOK="@command('doSearch')" />
 				</column>
+				<column label="Bank" align="center" />
+				<column label="Nomor Rekening" align="center" />
+				<column label="Nama Rekening" />
+				<column label="Ketua" />
+				<column label="Sekretaris 1" />
+				<column label="Sekretaris 2" />
+				<column label="Bendahara 1" />
+				<column label="Bendahara 2" />
 				<column label="Aksi" align="center" width="120px" />
 			</columns>
 		</grid>
