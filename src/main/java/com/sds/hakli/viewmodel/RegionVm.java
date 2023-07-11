@@ -178,7 +178,24 @@ public class RegionVm {
 						BindUtils.postNotifyChange(RegionVm.this, "objForm");
 					}
 				});
-				row.getChildren().add(btEdit);
+				
+				Button btOrg = new Button();
+				btOrg.setIconSclass("z-icon-address-card");
+				btOrg.setSclass("btn btn-success btn-sm");
+				btOrg.setAutodisable("self");
+				btOrg.setTooltiptext("Lihat Detail Susunan Organisasi");
+				btOrg.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("obj", data);
+						Window win = (Window) Executions
+								.createComponents("/view/regionorg.zul", null, map);
+						win.setClosable(true);
+						win.doModal();
+					}
+				});
 				
 				Button btDel = new Button();
 				btDel.setIconSclass("z-icon-trash-o");
@@ -219,6 +236,8 @@ public class RegionVm {
 				
 				Div div = new Div();
 				div.appendChild(btEdit);
+				div.appendChild(new Separator("vertical"));
+				div.appendChild(btOrg);
 				div.appendChild(new Separator("vertical"));
 				div.appendChild(btDel);
 				row.getChildren().add(div);

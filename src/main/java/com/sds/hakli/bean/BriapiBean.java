@@ -14,6 +14,12 @@ public class BriapiBean {
 	private String briva_pathupdateva;
 	private String briva_pathreport;
 	
+	private String brift_consumerkey;
+	private String brift_consumersecret;
+	private String brift_pathaccount;
+	private String brift_pathtransfer;
+	private String brift_pathcheckstatus;
+	
 	public String getUrl() {
 		return url;
 	}
@@ -79,6 +85,36 @@ public class BriapiBean {
 	}
 	public void setBriva_pathreport(String briva_pathreport) {
 		this.briva_pathreport = briva_pathreport;
+	}
+	public String getBrift_consumerkey() {
+		return brift_consumerkey;
+	}
+	public void setBrift_consumerkey(String brift_consumerkey) {
+		this.brift_consumerkey = brift_consumerkey;
+	}
+	public String getBrift_consumersecret() {
+		return brift_consumersecret;
+	}
+	public void setBrift_consumersecret(String brift_consumersecret) {
+		this.brift_consumersecret = brift_consumersecret;
+	}
+	public String getBrift_pathaccount() {
+		return brift_pathaccount;
+	}
+	public void setBrift_pathaccount(String brift_pathaccount) {
+		this.brift_pathaccount = brift_pathaccount;
+	}
+	public String getBrift_pathtransfer() {
+		return brift_pathtransfer;
+	}
+	public void setBrift_pathtransfer(String brift_pathtransfer) {
+		this.brift_pathtransfer = brift_pathtransfer;
+	}
+	public String getBrift_pathcheckstatus() {
+		return brift_pathcheckstatus;
+	}
+	public void setBrift_pathcheckstatus(String brift_pathcheckstatus) {
+		this.brift_pathcheckstatus = brift_pathcheckstatus;
 	}
 	
 }

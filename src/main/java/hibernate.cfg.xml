@@ -58,6 +58,7 @@
 		<mapping class="com.sds.hakli.domain.Tmutasi" />
 		<mapping class="com.sds.hakli.domain.Tpendidikan" />
 		<mapping class="com.sds.hakli.domain.Tpekerjaan" />
+		<mapping class="com.sds.hakli.domain.Ttransfer" />
 		
 		<mapping class="com.sds.hakli.domain.Tp2kb" />
 		<mapping class="com.sds.hakli.domain.Tp2kbbook" />

@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
@@ -43,6 +44,7 @@ import com.sds.hakli.dao.MfeeDAO;
 import com.sds.hakli.domain.Mcharge;
 import com.sds.hakli.domain.Mfee;
 import com.sds.hakli.domain.Tanggota;
+import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -80,6 +82,8 @@ public class ChargeVm {
 	private Grid gridIuran;
 	@Wire
 	private Grid gridP2kb;
+	@Wire
+	private Grid gridFee;
 	@Wire
 	private Button btAddReg;
 	@Wire
@@ -321,9 +325,84 @@ public class ChargeVm {
 				}
 			});
 			
+			gridFee.setRowRenderer(new RowRenderer<Mfee>() {
+
+				@Override
+				public void render(Row row, Mfee data, int index) throws Exception {
+					row.getChildren().add(new Label(AppData.getInvoiceType(data.getFeetype())));
+					Decimalbox feePusat = new Decimalbox();
+					feePusat.setValue(data.getFeepusat());
+					feePusat.setFormat("#,##0");
+					feePusat.setMaxlength(11);
+					feePusat.setStyle("text-align: right");
+					row.getChildren().add(feePusat);
+					Decimalbox feeProv = new Decimalbox();
+					feeProv.setValue(data.getFeeprov());
+					feeProv.setFormat("#,##0");
+					feeProv.setMaxlength(11);
+					feeProv.setStyle("text-align: right");
+					row.getChildren().add(feeProv);
+					Decimalbox feeKab = new Decimalbox();
+					feeKab.setValue(data.getFeekab());
+					feeKab.setFormat("#,##0");
+					feeKab.setMaxlength(11);
+					feeKab.setStyle("text-align: right");
+					row.getChildren().add(feeKab);
+					Decimalbox feeTotal = new Decimalbox();
+					BigDecimal total = doCalTotalFee(data.getFeepusat(), data.getFeeprov(), data.getFeekab());
+					feeTotal.setValue(total);
+					feeTotal.setFormat("#,##0");
+					feeTotal.setMaxlength(11);
+					feeTotal.setStyle("text-align: right");
+					feeTotal.setReadonly(true);
+					row.getChildren().add(feeTotal);
+					
+					feePusat.addEventListener(Events.ON_CHANGE, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							BigDecimal total = doCalTotalFee(feePusat.getValue(), feeProv.getValue(), feeKab.getValue());
+							feeTotal.setValue(total);
+						}
+					});
+					feeProv.addEventListener(Events.ON_CHANGE, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							BigDecimal total = doCalTotalFee(feePusat.getValue(), feeProv.getValue(), feeKab.getValue());
+							feeTotal.setValue(total);
+						}
+					});
+					feeKab.addEventListener(Events.ON_CHANGE, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							BigDecimal total = doCalTotalFee(feePusat.getValue(), feeProv.getValue(), feeKab.getValue());
+							feeTotal.setValue(total);
+						}
+					});
+					
+					Button btSave = new Button();
+					btSave.setIconSclass("z-icon-save");
+					btSave.setSclass("btn btn-primary btn-sm");
+					btSave.setAutodisable("self");
+					btSave.setTooltiptext("Simpan");
+					btSave.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							doSaveFeeDisburse((Mfee) row.getAttribute("obj"), feePusat.getValue(), feeProv.getValue(), feeKab.getValue());
+						}
+					});
+					row.getChildren().add(btSave);
+					row.setAttribute("obj", data);
+				}
+			});
+			
 			doLoadReg();
 			doLoadIuran();
 			doLoadP2kb();
+			doLoadFee();
 			
 			List<Mfee> fees = feeDao.listAll();
 			if (fees.size() == 0)
@@ -358,6 +437,14 @@ public class ChargeVm {
 		try {
 			totalp2kb = new BigDecimal(0);
 			gridP2kb.setModel(new ListModelList<>(chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_P2KB + "'", "mchargepk")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void doLoadFee() {
+		try {
+			gridFee.setModel(new ListModelList<>(feeDao.listByFilter("0=0", "feetype")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -621,6 +708,14 @@ public class ChargeVm {
 		};
 	}
 	
+	public BigDecimal doCalTotalFee(BigDecimal pusat, BigDecimal prov, BigDecimal kab) {
+		BigDecimal total = new BigDecimal(0);
+		total = pusat != null ? total.add(pusat) : total.add(new BigDecimal(0));
+		total = prov != null ? total.add(prov) : total.add(new BigDecimal(0));
+		total = kab != null ? total.add(kab) : total.add(new BigDecimal(0));
+		return total;
+	}
+	
 	@Command
 	@NotifyChange("totalfeepercent")
 	public void doTotalpercent(@BindingParam("item") Mfee obj) {
@@ -670,6 +765,28 @@ public class ChargeVm {
 		} else {
 			Messagebox.show("Total % harus 100%", WebApps.getCurrent().getAppName(),
 					Messagebox.OK, Messagebox.EXCLAMATION);
+		}
+	}
+	
+	public void doSaveFeeDisburse(Mfee objFee, BigDecimal pusat, BigDecimal prov, BigDecimal kab ) {
+		Session session = StoreHibernateUtil.openSession();
+		Transaction trx = null;
+		try {
+			trx = session.beginTransaction();
+			objFee.setFeepusat(pusat);
+			objFee.setFeeprov(prov);
+			objFee.setFeekab(kab);
+			objFee.setLastupdated(new Date());
+			objFee.setUpdatedby(oUser.getNoanggota());
+			feeDao.save(session, objFee);
+			trx.commit();
+			Clients.showNotification("Pengaturan nilai distrubsi fee berhasil disimpan", "info", null, "middle_center", 1500);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(),
+					Messagebox.OK, Messagebox.ERROR);
+		} finally {
+			session.close();
 		}
 	}
 

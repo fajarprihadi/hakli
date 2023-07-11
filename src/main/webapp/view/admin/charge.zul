@@ -270,20 +270,21 @@
 								Pengaturan Distribusi Fee
 							</n:span>
 						</caption>
-						<grid>
+						<grid id="gridFee">
 							<columns>
-								<column label="Pusat (%)"
+								<column label="Tipe" />
+								<column label="Pusat"
 									align="center" />
-								<column label="Provinsi (%)"
+								<column label="Provinsi"
 									align="center" />
-								<column label="Kabupaten (%)"
+								<column label="Kabupaten"
 									align="center" />
-								<column label="Total (%)"
+								<column label="Total"
 									align="center" />
 								<column label="Aksi" align="center" />
 							</columns>
 							<rows>
-								<row>
+								<!-- <row>
 									<decimalbox value="@bind(g.feepusat)" width="100%"
 										style="text-align: right" onChange="@command('doTotalpercent', item=g)" />
 									<decimalbox value="@bind(g.feeprov)" width="100%"
@@ -296,12 +297,12 @@
 										iconSclass="z-icon-save" label="Simpan" autodisable="self"
 										sclass="btn btn-primary btn-sm"
 										onClick="@command('doSaveFee')" />
-								</row>
+								</row> -->
 							</rows>
 						</grid>
 					</groupbox>
 					<separator />
-					<groupbox mold="3d" closable="false">
+					<!-- <groupbox mold="3d" closable="false">
 						<caption>
 							<n:span class="h5 fw-bold mb-0">
 								<n:i class="fas fa-cog"></n:i>
@@ -343,7 +344,7 @@
 								</row>
 							</rows>
 						</grid>
-					</groupbox>
+					</groupbox> -->
 				</div>
 			</n:div>
 		</div>

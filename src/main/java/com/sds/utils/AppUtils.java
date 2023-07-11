@@ -61,6 +61,12 @@ public class AppUtils {
 	public static final String SYSPARAM_BRIVA_PATH_UPDATEVA = "BRIVA_PATH_UPDATEVA";
 	public static final String SYSPARAM_BRIVA_PATH_REPORT = "BRIVA_PATH_REPORT";
 	
+	public static final String SYSPARAM_BRIFT_CONSUMER_KEY = "BRIFT_CONSUMER_KEY";
+	public static final String SYSPARAM_BRIFT_CONSUMER_SECRET = "BRIFT_CONSUMER_SECRET";
+	public static final String SYSPARAM_BRIFT_PATH_ACCOUNT = "BRIFT_PATH_ACCOUNT";
+	public static final String SYSPARAM_BRIFT_PATH_TRANSFER = "BRIFT_PATH_TRANSFER";
+	public static final String SYSPARAM_BRIFT_PATH_CHECKSTATUS = "BRIFT_PATH_CHECKSTATUS";
+	
 	public static final String SYSPARAM_CALLBACK_PATH = "CALLBACK_PATH";
 	public static final String SYSPARAM_CALLBACK_URL = "CALLBACK_URL";
 	

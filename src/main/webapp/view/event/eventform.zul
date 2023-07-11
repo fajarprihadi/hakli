@@ -92,6 +92,28 @@
 						</vlayout>
 					</row>
 					<row>
+						<label />
+						<vlayout>
+							<checkbox id="chkSharefee" label="Sharing Fee" onCheck="@command('doCheckSharefee', ischeck=self.checked)" />
+							<grid id="gridSharefee">
+								<columns>
+									<column label="Pusat" align="center" />
+									<column label="Provinsi" align="center" />
+									<column label="Kabupaten/Kota" align="center" />
+								</columns>
+								<rows>
+									<row>
+										<decimalbox value="@bind(e.feepusat)" format="#,##0" maxlength="11" width="100%" style="text-align:right" />
+										<decimalbox value="@bind(e.feeprov)" format="#,##0" maxlength="11" width="100%" style="text-align:right" />
+										<decimalbox value="@bind(e.feekab)" format="#,##0" maxlength="11" width="100%" style="text-align:right" />
+									</row>
+								</rows>
+							</grid>
+							<label style="color:gray"
+								value="@load(vmsgs['sharefee'])" />
+						</vlayout>
+					</row>
+					<row>
 						<button sclass="btn btn-info btn-sm"
 							label="Browse Gambar ..." upload="true,maxsize=10000"
 							onUpload="@command('doUploadPhoto', upEvent=event)"

@@ -201,7 +201,7 @@
 				<column label="Sekretaris 2" />
 				<column label="Bendahara 1" />
 				<column label="Bendahara 2" />
-				<column label="Aksi" align="center" width="120px" />
+				<column label="Aksi" align="center" width="170px" />
 			</columns>
 		</grid>
 

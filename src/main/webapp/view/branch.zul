@@ -21,7 +21,7 @@
 			<groupbox mold="3d">
 				<caption>
 					<n:span class="h5 fw-bold mb-0">
-						<n:i class="fas fa-user-tag"></n:i>
+						<n:i class="fas fa-university"></n:i>
 						Form Kabupaten/Kota
 					</n:span>
 				</caption>
@@ -226,7 +226,7 @@
 				<column label="Sekretaris 2" />
 				<column label="Bendahara 1" />
 				<column label="Bendahara 2" />
-				<column label="Aksi" align="center" width="120px" />
+				<column label="Aksi" align="center" width="170px" />
 			</columns>
 		</grid>
 
