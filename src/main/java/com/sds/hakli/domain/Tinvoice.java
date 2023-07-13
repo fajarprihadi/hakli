@@ -56,6 +56,13 @@ public class Tinvoice {
 
 	private String vaterminalid;
 	
+	private String istrfprov = "N";
+	
+	private Date trfprovtime;
+	
+	private String istrfkab = "N";
+	
+	private Date trfkabtime;
 	
 	@Id
 	@SequenceGenerator(name = "tinvoice_seq", sequenceName = "tinvoice_seq", allocationSize = 1)
@@ -225,6 +232,40 @@ public class Tinvoice {
 
 	public void setVaterminalid(String vaterminalid) {
 		this.vaterminalid = vaterminalid;
+	}
+
+	public String getIstrfprov() {
+		return istrfprov;
+	}
+
+	public void setIstrfprov(String istrfprov) {
+		this.istrfprov = istrfprov;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getTrfprovtime() {
+		return trfprovtime;
+	}
+
+	public void setTrfprovtime(Date trfprovtime) {
+		this.trfprovtime = trfprovtime;
+	}
+
+	public String getIstrfkab() {
+		return istrfkab;
+	}
+
+	public void setIstrfkab(String istrfkab) {
+		this.istrfkab = istrfkab;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getTrfkabtime() {
+		return trfkabtime;
+	}
+
+	public void setTrfkabtime(Date trfkabtime) {
+		this.trfkabtime = trfkabtime;
 	}
 
 }

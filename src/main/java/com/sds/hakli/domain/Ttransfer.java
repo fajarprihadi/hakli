@@ -48,6 +48,8 @@ public class Ttransfer {
 	
 	private String journalseq;
 	
+	private String trfto;
+	
 	@Id
 	@SequenceGenerator(name = "ttransfer_seq", sequenceName = "ttransfer_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ttransfer_seq")
@@ -183,6 +185,15 @@ public class Ttransfer {
 
 	public void setJournalseq(String journalseq) {
 		this.journalseq = journalseq;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getTrfto() {
+		return trfto;
+	}
+
+	public void setTrfto(String trfto) {
+		this.trfto = trfto;
 	}
 
 	

@@ -1,0 +1,168 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winInvoiceList" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardPinbukVm')">
+		<caption>
+			<n:i class="fas fa-file-invoice"></n:i>
+			<n:span>Pemindahbukuan</n:span>
+		</caption>
+		<div id="divHead">
+			<div align="center">
+				<label value="@load(vm.period)" style="font-size: 20px" />
+			</div>
+			<n:hr />
+			<div class="row" align="center">
+				<div class="col-md-4 col-sm-4">
+					<div class="card text-white bg-primary mb-3"
+						style="max-width: 18rem;">
+						<div class="card-header">
+							<n:h5 class="card-title">Total Pinbuk</n:h5>
+						</div>
+						<div class="card-body">
+							<hlayout>
+								<n:h5>Rp.</n:h5>
+								<label sclass="card-text"
+									value="@load(vm.totalpinbuk) @converter('formatedNumber', format='###,##0')"
+									style="font-size: 20px" />
+							</hlayout>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4 col-sm-4">
+					<div class="card text-white bg-success mb-3"
+						style="max-width: 18rem;">
+						<div class="card-header">
+							<n:h5 class="card-title">
+								Pinbuk Provinsi
+							</n:h5>
+						</div>
+						<div class="card-body">
+							<hlayout>
+								<n:h5>Rp.</n:h5>
+								<label sclass="card-text"
+									value="@load(vm.totalpinbukprov) @converter('formatedNumber', format='###,##0')"
+									style="font-size: 20px" />
+							</hlayout>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4">
+					<div class="card text-white bg-warning mb-3"
+						style="max-width: 18rem;">
+						<div class="card-header">
+							<n:h5 class="card-title">
+								Pinbuk Kabupaten/Kota
+							</n:h5>
+						</div>
+						<div class="card-body">
+							<hlayout>
+								<n:h5>Rp.</n:h5>
+								<label sclass="card-text"
+									value="@load(vm.totalpinbukkab) @converter('formatedNumber', format='###,##0')"
+									style="font-size: 20px" />
+							</hlayout>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<groupbox id="gbSearch" mold="3d">
+			<caption label="Pencarian" iconSclass="z-icon-search" />
+			<grid>
+				<columns>
+					<column width="25%" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="Tipe Tagihan" />
+						<combobox id="cbInvoicetype"
+							selectedItem="@bind(vm.invoicetype)">
+							<comboitem label="Pendaftaran" value="01" />
+							<comboitem label="Iuran" value="02" />
+							<comboitem label="Event" value="03" />
+							<comboitem label="Rekomendasi STR"
+								value="04" />
+						</combobox>
+					</row>
+					<row>
+						<label value="Kode Tagihan" />
+						<textbox value="@bind(vm.invno)" maxlength="30" />
+					</row>
+					<row>
+						<label value="No Rekening Tujuan" />
+						<textbox value="@bind(vm.benefacc)" id="tbBenefAcc"
+							maxlength="20" />
+					</row>
+					<row>
+						<label value="Status Pemindahbukuan" />
+						<combobox id="cbStatus"
+							selectedItem="@bind(vm.status)">
+							<comboitem label="Sukses" value="Y" />
+							<comboitem label="Gagal" value="N" />
+						</combobox>
+					</row>
+					<row>
+						<label value="Periode Pemindahbukuan" />
+						<hlayout>
+							<datebox value="@bind(vm.begindate)"
+								format="dd-MM-yyyy" />
+							S/D
+							<datebox value="@bind(vm.enddate)"
+								format="dd-MM-yyyy" />
+						</hlayout>
+					</row>
+				</rows>
+				<foot>
+					<footer />
+					<footer>
+						<button label="Telusuri" autodisable="self"
+							iconSclass="z-icon-search" width="130px"
+							sclass="btn btn-success btn-sm" onClick="@command('doSearch')" />
+						<button label="Reset" autodisable="self"
+							iconSclass="z-icon-retweet" width="130px"
+							sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+					</footer>
+				</foot>
+			</grid>
+		</groupbox>
+		<separator />
+		<groupbox mold="3d">
+			<caption label="Daftar Pemindahbukuan"
+				iconSclass="z-icon-list" />
+			<div class="row">
+				<div class="col-md-10">
+					<paging id="paging" autohide="true" />
+				</div>
+				<div class="col-md-2" align="right">
+					<label value="${labels.common.totalrecord} :"
+						style="font-weight: bold" />
+					<label value="@load(vm.pageTotalSize)"
+						style="font-weight: bold" />
+				</div>
+			</div>
+			<grid id="grid" sizedByContent="true" span="true"
+				emptyMessage="${labels.common.emptymsg}">
+				<columns sizable="true">
+					<column label="No" align="right" width="40px" />
+					<column label="Tipe Tagihan" />
+					<column label="Nama" />
+					<column label="Kode Tagihan" align="center" />
+					<column label="Tanggal Bayar" align="center" />
+					<column label="No Referral" align="center" />
+					<column label="No Rekening Tujuan" />
+					<column label="Nama Rekening Tujuan" />
+					<column label="Bank Tujuan" />
+					<column label="Tingkat Tujuan" />
+					<column label="Nominal" align="right" />
+					<column label="Waktu" align="center" />
+					<column label="Keterangan" />
+				</columns>
+			</grid>
+		</groupbox>
+		<separator />
+	</window>
+	<separator />
+</zk>

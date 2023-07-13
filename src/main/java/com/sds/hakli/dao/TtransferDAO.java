@@ -1,5 +1,6 @@
 package com.sds.hakli.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class TtransferDAO {
     	if (filter == null || "".equals(filter))
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
-    	oList = session.createSQLQuery("select * from ttransfer  "
+    	oList = session.createSQLQuery("select * from ttransfer join Tinvoice on tinvoicefk = tinvoicepk "
 				+ "where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
 				.addEntity(Ttransfer.class).list();		
 
@@ -32,7 +33,7 @@ public class TtransferDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Ttransfer "
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Ttransfer join Tinvoice on tinvoicefk = tinvoicepk "
 				+ "where " + filter).uniqueResult().toString());
 		session.close();
         return count;
@@ -78,6 +79,17 @@ public class TtransferDAO {
 	
 	public void delete(Session session, Ttransfer oForm) throws HibernateException, Exception {
 		session.delete(oForm);    
+    }
+	
+	public BigDecimal sumAmount(String filter) throws Exception {
+		BigDecimal amount = new BigDecimal(0);
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(amount),0) from Ttransfer "
+				+ "where " + filter).uniqueResult();
+		session.close();
+        return amount;
     }
 
 }
