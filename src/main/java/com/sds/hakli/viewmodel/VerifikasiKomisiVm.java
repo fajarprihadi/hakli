@@ -187,7 +187,7 @@ public class VerifikasiKomisiVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "totalskp > 50 and status != 'C'";
+			filter = "totalskp > 50 and status = 'R' and ispaid = 'Y'";
 			orderby = "tglmulai";
 
 			if (nama != null && nama.trim().length() > 0)

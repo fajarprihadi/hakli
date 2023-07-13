@@ -8,11 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Transaction;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
@@ -22,6 +24,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
@@ -37,6 +40,7 @@ import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.AppUtils;
+import com.sds.utils.db.StoreHibernateUtil;
 
 public class BukuLogRequestVm {
 	private Session session = Sessions.getCurrent();
@@ -173,6 +177,44 @@ public class BukuLogRequestVm {
 							});
 						}
 
+					}
+				});
+
+				Button btDelete = new Button("Delete");
+				btDelete.setIconSclass("z-icon-trash");
+				btDelete.setSclass("btn btn-danger btn-sm");
+				btDelete.setAutodisable("self");
+				btDelete.setTooltiptext("Delete");
+				btDelete.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						Messagebox.show("Apakah anda yakin ingin menghapus data ini?", "Confirm Dialog",
+								Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+									@Override
+									public void onEvent(Event event) throws Exception {
+										if (event.getName().equals("onOK")) {
+											try {
+												org.hibernate.Session session = StoreHibernateUtil.openSession();
+												Transaction transaction = session.beginTransaction();
+
+												new Tp2kbbookDAO().delete(session, data);
+												transaction.commit();
+												session.close();
+
+												Clients.showNotification("Data berhasil dihapus.", "info", null,
+														"middle_center", 1500);
+
+												objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
+												pageTotalSize = objList.size();
+												grid.setModel(new ListModelList<>(objList));
+												doReset();
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
+										}
+									}
+								});
 					}
 				});
 
