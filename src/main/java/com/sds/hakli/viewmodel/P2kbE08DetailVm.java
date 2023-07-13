@@ -411,7 +411,7 @@ public class P2kbE08DetailVm {
 					+ p2kb.getTp2kbbook().getTglmulai() + "' and '" + p2kb.getTp2kbbook().getTglakhir() + "')";
 
 			if (approvetype != null && approvetype.equals("T"))
-				filter += " and status = 'WC'";
+				filter += " and status = 'W'";
 			else if (approvetype != null && approvetype.equals("K"))
 				filter += " and status = '" + AppUtils.STATUS_APPROVEDTIM + "'";
 
@@ -423,7 +423,6 @@ public class P2kbE08DetailVm {
 	}
 
 	@Command()
-	@NotifyChange("*")
 	public void doEdit(Tp2kbe08 obj) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("action", "edit");
