@@ -147,7 +147,9 @@ public class Tp2kbDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select coalesce(sum(totaltimapprove),0) from Tp2kb join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where " + filter)
+//		count = Integer.parseInt((String) session.createSQLQuery("select coalesce(sum(totaltimapprove),0) from Tp2kb join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where " + filter)
+//				.uniqueResult().toString());
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tp2kbbook join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where status = 'R' and " + filter)
 				.uniqueResult().toString());
 		session.close();
 		return count;

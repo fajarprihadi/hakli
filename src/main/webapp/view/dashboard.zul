@@ -31,7 +31,7 @@
 					</div>
 					<div class="card-body">
 						<label sclass="card-text"
-							value="@load(vm.totalkomisip2kb)" style="font-size: 20px" /> Kegiatan
+							value="@load(vm.totalkomisip2kb)" style="font-size: 20px" /> Buku Kegiatan
 					</div>
 				</div>
 				<separator />
