@@ -31,7 +31,7 @@
 				<column label="Tgl Mulai" align="center" />
 				<column label="Tgl Berakhir" align="center" />
 				<column label="Status" align="center" />
-				<column label="Total SKP" align="center" />
+				<column label="Total SKP" align="right" />
 				<column label="Action" align="center" />
 			</columns>
 		</grid>
