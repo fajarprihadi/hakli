@@ -220,6 +220,7 @@ public class BukuLogRequestVm {
 
 				hlayout.appendChild(btLog);
 				hlayout.appendChild(btEdit);
+				hlayout.appendChild(btDelete);
 				div.appendChild(hlayout);
 
 				row.getChildren().add(div);
