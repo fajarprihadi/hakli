@@ -92,7 +92,6 @@ public class UserInitializationVm {
 			}
 			Collections.sort(oList, Musergroupmenu.fieldComparator);
 			for (final Musergroupmenu obj : oList) {
-				System.out.println("Menu : " + obj.getMmenu().getMenuname());
 				if (!menugroup.equals(obj.getMmenu().getMenugroup())) {
 					idx++;
 					
