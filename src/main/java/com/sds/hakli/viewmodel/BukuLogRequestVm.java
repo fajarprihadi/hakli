@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Transaction;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -209,6 +210,7 @@ public class BukuLogRequestVm {
 												pageTotalSize = objList.size();
 												grid.setModel(new ListModelList<>(objList));
 												doReset();
+												BindUtils.postNotifyChange(null, null, BukuLogRequestVm.this, "*");
 											} catch (Exception e) {
 												e.printStackTrace();
 											}
