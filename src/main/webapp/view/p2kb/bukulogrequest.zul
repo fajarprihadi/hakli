@@ -22,17 +22,17 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
+			sizedByContent="true" span="true" mold="paging" pageSize="20"
+			pagingPosition="both">
 			<columns>
-				<column label="${labels.common.no}" align="right"
-					width="40px" />
+				<column label="${labels.common.no}" align="right" />
 				<column label="Nomor STR" />
-				<column label="Tgl Mulai" align="center" width="150px" />
-				<column label="Tgl Berakhir" align="center"
-					width="150px" />
-				<column label="Status" width="150px" align="center" />
-				<column label="Total SKP" width="150px" align="center" />
-				<column label="Action" align="center" width="250px" />
+				<column label="Tgl Mulai" align="center" />
+				<column label="Tgl Berakhir" align="center" />
+				<column label="Status" align="center" />
+				<column label="Total SKP" align="center" />
+				<column label="Action" align="center" />
 			</columns>
 		</grid>
 
