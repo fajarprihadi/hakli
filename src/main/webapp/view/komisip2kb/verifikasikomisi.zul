@@ -65,6 +65,7 @@
 				<column label="Tgl Mulai" align="center" />
 				<column label="Tgl Berakhir" align="center" />
 				<column label="Total SKP" align="right"/>
+				<column label="Status Bayar" align="center"/>
 			</columns>
 		</grid>
 		<separator />
