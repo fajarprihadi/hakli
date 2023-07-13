@@ -13,6 +13,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -31,6 +32,8 @@ import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
@@ -53,6 +56,10 @@ public class EventFormVm {
 	private Window winEventform;
 	@Wire
 	private Image photo;
+	@Wire
+	private Grid gridSharefee;
+	@Wire
+	private Checkbox chkSharefee;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tevent obj) {
@@ -62,12 +69,23 @@ public class EventFormVm {
 			isInsert = false;
 			objForm = obj;
 			photo.setSrc(AppUtils.PATH_EVENT + "/" + objForm.getEventimg());
+			chkSharefee.setChecked(objForm.getIssharefee() != null && objForm.getIssharefee().equals("Y") ? true : false);
 		}
+		doCheckSharefee(objForm.getIssharefee() != null && objForm.getIssharefee().equals("Y") ? true : false);
 	}
 	
 	public void doReset() {
 		isInsert = true;
 		objForm = new Tevent();
+	}
+	
+	@Command
+	public void doCheckSharefee(@BindingParam("ischeck") Boolean ischeck) {
+		if (ischeck) {
+			gridSharefee.setVisible(true);
+		} else {
+			gridSharefee.setVisible(false);
+		}
 	}
 	
 	@Command
@@ -114,6 +132,12 @@ public class EventFormVm {
 				}
 			}
 			
+			objForm.setIssharefee(chkSharefee.isChecked() == true ? "Y" : "N");
+			if (!chkSharefee.isChecked()) {
+				objForm.setFeepusat(null);
+				objForm.setFeeprov(null);
+				objForm.setFeekab(null);
+			}
 			dao.save(session, objForm);
 			trx.commit();
 			
@@ -168,6 +192,25 @@ public class EventFormVm {
 					this.addInvalidMessage(ctx, "closedate", Labels.getLabel("common.validator.empty"));
 				if (isInsert && media == null)
 					this.addInvalidMessage(ctx, "eventimg", Labels.getLabel("common.validator.empty"));
+				
+				if (chkSharefee.isChecked()) {
+					BigDecimal feepusat = (BigDecimal) ctx.getProperties("feepusat")[0].getValue();
+					if (feepusat == null)
+						this.addInvalidMessage(ctx, "sharefee", Labels.getLabel("common.validator.empty"));
+					BigDecimal feeprov = (BigDecimal) ctx.getProperties("feeprov")[0].getValue();
+					if (feeprov == null)
+						this.addInvalidMessage(ctx, "sharefee", Labels.getLabel("common.validator.empty"));
+					BigDecimal feekab = (BigDecimal) ctx.getProperties("feekab")[0].getValue();
+					if (feekab == null)
+						this.addInvalidMessage(ctx, "sharefee", Labels.getLabel("common.validator.empty"));
+					
+					if (eventprice != null && feepusat != null && feeprov != null && feekab != null) {
+						if (eventprice.compareTo(feepusat.add(feeprov).add(feekab)) != 0) {
+							this.addInvalidMessage(ctx, "sharefee", "Jumlah Sharing Fee tidak sama dengan Jumlah Biaya Pendaftaran");
+						}
+					}
+				}
+				
 			}
 		};
 	}

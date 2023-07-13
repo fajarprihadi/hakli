@@ -16,10 +16,13 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Html;
 
 import com.sds.hakli.dao.MusergroupmenuDAO;
+import com.sds.hakli.dao.TanggotarolesDAO;
 import com.sds.hakli.domain.Musergroupmenu;
 import com.sds.hakli.domain.Tanggota;
+import com.sds.hakli.domain.Tanggotaroles;
 import com.sds.utils.AppUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +85,12 @@ public class UserInitializationVm {
 			List<Musergroupmenu> oList = new MusergroupmenuDAO().listByFilter("musergroup.musergrouppk = "
 					+ oUser.getMusergroup().getMusergrouppk(),
 					"mmenu.menuorderno, mmenu.menuname");
-
+			for (Tanggotaroles roles: new TanggotarolesDAO().listByFilter("tanggota.tanggotapk = " + oUser.getTanggotapk(), "tanggotarolespk")) {
+				oList.addAll(new MusergroupmenuDAO().listByFilter("musergroup.musergrouppk = "
+						+ roles.getMusergroup().getMusergrouppk(),
+						"mmenu.menuorderno, mmenu.menuname"));
+			}
+			Collections.sort(oList, Musergroupmenu.fieldComparator);
 			for (final Musergroupmenu obj : oList) {
 				if (!menugroup.equals(obj.getMmenu().getMenugroup())) {
 					idx++;

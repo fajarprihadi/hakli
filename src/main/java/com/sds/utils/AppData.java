@@ -42,6 +42,16 @@ public class AppData {
 				bean.setBriva_pathupdateva(obj.getParamvalue());
 			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIVA_PATH_REPORT))
 				bean.setBriva_pathreport(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIFT_CONSUMER_KEY))
+				bean.setBrift_consumerkey(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIFT_CONSUMER_SECRET))
+				bean.setBrift_consumersecret(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIFT_PATH_ACCOUNT))
+				bean.setBrift_pathaccount(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIFT_PATH_TRANSFER))
+				bean.setBrift_pathtransfer(obj.getParamvalue());
+			else if (obj.getParamcode().equals(AppUtils.SYSPARAM_BRIFT_PATH_CHECKSTATUS))
+				bean.setBrift_pathcheckstatus(obj.getParamvalue());
 		}
 		return bean;
 	}

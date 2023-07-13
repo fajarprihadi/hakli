@@ -25,6 +25,26 @@ public class Mcabang {
 	
 	private String provcode;
 	
+	private String ketuaid;
+	
+	private String ketuanama;
+	
+	private String sekretaris1id;
+	
+	private String sekretaris1nama;
+	
+	private String sekretaris2id;
+	
+	private String sekretaris2nama;
+	
+	private String bendahara1id;
+	
+	private String bendahara1nama;
+	
+	private String bendahara2id;
+	
+	private String bendahara2nama;
+	
 	private Date createtime;
 	
 	private String createdby;
@@ -151,6 +171,96 @@ public class Mcabang {
 
 	public void setMprov(Mprov mprov) {
 		this.mprov = mprov;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getKetuaid() {
+		return ketuaid;
+	}
+
+	public void setKetuaid(String ketuaid) {
+		this.ketuaid = ketuaid;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getKetuanama() {
+		return ketuanama;
+	}
+
+	public void setKetuanama(String ketuanama) {
+		this.ketuanama = ketuanama;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getSekretaris1id() {
+		return sekretaris1id;
+	}
+
+	public void setSekretaris1id(String sekretaris1id) {
+		this.sekretaris1id = sekretaris1id;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getSekretaris1nama() {
+		return sekretaris1nama;
+	}
+
+	public void setSekretaris1nama(String sekretaris1nama) {
+		this.sekretaris1nama = sekretaris1nama;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getSekretaris2id() {
+		return sekretaris2id;
+	}
+
+	public void setSekretaris2id(String sekretaris2id) {
+		this.sekretaris2id = sekretaris2id;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getSekretaris2nama() {
+		return sekretaris2nama;
+	}
+
+	public void setSekretaris2nama(String sekretaris2nama) {
+		this.sekretaris2nama = sekretaris2nama;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getBendahara1id() {
+		return bendahara1id;
+	}
+
+	public void setBendahara1id(String bendahara1id) {
+		this.bendahara1id = bendahara1id;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getBendahara1nama() {
+		return bendahara1nama;
+	}
+
+	public void setBendahara1nama(String bendahara1nama) {
+		this.bendahara1nama = bendahara1nama;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getBendahara2id() {
+		return bendahara2id;
+	}
+
+	public void setBendahara2id(String bendahara2id) {
+		this.bendahara2id = bendahara2id;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getBendahara2nama() {
+		return bendahara2nama;
+	}
+
+	public void setBendahara2nama(String bendahara2nama) {
+		this.bendahara2nama = bendahara2nama;
 	}
 
 }

@@ -93,11 +93,21 @@
 					<n:td>
 						<combobox id="cbRole" readonly="true"
 						model="@load(vm.usergroup)" selectedItem="@bind(e.musergroup)"
-						width="100%">
+						width="100%" onChange="@command('doChangeRole', usergroup=e.musergroup.usergroupcode)" >
 						<template name="model" var="musergroup">
 							<comboitem label="@load(musergroup.usergroupname)" />
 						</template>
 					</combobox>
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						Kewenangan Tambahan
+					</n:td>
+					<n:td>
+						<checkbox id="chkVerReg" label="Verifikator Pendaftaran" /><separator />
+						<checkbox id="chkTimP2kb" label="Tim P2KB" /><separator />
+						<checkbox id="chkKomisiP2kb" label="Komisi P2KB" />
 					</n:td>
 				</n:tr>
 				<n:tr>

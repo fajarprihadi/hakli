@@ -1,0 +1,222 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winKabOrg" border="normal" width="85%"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.RegionOrgVm')"
+		validationMessages="@id('vmsgs')">
+		<caption>
+			<n:i class="fas fa-university"></n:i>
+			<n:span>HAKLI Provinsi</n:span>
+		</caption>
+		<div id="divForm" form="@id('e') @load(vm.objForm)">
+			<separator />
+			<groupbox mold="3d" closable="false">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-university"></n:i>
+						Susunan Organisasi HAKLI Provinsi
+					</n:span>
+				</caption>
+				<grid id="grid">
+					<columns>
+						<column width="25%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="Kode Provinsi" />
+							<label value="@load(e.provcode)" />
+						</row>
+						<row>
+							<label value="Provinsi" />
+							<label value="@load(e.provname)" />
+						</row>
+						<row spans="2">
+							<n:hr />
+						</row>
+						<row valign="top">
+							<label value="Ketua" style="font-weight: bold" />
+							<hlayout>
+								<image id="imgKetua" width="75px" />
+								<grid>
+									<columns>
+										<column width="80px" />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<label value="No Anggota" />
+											<label
+												value="@load(e.ketuaid)" />
+										</row>
+										<row>
+											<label value="Nama" />
+											<label
+												value="@load(e.ketuanama)" />
+										</row>
+										<row>
+											<label value="No HP" />
+											<label
+												value="@load(vm.hpKetua)" />
+										</row>
+									</rows>
+									<foot>
+										<footer span="2">
+											<button label="Detail" autodisable="self"
+												iconSclass="z-icon-eye" sclass="btn btn-primary btn-sm"
+												onClick="@command('doView', noanggota=e.ketuaid)" />
+										</footer>
+									</foot>
+								</grid>
+							</hlayout>
+						</row>
+						<row valign="top">
+							<label value="Sekretaris 1" style="font-weight: bold" />
+							<hlayout>
+								<image id="imgSekretaris1" width="75px" />
+								<grid>
+									<columns>
+										<column width="80px" />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<label value="No Anggota" />
+											<label
+												value="@load(e.sekretaris1id)" />
+										</row>
+										<row>
+											<label value="Nama" />
+											<label
+												value="@load(e.sekretaris1nama)" />
+										</row>
+										<row>
+											<label value="No HP" />
+											<label
+												value="@load(vm.hpSekretaris1)" />
+										</row>
+									</rows>
+									<foot>
+										<footer span="2">
+											<button label="Detail" autodisable="self"
+												iconSclass="z-icon-eye" sclass="btn btn-primary btn-sm"
+												onClick="@command('doView', noanggota=e.sekretaris1id)" />
+										</footer>
+									</foot>
+								</grid>
+							</hlayout>
+						</row>
+						<row valign="top">
+							<label value="Sekretaris 2" style="font-weight: bold" />
+							<hlayout>
+								<image id="imgSekretaris2" width="75px" />
+								<grid>
+									<columns>
+										<column width="80px" />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<label value="No Anggota" />
+											<label
+												value="@load(e.sekretaris2id)" />
+										</row>
+										<row>
+											<label value="Nama" />
+											<label
+												value="@load(e.sekretaris2nama)" />
+										</row>
+										<row>
+											<label value="No HP" />
+											<label
+												value="@load(vm.hpSekretaris2)" />
+										</row>
+									</rows>
+									<foot>
+										<footer span="2">
+											<button label="Detail" autodisable="self"
+												iconSclass="z-icon-eye" sclass="btn btn-primary btn-sm"
+												onClick="@command('doView', noanggota=e.sekretaris2id)" />
+										</footer>
+									</foot>
+								</grid>
+							</hlayout>
+						</row>
+						<row valign="top">
+							<label value="Bendahara 1" style="font-weight: bold" />
+							<hlayout>
+								<image id="imgBendahara1" width="75px" />
+								<grid>
+									<columns>
+										<column width="80px" />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<label value="No Anggota" />
+											<label
+												value="@load(e.bendahara1id)" />
+										</row>
+										<row>
+											<label value="Nama" />
+											<label
+												value="@load(e.bendahara1nama)" />
+										</row>
+										<row>
+											<label value="No HP" />
+											<label
+												value="@load(vm.hpBendahara1)" />
+										</row>
+									</rows>
+									<foot>
+										<footer span="2">
+											<button label="Detail" autodisable="self"
+												iconSclass="z-icon-eye" sclass="btn btn-primary btn-sm"
+												onClick="@command('doView', noanggota=e.bendahara1id)" />
+										</footer>
+									</foot>
+								</grid>
+							</hlayout>
+						</row>
+						<row valign="top">
+							<label value="Bendahara 2" style="font-weight: bold" />
+							<hlayout>
+								<image id="imgBendahara2" width="75px" />
+								<grid>
+									<columns>
+										<column width="80px" />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<label value="No Anggota" />
+											<label
+												value="@load(e.bendahara2id)" />
+										</row>
+										<row>
+											<label value="Nama" />
+											<label
+												value="@load(e.bendahara2nama)" />
+										</row>
+										<row>
+											<label value="No HP" />
+											<label
+												value="@load(vm.hpBendahara2)" />
+										</row>
+									</rows>
+									<foot>
+										<footer span="2">
+											<button label="Detail" autodisable="self"
+												iconSclass="z-icon-eye" sclass="btn btn-primary btn-sm"
+												onClick="@command('doView', noanggota=e.bendahara2id)" />
+										</footer>
+									</foot>
+								</grid>
+							</hlayout>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</div>
+		<separator />
+	</window>
+</zk>

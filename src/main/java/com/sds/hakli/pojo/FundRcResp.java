@@ -1,11 +1,11 @@
 package com.sds.hakli.pojo;
 
-public class FundInqResp {
+public class FundRcResp {
 
 	private String responseCode;
 	private String responseDescription;
 	private String errorDescription;
-	private FundData data;
+	private FundRcData data;
 
 	public String getResponseCode() {
 		return responseCode;
@@ -31,11 +31,11 @@ public class FundInqResp {
 		this.errorDescription = errorDescription;
 	}
 
-	public FundData getData() {
+	public FundRcData getData() {
 		return data;
 	}
 
-	public void setData(FundData data) {
+	public void setData(FundRcData data) {
 		this.data = data;
 	}
 

@@ -38,6 +38,14 @@ public class Tevent {
 	
 	private BigDecimal eventprice;
 	
+	private String issharefee;
+	
+	private BigDecimal feepusat;
+	
+	private BigDecimal feeprov;
+	
+	private BigDecimal feekab;
+	
 	@Id
 	@SequenceGenerator(name = "tevent_seq", sequenceName = "tevent_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tevent_seq")
@@ -136,6 +144,38 @@ public class Tevent {
 
 	public void setEventcity(String eventcity) {
 		this.eventcity = eventcity;
+	}
+
+	public String getIssharefee() {
+		return issharefee;
+	}
+
+	public void setIssharefee(String issharefee) {
+		this.issharefee = issharefee;
+	}
+
+	public BigDecimal getFeepusat() {
+		return feepusat;
+	}
+
+	public void setFeepusat(BigDecimal feepusat) {
+		this.feepusat = feepusat;
+	}
+
+	public BigDecimal getFeeprov() {
+		return feeprov;
+	}
+
+	public void setFeeprov(BigDecimal feeprov) {
+		this.feeprov = feeprov;
+	}
+
+	public BigDecimal getFeekab() {
+		return feekab;
+	}
+
+	public void setFeekab(BigDecimal feekab) {
+		this.feekab = feekab;
 	}
 	
 	

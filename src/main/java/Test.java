@@ -1,4 +1,5 @@
 import java.util.Base64;
+import java.util.Calendar;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,9 +14,18 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String encrypted = encode("nUmPkHfO5qnxgZ9a",
-				"path=/v1/briva/j104408/77777/1&verb=GET&token=Bearer OVk4G80sgJFVo4mdVP4m6ccDO2tZ&timestamp=2023-04-06T00:42:52.153Z&body=");
-		System.out.println(encrypted);
+//		String encrypted = encode("nUmPkHfO5qnxgZ9a",
+//				"path=/v1/briva/j104408/77777/1&verb=GET&token=Bearer OVk4G80sgJFVo4mdVP4m6ccDO2tZ&timestamp=2023-04-06T00:42:52.153Z&body=");
+//		System.out.println(encrypted);
+		
+		try {
+			String tablename = "api_hit_";
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, -1);
+			System.out.println(tablename + cal.get(Calendar.YEAR));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
