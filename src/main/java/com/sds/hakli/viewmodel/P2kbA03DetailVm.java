@@ -404,7 +404,7 @@ public class P2kbA03DetailVm {
 							+ p2kb.getTp2kbbook().getTglmulai() + "' and '" + p2kb.getTp2kbbook().getTglakhir() + "')";
 
 			if (approvetype != null && approvetype.equals("T"))
-				filter += " and status = 'WC'";
+				filter += " and status = 'W'";
 			else if (approvetype != null && approvetype.equals("K"))
 				filter += " and status = '" + AppUtils.STATUS_APPROVEDTIM + "'";
 			

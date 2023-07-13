@@ -33,7 +33,7 @@ public class AppUtils {
 	public static final String STATUS_APPROVEDKOMISI = "AK";
 	public static final String STATUS_REJECTEDKOMISI = "RK";
 	
-	public static final String STATUS_WAITCONFIRM = "WC";
+	public static final String STATUS_WAITCONFIRM = "W";
 
 	public static final String CHARGETYPE_REG = "01";
 	public static final String CHARGETYPE_IURAN = "02";

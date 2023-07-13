@@ -118,7 +118,7 @@ public class P2kbD01Vm {
 				objForm.setNilaiskp(new BigDecimal(2));
 				objForm.setCreatedby(anggota.getNoanggota());
 				objForm.setCreatetime(new Date());
-				objForm.setStatus("WC");
+				objForm.setStatus("W");
 
 				if (media != null) {
 					try {
