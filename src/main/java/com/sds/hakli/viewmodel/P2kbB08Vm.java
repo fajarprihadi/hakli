@@ -121,7 +121,7 @@ public class P2kbB08Vm {
 
 					objForm.setCreatedby(anggota.getNoanggota());
 					objForm.setCreatetime(new Date());
-					objForm.setStatus("WC");
+					objForm.setStatus("W");
 				} else
 					isInsert = false;
 
