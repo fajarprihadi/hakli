@@ -43,6 +43,11 @@ public class MailHandler implements Runnable {
 		MailBean mailbean = null;
 		try {
 			mailbean = AppData.getSmtpParam();	
+			mailbean.setSmtpname("103.235.74.158");
+			mailbean.setSmtpport(465);
+			mailbean.setMailid("admin@pphakli.org");
+			mailbean.setMailpassword("Qwert1234!");
+			mailbean.setFrom("HAKLI <admin@pphakli.org>");
 			try {
 				if (obj != null) {
 					File file = new File(bodymail);

@@ -57,6 +57,7 @@ public class BriapiFundTransferHandler implements InterruptableJob  {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
 			List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N')", "tinvoicepk");
+			//List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 1021", "tinvoicepk");
 			if (listInvoice.size() > 0) {
 				sourceacc = sysparamDao.getParamvalue(AppUtils.SYSPARAM_BANK_ACCNO);
 				if (sourceacc != null)
@@ -72,10 +73,12 @@ public class BriapiFundTransferHandler implements InterruptableJob  {
 				
 				if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
 					for (Tinvoice inv: listInvoice) {
-						if (inv.getIstrfprov().equals("N"))
-							doFundTransfer(inv, "PROV");
-						if (inv.getIstrfkab().equals("N"))
-							doFundTransfer(inv, "KAB");
+						doFundTransfer(inv, "PROV");
+						
+//						if (inv.getIstrfprov().equals("N"))
+//							doFundTransfer(inv, "PROV");
+//						if (inv.getIstrfkab().equals("N"))
+//							doFundTransfer(inv, "KAB");
 					}
 				}
 			}
@@ -122,6 +125,7 @@ public class BriapiFundTransferHandler implements InterruptableJob  {
 			FundInqReq inqReq = new FundInqReq();
 			inqReq.setSourceAccount(trf.getSourceacc());
 			inqReq.setBeneficiaryAccount(trf.getBenefacc());
+			//inqReq.setBeneficiaryAccount("188809999999919");
 			FundInqResp fundInq = briapi.fundInq(briapiToken.getAccess_token(), inqReq);
 			if (fundInq != null && fundInq.getResponseCode() != null && fundInq.getResponseCode().equals("0100")) {
 				
