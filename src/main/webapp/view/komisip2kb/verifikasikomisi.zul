@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winAnggotaRegList" border="normal"
+	<window id="winVerifikasikomisi" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.VerifikasiKomisiVm')">
 		<caption>
 			<n:i class="fas fa-check-double"></n:i>

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -102,6 +103,7 @@ public class VerifikasiP2kbDataVm {
 							@Override
 							public void onEvent(Event event) throws Exception {
 								doRefresh();
+								BindUtils.postNotifyChange(null, null, VerifikasiP2kbDataVm.this, "*");
 							}
 
 						});

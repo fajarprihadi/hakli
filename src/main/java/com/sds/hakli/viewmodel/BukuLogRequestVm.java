@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.hibernate.Transaction;
@@ -77,6 +78,7 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(AppUtils.getStatusLogLabel(data.getStatus())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
+				row.getChildren().add(new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ? "LUNAS" : "BELUM BAYAR"));
 
 				Div div = new Div();
 				Hlayout hlayout = new Hlayout();
@@ -219,10 +221,48 @@ public class BukuLogRequestVm {
 								});
 					}
 				});
+				
+				Button btLetter = new Button("Download");
+				btLetter.setIconSclass("z-icon-download");
+				btLetter.setSclass("btn btn-primary btn-sm");
+				btLetter.setAutodisable("self");
+				btLetter.setTooltiptext("Download surat rekomendasi");
+				btLetter.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						Map<String, Object> parameters = new HashMap<>();
+						List<Tp2kbbook>dataList = new ArrayList<>();
+						String currentdate = "";
+						
+						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getReviewtime());
+						
+						String nosurat = data.getLetterno();
+						dataList.add(data);
+						session.setAttribute("objList", dataList);
+						
+						parameters.put("NOSURAT", nosurat);
+						parameters.put("CURRENTDATE", currentdate);
+						parameters.put("TTD_KETUAUMUM",
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
+						parameters.put("LOGO",
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
+						
+						session.setAttribute("parameters", parameters);
+						session.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+								.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi.jasper"));
+						
+						Executions.getCurrent().sendRedirect("/view/jasperviewer.zul", "_blank");
+					}
+				});
 
 				hlayout.appendChild(btLog);
 				hlayout.appendChild(btEdit);
 				hlayout.appendChild(btDelete);
+				
+				if(data.getIspaid() != null && data.getIspaid().equals("Y"))
+					hlayout.appendChild(btLetter);
+				
 				div.appendChild(hlayout);
 
 				row.getChildren().add(div);
