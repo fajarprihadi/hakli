@@ -102,7 +102,8 @@ public class VerifikasiKomisiVm {
 				row.getChildren().add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglmulai())));
 				row.getChildren().add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglakhir())));
 				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
-				row.getChildren().add(new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ?  "LUNAS" : "BELUM BAYAR"));
+				row.getChildren().add(
+						new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ? "LUNAS" : "BELUM BAYAR"));
 			}
 		});
 	}
@@ -158,6 +159,8 @@ public class VerifikasiKomisiVm {
 										String nosurat = new TcounterengineDAO().generateSeqnum() + "/REKOM/PP-HAKLI/"
 												+ mapRomawi.get(month) + "/" + year;
 
+//										String nosurat = new TcounterengineDAO().getLastCounter(
+//												"/REKOM/PP-HAKLI/" + mapRomawi.get(month) + "/" + year, 5);
 										Tp2kbbook obj = entry.getValue();
 										obj.setLetterno(nosurat);
 										obj.setReviewerid(anggota.getNoanggota());
