@@ -1,0 +1,30 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winP2kbSumWaitTimKab" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.SumPendingRegKabVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Daftar Pending Verifikasi Pendaftaran</n:span>
+		</caption>
+		<hlayout>
+		<n:h5>Provinsi</n:h5> <label value="@load(vm.provname)" style="font-size: 18px; font-weight: bold" /></hlayout>
+		<grid id="grid" sizedByContent="true" span="true">
+			<columns>
+				<column label="No" align="right" />
+				<column label="Cabang" />
+				<column label="Total Pending" align="right" />
+			</columns>
+			<foot>
+				<footer />
+				<footer>
+					<label value="TOTAL" style="font-size: 14px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totaldata)"
+						format="#,##0" readonly="true"
+						style="text-align: right; font-size: 14px" />
+				</footer>
+			</foot>
+		</grid>
+	</window>
+</zk>

@@ -45,6 +45,7 @@ public class DashboardProvVm {
 	private long totalpop;
 	private String totalanggota;
 	private String totaltimp2kb;
+	private String totalregver;
 	private List<BranchTop> objList = new ArrayList<>();
 
 	@Wire
@@ -78,11 +79,12 @@ public class DashboardProvVm {
 		doChart();
 	}
 
-	@NotifyChange({"totalanggota", "totaltimp2kb"})
+	@NotifyChange({"totalanggota", "totaltimp2kb", "totalregver"})
 	public void doCount() {
 		try {
 			totalanggota = NumberFormat.getInstance().format(anggotaDao.pageCount("statusreg = '3' and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk()));
 			totaltimp2kb = NumberFormat.getInstance().format(timp2kbDao.getSumWaitTimP2KB("mprovfk = " + oUser.getMcabang().getMprov().getMprovpk()));
+			totalregver = NumberFormat.getInstance().format(anggotaDao.pageCount("statusreg = '1' and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,6 +162,14 @@ public class DashboardProvVm {
 
 	public void setTotaltimp2kb(String totaltimp2kb) {
 		this.totaltimp2kb = totaltimp2kb;
+	}
+
+	public String getTotalregver() {
+		return totalregver;
+	}
+
+	public void setTotalregver(String totalregver) {
+		this.totalregver = totalregver;
 	}
 
 }

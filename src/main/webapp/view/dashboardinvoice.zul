@@ -118,6 +118,7 @@
 							<comboitem label="Pendaftaran" value="01" />
 							<comboitem label="Iuran" value="02" />
 							<comboitem label="Event" value="03" />
+							<comboitem label="Rekomendasi STR" value="04" />
 						</combobox>
 					</row>
 					<row>
