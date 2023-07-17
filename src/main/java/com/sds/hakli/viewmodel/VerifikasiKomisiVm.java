@@ -208,12 +208,9 @@ public class VerifikasiKomisiVm {
 									mapRomawi = AppData.getAngkaRomawi();
 
 									for (Entry<Integer, Tp2kbbook> entry : mapData.entrySet()) {
-										String nosurat = new TcounterengineDAO().generateSeqnum() + "/REKOM/PP-HAKLI/"
-												+ mapRomawi.get(month) + "/" + year;
-
-//										String nosurat = new TcounterengineDAO().getLastCounter(
-//												"/REKOM/PP-HAKLI/" + mapRomawi.get(month) + "/" + year, 5);
 										Tp2kbbook obj = entry.getValue();
+										String nosurat = obj.getTanggota().getProvcode() + new TcounterengineDAO()
+												.getLetterRecomNo("/REKOM/PP-HAKLI/" + mapRomawi.get(month) + "/" + year, 4);
 										obj.setLetterno(nosurat);
 										obj.setReviewerid(anggota.getNoanggota());
 										obj.setReviewername(anggota.getNama());
