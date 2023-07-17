@@ -1,0 +1,78 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winMutasi" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.FtStatusVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Cek Status Pemindahbukuan</n:span>
+		</caption>
+		<div class="row">
+			<div class="col">
+				<textbox value="@bind(vm.noreferral)" maxlength="20"
+					placeholder="Nomor Referral" cols="20" />
+				<datebox value="@bind(vm.trxdate)" maxlength="10" format="dd-MM-yyyy"
+					placeholder="Tanggal Trx" cols="12" />
+				<button label="Cek" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doSubmit')" />
+				<button label="Reset" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+			</div>
+		</div>
+		<n:hr />
+		<groupbox id="gbResult" mold="3d" visible="false">
+			<caption label="Data Hasil Pengecekan Pemindahbukuan" />
+			<n:table class="table table-sm table-striped mb-0">
+				<n:tr>
+					<n:td width="30%">
+						<label value="Nomor Referral" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.data.noReferral)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Journal Seq" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.data.journalSeq)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Nominal" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.data.amount)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Remark" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.data.remark)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Status Transfer" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.data.internalTransferStatus)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Keterangan Status" />
+					</n:td>
+					<n:td>
+						<label value="@load(vm.obj.data.internalTransferDescription)" />
+					</n:td>
+				</n:tr>
+			</n:table>
+		</groupbox>
+		<separator />
+		
+	</window>
+</zk>

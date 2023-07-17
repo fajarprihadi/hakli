@@ -5,7 +5,7 @@
 <?link rel="stylesheet" type="text/css"	href="/mdb/css/mdb.min.css" ?>
 <zk xmlns:n="native">
 	<window id="winRegInit"
-		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.RegInitVm')">
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.RegUpdateVaVm')">
 		<!-- Section: Design Block -->
 		<n:section class="text-center">
 			<!-- Background image -->
@@ -36,29 +36,25 @@
 
 					<div class="row d-flex justify-content-center">
 						<div class="col-lg-8">
-							<n:h2 class="fw-bold mb-5">
-								Pendaftaran Anggota HAKLI
-							</n:h2>
+							<n:h3 class="fw-bold mb-5">
+								Permintaan Perpanjangan Tagihan Administrasi Pendaftaran
+							</n:h3>
 							<n:form>
 
 								<!-- Email input -->
 								<div class="form mb-4">
 									<textbox value="@bind(vm.nik)" onOK="@command('doSubmit')"
-										placeholder="Input NIK Anda untuk memulai pendaftaran"
+										placeholder="Input NIK Anda untuk permintaan perpanjangan tagihan"
 										sclass="form-control form-control-lg" />
 								</div>
 								
-								<n:p><n:em><checkbox id="chkSisdmk" /> Jika data Anda sudah terdaftar di SISDMK, maka sistem HAKLI akan secara otomatis mengambil data Anda dari SISDMK untuk membantu Anda melengkapi data pendaftaran pada sistem HAKLI.</n:em></n:p>
-
 								<!-- Submit button -->
-								<button label="Submit"
+								<button label="Submit" id="btSubmit"
 									onClick="@command('doSubmit')" autodisable="self"
 									class="btn btn-primary btn-block mb-4">
 								</button>
-								<n:hr/>
-								<n:p class="mb-5 pb-lg-2" style="color: #393f81;">Sudah mendaftar tapi tagihan kadaluarsa? <n:a href="/hakli/regupdateva.zul"
-											style="color: #393f81;">Klik untuk perpanjangan tagihan</n:a></n:p>
 								
+								<div id="divInfo" />
 							</n:form>
 						</div>
 					</div>
