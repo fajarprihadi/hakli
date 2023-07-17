@@ -126,5 +126,34 @@ public class TanggotaDAO {
 		session.close();
 		return oList;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<BranchTop> listSumPendingReg(String filter) throws Exception {
+		List<BranchTop> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, COUNT(*) AS TOTAL FROM TANGGOTA " + 
+				"JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROV ON MPROVFK = MPROVPK " +
+				"WHERE STATUSREG = '1' GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY COUNT(*) DESC").addEntity(BranchTop.class)
+				.list();
+		session.close();
+		return oList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<BranchTop> listSumPendingRegKab(String filter) throws Exception {
+		List<BranchTop> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT MCABANGPK AS ID, CABANG AS NAME, COUNT(*) AS TOTAL FROM TANGGOTA " + 
+				"JOIN MCABANG ON MCABANGFK = MCABANGPK " +
+				"WHERE STATUSREG = '1' AND " + filter + " " + 
+				"GROUP BY MCABANGPK, CABANG ORDER BY COUNT(*) DESC").addEntity(BranchTop.class)
+				.list();
+		session.close();
+		return oList;
+	}
 
 }

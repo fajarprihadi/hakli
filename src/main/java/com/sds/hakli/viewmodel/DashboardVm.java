@@ -44,6 +44,7 @@ public class DashboardVm {
 	private String totalanggota;
 	private String totalkomisip2kb;
 	private String totaltimp2kb;
+	private String totalregver;
 	private List<BranchTop> objList = new ArrayList<>();
 	private List<BranchTop> objListTopTen = new ArrayList<>();
 
@@ -105,12 +106,13 @@ public class DashboardVm {
 		doChart();
 	}
 
-	@NotifyChange({"totalanggota", "totaltimp2kb", "totalkomisip2kb"})
+	@NotifyChange({"totalanggota", "totaltimp2kb", "totalkomisip2kb", "totalregver"})
 	public void doCount() {
 		try {
 			totalanggota = NumberFormat.getInstance().format(anggotaDao.pageCount("statusreg = '3'"));
 			totalkomisip2kb = NumberFormat.getInstance().format(p2kbDao.getSumWaitKomisiP2KB("0=0"));
 			totaltimp2kb = NumberFormat.getInstance().format(p2kbDao.getSumWaitTimP2KB("0=0"));
+			totalregver = NumberFormat.getInstance().format(anggotaDao.pageCount("statusreg = '1'"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -166,6 +168,19 @@ public class DashboardVm {
 			e.printStackTrace();
 		}
 	}
+	
+	@Command
+	public void doViewPendingReg() {
+		try {
+			Window win = (Window) Executions
+					.createComponents("/view/sumpendingreg.zul", null, null);
+			win.setClosable(true);
+			win.setWidth("85%");
+			win.doModal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public String getTotalanggota() {
 		return totalanggota;
@@ -197,6 +212,14 @@ public class DashboardVm {
 
 	public void setTotaltimp2kb(String totaltimp2kb) {
 		this.totaltimp2kb = totaltimp2kb;
+	}
+
+	public String getTotalregver() {
+		return totalregver;
+	}
+
+	public void setTotalregver(String totalregver) {
+		this.totalregver = totalregver;
 	}
 
 }

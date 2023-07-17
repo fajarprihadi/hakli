@@ -21,14 +21,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-public class MailSender {
+public class MailSender2 {
 
 	public static void sendSSLMessage(MailBean mailbean) throws MessagingException {
-		
-//		MailSSLSocketFactory sf = new MailSSLSocketFactory();
-//		sf.setTrustAllHosts(true); 
-//		properties.put("mail.smtp.ssl.trust", "*");
-//		properties.put("mail.smtp.ssl.socketFactory", sf);
 
 		//Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
 		boolean debug = false;

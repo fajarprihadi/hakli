@@ -49,6 +49,20 @@
 					</div>
 				</div>
 				<separator />
+				<div class="card text-white bg-info mb-3"
+					style="max-width: 18rem;">
+					<div class="card-header">
+						<n:h5 class="card-title">Pending Verifikasi Pendaftaran</n:h5>
+					</div>
+					<div class="card-body">
+						<label sclass="card-text"
+							value="@load(vm.totalregver)" style="font-size: 20px" /> Calon Anggota
+					</div>
+					<div class="card-footer">
+						<a onClick="@command('doViewPendingReg')" style="color: white">Tampilkan</a>
+					</div>
+				</div>
+				<separator />
 				<n:h6>
 					10 Cabang Dengan Anggota Terbanyak
 				</n:h6>
