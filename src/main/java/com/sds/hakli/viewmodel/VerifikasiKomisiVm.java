@@ -19,6 +19,7 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -33,6 +34,7 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
+import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
@@ -60,51 +62,102 @@ public class VerifikasiKomisiVm {
 	private Integer pageTotalSize;
 	private Map<Integer, Tp2kbbook> mapData = new HashMap<>();
 
+	private SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+
 	@Wire
 	private Grid grid;
+	@Wire
+	private Window winVerifikasikomisi;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
+		anggota = (Tanggota) zkSession.getAttribute("anggota");
 
-		doReset();
-		grid.setRowRenderer(new RowRenderer<Tp2kbbook>() {
+		try {
+			Map<String, Object> map = new HashMap<>();
+			Window win = new Window();
+			if (anggota.getPeriodekta() != null) {
+				Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+				Date d2 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(anggota.getPeriodekta()));
 
-			@Override
-			public void render(Row row, Tp2kbbook data, int index) throws Exception {
-				row.getChildren().add(new Label(String.valueOf(index + 1)));
-				Checkbox check = new Checkbox();
-				check.setAttribute("obj", data);
-				check.addEventListener(Events.ON_CHECK, new EventListener<Event>() {
+				if (d1.compareTo(d2) < 0) {
+					doReset();
+					grid.setRowRenderer(new RowRenderer<Tp2kbbook>() {
+
+						@Override
+						public void render(Row row, Tp2kbbook data, int index) throws Exception {
+							row.getChildren().add(new Label(String.valueOf(index + 1)));
+							Checkbox check = new Checkbox();
+							check.setAttribute("obj", data);
+							check.addEventListener(Events.ON_CHECK, new EventListener<Event>() {
+								@Override
+								public void onEvent(Event event) throws Exception {
+									Checkbox checked = (Checkbox) event.getTarget();
+									if (checked.isChecked()) {
+										if (data.getIspaid() != null && data.getIspaid().trim().equals("Y"))
+											mapData.put(data.getTp2kbbookpk(), data);
+										else {
+											check.setChecked(false);
+											Messagebox.show("Status belum melakukan pembayaran.");
+										}
+									} else {
+										mapData.remove(data.getTp2kbbookpk());
+									}
+								}
+							});
+							if (mapData.get(data.getTp2kbbookpk()) != null)
+								check.setChecked(true);
+
+							row.getChildren().add(check);
+							row.getChildren().add(new Label(data.getNostr()));
+							row.getChildren().add(new Label(data.getTanggota().getMcabang().getCabang()));
+							row.getChildren().add(new Label(data.getTanggota().getNoanggota()));
+							row.getChildren().add(new Label(data.getTanggota().getNama()));
+							row.getChildren()
+									.add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglmulai())));
+							row.getChildren()
+									.add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglakhir())));
+							row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
+							row.getChildren()
+									.add(new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ? "LUNAS"
+											: "BELUM BAYAR"));
+						}
+					});
+				} else {
+					win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+					win.setWidth("50%");
+					win.setClosable(true);
+					win.doModal();
+					win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+						@Override
+						public void onEvent(Event event) throws Exception {
+							winVerifikasikomisi.getChildren().clear();
+							winVerifikasikomisi.setBorder(false);
+							Executions.createComponents("/view/payment/payment.zul", winVerifikasikomisi, null);
+						}
+
+					});
+				}
+			} else {
+				win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+				win.setWidth("50%");
+				win.setClosable(true);
+				win.doModal();
+				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 					@Override
 					public void onEvent(Event event) throws Exception {
-						Checkbox checked = (Checkbox) event.getTarget();
-						if (checked.isChecked()) {
-							if (data.getIspaid() != null && data.getIspaid().trim().equals("Y"))
-								mapData.put(data.getTp2kbbookpk(), data);
-							else {
-								check.setChecked(false);
-								Messagebox.show("Status belum melakukan pembayaran.");
-							}
-						} else {
-							mapData.remove(data.getTp2kbbookpk());
-						}
+						winVerifikasikomisi.getChildren().clear();
+						winVerifikasikomisi.setBorder(false);
+						Executions.createComponents("/view/payment/payment.zul", winVerifikasikomisi, null);
 					}
-				});
-				if (mapData.get(data.getTp2kbbookpk()) != null)
-					check.setChecked(true);
 
-				row.getChildren().add(check);
-				row.getChildren().add(new Label(data.getNostr()));
-				row.getChildren().add(new Label(data.getTanggota().getMcabang().getCabang()));
-				row.getChildren().add(new Label(data.getTanggota().getNoanggota()));
-				row.getChildren().add(new Label(data.getTanggota().getNama()));
-				row.getChildren().add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglmulai())));
-				row.getChildren().add(new Label(new SimpleDateFormat("dd MMMMM yyyy").format(data.getTglakhir())));
-				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskp())));
-				row.getChildren().add(new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ?  "LUNAS" : "BELUM BAYAR"));
+				});
 			}
-		});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Command
@@ -155,10 +208,9 @@ public class VerifikasiKomisiVm {
 									mapRomawi = AppData.getAngkaRomawi();
 
 									for (Entry<Integer, Tp2kbbook> entry : mapData.entrySet()) {
-										String nosurat = new TcounterengineDAO().generateSeqnum() + "/REKOM/PP-HAKLI/"
-												+ mapRomawi.get(month) + "/" + year;
-
 										Tp2kbbook obj = entry.getValue();
+										String nosurat = obj.getTanggota().getProvcode() + new TcounterengineDAO()
+												.getLetterRecomNo("/REKOM/PP-HAKLI/" + mapRomawi.get(month) + "/" + year, 4);
 										obj.setLetterno(nosurat);
 										obj.setReviewerid(anggota.getNoanggota());
 										obj.setReviewername(anggota.getNama());
@@ -188,7 +240,7 @@ public class VerifikasiKomisiVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "totalskp > 50 and status = 'R' and ispaid = 'Y'";
+			filter = "totalskp > 50 and status = 'R'";
 			orderby = "tglmulai";
 
 			if (nama != null && nama.trim().length() > 0)

@@ -1,11 +1,14 @@
 package com.sds.hakli.viewmodel;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -37,7 +40,7 @@ import com.sds.hakli.domain.Vp2kb;
 public class VerifikasiP2kbVm {
 	private Session session = Sessions.getCurrent();
 	private Tanggota obj;
-	
+
 	private List<Vp2kb> objList = new ArrayList<>();
 
 	private String filter;
@@ -45,66 +48,115 @@ public class VerifikasiP2kbVm {
 
 	private String nama;
 	private Mprov region;
-	
+
 	private Integer pageTotalSize;
-	
+
+	private SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+
 	@Wire
 	private Grid grid;
+	@Wire
+	private Window winVerifikasip2kb;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
 		obj = (Tanggota) session.getAttribute("anggota");
-		
-		doReset();
-		grid.setRowRenderer(new RowRenderer<Vp2kb>() {
 
-			@Override
-			public void render(Row row, Vp2kb data, int index) throws Exception {
-				row.getChildren().add(new Label(String.valueOf(index + 1)));
-				row.getChildren().add(new Label(data.getCabang()));
-				row.getChildren().add(new Label(data.getNoanggota()));
-				A a = new A(data.getNama());
-				a.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+		try {
+			Map<String, Object> map = new HashMap<>();
+			Window win = new Window();
+			if (obj.getPeriodekta() != null) {
+				Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+				Date d2 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
 
+				if (d1.compareTo(d2) < 0) {
+					doReset();
+					grid.setRowRenderer(new RowRenderer<Vp2kb>() {
+
+						@Override
+						public void render(Row row, Vp2kb data, int index) throws Exception {
+							row.getChildren().add(new Label(String.valueOf(index + 1)));
+							row.getChildren().add(new Label(data.getCabang()));
+							row.getChildren().add(new Label(data.getNoanggota()));
+							A a = new A(data.getNama());
+							a.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+								@Override
+								public void onEvent(Event event) throws Exception {
+									Map<String, Object> map = new HashMap<>();
+									Window win = new Window();
+									map.put("obj", data);
+									win = (Window) Executions.createComponents("/view/timp2kb/verifikasip2kbdata.zul",
+											null, map);
+									win.setWidth("70%");
+									win.setClosable(true);
+									win.doModal();
+									win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+										@Override
+										public void onEvent(Event event) throws Exception {
+											doReset();
+											BindUtils.postNotifyChange(null, null, VerifikasiP2kbVm.this,
+													"pageTotalSize");
+										}
+
+									});
+								}
+							});
+							row.getChildren().add(a);
+							row.getChildren().add(new Label(data.getAlamat()));
+							row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalwaiting())));
+						}
+					});
+				} else {
+					win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+					win.setWidth("50%");
+					win.setClosable(true);
+					win.doModal();
+					win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+						@Override
+						public void onEvent(Event event) throws Exception {
+							winVerifikasip2kb.getChildren().clear();
+							winVerifikasip2kb.setBorder(false);
+							Executions.createComponents("/view/payment/payment.zul", winVerifikasip2kb, null);
+						}
+
+					});
+				}
+			} else {
+				win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+				win.setWidth("50%");
+				win.setClosable(true);
+				win.doModal();
+				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 					@Override
 					public void onEvent(Event event) throws Exception {
-						Map<String, Object> map = new HashMap<>();
-						Window win = new Window();
-						map.put("obj", data);
-						win = (Window) Executions.createComponents("/view/timp2kb/verifikasip2kbdata.zul", null, map);
-						win.setWidth("70%");
-						win.setClosable(true);
-						win.doModal();
-						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-							@Override
-							public void onEvent(Event event) throws Exception {
-								doReset();
-							}
-
-						});
+						winVerifikasip2kb.getChildren().clear();
+						winVerifikasip2kb.setBorder(false);
+						Executions.createComponents("/view/payment/payment.zul", winVerifikasip2kb, null);
 					}
+
 				});
-				row.getChildren().add(a);
-				row.getChildren().add(new Label(data.getAlamat()));
-				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalwaiting())));
 			}
-		});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
 			filter = "mcabangpk = " + obj.getMcabang().getMcabangpk();
 			orderby = "nama";
-			
-			if(nama != null && nama.trim().length() > 0)
+
+			if (nama != null && nama.trim().length() > 0)
 				filter += " and upper(nama) like '%" + nama.trim().toUpperCase() + "%'";
-			
-			if(region != null)
+
+			if (region != null)
 				filter += " ";
-			
+
 			objList = new Tp2kbDAO().listVerifikasiTim(filter, orderby);
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));
@@ -112,7 +164,7 @@ public class VerifikasiP2kbVm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Command
 	@NotifyChange("*")
 	public void doReset() {
@@ -122,8 +174,8 @@ public class VerifikasiP2kbVm {
 
 		doSearch();
 	}
-	
-	public ListModelList<Mprov> getRegionmodel(){
+
+	public ListModelList<Mprov> getRegionmodel() {
 		ListModelList<Mprov> lm = null;
 		try {
 			lm = new ListModelList<Mprov>(new MprovDAO().listAll());

@@ -218,4 +218,36 @@ public class TcounterengineDAO {
 		}		
 		return finalCounter;
 	}
+	
+	public String getLetterRecomNo(String counterName, int counter) throws Exception {
+		Integer lastCounter = 0;
+		String strCounter = "";
+		String finalCounter = "";
+		char[] fillUploadid = new char[counter];
+		Session session = StoreHibernateUtil.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query q = session
+					.createQuery("select lastcounter from Tcounterengine where countername = '" + counterName + "'");
+			lastCounter = (Integer) q.uniqueResult();
+			if (lastCounter != null) {
+				lastCounter++;
+				session.createSQLQuery("update Tcounterengine set lastcounter = lastcounter + 1 where countername = '"
+						+ counterName + "'").executeUpdate();
+			} else {
+				lastCounter = 1;
+				session.createSQLQuery("insert into Tcounterengine values ('" + counterName + "', " + lastCounter + ")")
+						.executeUpdate();
+			}
+			transaction.commit();
+			session.close();
+			Arrays.fill(fillUploadid, '0');
+			strCounter = new String(fillUploadid) + lastCounter;
+			finalCounter = strCounter.substring(strCounter.length()-counter, strCounter.length()) + counterName;
+		} catch (Exception e) {
+			transaction.rollback();
+			e.printStackTrace();
+		}
+		return finalCounter;
+	}
 }

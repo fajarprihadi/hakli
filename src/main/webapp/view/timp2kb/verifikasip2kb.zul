@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winAnggotaRegList" border="normal"
+	<window id="winVerifikasip2kb" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.VerifikasiP2kbVm')">
 		<caption>
 			<n:i class="fas fa-check"></n:i>
