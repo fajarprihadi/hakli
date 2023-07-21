@@ -109,6 +109,7 @@ public class BriapiFundTransferHandler implements InterruptableJob  {
 			trf.setFeetype("BEN");
 			//trf.setNoreferral(counterDao.generateSeqnum());
 			trf.setNoreferral("99999999999999999918");
+			//trf.setNoreferral("99999999999999999993");
 			trf.setTrxtime(new Date());
 			if (beneftype.equals("PROV")) {
 				trf.setBenefacc(inv.getTanggota().getMcabang().getMprov().getAccno());
@@ -125,9 +126,13 @@ public class BriapiFundTransferHandler implements InterruptableJob  {
 			FundInqReq inqReq = new FundInqReq();
 			inqReq.setSourceAccount(trf.getSourceacc());
 			inqReq.setBeneficiaryAccount(trf.getBenefacc());
-			//inqReq.setBeneficiaryAccount("188809999999919");
+			//inqReq.setSourceAccount("888801000157508");
+			//inqReq.setBeneficiaryAccount("888809999999918");
 			FundInqResp fundInq = briapi.fundInq(briapiToken.getAccess_token(), inqReq);
 			if (fundInq != null && fundInq.getResponseCode() != null && fundInq.getResponseCode().equals("0100")) {
+				
+				//trf.setSourceacc("888801000003301");
+				//trf.setBenefacc("888809999999993");
 				
 				FundTrfReq trfReq = new FundTrfReq();
 				trfReq.setSourceAccount(trf.getSourceacc());

@@ -43,8 +43,8 @@ public class MailHandler implements Runnable {
 		MailBean mailbean = null;
 		try {
 			mailbean = AppData.getSmtpParam();	
-			mailbean.setSmtpname("103.235.74.158");
-			mailbean.setSmtpport(465);
+			mailbean.setSmtpname("mail.bangzk.tech");
+			mailbean.setSmtpport(587);
 			mailbean.setMailid("admin@pphakli.org");
 			mailbean.setMailpassword("Qwert1234!");
 			mailbean.setFrom("HAKLI <admin@pphakli.org>");
@@ -97,7 +97,8 @@ public class MailHandler implements Runnable {
 			
 			mailbean.setAttachment(null);
 			mailbean.setFilename("");
-			MailSender.sendSSLMessage(mailbean);
+			//MailSender.sendSSLMessage(mailbean);
+			MailBlast.sendSSLMessage(mailbean);
 		} catch (MessagingException e) {
 			errormsg = e.getMessage();
 			e.printStackTrace();

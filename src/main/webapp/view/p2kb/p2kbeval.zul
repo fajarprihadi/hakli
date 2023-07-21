@@ -37,8 +37,14 @@
 						<label
 							value="Periode P2KB" />
 						<combobox id="cbPeriod" placeholder="Periode P2KB" readonly="true"
-							cols="50" selectedItem="@bind(vm.p2kbbook)">
+							cols="50" selectedItem="@bind(vm.p2kbbook)" onChange="@command('doSelectPeriod', p2kbbook=vm.p2kbbook)" >
 						</combobox>
+					</row>
+					<row>
+						<label
+							value="Keterangan" />
+						<label
+							value="@load(vm.keterangan)" style="font-size: 16px" />
 					</row>
 					<row>
 						<label />
@@ -64,7 +70,7 @@
 				<foot>
 					<footer />
 					<footer>
-						<button id="btSave" width="100%"
+						<button id="btSave" width="100%" disabled="true"
 							label="Generate Tagihan" autodisable="self"
 							sclass="btn btn-primary btn-sm" onClick="@command('doSave')" />
 					</footer>

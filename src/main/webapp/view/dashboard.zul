@@ -33,6 +33,9 @@
 						<label sclass="card-text"
 							value="@load(vm.totalkomisip2kb)" style="font-size: 20px" /> Buku Kegiatan
 					</div>
+					<div class="card-footer">
+						<a onClick="@command('doViewKomisiP2kb')" style="color: white">Tampilkan</a>
+					</div>
 				</div>
 				<separator />
 				<div class="card text-white bg-warning mb-3"

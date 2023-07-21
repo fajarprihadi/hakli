@@ -990,7 +990,7 @@ public class AnggotaFormVm {
 						String custcode_cabang = "0000" + pribadi.getMcabang().getKodecabang();
 						String custcode = custcode_cabang.substring(custcode_cabang.length() - 4,
 								custcode_cabang.length());
-						briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
+						briva.setCustCode(new TcounterengineDAO().getVaCounter());
 						briva.setKeterangan("Pendaftaran Anggota HAKLI");
 						briva.setNama(pribadi.getNama().trim().length() > 40 ? pribadi.getNama().trim().substring(0, 40) : pribadi.getNama().trim());
 						

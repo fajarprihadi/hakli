@@ -2,6 +2,7 @@ package com.sds.hakli.dao;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.hibernate.Query;
@@ -81,7 +82,7 @@ public class TcounterengineDAO {
 		return finalCounter;
 	}
 	
-	public String getVaCounter(String counterName) throws Exception {
+	public String getVaCounter() throws Exception {
 		Integer lastCounter = 0;
 		String strCounter = "";
 		String finalCounter = "";
@@ -89,6 +90,9 @@ public class TcounterengineDAO {
 		Session session = StoreHibernateUtil.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
+			String julianDay = "000" + Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+			
+			String counterName = new SimpleDateFormat("yy").format(new Date()) + julianDay.substring(julianDay.length()-3, julianDay.length());
 			Query q = session
 					.createQuery("select lastcounter from Tcounterengine where countername = 'VA" + counterName + "'");
 			lastCounter = (Integer) q.uniqueResult();

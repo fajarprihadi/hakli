@@ -157,10 +157,27 @@ public class DashboardVm {
 	}
 	
 	@Command
+	public void doViewKomisiP2kb() {
+		try {
+			Map<String, Object> map = new HashMap<>();
+			map.put("type", "komisi");
+			Window win = (Window) Executions
+					.createComponents("/view/p2kb/p2kbsumwaittim.zul", null, map);
+			win.setClosable(true);
+			win.setWidth("85%");
+			win.doModal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
 	public void doViewTimP2kb() {
 		try {
+			Map<String, Object> map = new HashMap<>();
+			map.put("type", "tim");
 			Window win = (Window) Executions
-					.createComponents("/view/p2kb/p2kbsumwaittim.zul", null, null);
+					.createComponents("/view/p2kb/p2kbsumwaittim.zul", null, map);
 			win.setClosable(true);
 			win.setWidth("85%");
 			win.doModal();

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+import com.sds.hakli.domain.BranchTop;
 import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -88,5 +89,34 @@ public class Tp2kbbookDAO {
 	public void delete(Session session, Tp2kbbook oForm) throws HibernateException, Exception {
 		session.delete(oForm);    
     }
+	
+	@SuppressWarnings("unchecked")
+	public List<BranchTop> listSumWaitKomisiP2KB(String filter) throws Exception {
+		List<BranchTop> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, COUNT(*) AS TOTAL FROM TP2KBBOOK " + 
+				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROV ON MPROVFK = MPROVPK " +
+				"WHERE STATUS = 'R' AND ISPAID = 'Y' GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY COUNT(*) DESC").addEntity(BranchTop.class)
+				.list();
+		session.close();
+		return oList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<BranchTop> listSumWaitKomisiP2KBKab(String filter) throws Exception {
+		List<BranchTop> oList = null;
+		if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+		session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("SELECT MCABANGPK AS ID, CABANG AS NAME, COUNT(*) AS TOTAL FROM TP2KBBOOK " + 
+				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK " +
+				"WHERE " + filter + " " + 
+				"GROUP BY MCABANGPK, CABANG ORDER BY COUNT(*) DESC").addEntity(BranchTop.class)
+				.list();
+		session.close();
+		return oList;
+	}
 
 }

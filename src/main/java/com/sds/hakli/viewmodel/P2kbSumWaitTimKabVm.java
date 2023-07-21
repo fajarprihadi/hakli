@@ -18,6 +18,7 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 
 import com.sds.hakli.dao.Tp2kbDAO;
+import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.BranchTop;
 
 public class P2kbSumWaitTimKabVm {
@@ -28,16 +29,24 @@ public class P2kbSumWaitTimKabVm {
 	private String provname;
 	private List<BranchTop> objList;
 	private long totaldata;
+	private String type;
+	private String title;
 	
 	@Wire
 	private Grid grid;
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("mprovpk") Integer mprovpk, 
-			@ExecutionArgParam("provname") String provname) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, 
+			@ExecutionArgParam("mprovpk") Integer mprovpk, 
+			@ExecutionArgParam("provname") String provname, @ExecutionArgParam("type") String type) {
 		Selectors.wireComponents(view, this, false);
 		this.mprovpk = mprovpk;
 		this.provname = provname;
+		this.type = type;
+		if (type.equals("komisi"))
+			title = "Daftar Pending Verifikasi Komisi P2KB";
+		else if (type.equals("tim"))
+			title = "Daftar Pending Verifikasi Tim P2KB";
 		grid.setRowRenderer(new RowRenderer<BranchTop>() {
 
 			@Override
@@ -55,7 +64,12 @@ public class P2kbSumWaitTimKabVm {
 	
 	public void refreshModel() {
 		try {
-			objList = oDao.listSumWaitTimP2KBKab("mprovfk = " + mprovpk);
+			if (type.equals("komisi")) {
+				objList = new Tp2kbbookDAO().listSumWaitKomisiP2KBKab("mprovfk = " + mprovpk);
+			} else if (type.equals("tim")) {
+				objList = oDao.listSumWaitTimP2KBKab("mprovfk = " + mprovpk);
+			}
+			
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,6 +98,14 @@ public class P2kbSumWaitTimKabVm {
 
 	public void setProvname(String provname) {
 		this.provname = provname;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

@@ -173,20 +173,6 @@ public class EventRegdoneVm {
 		TeventregDAO eventregDao = new TeventregDAO();
 		TinvoiceDAO invDao = new TinvoiceDAO();
 		try {
-			boolean isVaCreate = false;
-			boolean isVaUpdate = false;
-			if (obj.getTanggota().getVaevent() == null || obj.getTanggota().getVaevent().trim().length() == 0) {
-				isVaCreate = true;
-			} else {
-				if (obj.getTanggota().getVaeventstatus() == 1) {
-					isVaCreate = true;
-					isVaUpdate = false;
-				} else {
-					isVaCreate = false;
-					isVaUpdate = true;
-				}
-			}
-			
 			BriapiBean bean = AppData.getBriapibean();
 			BriApiExt briapi = new BriApiExt(bean);
 			BriApiToken briapiToken = briapi.getToken();
@@ -203,9 +189,7 @@ public class EventRegdoneVm {
 					
 					String custcode_cabang = "0000" + obj.getTanggota().getMcabang().getKodecabang();
 					String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
-					if (isVaCreate)
-						briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
-					else briva.setCustCode(obj.getTanggota().getVaevent().substring(5));
+					briva.setCustCode(new TcounterengineDAO().getVaCounter());
 					briva.setKeterangan(obj.getTevent().getEventname().trim().length() > 40 ? obj.getTevent().getEventname().substring(0, 40) : obj.getTevent().getEventname());
 					briva.setNama(obj.getTanggota().getNama().trim().length() > 40 ? obj.getTanggota().getNama().trim().substring(0, 40) : obj.getTanggota().getNama().trim());
 					
@@ -216,22 +200,7 @@ public class EventRegdoneVm {
 					
 					briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 					
-					BrivaCreateResp brivaCreated = null;
-					if (isVaCreate) {
-						brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
-						if (brivaCreated != null && brivaCreated.getStatus() && isVaUpdate) {
-							obj.getTanggota().setVaevent(briva.getBrivaNo() + briva.getCustCode());
-							obj.getTanggota().setVaeventstatus(1);
-							anggotaDao.save(session, obj.getTanggota());
-						}
-					} else {
-						brivaCreated = briapi.updateDataBriva(briapiToken.getAccess_token(), briva);
-						if (brivaCreated != null && brivaCreated.getStatus()) {
-							obj.getTanggota().setVaeventstatus(1);
-							anggotaDao.save(session, obj.getTanggota());
-						}
-					}
-					
+					BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
 					if (brivaCreated != null && brivaCreated.getStatus()) {
 						obj.setVano(briva.getBrivaNo() + briva.getCustCode());
 						obj.setVaamount(obj.getTevent().getEventprice());

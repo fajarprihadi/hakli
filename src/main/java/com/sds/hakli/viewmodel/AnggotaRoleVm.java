@@ -89,11 +89,11 @@ public class AnggotaRoleVm {
 	@Command
 	public void doChangeRole(@BindingParam("usergroup") String usergroup) {
 		if (usergroup != null) {
-			if (usergroup.equals(AppUtils.ANGGOTA_ROLE_ADMIN) || usergroup.equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT) || usergroup.equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			if (usergroup.equals(AppUtils.ANGGOTA_ROLE_ADMIN) || usergroup.equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT)) {
 				chkVerReg.setDisabled(false);
 				chkTimP2kb.setDisabled(false);
 				chkKomisiP2kb.setDisabled(false);
-			} else if (usergroup.equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+			} else if (usergroup.equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN) || usergroup.equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
 				chkVerReg.setDisabled(false);
 				chkTimP2kb.setDisabled(false);
 				chkKomisiP2kb.setDisabled(true);

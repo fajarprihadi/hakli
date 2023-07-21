@@ -4,7 +4,7 @@
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.P2kbSumWaitTimVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
-			<n:span>Daftar Pending Verifikasi Tim P2KB</n:span>
+			<n:span><label value="@load(vm.title)" /></n:span>
 		</caption>
 		<grid id="grid" sizedByContent="true" span="true">
 			<columns>

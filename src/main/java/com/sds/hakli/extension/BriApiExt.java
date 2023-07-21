@@ -71,25 +71,26 @@ public class BriApiExt {
 			BriApiToken briapiToken = briapi.getTokenFundTransfer();
 			
 			if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
-				FundInqReq inqReq = new FundInqReq();
-				inqReq.setSourceAccount("888801000157508");
-				inqReq.setBeneficiaryAccount("888809999999918");
-				briapi.fundInq(briapiToken.getAccess_token(), inqReq);
-				
-				FundTrfReq trfReq = new FundTrfReq();
-				trfReq.setSourceAccount("888801000157508");
-				trfReq.setBeneficiaryAccount("888809999999918");
-				trfReq.setAmount("10000.00");
-				trfReq.setFeeType("OUR");
-				trfReq.setNoReferral("99999999999999999918");
-				trfReq.setRemark("9999999999999999991801");
-				trfReq.setTransactionDateTime("04-07-2023 15:08:00");
-				
-				briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
+//				FundInqReq inqReq = new FundInqReq();
+//				inqReq.setSourceAccount("888801000157508");
+//				inqReq.setBeneficiaryAccount("888809999999918");
+//				briapi.fundInq(briapiToken.getAccess_token(), inqReq);
+//				
+//				FundTrfReq trfReq = new FundTrfReq();
+//				trfReq.setSourceAccount("888801000157508");
+//				trfReq.setBeneficiaryAccount("888809999999918");
+//				trfReq.setAmount("10000.00");
+//				trfReq.setFeeType("OUR");
+//				trfReq.setNoReferral("99999999999999999918");
+//				trfReq.setRemark("9999999999999999991801");
+//				trfReq.setTransactionDateTime("04-07-2023 15:08:00");
+//				
+//				briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
 				
 				FundRcReq rcReq = new FundRcReq();
-				rcReq.setNoReferral("99999999999999999918");
-				rcReq.setTransactionDate("04-07-2023");
+				//rcReq.setNoReferral("99999999999999999918");
+				rcReq.setNoReferral("88888888888888888884");
+				rcReq.setTransactionDate("09-07-2021");
 				briapi.fundRcStatus(briapiToken.getAccess_token(), rcReq);
 				
 			} else {

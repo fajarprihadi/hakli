@@ -267,18 +267,9 @@ public class PaymentVm {
 										briva.setInstitutionCode(bean.getBriva_institutioncode());
 										briva.setBrivaNo(bean.getBriva_cid());
 										
-										boolean isVaUpdate = false;
-										if (anggota.getVareg() != null && anggota.getVaregstatus() == 0) {
-											isVaUpdate = true;
-										}
-										
-										if (isVaUpdate)
-											briva.setCustCode(anggota.getVareg().substring(5));
-										else {
-											String custcode_cabang = "0000" + anggota.getMcabang().getKodecabang();
-											String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
-											briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
-										}
+										String custcode_cabang = "0000" + anggota.getMcabang().getKodecabang();
+										String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
+										briva.setCustCode(new TcounterengineDAO().getVaCounter());
 										
 										Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
 										Calendar cal = Calendar.getInstance();
@@ -293,21 +284,12 @@ public class PaymentVm {
 										vaexpdate = cal.getTime();
 										briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 										
-										BrivaCreateResp brivaCreated = null;
-										if (isVaUpdate) {
-											brivaCreated = briapi.updateDataBriva(briapiToken.getAccess_token(), briva);
-										} else {
-											brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
-										}
+										BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
 										if (brivaCreated != null && brivaCreated.getStatus()) {
 											trx = session.beginTransaction();
 											
 											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
 											invDao.save(session, inv);
-											
-											anggota.setVareg(briva.getBrivaNo() + briva.getCustCode());
-											anggota.setVaregstatus(1);
-											new TanggotaDAO().save(session, anggota);
 											
 											trx.commit();
 											

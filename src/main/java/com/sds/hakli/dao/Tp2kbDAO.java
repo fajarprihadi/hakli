@@ -149,7 +149,7 @@ public class Tp2kbDAO {
 		session = StoreHibernateUtil.openSession();
 //		count = Integer.parseInt((String) session.createSQLQuery("select coalesce(sum(totaltimapprove),0) from Tp2kb join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where " + filter)
 //				.uniqueResult().toString());
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tp2kbbook join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where status = 'R' and " + filter)
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tp2kbbook join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where status = 'R' and ispaid = 'Y' and " + filter)
 				.uniqueResult().toString());
 		session.close();
 		return count;
@@ -163,7 +163,7 @@ public class Tp2kbDAO {
 		session = StoreHibernateUtil.openSession();
 		oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, SUM(TOTALWAITING) AS TOTAL FROM TP2KB " + 
 				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROV ON MPROVFK = MPROVPK " +
-				"GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY SUM(TOTALWAITING) DESC").addEntity(BranchTop.class)
+				"WHERE TOTALWAITING > 0 GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY SUM(TOTALWAITING) DESC").addEntity(BranchTop.class)
 				.list();
 		session.close();
 		return oList;
@@ -177,7 +177,7 @@ public class Tp2kbDAO {
 		session = StoreHibernateUtil.openSession();
 		oList = session.createSQLQuery("SELECT MCABANGPK AS ID, CABANG AS NAME, SUM(TOTALWAITING) AS TOTAL FROM TP2KB " + 
 				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK " +
-				"WHERE " + filter + " " + 
+				"WHERE TOTALWAITING > 0 AND " + filter + " " + 
 				"GROUP BY MCABANGPK, CABANG ORDER BY SUM(TOTALWAITING) DESC").addEntity(BranchTop.class)
 				.list();
 		session.close();

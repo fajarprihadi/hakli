@@ -21,7 +21,27 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.sds.utils.AppData;
+
 public class MailSender {
+	
+	public static void main(String[] args) {
+		try {
+			System.out.println("Haihia");
+			MailBean mailbean = AppData.getSmtpParam();	
+			mailbean.setSmtpname("mail.bangzk.tech");
+			mailbean.setSmtpport(587);
+			mailbean.setMailid("admin@pphakli.org");
+			mailbean.setMailpassword("Qwert1234!");
+			mailbean.setFrom("HAKLI <admin@pphakli.org>");
+			mailbean.setRecipient("fprihadi@gmail.com");
+			mailbean.setSubject("Hi Fajar");
+			mailbean.setBodymsg("How are you Fajar?");
+			sendSSLMessage(mailbean);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void sendSSLMessage(MailBean mailbean) throws MessagingException {
 		
@@ -31,7 +51,7 @@ public class MailSender {
 //		properties.put("mail.smtp.ssl.socketFactory", sf);
 
 		//Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-		boolean debug = false;
+		boolean debug = true;
 		Properties props = new Properties();
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.host", mailbean.getSmtpname());
@@ -39,15 +59,28 @@ public class MailSender {
 		props.put("mail.smtp.from", mailbean.getMailid());
 		props.put("java.protocol.handler.pkgs", "com.sun.net.ssl.internal.www.protocol");
 		
-		// remark untuk relay server dan unremark untuk mail server
-		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable","true");
+		props.put("mail.smtp.auth", "true");  // If you need to authenticate
+		// Use the following if you need SSL
+		props.put("mail.smtp.host", "mail.bangzk.tech"); 	
+		props.put("mail.smtp.port", "587");
+		props.put("mail.smtps.socketFactory.port", "587");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.starttls.enable", "false");
+		props.put("mail.smtp.socketFactory.fallback", "false");
 		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-		props.put("mail.smtp.socketFactory.fallback", "true");
+		props.put("mail.smtp.ssl.trust", "*");
+		props.put("mail.debug", "true");
+		
+		// remark untuk relay server dan unremark untuk mail server
+//		props.put("mail.smtp.auth", "true");
+//		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+//		props.put("mail.smtp.starttls.enable", "true");
+//		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+//		props.put("mail.smtp.socketFactory.fallback", "true");
 
 		Session session = Session.getDefaultInstance(props);
 		session.setDebug(debug);
+		
 		Message message = new MimeMessage(session);
 		InternetAddress addressFrom;
 		addressFrom = new InternetAddress(mailbean.getFrom());

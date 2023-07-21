@@ -78,6 +78,7 @@ public class P2KBEvalVm {
 
 	private ListModelList<Tp2kbbook> model;
 	private Tp2kbbook p2kbbook;
+	private boolean isUpdate;
 
 	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -123,7 +124,7 @@ public class P2KBEvalVm {
 		try {
 			cbPeriod.getChildren().clear();
 			for (Tp2kbbook book: p2kbbookDao.listByFilter(
-					"tanggota.tanggotapk = " + anggota.getTanggotapk() + " and status = 'O'", "tp2kbbookpk")) {
+					"tanggota.tanggotapk = " + anggota.getTanggotapk() + " and status != 'C'", "tp2kbbookpk")) {
 				Comboitem item = new Comboitem(datelocalFormatter.format(book.getTglmulai()) + " S/D " + datelocalFormatter.format(book.getTglakhir()));
 				item.setValue(book);
 				cbPeriod.appendChild(item);
@@ -131,6 +132,38 @@ public class P2KBEvalVm {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	@NotifyChange("keterangan")
+	public void doSelectPeriod(@BindingParam("p2kbbook") Tp2kbbook p2kbbook) {
+		if (p2kbbook != null) {
+			try {
+				isUpdate = false;
+				keterangan = "";
+				btSave.setDisabled(true);
+				if (p2kbbook.getTotalskp().compareTo(new BigDecimal(50)) < 0) {
+					keterangan = "Anda belum dapat melakukan pengajuan evaluasi dikarenakan total nilai SKP Anda belum mencapai minimum kecukupan nilai SKP, yaitu 50 SKP.";
+				} else {
+					Tinvoice inv = invDao.findByFilter("tp2kbbook.tp2kbbookpk = " + p2kbbook.getTp2kbbookpk());
+					if (inv != null) {
+						if (inv.getIspaid().equals("Y"))
+							keterangan = "Anda sudah melakukan pembayaran dan pengajuan evaluasi Anda sedang dalam proses review oleh Komisi P2KB. Mohon ditunggu.";
+						else if (inv.getIspaid().equals("N") && inv.getInvoiceduedate().compareTo(new Date()) >= 0) {
+							keterangan = "Anda sudah melakukan generate tagihan dan tagihan Anda masih aktif sampai dengan " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(inv.getInvoiceduedate()) + " dengan Nomor VA " + inv.getVano() + ". Silakan segera lakukan pembayaran sebelum tanggal jatuh tempo tagihan.";
+						} else if (inv.getIspaid().equals("N") && inv.getInvoiceduedate().compareTo(new Date()) < 0) {
+							keterangan = "Tagihan Anda sudah kadaluarsa. Silakan Klik tombol Generate Tagihan untuk membuat tagihan baru.";
+							isUpdate = true;
+							btSave.setDisabled(false);
+						}
+					} else {
+						btSave.setDisabled(false);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -167,7 +200,7 @@ public class P2KBEvalVm {
 										String custcode_cabang = "0000" + anggota.getMcabang().getKodecabang();
 										String custcode = custcode_cabang.substring(custcode_cabang.length() - 4,
 												custcode_cabang.length());
-										briva.setCustCode(new TcounterengineDAO().getVaCounter(custcode));
+										briva.setCustCode(new TcounterengineDAO().getVaCounter());
 
 										String invdesc = "Evaluasi P2KB " + datelocalFormatter.format(p2kbbook.getTglmulai())
 												+ " s/d " + datelocalFormatter.format(p2kbbook.getTglakhir());
