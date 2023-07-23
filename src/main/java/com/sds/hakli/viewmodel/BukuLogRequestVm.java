@@ -328,7 +328,7 @@ public class BukuLogRequestVm {
 				if(obj.getMusergroup().getUsergroupcode().equals("PPR"))
 					filter = "mprovfk = " + obj.getMcabang().getMprov().getMprovpk();
 				else if(obj.getMusergroup().getUsergroupcode().equals("PKA"))
-					filter = "mprovfk = " + obj.getMcabang().getMcabangpk();
+					filter = "mcabangpk = " + obj.getMcabang().getMcabangpk();
 				else
 					filter = "0=0";
 			} else {
