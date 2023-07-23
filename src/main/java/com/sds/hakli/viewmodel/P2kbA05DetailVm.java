@@ -394,6 +394,7 @@ public class P2kbA05DetailVm {
 				}
 				obj.setMemo(memotim);
 				obj.setCheckedby(anggota.getNama());
+				obj.setCheckedbyid(anggota.getNoanggota());
 				obj.setChecktime(new Date());
 			} else {
 				if (action.equals("A"))

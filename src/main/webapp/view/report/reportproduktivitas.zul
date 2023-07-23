@@ -1,10 +1,10 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
 	<window id="winVerifikasip2kb" border="normal"
-		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.VerifikasiP2kbVm')">
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.ReportProduktivitasVm')">
 		<caption>
 			<n:i class="fas fa-check"></n:i>
-			<n:span>Verifikasi Kegiatan P2KB Anggota</n:span>
+			<n:span>Report Produktivitas</n:span>
 		</caption>
 		<groupbox mold="3d">
 			<caption label="Pencarian" iconSclass="z-icon-search" />
@@ -14,12 +14,10 @@
 						onOK="@command('doSearch')" width="100%" maxlength="40" />
 				</div>
 				<div class="col">
-					<combobox id="cbRegion" placeholder="Provinsi"
-						onSelect="@command('doLoadCabang', prov=vm.region)"
-						model="@load(vm.regionmodel)" selectedItem="@bind(vm.region)"
-						width="100%">
-						<template name="model" var="region">
-							<comboitem label="@load(region.provname)" />
+					<combobox id="cbCabang" placeholder="Cabang"
+						model="@load(vm.mcabangmodel)" width="100%">
+						<template name="model" var="mcabang">
+							<comboitem label="@load(mcabang.cabang)" />
 						</template>
 					</combobox>
 				</div>
@@ -54,11 +52,11 @@
 			<columns>
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.cabang}" />
-				<column label="${labels.anggota.noanggota}"
+				<column label="Nomor Anggota"
 					align="center" />
-				<column label="${labels.anggota.nama}" />
-				<column label="Alamat" />
-				<column label="Total Waiting" align="right" />
+				<column label="Nama" />
+				<column label="Role" />
+				<column label="Total Produktivitas" align="right" />
 			</columns>
 		</grid>
 

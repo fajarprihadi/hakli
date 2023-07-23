@@ -355,6 +355,7 @@ public class P2kbE02DetailVm {
 				obj.setMemo(memotim);
 				obj.setCheckedby(anggota.getNama());
 				obj.setChecktime(new Date());
+				obj.setCheckedbyid(anggota.getNoanggota());
 			} else {
 				if (action.equals("A"))
 					obj.setStatus(AppUtils.STATUS_APPROVEDKOMISI);

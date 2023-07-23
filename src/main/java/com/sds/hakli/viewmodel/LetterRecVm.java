@@ -58,6 +58,8 @@ public class LetterRecVm {
 			@Override
 			public void render(Row row, Tp2kbbook data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index + 1)));
+				row.getChildren().add(new Label(data.getNostr()));
+				row.getChildren().add(new Label(data.getTanggota().getMcabang().getCabang()));
 				row.getChildren().add(new Label(data.getTanggota().getNoanggota()));
 				row.getChildren().add(new Label(data.getTanggota().getNama()));
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglmulai())));

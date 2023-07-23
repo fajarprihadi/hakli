@@ -15,8 +15,8 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
@@ -28,19 +28,22 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Column;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
+import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
+import com.sds.hakli.model.Tp2kbbookListModel;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
@@ -48,12 +51,14 @@ public class BukuLogRequestVm {
 	private Session session = Sessions.getCurrent();
 	private Tanggota obj;
 
-	List<Tp2kbbook> objList = new ArrayList<>();
+	private Tp2kbbookListModel model;
 
-	private String filter;
+	private int pageStartNumber;
+	private int pageTotalSize;
+	private boolean needsPageUpdate;
 	private String orderby;
-
-	private Integer pageTotalSize;
+	private String filter;
+	private String arg;
 
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd MMMM yyyy");
 
@@ -61,11 +66,33 @@ public class BukuLogRequestVm {
 	private Grid grid;
 	@Wire
 	private Window winBookLogReq;
+	@Wire
+	private Paging paging;
+	@Wire
+	private Column colAction;
+	@Wire
+	private Div divAdd;
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("arg") String arg) {
 		Selectors.wireComponents(view, this, false);
 		obj = (Tanggota) session.getAttribute("anggota");
+		this.arg = arg;
+
+		if (arg != null && arg.equals("list")) {
+			colAction.setVisible(false);
+			divAdd.setVisible(false);
+		}
+
+		paging.addEventListener("onPaging", new EventListener<Event>() {
+
+			@Override
+			public void onEvent(Event event) throws Exception {
+				PagingEvent pe = (PagingEvent) event;
+				pageStartNumber = pe.getActivePage();
+				refreshModel(pageStartNumber);
+			}
+		});
 
 		doReset();
 		grid.setRowRenderer(new RowRenderer<Tp2kbbook>() {
@@ -78,7 +105,8 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(AppUtils.getStatusLogLabel(data.getStatus())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
-				row.getChildren().add(new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ? "LUNAS" : "BELUM BAYAR"));
+				row.getChildren().add(
+						new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ? "LUNAS" : "BELUM BAYAR"));
 
 				Div div = new Div();
 				Hlayout hlayout = new Hlayout();
@@ -208,9 +236,6 @@ public class BukuLogRequestVm {
 												Clients.showNotification("Data berhasil dihapus.", "info", null,
 														"middle_center", 1500);
 
-												objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
-												pageTotalSize = objList.size();
-												grid.setModel(new ListModelList<>(objList));
 												doReset();
 												BindUtils.postNotifyChange(null, null, BukuLogRequestVm.this, "*");
 											} catch (Exception e) {
@@ -221,7 +246,7 @@ public class BukuLogRequestVm {
 								});
 					}
 				});
-				
+
 				Button btLetter = new Button("Download");
 				btLetter.setIconSclass("z-icon-download");
 				btLetter.setSclass("btn btn-primary btn-sm");
@@ -232,26 +257,27 @@ public class BukuLogRequestVm {
 					@Override
 					public void onEvent(Event event) throws Exception {
 						Map<String, Object> parameters = new HashMap<>();
-						List<Tp2kbbook>dataList = new ArrayList<>();
+						List<Tp2kbbook> dataList = new ArrayList<>();
 						String currentdate = "";
-						
-						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getReviewtime());
-						
+
+						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID"))
+								.format(data.getReviewtime());
+
 						String nosurat = data.getLetterno();
 						dataList.add(data);
 						session.setAttribute("objList", dataList);
-						
+
 						parameters.put("NOSURAT", nosurat);
 						parameters.put("CURRENTDATE", currentdate);
 						parameters.put("TTD_KETUAUMUM",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
 						parameters.put("LOGO",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
-						
+
 						session.setAttribute("parameters", parameters);
 						session.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
 								.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi.jasper"));
-						
+
 						Executions.getCurrent().sendRedirect("/view/jasperviewer.zul", "_blank");
 					}
 				});
@@ -259,10 +285,10 @@ public class BukuLogRequestVm {
 				hlayout.appendChild(btLog);
 				hlayout.appendChild(btEdit);
 				hlayout.appendChild(btDelete);
-				
-				if(data.getIspaid() != null && data.getIspaid().equals("Y"))
+
+				if (data.getIspaid() != null && data.getIspaid().equals("Y"))
 					hlayout.appendChild(btLetter);
-				
+
 				div.appendChild(hlayout);
 
 				row.getChildren().add(div);
@@ -298,22 +324,42 @@ public class BukuLogRequestVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "tanggotafk = " + obj.getTanggotapk();
-			orderby = "tglmulai";
+			if (arg != null && arg.equals("list")) {
+				if(obj.getMusergroup().getUsergroupcode().equals("PPR"))
+					filter = "mprovfk = " + obj.getMcabang().getMprov().getMprovpk();
+				else if(obj.getMusergroup().getUsergroupcode().equals("PKA"))
+					filter = "mprovfk = " + obj.getMcabang().getMcabangpk();
+				else
+					filter = "0=0";
+			} else {
+				filter = "tanggotafk = " + obj.getTanggotapk();
+			}
 
-			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
-			pageTotalSize = objList.size();
-			grid.setModel(new ListModelList<>(objList));
+			needsPageUpdate = true;
+			paging.setActivePage(0);
+			pageStartNumber = 0;
+			refreshModel(pageStartNumber);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	@NotifyChange("pageTotalSize")
+	public void refreshModel(int activePage) {
+		orderby = "tglmulai";
+		paging.setPageSize(AppUtils.PAGESIZE);
+		model = new Tp2kbbookListModel(activePage, AppUtils.PAGESIZE, filter, orderby);
+		if (needsPageUpdate) {
+			pageTotalSize = model.getTotalSize(filter);
+			needsPageUpdate = false;
+		}
+		paging.setTotalSize(pageTotalSize);
+		grid.setModel(model);
+	}
+
 	@Command
 	@NotifyChange("*")
 	public void doReset() {
-		pageTotalSize = 0;
-
 		doSearch();
 	}
 

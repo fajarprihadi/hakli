@@ -391,6 +391,7 @@ public class P2kbB14DetailVm {
 
 				obj.setMemokomisi(memotim);
 				obj.setCheckedbykomisi(anggota.getNama());
+				obj.setCheckedbyid(anggota.getNoanggota());
 				obj.setChecktimekomisi(new Date());
 			}
 

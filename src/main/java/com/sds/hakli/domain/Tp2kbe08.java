@@ -56,6 +56,17 @@ public class Tp2kbe08 {
 
 	private Date checktimekomisi;
 	
+	private String checkedbyid;
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getCheckedbyid() {
+		return checkedbyid;
+	}
+
+	public void setCheckedbyid(String checkedbyid) {
+		this.checkedbyid = checkedbyid;
+	}
+	
 	@Id
 	@SequenceGenerator(name = "tp2kbe08_seq", sequenceName = "tp2kbe08_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kbe08_seq")

@@ -380,6 +380,7 @@ public class P2kbB15DetailVm {
 					obj.setStatus(AppUtils.STATUS_REJECTEDTIM);
 				}
 				obj.setMemo(memotim);
+				obj.setCheckedbyid(anggota.getNoanggota());
 				obj.setCheckedby(anggota.getNama());
 				obj.setChecktime(new Date());
 			} else {

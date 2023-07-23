@@ -17,43 +17,54 @@ import org.hibernate.annotations.Type;
 
 @Entity
 public class Tp2kba02 {
-	
+
 	private Integer tp2kba02pk;
-	
+
 	private Tanggota tanggota;
-	
+
 	private Mp2kbkegiatan mp2kbkegiatan;
-	
+
 	private String tempat;
-	
+
 	private String penyelenggara;
-	
+
 	private String docid;
-	
+
 	private String docpath;
-	
+
 	private Date tglkegiatan;
-	
+
 	private BigDecimal nilaiskp;
-	
+
 	private String status;
-	
+
 	private String memo;
-	
+
 	private String memokomisi;
-	
+
 	private String createdby;
-	
+
 	private Date createtime;
-	
+
 	private String checkedby;
-	
+
 	private Date checktime;
-	
+
 	private String checkedbykomisi;
 
 	private Date checktimekomisi;
-	
+
+	private String checkedbyid;
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getCheckedbyid() {
+		return checkedbyid;
+	}
+
+	public void setCheckedbyid(String checkedbyid) {
+		this.checkedbyid = checkedbyid;
+	}
+
 	@Id
 	@SequenceGenerator(name = "tp2kba02_seq", sequenceName = "tp2kba02_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kba02_seq")
@@ -128,7 +139,7 @@ public class Tp2kba02 {
 	public void setTglkegiatan(Date tglkegiatan) {
 		this.tglkegiatan = tglkegiatan;
 	}
-	
+
 	public BigDecimal getNilaiskp() {
 		return nilaiskp;
 	}

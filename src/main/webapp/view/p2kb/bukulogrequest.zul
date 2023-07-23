@@ -6,7 +6,7 @@
 			<n:i class="fas fa-list"></n:i>
 			<n:span>Daftar Permohonan Untuk Melakukan P2KB</n:span>
 		</caption>
-		<div class="row" align="right">
+		<div id="divAdd" class="row" align="right">
 			<div class="col">
 				<button label="Tambah" autodisable="self"
 					iconSclass="z-icon-plus" sclass="btn btn-primary btn-sm"
@@ -15,16 +15,18 @@
 		</div>
 		<separator />
 		<div class="row">
-			<div class="col-md" />
-			<div class="col-md-2" align="right">
-				<label value="Total Data :" style="font-weight: bold" />
-				<label value="@load(vm.pageTotalSize)"
-					style="font-weight: bold" />
-			</div>
+			<div class="col-md-10">
+						<paging id="paging" autohide="true" />
+					</div>
+					<div class="col-md-2" align="right">
+						<label value="Total Record :"
+							style="font-weight: bold" />
+						<label value="@load(vm.pageTotalSize)"
+							style="font-weight: bold" />
+					</div>
 		</div>
 		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
-			sizedByContent="true" span="true" mold="paging" pageSize="20"
-			pagingPosition="both">
+			sizedByContent="true" span="true" pagingPosition="both">
 			<columns>
 				<column label="${labels.common.no}" align="right" />
 				<column label="Nomor STR" />
@@ -33,7 +35,7 @@
 				<column label="Status" align="center" />
 				<column label="Total SKP" align="right" />
 				<column label="Status Bayar" align="right" />
-				<column label="Action" align="center" />
+				<column id="colAction" label="Action" align="center" />
 			</columns>
 		</grid>
 
