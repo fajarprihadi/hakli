@@ -36,8 +36,8 @@ public class MailSender_Test {
 			mailbean.setMailpassword("Qwert1234!");
 			mailbean.setFrom("HAKLI <admin@pphakli.org>");
 			mailbean.setRecipient("fprihadi@gmail.com");
-			mailbean.setSubject("Hi Fajar");
-			mailbean.setBodymsg("How are you Fajar?");
+			mailbean.setSubject("Hi Fajar Prihadi");
+			mailbean.setBodymsg("How are you Prihadi?");
 			sendSSLMessage(mailbean);
 		} catch (Exception e) {
 			e.printStackTrace();
