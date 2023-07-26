@@ -84,7 +84,7 @@ public class BukuLogRequestVm {
 	@Wire
 	private Column colAction;
 	@Wire
-	private Div divAdd;
+	private Div divAdd, divProv, divCab;
 	@Wire
 	private Groupbox gbSearch;
 	@Wire
@@ -97,14 +97,16 @@ public class BukuLogRequestVm {
 		this.arg = arg;
 
 		if (arg != null && arg.equals("list")) {
+			doLoadCabang();
+			
 			divAdd.setVisible(false);
 			gbSearch.setVisible(true);
 			
 			if(obj.getMusergroup().getUsergroupcode().equals("PPR")) {
-				cbProv.setVisible(false);
+				divProv.setVisible(false);
 			} else if(obj.getMusergroup().getUsergroupcode().equals("PKA")) {
-				cbProv.setVisible(false);
-				cbCabang.setVisible(false);
+				divProv.setVisible(false);
+				divCab.setVisible(false);
 			}
 				
 		}

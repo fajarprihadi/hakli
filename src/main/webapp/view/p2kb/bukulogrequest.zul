@@ -13,7 +13,7 @@
 					<textbox placeholder="Nama" value="@bind(vm.nama)"
 						onOK="@command('doSearch')" width="100%" maxlength="40" />
 				</div>
-				<div class="col">
+				<div id="divProv" class="col">
 					<combobox id="cbProv" placeholder="Provinsi"
 						onSelect="@command('doLoadCabang')"
 						model="@load(vm.mprovmodel)" selectedItem="@bind(vm.mprov)"
@@ -23,7 +23,7 @@
 						</template>
 					</combobox>
 				</div>
-				<div class="col">
+				<div id="divCab" class="col">
 					<combobox id="cbCabang" placeholder="Cabang"
 						model="@load(vm.mcabangmodel)" width="100%">
 						<template name="model" var="mcabang">
