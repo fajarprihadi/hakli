@@ -80,8 +80,12 @@ public class P2kbB10DetailVm {
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tp2kb p2kb,
-			@ExecutionArgParam("isApprove") String isApprove) {
+			@ExecutionArgParam("isApprove") String isApprove,
+			@ExecutionArgParam("isDetail") String isDetail) {
 		Selectors.wireComponents(view, this, false);
+		
+		if(isDetail != null)
+			colAksi.setVisible(false);
 
 		if (isApprove != null && isApprove.length() > 0) {
 			isApproved = true;

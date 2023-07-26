@@ -29,10 +29,13 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Column;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
@@ -40,7 +43,11 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
+import com.sds.hakli.dao.McabangDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
+import com.sds.hakli.domain.Mcabang;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.hakli.model.Tp2kbbookListModel;
@@ -60,6 +67,12 @@ public class BukuLogRequestVm {
 	private String filter;
 	private String arg;
 
+	private String nama;
+	private Mcabang mcabang;
+	private Mprov mprov;
+	
+	private List<Mcabang> mcabangmodel = new ArrayList<>();
+
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd MMMM yyyy");
 
 	@Wire
@@ -71,7 +84,11 @@ public class BukuLogRequestVm {
 	@Wire
 	private Column colAction;
 	@Wire
-	private Div divAdd;
+	private Div divAdd, divProv, divCab;
+	@Wire
+	private Groupbox gbSearch;
+	@Wire
+	private Combobox cbProv, cbCabang;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("arg") String arg) {
@@ -80,8 +97,18 @@ public class BukuLogRequestVm {
 		this.arg = arg;
 
 		if (arg != null && arg.equals("list")) {
-			colAction.setVisible(false);
+			doLoadCabang();
+			
 			divAdd.setVisible(false);
+			gbSearch.setVisible(true);
+			
+			if(obj.getMusergroup().getUsergroupcode().equals("PPR")) {
+				divProv.setVisible(false);
+			} else if(obj.getMusergroup().getUsergroupcode().equals("PKA")) {
+				divProv.setVisible(false);
+				divCab.setVisible(false);
+			}
+				
 		}
 
 		paging.addEventListener("onPaging", new EventListener<Event>() {
@@ -101,6 +128,8 @@ public class BukuLogRequestVm {
 			public void render(Row row, Tp2kbbook data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index + 1)));
 				row.getChildren().add(new Label(data.getNostr()));
+				row.getChildren().add(new Label(data.getTanggota().getNama()));
+				row.getChildren().add(new Label(data.getTanggota().getMcabang().getCabang()));
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglmulai())));
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(AppUtils.getStatusLogLabel(data.getStatus())));
@@ -151,15 +180,17 @@ public class BukuLogRequestVm {
 						Window win = new Window();
 						map.put("obj", obj);
 						map.put("book", data);
+						if (arg != null && arg.equals("req")) {
 
-						SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+							SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 
-						if (obj.getPeriodekta() != null) {
-							Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-							Date d2 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
+							if (obj.getPeriodekta() != null) {
+								Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+								Date d2 = sdformat
+										.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
 
-							System.out.println(d1 + ", " + d2);
-							if (d1.compareTo(d2) < 0) {
+								System.out.println(d1 + ", " + d2);
+								if (d1.compareTo(d2) < 0) {
 //							win = (Window) Executions.createComponents("/view/p2kb/bukulog.zul", null, map);
 //							win.setWidth("90%");
 //							win.setClosable(true);
@@ -172,11 +203,27 @@ public class BukuLogRequestVm {
 //
 //							});
 
-								Component comp = winBookLogReq.getParent();
-								comp.getChildren().clear();
-								// Map<String, Object> map = new HashMap<>();
-								// map.put("obj", obj);
-								Executions.createComponents("/view/p2kb/bukulog.zul", comp, map);
+									Component comp = winBookLogReq.getParent();
+									comp.getChildren().clear();
+									// Map<String, Object> map = new HashMap<>();
+									// map.put("obj", obj);
+									Executions.createComponents("/view/p2kb/bukulog.zul", comp, map);
+								} else {
+									win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+									win.setWidth("50%");
+									win.setClosable(true);
+									win.doModal();
+									win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+										@Override
+										public void onEvent(Event event) throws Exception {
+											winBookLogReq.getChildren().clear();
+											winBookLogReq.setBorder(false);
+											Executions.createComponents("/view/payment/payment.zul", winBookLogReq,
+													null);
+										}
+
+									});
+								}
 							} else {
 								win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
 								win.setWidth("50%");
@@ -193,21 +240,11 @@ public class BukuLogRequestVm {
 								});
 							}
 						} else {
-							win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
-							win.setWidth("50%");
-							win.setClosable(true);
-							win.doModal();
-							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-								@Override
-								public void onEvent(Event event) throws Exception {
-									winBookLogReq.getChildren().clear();
-									winBookLogReq.setBorder(false);
-									Executions.createComponents("/view/payment/payment.zul", winBookLogReq, null);
-								}
-
-							});
+							map.put("isDetail", "Y");
+							Component comp = winBookLogReq.getParent();
+							comp.getChildren().clear();
+							Executions.createComponents("/view/p2kb/bukulog.zul", comp, map);
 						}
-
 					}
 				});
 
@@ -283,17 +320,32 @@ public class BukuLogRequestVm {
 				});
 
 				hlayout.appendChild(btLog);
-				hlayout.appendChild(btEdit);
-				hlayout.appendChild(btDelete);
 
-				if (data.getIspaid() != null && data.getIspaid().equals("Y"))
-					hlayout.appendChild(btLetter);
-
+				if (arg != null && arg.equals("req")) {
+					hlayout.appendChild(btEdit);
+					hlayout.appendChild(btDelete);
+					if (data.getIspaid() != null && data.getIspaid().equals("Y"))
+						hlayout.appendChild(btLetter);
+				}
 				div.appendChild(hlayout);
 
 				row.getChildren().add(div);
 			}
 		});
+	}
+	
+	@Command
+	@NotifyChange("mcabangmodel")
+	public void doLoadCabang() {
+		try {
+			if(mprov != null) {
+				mcabangmodel = new McabangDAO().listByFilter("mprovfk = " + mprov.getMprovpk(), "cabang");
+			} else if (obj.getMusergroup().getUsergroupcode().equals("PPR")) {
+				mcabangmodel = new McabangDAO().listByFilter("mprovfk = " + obj.getMcabang().getMprov().getMprovpk(), "cabang");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Command
@@ -325,15 +377,22 @@ public class BukuLogRequestVm {
 	public void doSearch() {
 		try {
 			if (arg != null && arg.equals("list")) {
-				if(obj.getMusergroup().getUsergroupcode().equals("PPR"))
+				if (obj.getMusergroup().getUsergroupcode().equals("PPR"))
 					filter = "mprovfk = " + obj.getMcabang().getMprov().getMprovpk();
-				else if(obj.getMusergroup().getUsergroupcode().equals("PKA"))
+				else if (obj.getMusergroup().getUsergroupcode().equals("PKA"))
 					filter = "mcabangpk = " + obj.getMcabang().getMcabangpk();
 				else
 					filter = "0=0";
 			} else {
 				filter = "tanggotafk = " + obj.getTanggotapk();
 			}
+
+			if (nama != null && nama.trim().length() > 0)
+				filter += " and UPPER(nama) like '%" + nama.trim().toUpperCase() + "%'";
+			if (mprov != null)
+				filter += " and mprovfk = " + mprov.getMprovpk();
+			if (mcabang != null)
+				filter += " and mcabangpk = " + mcabang.getMcabangpk();
 
 			needsPageUpdate = true;
 			paging.setActivePage(0);
@@ -360,7 +419,22 @@ public class BukuLogRequestVm {
 	@Command
 	@NotifyChange("*")
 	public void doReset() {
+		cbCabang.setValue(null);
+		cbProv.setValue(null);
+		nama = null;
+		mcabang = null;
+		mprov = null;
 		doSearch();
+	}
+
+	public ListModelList<Mprov> getMprovmodel() {
+		ListModelList<Mprov> lm = null;
+		try {
+			lm = new ListModelList<Mprov>(new MprovDAO().listByFilter("0=0", "provname"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lm;
 	}
 
 	public Integer getPageTotalSize() {
@@ -369,5 +443,37 @@ public class BukuLogRequestVm {
 
 	public void setPageTotalSize(Integer pageTotalSize) {
 		this.pageTotalSize = pageTotalSize;
+	}
+
+	public String getNama() {
+		return nama;
+	}
+
+	public void setNama(String nama) {
+		this.nama = nama;
+	}
+
+	public Mcabang getMcabang() {
+		return mcabang;
+	}
+
+	public void setMcabang(Mcabang mcabang) {
+		this.mcabang = mcabang;
+	}
+
+	public Mprov getMprov() {
+		return mprov;
+	}
+
+	public void setMprov(Mprov mprov) {
+		this.mprov = mprov;
+	}
+
+	public List<Mcabang> getMcabangmodel() {
+		return mcabangmodel;
+	}
+
+	public void setMcabangmodel(List<Mcabang> mcabangmodel) {
+		this.mcabangmodel = mcabangmodel;
 	}
 }
