@@ -21,9 +21,24 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-public class MailSender {
+import com.sds.utils.AppData;
 
-	public static void sendSSLMessage(MailBean mailbean) throws MessagingException {
+public class MailSender {
+	
+	public static void main(String[] args) {
+		try {
+			System.out.println("Fajar Prihadi");
+			MailBean mailbean = AppData.getSmtpParam();	
+			mailbean.setRecipient("fprihadi@gmail.com");
+			mailbean.setSubject("Hi Fajar Prihadi");
+			mailbean.setBodymsg("How are you Prihadi?");
+			new MailSender().sendSSLMessage(mailbean);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void sendSSLMessage(MailBean mailbean) throws MessagingException {
 
 		//Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
 		boolean debug = false;
@@ -40,6 +55,7 @@ public class MailSender {
 		props.put("mail.smtp.starttls.enable", "false");
 		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 		props.put("mail.smtp.socketFactory.fallback", "true");
+		props.put("java.net.preferIPv4Stack" , "true");
 
 		Session session = Session.getDefaultInstance(props);
 		session.setDebug(debug);

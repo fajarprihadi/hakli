@@ -42,12 +42,7 @@ public class MailHandler implements Runnable {
 		String errormsg = "";
 		MailBean mailbean = null;
 		try {
-			mailbean = AppData.getSmtpParam();	
-			mailbean.setSmtpname("mail.bangzk.tech");
-			mailbean.setSmtpport(587);
-			mailbean.setMailid("admin@pphakli.org");
-			mailbean.setMailpassword("Qwert1234!");
-			mailbean.setFrom("HAKLI <admin@pphakli.org>");
+			mailbean = AppData.getSmtpParam();
 			try {
 				if (obj != null) {
 					File file = new File(bodymail);
@@ -97,7 +92,7 @@ public class MailHandler implements Runnable {
 			
 			mailbean.setAttachment(null);
 			mailbean.setFilename("");
-			MailSender.sendSSLMessage(mailbean);
+			new MailSender().sendSSLMessage(mailbean);
 		} catch (MessagingException e) {
 			errormsg = e.getMessage();
 			e.printStackTrace();

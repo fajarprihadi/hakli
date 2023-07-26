@@ -65,9 +65,9 @@ public class MailSender_Test {
 		// Use the following if you need SSL
 		props.put("mail.smtp.host", "mail.bangzk.tech"); 	
 		props.put("mail.smtp.port", "587");
-		props.put("mail.smtps.socketFactory.port", "587");
-		//props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.socketFactory.fallback", "false");
+		//props.put("mail.smtps.socketFactory.port", "587");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.socketFactory.fallback", "true");
 		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 		props.put("java.net.preferIPv4Stack" , "true");
 		//props.put("mail.smtp.ssl.trust", "*");
