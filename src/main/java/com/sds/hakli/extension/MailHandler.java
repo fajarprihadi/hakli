@@ -97,8 +97,7 @@ public class MailHandler implements Runnable {
 			
 			mailbean.setAttachment(null);
 			mailbean.setFilename("");
-			//MailSender.sendSSLMessage(mailbean);
-			MailBlast.sendSSLMessage(mailbean);
+			MailSender.sendSSLMessage(mailbean);
 		} catch (MessagingException e) {
 			errormsg = e.getMessage();
 			e.printStackTrace();
