@@ -66,11 +66,12 @@ public class BukuLogRequestVm {
 	private String orderby;
 	private String filter;
 	private String arg;
+	private String status;
 
 	private String nama;
 	private Mcabang mcabang;
 	private Mprov mprov;
-	
+
 	private List<Mcabang> mcabangmodel = new ArrayList<>();
 
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd MMMM yyyy");
@@ -98,17 +99,17 @@ public class BukuLogRequestVm {
 
 		if (arg != null && arg.equals("list")) {
 			doLoadCabang();
-			
+
 			divAdd.setVisible(false);
 			gbSearch.setVisible(true);
-			
-			if(obj.getMusergroup().getUsergroupcode().equals("PPR")) {
+
+			if (obj.getMusergroup().getUsergroupcode().equals("PPR")) {
 				divProv.setVisible(false);
-			} else if(obj.getMusergroup().getUsergroupcode().equals("PKA")) {
+			} else if (obj.getMusergroup().getUsergroupcode().equals("PKA")) {
 				divProv.setVisible(false);
 				divCab.setVisible(false);
 			}
-				
+
 		}
 
 		paging.addEventListener("onPaging", new EventListener<Event>() {
@@ -134,8 +135,17 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(dateLocalFormatter.format(data.getTglakhir())));
 				row.getChildren().add(new Label(AppUtils.getStatusLogLabel(data.getStatus())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
-				row.getChildren().add(
-						new Label(data.getIspaid() != null && data.getIspaid().equals("Y") ? "LUNAS" : "BELUM BAYAR"));
+
+				if (data.getStatus().equals("O"))
+					status = "-";
+				else if (data.getStatus().equals("R") && data.getIspaid() != null && data.getIspaid().equals("N"))
+					status = "BELUM BAYAR";
+				else if (data.getIspaid() != null && data.getIspaid().equals("Y"))
+					status = "LUNAS";
+				else
+					status = "-";
+
+				row.getChildren().add(new Label(status));
 
 				Div div = new Div();
 				Hlayout hlayout = new Hlayout();
@@ -333,15 +343,16 @@ public class BukuLogRequestVm {
 			}
 		});
 	}
-	
+
 	@Command
 	@NotifyChange("mcabangmodel")
 	public void doLoadCabang() {
 		try {
-			if(mprov != null) {
+			if (mprov != null) {
 				mcabangmodel = new McabangDAO().listByFilter("mprovfk = " + mprov.getMprovpk(), "cabang");
 			} else if (obj.getMusergroup().getUsergroupcode().equals("PPR")) {
-				mcabangmodel = new McabangDAO().listByFilter("mprovfk = " + obj.getMcabang().getMprov().getMprovpk(), "cabang");
+				mcabangmodel = new McabangDAO().listByFilter("mprovfk = " + obj.getMcabang().getMprov().getMprovpk(),
+						"cabang");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
