@@ -62,7 +62,7 @@
 						<vlayout>
 							<hlayout>
 								<button sclass="btn btn-info btn-sm"
-									label="Browse..." upload="true,maxsize=1000"
+									label="Browse..." upload="true,maxsize=5000"
 									onUpload="@command('doUpload', upEvent=event)"
 									autodisable="self" />
 								<separator orient="vertical" />
