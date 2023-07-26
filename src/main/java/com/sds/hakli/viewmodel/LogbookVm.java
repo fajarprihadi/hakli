@@ -62,23 +62,32 @@ public class LogbookVm {
 
 	private String startdate;
 	private String enddate;
+	private String isDetail;
 
 	@Wire
 	private Div divTitle;
 	@Wire
 	private Grid grid;
+	@Wire
+	private Div divAdd;
 
 	@AfterCompose
-	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("book") Tp2kbbook tpb) {
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("book") Tp2kbbook tpb,
+			@ExecutionArgParam("isDetail") String isDetail) {
 		Selectors.wireComponents(view, this, false);
 
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
 		
+		if(isDetail != null && isDetail.equals("Y")) {
+			divAdd.setVisible(false);
+			this.isDetail = isDetail;
+		}
+
 		if (tpb != null) {
 			this.tpb = tpb;
 			startdate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglmulai());
 			enddate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglakhir());
-			
+
 			HtmlNativeComponent h4 = new HtmlNativeComponent("h4");
 			h4.appendChild(new Html("Buku Log P2KB Periode " + startdate + " S/D " + enddate));
 			divTitle.appendChild(h4);
@@ -117,7 +126,7 @@ public class LogbookVm {
 		});
 
 		doReset();
-		
+
 	}
 
 	@Command
@@ -287,6 +296,10 @@ public class LogbookVm {
 			} else {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("obj", obj);
+				if(isDetail != null && isDetail.equals("Y")) {
+					map.put("isDetail", isDetail);
+					System.out.println(isDetail);
+				}
 				Window win = (Window) Executions.createComponents("/view/p2kb/" + page, null, map);
 				win.setClosable(true);
 				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {

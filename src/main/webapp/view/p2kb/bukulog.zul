@@ -41,7 +41,7 @@
 			</grid>
 		</groupbox>
 		<separator />
-		<div class="row" align="right">
+		<div id="divAdd" class="row" align="right">
 			<div class="col">
 				<button label="Tambah" autodisable="self"
 					iconSclass="z-icon-plus" sclass="btn btn-primary btn-sm"
