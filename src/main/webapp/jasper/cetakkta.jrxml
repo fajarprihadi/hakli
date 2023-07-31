@@ -2,12 +2,13 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cetakkta" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1797a0a-6826-4e1a-877f-337eec26aa05">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="8"/>
+	<property name="ireport.y" value="80"/>
 	<parameter name="CARD1" class="java.lang.String"/>
 	<parameter name="CARD2" class="java.lang.String"/>
 	<parameter name="FOTO" class="java.lang.String"/>
 	<parameter name="CURRENTDATE" class="java.lang.String"/>
 	<parameter name="TGLLAHIR" class="java.lang.String"/>
+	<parameter name="PERIODEKTA" class="java.lang.String"/>
 	<field name="nama" class="java.lang.String"/>
 	<field name="tempatlahir" class="java.lang.String"/>
 	<field name="tgllahir" class="java.util.Date"/>
@@ -93,7 +94,7 @@
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[": " + $F{noanggota}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[": " + $P{PERIODEKTA}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="71" y="187" width="141" height="11" uuid="bc683499-d38f-466b-b4ef-19d359fab6ef"/>
