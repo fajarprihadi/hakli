@@ -24,33 +24,51 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
+import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Tp2kbbook;
+import com.sds.hakli.model.Tp2kbbookListModel;
 import com.sds.utils.AppUtils;
 
 public class LetterRecVm {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	private List<Tp2kbbook> objList = new ArrayList<>();
+//	private List<Tp2kbbook> objList = new ArrayList<>();
+	
+	private Tp2kbbookListModel model;
 
 	private String filter;
 	private String orderby;
 
 	private String nama;
 
-	private Integer pageTotalSize;
+	private int pageStartNumber;
+	private int pageTotalSize;
+	private boolean needsPageUpdate;
 	
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Wire
 	private Grid grid;
+	@Wire
+	private Paging paging;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
+		
+		paging.addEventListener("onPaging", new EventListener<Event>() {
+
+			@Override
+			public void onEvent(Event event) throws Exception {
+				PagingEvent pe = (PagingEvent) event;
+				pageStartNumber = pe.getActivePage();
+				refreshModel(pageStartNumber);
+			}
+		});
 		
 		doReset();
 		grid.setRowRenderer(new RowRenderer<Tp2kbbook>() {
@@ -109,18 +127,32 @@ public class LetterRecVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "status = 'C'";
+			filter = "status = 'C' and ispaid = 'Y'";
 			orderby = "tp2kbbookpk";
 
 			if (nama != null && nama.trim().length() > 0)
 				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
 
-			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
-			pageTotalSize = objList.size();
-			grid.setModel(new ListModelList<>(objList));
+			needsPageUpdate = true;
+			paging.setActivePage(0);
+			pageStartNumber = 0;
+			refreshModel(pageStartNumber);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@NotifyChange("pageTotalSize")
+	public void refreshModel(int activePage) {
+		orderby = "tglmulai";
+		paging.setPageSize(AppUtils.PAGESIZE);
+		model = new Tp2kbbookListModel(activePage, AppUtils.PAGESIZE, filter, orderby);
+		if (needsPageUpdate) {
+			pageTotalSize = model.getTotalSize(filter);
+			needsPageUpdate = false;
+		}
+		paging.setTotalSize(pageTotalSize);
+		grid.setModel(model);
 	}
 
 	@Command
