@@ -42,7 +42,9 @@ public class CetakKtaVm {
 		objList.add(obj);
 		String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 		String localdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getTgllahir());
-		String periodekta = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getPeriodekta());
+		String periodekta = "";
+		if(obj.getPeriodekta() != null)
+			periodekta = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getPeriodekta());
 
 		String photoname = "";
 
