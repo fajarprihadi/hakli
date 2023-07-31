@@ -2,6 +2,7 @@ package com.sds.hakli.viewmodel;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,7 +42,9 @@ public class CetakKtaVm {
 		objList.add(obj);
 		String currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 		String localdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getTgllahir());
-		;
+		String periodekta = "";
+		if(obj.getPeriodekta() != null)
+			periodekta = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(obj.getPeriodekta());
 
 		String photoname = "";
 
@@ -56,6 +59,7 @@ public class CetakKtaVm {
 		}
 
 		parameters.put("TGLLAHIR", localdate);
+		parameters.put("PERIODEKTA", periodekta);
 		parameters.put("CURRENTDATE", currentdate);
 		parameters.put("FOTO",
 				Executions.getCurrent().getDesktop().getWebApp().getRealPath(AppUtils.PATH_PHOTO + "/" + photoname));
