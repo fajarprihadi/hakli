@@ -60,6 +60,7 @@ public class PaymentVm {
 
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private Tanggota anggota;
+	private TanggotaDAO anggotaDao = new TanggotaDAO();
 	private MchargeDAO chargeDao = new MchargeDAO();
 	private TinvoiceDAO invDao = new TinvoiceDAO();
 	private List<Mcharge> objList;
@@ -100,6 +101,7 @@ public class PaymentVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			anggota = (Tanggota) zkSession.getAttribute("anggota");
+			anggota = anggotaDao.findByPk(anggota.getTanggotapk());
 			gridCharge.setRowRenderer(new RowRenderer<Mcharge>() {
 
 				@Override
@@ -275,7 +277,8 @@ public class PaymentVm {
 										Calendar cal = Calendar.getInstance();
 										cal.setTime(startperiod);
 										cal.add(Calendar.MONTH, 6 * qty);
-										String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(cal.getTime());
+										Date periodektanext = cal.getTime();
+										String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(periodektanext);
 										
 										briva.setKeterangan(invdesc);
 										briva.setNama(anggota.getNama().trim().length() > 40 ? anggota.getNama().trim().substring(0, 40) : anggota.getNama().trim());
@@ -290,6 +293,9 @@ public class PaymentVm {
 											
 											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
 											invDao.save(session, inv);
+											
+											anggota.setPeriodektanext(periodektanext);
+											anggotaDao.save(session, anggota);
 											
 											trx.commit();
 											

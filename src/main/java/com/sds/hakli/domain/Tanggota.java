@@ -425,6 +425,12 @@ public class Tanggota {
 		this.periodekta = periodekta;
 	}
 	
+	public Date getPeriodektanext() {
+		return periodektanext;
+	}
+	public void setPeriodektanext(Date periodektanext) {
+		this.periodektanext = periodektanext;
+	}
 	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getVareg() {
 		return vareg;
