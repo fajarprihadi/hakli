@@ -31,16 +31,18 @@
 		</groupbox>
 		<separator />
 		<div class="row">
-			<div class="col-md" />
-				<div class="col-md-2" align="right">
-					<label value="Total Data :"
-						style="font-weight: bold" />
-					<label value="@load(vm.pageTotalSize)"
-						style="font-weight: bold" />
-				</div>
+			<div class="col-md-10">
+						<paging id="paging" autohide="true" />
+					</div>
+					<div class="col-md-2" align="right">
+						<label value="Total Record :"
+							style="font-weight: bold" />
+						<label value="@load(vm.pageTotalSize)"
+							style="font-weight: bold" />
+					</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true" mold="paging" pageSize="20"
-			pagingPosition="both">
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
+			sizedByContent="true" span="true" pagingPosition="both">
 			<columns>
 				<column label="${labels.common.no}" align="right" />
 				<column label="Nomor STR" />
