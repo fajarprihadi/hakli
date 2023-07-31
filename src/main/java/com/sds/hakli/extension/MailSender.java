@@ -25,18 +25,18 @@ import com.sds.utils.AppData;
 
 public class MailSender {
 	
-	public static void main(String[] args) {
-		try {
-			System.out.println("Fajar Prihadi");
-			MailBean mailbean = AppData.getSmtpParam();	
-			mailbean.setRecipient("fprihadi@gmail.com");
-			mailbean.setSubject("Hi Fajar Prihadi");
-			mailbean.setBodymsg("How are you Prihadi?");
-			new MailSender().sendSSLMessage(mailbean);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			System.out.println("Fajar Prihadi");
+//			MailBean mailbean = AppData.getSmtpParam();	
+//			mailbean.setRecipient("fprihadi@gmail.com");
+//			mailbean.setSubject("Hi Fajar Prihadi");
+//			mailbean.setBodymsg("How are you Prihadi?");
+//			new MailSender().sendSSLMessage(mailbean);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void sendSSLMessage(MailBean mailbean) throws MessagingException {
 
@@ -51,7 +51,7 @@ public class MailSender {
 		
 		// remark untuk relay server dan unremark untuk mail server
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		//props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.starttls.enable", "false");
 		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 		props.put("mail.smtp.socketFactory.fallback", "true");

@@ -36,6 +36,8 @@ public class Tp2kb {
 	
 	private BigDecimal totalskpwaiting = new BigDecimal(0);
 	
+	private String isscrap;
+	
 	@Id
 	@SequenceGenerator(name = "tp2kb_seq", sequenceName = "tp2kb_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tp2kb_seq")
@@ -124,6 +126,14 @@ public class Tp2kb {
 
 	public void setTotalskpwaiting(BigDecimal totalskpwaiting) {
 		this.totalskpwaiting = totalskpwaiting;
+	}
+
+	public String getIsscrap() {
+		return isscrap;
+	}
+
+	public void setIsscrap(String isscrap) {
+		this.isscrap = isscrap;
 	}
 	
 }

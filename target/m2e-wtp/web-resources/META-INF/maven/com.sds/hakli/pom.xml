@@ -158,13 +158,6 @@
 			<version>1.4.7</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-			<version>1.6.2</version>
-		</dependency>
-
-
 		<!--  Lib untuk jasper -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>

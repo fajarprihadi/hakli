@@ -100,13 +100,15 @@ public class Tanggota {
 	
 	private Date periodekta;
 	
+	private Date periodektanext;
+	
 	private String vareg;
 	
-	private int varegstatus;
+	private Integer varegstatus;
 	
 	private String vaevent;
 	
-	private int vaeventstatus;
+	private Integer vaeventstatus;
 	
 	private String issisdmk;
 	
@@ -430,10 +432,10 @@ public class Tanggota {
 	public void setVareg(String vareg) {
 		this.vareg = vareg;
 	}
-	public int getVaregstatus() {
+	public Integer getVaregstatus() {
 		return varegstatus;
 	}
-	public void setVaregstatus(int varegstatus) {
+	public void setVaregstatus(Integer varegstatus) {
 		this.varegstatus = varegstatus;
 	}
 	
@@ -444,10 +446,10 @@ public class Tanggota {
 	public void setVaevent(String vaevent) {
 		this.vaevent = vaevent;
 	}
-	public int getVaeventstatus() {
+	public Integer getVaeventstatus() {
 		return vaeventstatus;
 	}
-	public void setVaeventstatus(int vaeventstatus) {
+	public void setVaeventstatus(Integer vaeventstatus) {
 		this.vaeventstatus = vaeventstatus;
 	}
 	

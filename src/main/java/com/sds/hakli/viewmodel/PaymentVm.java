@@ -274,7 +274,7 @@ public class PaymentVm {
 										Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
 										Calendar cal = Calendar.getInstance();
 										cal.setTime(startperiod);
-										cal.add(Calendar.MONTH, 6);
+										cal.add(Calendar.MONTH, 6 * qty);
 										String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(cal.getTime());
 										
 										briva.setKeterangan(invdesc);

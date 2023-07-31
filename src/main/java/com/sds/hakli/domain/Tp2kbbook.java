@@ -39,6 +39,7 @@ public class Tp2kbbook {
 	private String reviewerid;
 	private String reviewername;
 	private Date reviewtime;
+	private String isscrapp2kb;
 	
 	
 	@Id
@@ -204,6 +205,12 @@ public class Tp2kbbook {
 	}
 	public void setReviewername(String reviewername) {
 		this.reviewername = reviewername;
+	}
+	public String getIsscrapp2kb() {
+		return isscrapp2kb;
+	}
+	public void setIsscrapp2kb(String isscrapp2kb) {
+		this.isscrapp2kb = isscrapp2kb;
 	}
 	
 	
