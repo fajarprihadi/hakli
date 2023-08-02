@@ -75,6 +75,14 @@ public class EventRegdoneVm {
 						
 						btInv.setVisible(true);
 						isValid = false;
+					} else if (obj.getVaexpdate().compareTo(new Date()) < 0) {
+						HtmlNativeComponent strong = new HtmlNativeComponent("strong");
+						strong.appendChild(new Html("Anda telah mengisi data pendaftaran Anda, tapi Anda tidak melakukan pembayaran sampai tagihan Anda kadaluarsa. Silakan klik tombol Re-Generate Virtual Account untuk membuat tagihan baru."));
+						divInfo.appendChild(strong);
+						divInfo.appendChild(new Separator());
+						
+						btInv.setVisible(true);
+						//isValid = false;
 					} else {
 						HtmlNativeComponent strong = new HtmlNativeComponent("strong");
 						strong.appendChild(new Html("Anda telah mengisi data pendaftaran Anda. Selanjutnya silakan Anda menyelesaikan pembayaran tagihan melalui Virtual Account Bank BRI atas data berikut :"));
@@ -183,13 +191,18 @@ public class EventRegdoneVm {
 				Session session = StoreHibernateUtil.openSession();
 				Transaction trx = session.beginTransaction();
 				try {
+					boolean isUpdate = false;
+					if (obj.getVano() != null && obj.getVano().trim().length() > 0) {
+						isUpdate = true;
+						briva.setCustCode(obj.getVano().substring(5));
+					} else {
+						briva.setCustCode(new TcounterengineDAO().getVaCounter());
+					}
 					briva.setAmount(obj.getTevent().getEventprice().toString());
 					briva.setInstitutionCode(bean.getBriva_institutioncode());
 					briva.setBrivaNo(bean.getBriva_cid());
 					
-					String custcode_cabang = "0000" + obj.getTanggota().getMcabang().getKodecabang();
-					String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
-					briva.setCustCode(new TcounterengineDAO().getVaCounter());
+					//briva.setCustCode(new TcounterengineDAO().getVaCounter());
 					briva.setKeterangan(obj.getTevent().getEventname().trim().length() > 40 ? obj.getTevent().getEventname().substring(0, 40) : obj.getTevent().getEventname());
 					briva.setNama(obj.getTanggota().getNama().trim().length() > 40 ? obj.getTanggota().getNama().trim().substring(0, 40) : obj.getTanggota().getNama().trim());
 					
@@ -200,7 +213,11 @@ public class EventRegdoneVm {
 					
 					briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 					
-					BrivaCreateResp brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+					BrivaCreateResp brivaCreated = null;
+					if (isUpdate)
+						brivaCreated = briapi.updateDataBriva(briapiToken.getAccess_token(), briva);
+					else brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+					
 					if (brivaCreated != null && brivaCreated.getStatus()) {
 						obj.setVano(briva.getBrivaNo() + briva.getCustCode());
 						obj.setVaamount(obj.getTevent().getEventprice());

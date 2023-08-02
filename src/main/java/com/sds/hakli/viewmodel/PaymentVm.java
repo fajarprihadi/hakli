@@ -191,13 +191,12 @@ public class PaymentVm {
 			
 			refreshModel(pageStartNumber);
 			
-			if (anggota.getVaregstatus() == 1) {
-				Tinvoice inv = invDao.findByFilter("vano = '" + anggota.getVareg() + "' and ispaid = 'N'");
-				if (inv != null && inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN) && inv.getInvoiceduedate().compareTo(new Date()) >= 0) {
-					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar. \n Silahkan lihat di tabel riwayat tagihan dihalaman bawah.";
+			List<Tinvoice> invList = invDao.listByFilter("tanggota.tanggotapk = '" + anggota.getTanggotapk() + "' and invoicetype = '" + AppUtils.INVOICETYPE_IURAN + "' and ispaid = 'N'", "tinvoicepk desc");
+			if (invList.size() > 0) {
+				if (invList.get(0).getInvoiceduedate().compareTo(new Date()) >= 0) {
+					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar dengan Nomor VA " + invList.get(0).getVano() + " yang akan kadaluarsa pada tanggal" + datelocalFormatter.format(invList.get(0).getInvoiceduedate()) + ". \n Silahkan lihat tabel Riwayat Tagihan dihalaman bawah.";
 					btSave.setDisabled(true);
 				}
-				
 			}
 			
 		} catch (Exception e) {
