@@ -61,6 +61,18 @@ public class Tp2kbe09 {
 	private Date checktimekomisi;
 	
 	private String checkedbyid;
+	
+	private Tp2kbbook tp2kbbook;
+
+	@ManyToOne
+	@JoinColumn(name = "tp2kbbookfk")
+	public Tp2kbbook getTp2kbbook() {
+		return tp2kbbook;
+	}
+
+	public void setTp2kbbook(Tp2kbbook tp2kbbook) {
+		this.tp2kbbook = tp2kbbook;
+	}
 
 	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getCheckedbyid() {

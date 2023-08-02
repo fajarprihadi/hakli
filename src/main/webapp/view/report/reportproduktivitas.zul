@@ -10,6 +10,14 @@
 			<caption label="Pencarian" iconSclass="z-icon-search" />
 			<div class="row">
 				<div class="col">
+					<combobox id="cbMonth" width="100%" placeholder="Bulan"
+						selectedItem="@bind(vm.month)" />
+				</div>
+				<div class="col">
+					<intbox value="@bind(vm.year)" placeholder="Tahun"
+						onOK="@command('doSearch')" width="100%" />
+				</div>
+				<div class="col">
 					<textbox placeholder="Nama" value="@bind(vm.nama)"
 						onOK="@command('doSearch')" width="100%" maxlength="40" />
 				</div>
@@ -39,21 +47,21 @@
 		</groupbox>
 		<separator />
 		<div class="row">
-			<div class="col-md" />
+			<div class="col-md-10">
+				<paging id="paging" autohide="true" />
+			</div>
 			<div class="col-md-2" align="right">
-				<label value="Total Data :" style="font-weight: bold" />
+				<label value="Total Record :" style="font-weight: bold" />
 				<label value="@load(vm.pageTotalSize)"
 					style="font-weight: bold" />
 			</div>
 		</div>
 		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
-			mold="paging" pageSize="20" sizedByContent="true" span="true"
-			pagingPosition="both">
+			sizedByContent="true" span="true" pagingPosition="both">
 			<columns>
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.cabang}" />
-				<column label="Nomor Anggota"
-					align="center" />
+				<column label="Nomor Anggota" align="center" />
 				<column label="Nama" />
 				<column label="Role" />
 				<column label="Total Produktivitas" align="right" />

@@ -119,6 +119,7 @@ public class P2kbB08Vm {
 				if (objForm.getTp2kbb08pk() == null) {
 					isInsert = true;
 
+					objForm.setTp2kbbook(tpb);
 					objForm.setCreatedby(anggota.getNoanggota());
 					objForm.setCreatetime(new Date());
 					objForm.setStatus("W");
