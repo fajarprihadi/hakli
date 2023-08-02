@@ -10,8 +10,8 @@
 			<caption label="Pencarian" iconSclass="z-icon-search" />
 			<div class="row">
 				<div class="col">
-					<textbox placeholder="Nama" value="@bind(vm.nama)" onOK="@command('doSearch')"
-						width="100%" maxlength="40" />
+					<textbox placeholder="Nama" value="@bind(vm.nama)"
+						onOK="@command('doSearch')" width="100%" maxlength="40" />
 				</div>
 				<div class="col">
 					<div class="row">
@@ -32,14 +32,13 @@
 		<separator />
 		<div class="row">
 			<div class="col-md-10">
-						<paging id="paging" autohide="true" />
-					</div>
-					<div class="col-md-2" align="right">
-						<label value="Total Record :"
-							style="font-weight: bold" />
-						<label value="@load(vm.pageTotalSize)"
-							style="font-weight: bold" />
-					</div>
+				<paging id="paging" autohide="true" />
+			</div>
+			<div class="col-md-2" align="right">
+				<label value="Total Record :" style="font-weight: bold" />
+				<label value="@load(vm.pageTotalSize)"
+					style="font-weight: bold" />
+			</div>
 		</div>
 		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
 			sizedByContent="true" span="true" pagingPosition="both">
@@ -47,12 +46,13 @@
 				<column label="${labels.common.no}" align="right" />
 				<column label="Nomor STR" />
 				<column label="${labels.anggota.cabang}" />
-				<column label="${labels.anggota.noanggota}" align="center"/>
+				<column label="${labels.anggota.noanggota}"
+					align="center" />
 				<column label="${labels.anggota.nama}" />
 				<column label="Tgl Mulai" align="center" />
 				<column label="Tgl Berakhir" align="center" />
-				<column label="Total SKP" align="right"/>
-				<column label="Action" align="center"/>
+				<column label="Total SKP" align="right" />
+				<column label="Action" align="center" />
 			</columns>
 		</grid>
 

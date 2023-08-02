@@ -115,6 +115,7 @@ public class P2kbE11Vm {
 			Session session = StoreHibernateUtil.openSession();
 			Transaction trx = session.beginTransaction();
 			try {
+				objForm.setTp2kbbook(tpb);
 				objForm.setNilaiskp(new BigDecimal(3));
 				objForm.setCreatedby(anggota.getNoanggota());
 				objForm.setCreatetime(new Date());
