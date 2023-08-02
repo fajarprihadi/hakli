@@ -127,15 +127,15 @@ public class P2kbB09Vm {
 						String folder = Executions.getCurrent().getDesktop().getWebApp()
 								.getRealPath(AppUtils.PATH_P2KB);
 						if (media.isBinary()) {
-							Files.copy(new File(folder + "/" + docid + "/" + media.getFormat()), media.getStreamData());
+							Files.copy(new File(folder + "/" + docid + "." + media.getFormat()), media.getStreamData());
 						} else {
 							BufferedWriter writer = new BufferedWriter(
-									new FileWriter(folder + "/" + docid + "/" + media.getFormat()));
+									new FileWriter(folder + "/" + docid + "." + media.getFormat()));
 							Files.copy(writer, media.getReaderData());
 							writer.close();
 						}
 						objForm.setDocid(docid);
-						objForm.setDocpath(AppUtils.PATH_P2KB + "/" + docid + "/" + media.getFormat());
+						objForm.setDocpath(AppUtils.PATH_P2KB + "/" + docid + "." + media.getFormat());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

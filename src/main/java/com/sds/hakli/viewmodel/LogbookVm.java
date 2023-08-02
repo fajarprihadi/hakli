@@ -345,7 +345,8 @@ public class LogbookVm {
 	@Command
 	@NotifyChange("*")
 	public void doSearch() {
-		filter = "tanggota.tanggotapk = " + anggota.getTanggotapk() + " and tp2kbbookfk = " + tpb.getTp2kbbookpk();
+		//filter = "tanggota.tanggotapk = " + anggota.getTanggotapk() + " and tp2kbbookfk = " + tpb.getTp2kbbookpk();
+		filter = "tp2kbbookfk = " + tpb.getTp2kbbookpk();
 
 		refreshModel();
 	}
