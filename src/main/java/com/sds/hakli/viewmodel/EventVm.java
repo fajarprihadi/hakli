@@ -159,7 +159,7 @@ public class EventVm {
 				liEventlocation.setParent(ul);
 				HtmlNativeComponent li12 = new HtmlNativeComponent("li");
 				li12.setClientAttribute("class", "list-group-item px-4");
-				li12.appendChild(new Html("Biaya Pendaftaran Rp. " + NumberFormat.getInstance().format(obj.getEventprice())));
+				li12.appendChild(new Html("Biaya Pendaftaran Rp. " + (obj.getEventprice() != null ? NumberFormat.getInstance().format(obj.getEventprice()) : "0")));
 				li12.setParent(ul);
 				HtmlNativeComponent li1 = new HtmlNativeComponent("li");
 				li1.setClientAttribute("class", "list-group-item px-4");

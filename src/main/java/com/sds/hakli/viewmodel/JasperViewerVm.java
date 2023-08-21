@@ -57,8 +57,8 @@ public class JasperViewerVm {
 
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-			System.out.println(reportPath);
-			System.out.println(reportPath2);
+			//System.out.println(reportPath);
+			//System.out.println(reportPath2);
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters,
 					new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection) objList));
@@ -71,7 +71,7 @@ public class JasperViewerVm {
 				jasperPrintList.add(jasperPrint2);
 			}
 			
-			System.out.println("TOTAL PAGE : " + jasperPrintList.size());
+			//System.out.println("TOTAL PAGE : " + jasperPrintList.size());
 
 			JRPdfExporter exporter = new JRPdfExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, jasperPrintList);

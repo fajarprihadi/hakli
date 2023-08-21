@@ -115,6 +115,8 @@ public class AppData {
 		String name = "";
 		if (code.equals(AppUtils.EVENTTYPE_SUMPAHPROFESI))
 			name = "Sumpah Profesi";
+		else if (code.equals(AppUtils.EVENTTYPE_RAKERNAS))
+			name = "Rakernas";
 		else if (code.equals(AppUtils.EVENTTYPE_SEMINAR))
 			name = "Seminar";
 		else if (code.equals(AppUtils.EVENTTYPE_WORKSHOP))

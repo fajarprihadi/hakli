@@ -34,12 +34,13 @@ public class NaskahHandler {
 
 			String nosurat = "";
 			String eventcity = data.getTevent().getEventcity();
-			String filepath = "naskahsumpah.jasper";
+			//String filepath = "naskahsumpah.jasper";
+			String filepath = "cert.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
 			if (arg.equals("sumpah")) {
 				nosurat = data.getSpno();
 				if (data.getTanggota().getAgama() != null) {
-					System.out.println("'" + data.getTanggota().getAgama() + "'");
+					//System.out.println("'" + data.getTanggota().getAgama() + "'");
 					if (data.getTanggota().getAgama().toUpperCase().equals("ISLAM")) {
 						parameters.put("SALAMNASKAH",
 								"Semoga Allah Subhanahu wa ta’ala memberikan kekuatan kepada saya");
@@ -120,6 +121,27 @@ public class NaskahHandler {
 						.getRealPath(AppUtils.PATH_JASPER + "/" + filepath2));
 			}
 
+			Executions.getCurrent().sendRedirect("/view/jasperviewer.zul", "_blank");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void downloadSertifikat(Teventreg data) {
+		try {
+			Map<String, Object> parameters = new HashMap<>();
+			parameters.put("NAMA", data.getTanggota().getGelarbelakang() != null && data.getTanggota().getGelarbelakang().trim().length() > 0 ? 
+					data.getTanggota().getNama() + ", " + data.getTanggota().getGelarbelakang() : data.getTanggota().getNama());
+			List<Tanggota> objList = new ArrayList<>();
+			objList.add(data.getTanggota());
+			zkSession.setAttribute("objList", objList);
+			
+			parameters.put("TEMPLATEPATH", Executions.getCurrent().getDesktop().getWebApp()
+					.getRealPath("/") + data.getTevent().getCertpath());
+			
+			zkSession.setAttribute("parameters", parameters);
+			zkSession.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+					.getRealPath(AppUtils.PATH_JASPER + "/cert.jasper"));
 			Executions.getCurrent().sendRedirect("/view/jasperviewer.zul", "_blank");
 		} catch (Exception e) {
 			e.printStackTrace();

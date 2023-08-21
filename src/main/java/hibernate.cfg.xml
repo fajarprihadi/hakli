@@ -5,7 +5,7 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/haklidb6</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/haklidb7</property>
 		<!-- <property name="hibernate.connection.url">jdbc:postgresql://10.12.4.164:5432/haklidb6</property> -->
 		<!-- <property name="hibernate.connection.url">jdbc:postgresql://103.224.65.71:5432/haklidb5</property> -->
 		<property name="hibernate.connection.username">postgres</property>
@@ -30,7 +30,7 @@
 		<!-- <property name="cache.use_minimal_puts">false</property> <property 
 			name="max_fetch_depth">3</property> -->
 
-		<property name="show_sql">false</property>
+		<property name="show_sql">true</property>
 		<property name="use_sql_comments">false</property>
 
 		<mapping class="com.sds.hakli.domain.Msysparam" />

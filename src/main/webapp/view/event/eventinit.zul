@@ -44,7 +44,7 @@
 								<div id="divReg">
 									<div class="form mb-4">
 										<textbox value="@bind(vm.nik)"
-											placeholder="Input NIK Anda untuk memulai pendaftaran"
+											placeholder="Input NIK / No Anggota Anda untuk memulai pendaftaran"
 											sclass="form-control form-control-lg" />
 									</div>
 

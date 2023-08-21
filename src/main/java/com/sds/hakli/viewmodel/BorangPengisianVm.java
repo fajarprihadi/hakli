@@ -3,6 +3,7 @@ package com.sds.hakli.viewmodel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -89,10 +90,13 @@ public class BorangPengisianVm {
 			});
 
 			doReset();
-
-			tpb = new Tp2kbbookDAO().findByFilter("tanggotafk = " + obj.getTanggotapk() + " and '"
-					+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "' BETWEEN TGLMULAI AND TGLAKHIR");
-			if (tpb == null) {
+			
+			List<Tp2kbbook> books = new Tp2kbbookDAO().listByFilter("tanggotafk = " + obj.getTanggotapk(), "tglakhir desc");
+			if (books.size() > 0) {
+				tpb = books.get(0);
+				startdate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglmulai());
+				enddate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglakhir());
+			} else {
 				tpb = new Tp2kbbook();
 				Map<String, Object> map = new HashMap<>();
 				Window win = new Window();
@@ -110,10 +114,32 @@ public class BorangPengisianVm {
 					}
 
 				});
-			} else {
-				startdate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglmulai());
-				enddate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglakhir());
 			}
+
+//			tpb = new Tp2kbbookDAO().findByFilter("tanggotafk = " + obj.getTanggotapk() + " and '"
+//					+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "' BETWEEN TGLMULAI AND TGLAKHIR");
+//			if (tpb == null) {
+//				tpb = new Tp2kbbook();
+//				Map<String, Object> map = new HashMap<>();
+//				Window win = new Window();
+//				map.put("type", "permohonan");
+//				win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);
+//				win.setWidth("50%");
+//				win.setClosable(true);
+//				win.doModal();
+//				win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+//					@Override
+//					public void onEvent(Event event) throws Exception {
+//						winBorang.getChildren().clear();
+//						winBorang.setBorder(false);
+//						Executions.createComponents("/view/p2kb/bukulogrequest.zul", winBorang, null);
+//					}
+//
+//				});
+//			} else {
+//				startdate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglmulai());
+//				enddate = new SimpleDateFormat("dd MMMMM yyyy").format(tpb.getTglakhir());
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

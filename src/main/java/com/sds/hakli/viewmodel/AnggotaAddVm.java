@@ -344,7 +344,7 @@ public class AnggotaAddVm {
 								doLoadKabPekerjaan(provkantor);
 							}
 							
-							if (sisdmkPekerjaan.getKabkot() != null) {
+							if (provkantor != null && sisdmkPekerjaan.getKabkot() != null) {
 								kabkantor = kabDao.findByFilter("provcode = '" + provkantor.getProvcode() + "' and upper(kabname) = '" + sisdmkPekerjaan.getKabkot().trim().toUpperCase() + "'");
 								if (kabkantor != null) {
 									cbKabkantor.setValue(kabkantor.getKabname());
@@ -654,44 +654,48 @@ public class AnggotaAddVm {
 			eventreg.setTevent(tevent);
 			eventreg.setTanggota(objForm.getPribadi());
 			eventreg.setIspaid("N");
-						
-			BriapiBean bean = AppData.getBriapibean();
-			BriApiExt briapi = new BriApiExt(bean);
-			BriApiToken briapiToken = briapi.getToken();
 			
-			Date vaexpdate = null;
-			BrivaData briva = new BrivaData();
-			if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
-				briva.setAmount(tevent.getEventprice().toString());
-				briva.setInstitutionCode(bean.getBriva_institutioncode());
-				briva.setBrivaNo(bean.getBriva_cid());
+			if (tevent.getIsfree().equals("N")) {
+				BriapiBean bean = AppData.getBriapibean();
+				BriApiExt briapi = new BriApiExt(bean);
+				BriApiToken briapiToken = briapi.getToken();
 				
-				String custcode_cabang = "0000" + objForm.getPribadi().getMcabang().getKodecabang();
-				String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
-				briva.setCustCode(new TcounterengineDAO().getVaCounter());
-				briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
-				briva.setNama(objForm.getPribadi().getNama().trim().length() > 40 ? objForm.getPribadi().getNama().trim().substring(0, 40) : objForm.getPribadi().getNama().trim());
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(tevent.getEventdate());
-				cal.add(Calendar.DAY_OF_MONTH, 14);
-				
-				vaexpdate = cal.getTime();
-				briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
-				
-				BrivaCreateResp brivaCreated = null;
-				brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
-				if (brivaCreated != null && brivaCreated.getStatus()) {
-					eventreg.setVano(briva.getBrivaNo() + briva.getCustCode());
-					eventreg.setVaamount(tevent.getEventprice());
-					eventreg.setVacreatedat(new Date());
-					eventreg.setVaexpdate(vaexpdate);
+				Date vaexpdate = null;
+				BrivaData briva = new BrivaData();
+				if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+					briva.setAmount(tevent.getEventprice().toString());
+					briva.setInstitutionCode(bean.getBriva_institutioncode());
+					briva.setBrivaNo(bean.getBriva_cid());
 					
-					eventregDao.save(session, eventreg);
+					String custcode_cabang = "0000" + objForm.getPribadi().getMcabang().getKodecabang();
+					String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
+					briva.setCustCode(new TcounterengineDAO().getVaCounter());
+					briva.setKeterangan(tevent.getEventname().trim().length() > 40 ? tevent.getEventname().substring(0, 40) : tevent.getEventname());
+					briva.setNama(objForm.getPribadi().getNama().trim().length() > 40 ? objForm.getPribadi().getNama().trim().substring(0, 40) : objForm.getPribadi().getNama().trim());
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(tevent.getEventdate());
+					cal.add(Calendar.DAY_OF_MONTH, 14);
 					
-					inv = new InvoiceGenerator().doInvoice(eventreg, eventreg.getVano(), AppUtils.INVOICETYPE_EVENT, tevent.getEventprice(), tevent.getEventname(), vaexpdate);
-					inv.setTanggota(objForm.getPribadi());
-					new TinvoiceDAO().save(session, inv);
+					vaexpdate = cal.getTime();
+					briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
+					
+					BrivaCreateResp brivaCreated = null;
+					brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+					if (brivaCreated != null && brivaCreated.getStatus()) {
+						eventreg.setVano(briva.getBrivaNo() + briva.getCustCode());
+						eventreg.setVaamount(tevent.getEventprice());
+						eventreg.setVacreatedat(new Date());
+						eventreg.setVaexpdate(vaexpdate);
+						
+						eventregDao.save(session, eventreg);
+						
+						inv = new InvoiceGenerator().doInvoice(eventreg, eventreg.getVano(), AppUtils.INVOICETYPE_EVENT, tevent.getEventprice(), tevent.getEventname(), vaexpdate);
+						inv.setTanggota(objForm.getPribadi());
+						new TinvoiceDAO().save(session, inv);
+					}
 				}
+			} else {
+				eventregDao.save(session, eventreg);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

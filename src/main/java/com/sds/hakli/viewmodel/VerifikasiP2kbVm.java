@@ -36,6 +36,7 @@ import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Vp2kb;
+import com.sds.utils.AppUtils;
 
 public class VerifikasiP2kbVm {
 	private Session session = Sessions.getCurrent();
@@ -148,12 +149,26 @@ public class VerifikasiP2kbVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "mcabangpk = " + obj.getMcabang().getMcabangpk();
+			filter = "";
+			if (obj.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+				if (filter.length() > 0)
+					filter += " and ";
+				filter += "mprovfk = " + obj.getMcabang().getMprov().getMprovpk();
+			} else if (obj.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
+				if (filter.length() > 0)
+					filter += " and ";
+				filter += "mcabangpk = " + obj.getMcabang().getMcabangpk();
+			}
+			
+			//filter = "mcabangpk = " + obj.getMcabang().getMcabangpk();
 			orderby = "nama";
 
-			if (nama != null && nama.trim().length() > 0)
-				filter += " and upper(nama) like '%" + nama.trim().toUpperCase() + "%'";
-
+			if (nama != null && nama.trim().length() > 0) {
+				if (filter.length() > 0)
+					filter += " and ";
+				filter += "upper(nama) like '%" + nama.trim().toUpperCase() + "%'";
+			}
+			
 			if (region != null)
 				filter += " ";
 

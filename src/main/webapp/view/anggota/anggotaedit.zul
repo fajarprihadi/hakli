@@ -111,7 +111,7 @@
 								</n:td>
 								<n:td>
 									<vlayout>
-										<textbox value="@bind(e.noktp)"
+										<textbox value="@bind(e.noktp)" readonly="true"
 											maxlength="20" width="100%" />
 										<label style="color:gray"
 											value="@load(vmsgs['noktp'])" />
@@ -420,6 +420,64 @@
 									</vlayout>
 								</n:td>
 							</n:tr>
+							<n:tr>
+								<n:td colspan="2">
+									<n:hr />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan="2">
+									<n:h5>Informasi Kontribusi Iuran</n:h5>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label value="Periode Terakhir Pembayaran" />
+								</n:td>
+								<n:td>
+									<label value="@load(k.periodekta) @converter('formatedDate', format='dd-MM-yyyy')" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label value="Periode Pembayaran s/d" />
+								</n:td>
+								<n:td>
+									<label value="@load(vm.periodeiuran) @converter('formatedDate', format='dd-MM-yyyy')" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label value="Keterangan" />
+								</n:td>
+								<n:td>
+									<label value="@load(vm.keteranganiuran)" style="font-size: 16px" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label />
+								</n:td>
+								<n:td>
+									<grid id="gridCharge">
+							<columns>
+								<column label="Komponen" />
+								<column label="Biaya" align="right" />
+							</columns>
+							<foot>
+								<footer>
+									<label
+										value="Total Yang Harus Dibayar" />
+								</footer>
+								<footer>
+									<decimalbox
+										value="@load(vm.totalpayment)" format="#,##0" readonly="true"
+										style="text-align: right" />
+								</footer>
+							</foot>
+						</grid>
+								</n:td>
+							</n:tr>
 						</n:table>
 					</div>
 				</n:div>
@@ -444,7 +502,7 @@
 							<column label="${labels.pekerjaan.notelp}" width="100px" />
 							<column label="${labels.pekerjaan.nofax}" width="100px" />
 							<column label="${labels.common.action}"
-								align="center" width="90px" />
+								align="center" width="110px" />
 						</columns>
 						<rows />
 					</grid>
@@ -766,7 +824,7 @@
 									<label
 										value="${labels.pendidikan.noijazah}" />
 									<textbox value="@bind(g.noijazah)"
-										maxlength="20" width="100%" />
+										maxlength="50" width="100%" />
 								</row>
 								<row>
 									<label value="Dokumen Ijazah" />

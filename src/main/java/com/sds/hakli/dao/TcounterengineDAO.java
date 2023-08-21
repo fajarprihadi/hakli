@@ -41,7 +41,7 @@ public class TcounterengineDAO {
 			strCounter = new String(fillUploadid) + lastCounter;
 			finalCounter = counterName
 					+ strCounter.substring(strCounter.length()-counter, strCounter.length());
-			System.out.println("finalCounter : " + finalCounter);
+			//System.out.println("finalCounter : " + finalCounter);
 		} catch (Exception e) {
 			transaction.rollback();
 			e.printStackTrace();

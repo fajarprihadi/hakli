@@ -136,6 +136,7 @@ public class BukuLogRequestVm {
 				row.getChildren().add(new Label(AppUtils.getStatusLogLabel(data.getStatus())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
 
+				String status = "";
 				if (data.getStatus().equals("O"))
 					status = "-";
 				else if (data.getStatus().equals("R") && data.getIspaid() != null && data.getIspaid().equals("N"))
@@ -190,6 +191,7 @@ public class BukuLogRequestVm {
 						Window win = new Window();
 						map.put("obj", obj);
 						map.put("book", data);
+						map.put("arg", arg);
 						if (arg != null && arg.equals("req")) {
 
 							SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
@@ -199,24 +201,10 @@ public class BukuLogRequestVm {
 								Date d2 = sdformat
 										.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
 
-								System.out.println(d1 + ", " + d2);
+								//System.out.println(d1 + ", " + d2);
 								if (d1.compareTo(d2) < 0) {
-//							win = (Window) Executions.createComponents("/view/p2kb/bukulog.zul", null, map);
-//							win.setWidth("90%");
-//							win.setClosable(true);
-//							win.doModal();
-//							win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-//								@Override
-//								public void onEvent(Event event) throws Exception {
-//									doReset();
-//								}
-//
-//							});
-
 									Component comp = winBookLogReq.getParent();
 									comp.getChildren().clear();
-									// Map<String, Object> map = new HashMap<>();
-									// map.put("obj", obj);
 									Executions.createComponents("/view/p2kb/bukulog.zul", comp, map);
 								} else {
 									win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, map);

@@ -34,6 +34,8 @@ public class Tp2kbb02 {
 	
 	private String docpath;
 	
+	private String doclink;
+	
 	private Date tglkegiatan;
 
 	private BigDecimal nilaiskp;
@@ -249,5 +251,13 @@ public class Tp2kbb02 {
 
 	public void setChecktimekomisi(Date checktimekomisi) {
 		this.checktimekomisi = checktimekomisi;
+	}
+
+	public String getDoclink() {
+		return doclink;
+	}
+
+	public void setDoclink(String doclink) {
+		this.doclink = doclink;
 	}
 }

@@ -184,6 +184,5 @@ public class Teventreg {
 	public void setKeno(String keno) {
 		this.keno = keno;
 	}
-
 	
 }

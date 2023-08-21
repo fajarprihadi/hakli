@@ -46,8 +46,8 @@ import com.sds.utils.AppData;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class VerifikasiKomisiVm {
-	private static org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-	private static Tanggota anggota = (Tanggota) zkSession.getAttribute("anggota");
+	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
+	private Tanggota anggota;
 
 	private List<Tp2kbbook> objList = new ArrayList<>();
 
@@ -244,7 +244,7 @@ public class VerifikasiKomisiVm {
 			orderby = "tglmulai";
 
 			if (nama != null && nama.trim().length() > 0)
-				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
+				filter += " and upper(tanggota.nama) like '%" + nama.trim().toUpperCase() + "%'";
 
 			objList = new Tp2kbbookDAO().listByFilter(filter, orderby);
 			pageTotalSize = objList.size();

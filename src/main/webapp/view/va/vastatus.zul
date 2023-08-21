@@ -157,7 +157,7 @@
 						onClick="@command('doFlagInvoice')" />
 				</div>
 				<div class="col" align="right">
-					<button
+					<button visible="false"
 						label="Update VA" id="btUpdateVA"
 						autodisable="self" sclass="btn btn-warning btn-sm"
 						onClick="@command('doUpdateVA')" />

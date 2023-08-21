@@ -440,7 +440,7 @@ public class StringUtils {
 		style.setDataFormat(format.getFormat("[$-809]yyyy-MM-dd;@"));
 		cell.setCellStyle(style);
 		String sdate = poiFormatter.formatCellValue(cell);
-		System.out.println("getDateCustomFormat sdate " + sdate);
+		//System.out.println("getDateCustomFormat sdate " + sdate);
 		date = dateFormat.parse(sdate);
 		return date;
 	}

@@ -54,10 +54,10 @@ public class CetakKtaVm {
 			File file = new File(Executions.getCurrent().getDesktop().getWebApp()
 					.getRealPath(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink()));
 			if (file.exists()) {
-				System.out.println("ADA FOTO");
+				//System.out.println("ADA FOTO");
 				photoname = obj.getPhotolink();
 			} else {
-				System.out.println("TIDAK ADA FOTO");
+				//System.out.println("TIDAK ADA FOTO");
 				photoname = "default.png";
 			}
 

@@ -13,7 +13,7 @@
 					<textbox placeholder="Nama" value="@bind(vm.nama)"
 						onOK="@command('doSearch')" width="100%" maxlength="40" />
 				</div>
-				<div class="col">
+				<!-- <div class="col">
 					<combobox id="cbRegion" placeholder="Provinsi"
 						onSelect="@command('doLoadCabang', prov=vm.region)"
 						model="@load(vm.regionmodel)" selectedItem="@bind(vm.region)"
@@ -22,7 +22,7 @@
 							<comboitem label="@load(region.provname)" />
 						</template>
 					</combobox>
-				</div>
+				</div> -->
 				<div class="col">
 					<div class="row">
 						<div class="col">

@@ -1,59 +1,64 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winAnggotaChangePass" border="normal" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaChangePassVm')"
+	<window id="winAnggotaChangePass" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaChangePassVm')"
 		validationMessages="@id('vmsgs')">
 		<caption>
 			<n:i class="fas fa-lock"></n:i>
 			<n:span>Ubah Password</n:span>
 		</caption>
-		<n:table class="table table-sm table-striped mb-0">
-			<n:tr>
-				<n:td>
-					<label value="Masukkan Password Lama Anda" />
-				</n:td>
-				<n:td>
-					<vlayout>
-						<textbox value="@bind(vm.passold)" maxlength="70" width="100%"
-							type="password" />
-						<label style="color:gray"
-							value="@load(vmsgs['passold'])" />
-					</vlayout>
-				</n:td>
-			</n:tr>
-			<n:tr>
-				<n:td>
-					<label value="Masukkan Password Baru Anda" />
-				</n:td>
-				<n:td>
-					<vlayout>
-						<textbox value="@bind(vm.passnew)" maxlength="70" width="100%"
-							type="password" />
-						<label style="color:gray"
-							value="@load(vmsgs['passnew'])" />
-					</vlayout>
-				</n:td>
-			</n:tr>
-			<n:tr>
-				<n:td>
-					<label value="Konfirmasi Password Baru Anda" />
-				</n:td>
-				<n:td>
-					<vlayout>
-						<textbox value="@bind(vm.passnewconfirm)" maxlength="70" width="100%"
-							type="password" />
-						<label style="color:gray"
-							value="@load(vmsgs['passnewconfirm'])" />
-					</vlayout>
-				</n:td>
-			</n:tr>
-			<n:tr>
-				<n:td></n:td>
-				<n:td>
-					<button label="Simpan Perubahan Password" autodisable="self"
-						width="100%" iconSclass="z-icon-save"
-						sclass="btn btn-primary btn-sm" onClick="@command('doSave')" />
-				</n:td>
-			</n:tr>
-		</n:table>
+		<div
+			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSubmit') 
+						@validator(vm.validator) ">
+			<n:table class="table table-sm table-striped mb-0">
+				<n:tr>
+					<n:td>
+						<label value="Masukkan Password Lama Anda" />
+					</n:td>
+					<n:td>
+						<vlayout>
+							<textbox value="@bind(e.passold)"
+								maxlength="70" width="100%" type="password" />
+							<label style="color:gray"
+								value="@load(vmsgs['passold'])" />
+						</vlayout>
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Masukkan Password Baru Anda" />
+					</n:td>
+					<n:td>
+						<vlayout>
+							<textbox value="@bind(e.passnew)"
+								maxlength="70" width="100%" type="password" />
+							<label style="color:gray"
+								value="@load(vmsgs['passnew'])" />
+						</vlayout>
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Konfirmasi Password Baru Anda" />
+					</n:td>
+					<n:td>
+						<vlayout>
+							<textbox value="@bind(e.passnewconfirm)"
+								maxlength="70" width="100%" type="password" />
+							<label style="color:gray"
+								value="@load(vmsgs['passnewconfirm'])" />
+						</vlayout>
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td></n:td>
+					<n:td>
+						<button label="Simpan Perubahan Password"
+							autodisable="self" width="100%" iconSclass="z-icon-save"
+							sclass="btn btn-primary btn-sm" onClick="@command('doSubmit')" />
+					</n:td>
+				</n:tr>
+			</n:table>
+		</div>
 	</window>
 </zk>

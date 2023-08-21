@@ -261,4 +261,12 @@ public class P2kbE09Vm {
 		this.docfilename = docfilename;
 	}
 
+	public Tp2kbbook getTpb() {
+		return tpb;
+	}
+
+	public void setTpb(Tp2kbbook tpb) {
+		this.tpb = tpb;
+	}
+
 }

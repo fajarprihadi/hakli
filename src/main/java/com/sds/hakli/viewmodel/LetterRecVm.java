@@ -131,7 +131,7 @@ public class LetterRecVm {
 			orderby = "tp2kbbookpk";
 
 			if (nama != null && nama.trim().length() > 0)
-				filter += " and nama like '%" + nama.trim().toUpperCase() + "'";
+				filter += " and upper(nama) like '%" + nama.trim().toUpperCase() + "%'";
 
 			needsPageUpdate = true;
 			paging.setActivePage(0);

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -145,6 +146,10 @@ public class AnggotaFormVm {
 	private Media media;
 	private Media mediaIjazah;
 	private String strDob;
+	
+	private Date periodeiuran;
+	private String keteranganiuran;
+	private BigDecimal totalpayment;
 
 	@Wire
 	private Window winAnggotaForm;
@@ -232,6 +237,8 @@ public class AnggotaFormVm {
 	private Button btSaveApproval;
 	@Wire
 	private Textbox tbPass;
+	@Wire
+	private Grid gridCharge;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
@@ -260,7 +267,63 @@ public class AnggotaFormVm {
 			}
 
 			init();
+			
+			try {
+				List<Mcharge> charges = new MchargeDAO().listByFilter("chargetype = '" + AppUtils.CHARGETYPE_IURAN + "'", "isbase desc");
+				BigDecimal amountbase = new BigDecimal(0);
+				for (Mcharge charge : charges) {
+					if (charge.getIsbase().equals("Y")) {
+						amountbase = charge.getChargeamount();
+						break;
+					}
+				}
+				
+				Calendar cal = Calendar.getInstance();
+				Calendar calNext = Calendar.getInstance();
+				if (pribadi.getPeriodekta() == null) {
+					cal.setTime(new Date());
+					calNext.add(Calendar.MONTH, 6);
+				} else {
+					cal.setTime(pribadi.getPeriodekta());
+				}
+				int qty = 0;
+				List<Mcharge> oListIuran = new ArrayList<>();
+				for (Mcharge charge : charges) {
+					if (charge.getIsbase().equals("Y")) {
+						qty = 0;
+						BigDecimal totalbase = new BigDecimal(0);
+						while (cal.getTime().compareTo(calNext.getTime()) == -1) {
+							qty++;
+							totalbase = amountbase.multiply(new BigDecimal(qty));
+							cal.add(Calendar.MONTH, 6);
+						}
+						periodeiuran = cal.getTime();
+						keteranganiuran = "Pembayaran Iuran Untuk " + (6 * qty) + " Bulan";
+						charge.setChargeamount(totalbase);
+						charge.setChargedesc(keteranganiuran);
+					}
+					
+					oListIuran.add(charge);
+				}
 
+				totalpayment = new BigDecimal(0);
+				gridCharge.setRowRenderer(new RowRenderer<Mcharge>() {
+
+					@Override
+					public void render(Row row, Mcharge data, int index) throws Exception {
+						row.getChildren().add(new Label(data.getChargedesc()));
+						row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getChargeamount())));
+
+						totalpayment = totalpayment.add(data.getChargeamount());
+						BindUtils.postNotifyChange(AnggotaFormVm.this, "totalpayment");
+					}
+				});
+				gridCharge.setModel(new ListModelList<>(oListIuran));
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			if (pribadi.getPhotolink() != null) {
 				photo.setSrc(AppUtils.PATH_PHOTO + "/" + pribadi.getPhotolink());
 				photo.setVisible(true);
@@ -542,9 +605,9 @@ public class AnggotaFormVm {
 				tabApproval.setVisible(false);
 			}
 			
-			if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN))
-				tabAkun.setVisible(true);
-			else tabAkun.setVisible(false);
+//			if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN))
+//				tabAkun.setVisible(true);
+//			else tabAkun.setVisible(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1190,6 +1253,13 @@ public class AnggotaFormVm {
 				Date tglmulai = (Date) ctx.getProperties("tglmulai")[0].getValue();
 				if (tglmulai == null)
 					this.addInvalidMessage(ctx, "tglmulai", Labels.getLabel("common.validator.empty"));
+				Date tglakhir = (Date) ctx.getProperties("tglakhir")[0].getValue();
+				if (tglakhir == null)
+					this.addInvalidMessage(ctx, "tglakhir", Labels.getLabel("common.validator.empty"));
+				if (tglmulai != null && tglakhir != null) {
+					if (tglmulai.compareTo(tglakhir) > 0)
+						this.addInvalidMessage(ctx, "tglmulai", "Tanggal Mulai tidak dapat melebihi Tanggal Selesai");
+				}
 //				String nip = (String) ctx.getProperties("nip")[0].getValue();
 //				if (nip == null || "".equals(nip.trim()))
 //					this.addInvalidMessage(ctx, "nip", Labels.getLabel("common.validator.empty"));
@@ -1434,6 +1504,30 @@ public class AnggotaFormVm {
 
 	public void setIjazahfilename(String ijazahfilename) {
 		this.ijazahfilename = ijazahfilename;
+	}
+
+	public BigDecimal getTotalpayment() {
+		return totalpayment;
+	}
+
+	public void setTotalpayment(BigDecimal totalpayment) {
+		this.totalpayment = totalpayment;
+	}
+
+	public Date getPeriodeiuran() {
+		return periodeiuran;
+	}
+
+	public void setPeriodeiuran(Date periodeiuran) {
+		this.periodeiuran = periodeiuran;
+	}
+
+	public String getKeteranganiuran() {
+		return keteranganiuran;
+	}
+
+	public void setKeteranganiuran(String keteranganiuran) {
+		this.keteranganiuran = keteranganiuran;
 	}
 
 }

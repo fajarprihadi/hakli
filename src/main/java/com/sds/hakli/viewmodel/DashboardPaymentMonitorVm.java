@@ -88,7 +88,7 @@ public class DashboardPaymentMonitorVm {
 		        msgBox.setTop(anchor.getTop());
 		        msgBox.setLeft(anchor.getLeft());
 		        Label msg = (Label) msgBox.getFellow("msg");
-		        System.out.println("event.getCategory() : " + event.getSeries().getName() + " " + event.getSeriesIndex());
+		        //System.out.println("event.getCategory() : " + event.getSeries().getName() + " " + event.getSeriesIndex());
 		        String formattedDate = TimeUtil.getFormattedTime((Long) event.getCategory(),
 		                "EEEEEEEEE, MMM dd, yyyy");
 		        msg.setValue(formattedDate + ":\n Rp. " + NumberFormat.getInstance().format(point.getY()));

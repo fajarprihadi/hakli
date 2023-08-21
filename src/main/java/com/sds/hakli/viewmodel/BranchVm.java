@@ -147,7 +147,7 @@ public class BranchVm {
 				
 				A aBendahara1 = new A();
 				if (data.getBendahara1id() != null && !data.getBendahara1id().equals(""))
-					aBendahara1.setLabel(data.getBendahara1nama() + " - " + data.getBendahara1nama());
+					aBendahara1.setLabel(data.getBendahara1id() + " - " + data.getBendahara1nama());
 				aBendahara1.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
@@ -158,7 +158,7 @@ public class BranchVm {
 				
 				A aBendahara2 = new A();
 				if (data.getBendahara2id() != null && !data.getBendahara2id().equals(""))
-					aBendahara2.setLabel(data.getBendahara2nama() + " - " + data.getBendahara2nama());
+					aBendahara2.setLabel(data.getBendahara2id() + " - " + data.getBendahara2nama());
 				aBendahara2.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 					@Override
@@ -183,7 +183,7 @@ public class BranchVm {
 					@Override
 					public void onEvent(Event event) throws Exception {
 						doAdd(data);
-						BindUtils.postNotifyChange(BranchVm.this, "objForm");
+						BindUtils.postNotifyChange(BranchVm.this, "*");
 					}
 				});
 				
@@ -367,6 +367,42 @@ public class BranchVm {
 	}
 	
 	@Command
+	@NotifyChange({"ketuaid", "ketuanama", "sekretaris1id", "sekretaris1nama", "sekretaris2id", "sekretaris2nama", 
+		"bendahara1id", "bendahara1nama", "bendahara2id", "bendahara2nama"})
+	public void doDelPengurus(@BindingParam("type") String type) {
+		try {
+			if (type.equals("ketua")) {
+				ketuaid = null;
+				ketuanama = null;
+				BindUtils.postNotifyChange(BranchVm.this, "ketuaid");
+				BindUtils.postNotifyChange(BranchVm.this, "ketuanama");
+			} else if (type.equals("sekretaris1")) {
+				sekretaris1id = null;
+				sekretaris1nama = null;
+				BindUtils.postNotifyChange(BranchVm.this, "sekretaris1id");
+				BindUtils.postNotifyChange(BranchVm.this, "sekretaris1nama");
+			} else if (type.equals("sekretaris2")) {
+				sekretaris2id = null;
+				sekretaris2nama = null;
+				BindUtils.postNotifyChange(BranchVm.this, "sekretaris2id");
+				BindUtils.postNotifyChange(BranchVm.this, "sekretaris2nama");
+			} else if (type.equals("bendahara1")) {
+				bendahara1id = null;
+				bendahara1nama = null;
+				BindUtils.postNotifyChange(BranchVm.this, "bendahara1id");
+				BindUtils.postNotifyChange(BranchVm.this, "bendahara1nama");
+			} else if (type.equals("bendahara2")) {
+				bendahara2id = null;
+				bendahara2nama = null;
+				BindUtils.postNotifyChange(BranchVm.this, "bendahara2id");
+				BindUtils.postNotifyChange(BranchVm.this, "bendahara2nama");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
 	@NotifyChange("*")
 	public void doAdd(Mcabang obj) {
 		if (obj != null) {
@@ -435,22 +471,37 @@ public class BranchVm {
 			if (ketuaid != null && !ketuaid.equals("")) {
 				objForm.setKetuaid(ketuaid);
 				objForm.setKetuanama(ketuanama);
+			} else {
+				objForm.setKetuaid(null);
+				objForm.setKetuanama(null);
 			}
 			if (sekretaris1id != null && !sekretaris1id.equals("")) {
 				objForm.setSekretaris1id(sekretaris1id);
 				objForm.setSekretaris1nama(sekretaris1nama);
+			} else {
+				objForm.setSekretaris1id(null);
+				objForm.setSekretaris1nama(null);
 			}
 			if (sekretaris2id != null && !sekretaris2id.equals("")) {
 				objForm.setSekretaris2id(sekretaris2id);
 				objForm.setSekretaris2nama(sekretaris2nama);
+			} else {
+				objForm.setSekretaris2id(null);
+				objForm.setSekretaris2nama(null);
 			}
 			if (bendahara1id != null && !bendahara1id.equals("")) {
 				objForm.setBendahara1id(bendahara1id);
 				objForm.setBendahara1nama(bendahara1nama);
+			} else {
+				objForm.setBendahara1id(null);
+				objForm.setBendahara1nama(null);
 			}
 			if (bendahara2id != null && !bendahara2id.equals("")) {
 				objForm.setBendahara2id(bendahara2id);
 				objForm.setBendahara2nama(bendahara2nama);
+			} else {
+				objForm.setBendahara2id(null);
+				objForm.setBendahara2nama(null);
 			}
 			
 			objForm.setBankname(AppData.getBankName(objForm.getBankcode()));

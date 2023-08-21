@@ -530,7 +530,7 @@
 							<label
 								value="${labels.pendidikan.noijazah}" />
 							<textbox
-								value="@bind(e.pendidikan.noijazah)" maxlength="20"
+								value="@bind(e.pendidikan.noijazah)" maxlength="50"
 								width="100%" />
 						</row>
 						<row>

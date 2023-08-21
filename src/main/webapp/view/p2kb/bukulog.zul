@@ -6,6 +6,10 @@
 			<n:i class="fas fa-book"></n:i>
 			<n:span>Buku Log</n:span>
 		</caption>
+		<button label="Kembali Ke Daftar Buku Log"
+			sclass="btn btn-primary btn-sm" autodisable="self"
+			onClick="@command('doBack')" />
+		<separator />
 		<div id="divTitle" />
 		<groupbox mold="3d">
 			<caption label="Informasi" />
@@ -20,12 +24,16 @@
 						<label value="@load(vm.tpb.tanggota.nama)" />
 					</row>
 					<row>
-						<label value="Nomor STR" />
-						<label value="@load(vm.tpb.nostr)" />
+						<label value="Provinsi" />
+						<label value="@load(vm.tpb.tanggota.mcabang.mprov.provname)" />
 					</row>
 					<row>
 						<label value="Cabang" />
 						<label value="@load(vm.tpb.tanggota.mcabang.cabang)" />
+					</row>
+					<row>
+						<label value="Nomor STR" />
+						<label value="@load(vm.tpb.nostr)" />
 					</row>
 					<row>
 						<label value="Periode" />

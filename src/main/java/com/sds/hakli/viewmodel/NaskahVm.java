@@ -54,7 +54,7 @@ public class NaskahVm {
 			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
 			if (arg.equals("sumpah")) {
-				System.out.println("'" + objAnggota.getAgama() + "'");
+				//System.out.println("'" + objAnggota.getAgama() + "'");
 				if (objAnggota.getAgama().toUpperCase().equals("ISLAM")) {
 					parameters.put("SALAMNASKAH", "Semoga Allah Subhanahu wa ta’ala memberikan kekuatan kepada saya");
 					parameters.put("SUMPAHAGAMA", "Demi Allah saya bersumpah");
@@ -88,10 +88,10 @@ public class NaskahVm {
 
 			File file = new File(AppUtils.PATH_PHOTO + "/" + objAnggota.getPhotolink());
 			if (file.exists()) {
-				System.out.println("ADA FOTO");
+				//System.out.println("ADA FOTO");
 				photoname = objAnggota.getPhotolink();
 			} else {
-				System.out.println("TIDAK ADA FOTO");
+				//System.out.println("TIDAK ADA FOTO");
 				photoname = "default.png";
 			}
 			

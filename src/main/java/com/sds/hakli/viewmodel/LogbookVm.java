@@ -63,6 +63,7 @@ public class LogbookVm {
 	private String startdate;
 	private String enddate;
 	private String isDetail;
+	private String arg;
 
 	@Wire
 	private Div divTitle;
@@ -70,13 +71,17 @@ public class LogbookVm {
 	private Grid grid;
 	@Wire
 	private Div divAdd;
+	@Wire
+	private Window winBukulog;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("book") Tp2kbbook tpb,
-			@ExecutionArgParam("isDetail") String isDetail) {
+			@ExecutionArgParam("isDetail") String isDetail, @ExecutionArgParam("arg") String arg) {
 		Selectors.wireComponents(view, this, false);
 
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
+		
+		this.arg = arg;
 		
 		if(isDetail != null && isDetail.equals("Y")) {
 			divAdd.setVisible(false);
@@ -127,6 +132,19 @@ public class LogbookVm {
 
 		doReset();
 
+	}
+	
+	@Command
+	public void doBack() {
+		try {
+			Component comp = winBukulog.getParent();
+			comp.getChildren().clear();
+			Map<String, Object> map = new HashMap<>();
+			map.put("arg", arg);
+			Executions.createComponents("/view/p2kb/bukulogrequest.zul", comp, map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 
 	@Command
@@ -298,7 +316,7 @@ public class LogbookVm {
 				map.put("obj", obj);
 				if(isDetail != null && isDetail.equals("Y")) {
 					map.put("isDetail", isDetail);
-					System.out.println(isDetail);
+					//System.out.println(isDetail);
 				}
 				Window win = (Window) Executions.createComponents("/view/p2kb/" + page, null, map);
 				win.setClosable(true);
@@ -307,12 +325,12 @@ public class LogbookVm {
 					@Override
 					public void onEvent(Event event) throws Exception {
 						if (event.getData() != null) {
+							@SuppressWarnings("unchecked")
 							Map<String, Object> mapEvent = (Map<String, Object>) event.getData();
 							String action = (String) mapEvent.get("action");
 							String page = (String) mapEvent.get("page");
 							Mp2kbkegiatan p2kbkegiatan = (Mp2kbkegiatan) mapEvent.get("p2kbkegiatan");
 							if (action != null && action.equals("edit")) {
-
 								Map<String, Object> map = new HashMap<String, Object>();
 								map.put("obj", p2kbkegiatan);
 								map.put("objForm", mapEvent.get("p2kb"));
@@ -323,15 +341,13 @@ public class LogbookVm {
 
 									@Override
 									public void onEvent(Event event) throws Exception {
-
+										doReset();
 									}
 								});
 								win.doModal();
 
 							}
-						} else {
-							doReset();
-						}
+						} 
 					}
 				});
 				win.doModal();

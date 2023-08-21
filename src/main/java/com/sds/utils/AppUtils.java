@@ -45,6 +45,7 @@ public class AppUtils {
 	public static final String INVOICETYPE_P2KB = "04";
 	
 	public static final String EVENTTYPE_SUMPAHPROFESI = "SP";
+	public static final String EVENTTYPE_RAKERNAS = "RK";
 	public static final String EVENTTYPE_SEMINAR = "SM";
 	public static final String EVENTTYPE_WORKSHOP = "WS";
 	

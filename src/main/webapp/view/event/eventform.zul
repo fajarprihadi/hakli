@@ -4,15 +4,17 @@
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.EventFormVm')"
 		validationMessages="@id('vmsgs')">
 		<caption>
-			<n:i class="fas fa-list"></n:i>
-			<n:span>Buat Event</n:span>
+			<n:i class="fas fa-calendar-alt"></n:i>
+			<n:span>
+				<label value="@load(vm.title)" style="font-size: 20px" />
+			</n:span>
 		</caption>
 		<div id="divForm"
 			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')
 			@validator(vm.validator) ">
 			<grid>
 				<columns>
-					<column width="20%" />
+					<column width="25%" />
 					<column />
 				</columns>
 				<rows>
@@ -28,8 +30,11 @@
 					<row>
 						<label value="Tipe Event" />
 						<vlayout>
-							<combobox selectedItem="@bind(e.eventtype)" readonly="true">
-								<comboitem value="SP" label="Sumpah Profesi" />
+							<combobox selectedItem="@bind(e.eventtype)"
+								readonly="true">
+								<comboitem value="SP"
+									label="Sumpah Profesi" />
+								<comboitem value="RK" label="Rakernas" />
 								<comboitem value="SM" label="Seminar" />
 								<comboitem value="WS" label="Workshop" />
 							</combobox>
@@ -74,38 +79,57 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Kepesertaan" />
+						<radiogroup selectedItem="@bind(e.ismember)">
+							<radio label="Umum" value="N" />
+							<radio label="Hanya Untuk Pengurus/Anggota"
+								value="Y" />
+						</radiogroup>
+					</row>
+					<row>
+						<label value="Berbayar?" />
+						<radiogroup selectedItem="@bind(e.isfree)"
+							onCheck="@command('doFree', val=e.isfree)">
+							<radio label="Ya" value="N" />
+							<radio label="Tidak" value="Y" />
+						</radiogroup>
+					</row>
+					<row>
 						<label value="Biaya Pendaftaran" />
 						<vlayout>
-							<decimalbox value="@bind(e.eventprice)"
-								 format="#,##0" maxlength="20" width="100%" />
+							<decimalbox id="dbPrice"
+								value="@bind(e.eventprice)" format="#,##0" maxlength="20"
+								width="100%" />
 							<label style="color:gray"
 								value="@load(vmsgs['eventprice'])" />
 						</vlayout>
 					</row>
 					<row>
-						<label value="Tanggal Tutup Pendaftaran" />
-						<vlayout>
-							<datebox value="@bind(e.closedate)" 
-								maxlength="16" cols="12" format="dd-MM-yyyy HH:mm" />
-							<label style="color:gray"
-								value="@load(vmsgs['closedate'])" />
-						</vlayout>
-					</row>
-					<row>
 						<label />
 						<vlayout>
-							<checkbox id="chkSharefee" label="Sharing Fee" onCheck="@command('doCheckSharefee', ischeck=self.checked)" />
+							<checkbox id="chkSharefee"
+								label="Sharing Fee"
+								onCheck="@command('doCheckSharefee', ischeck=self.checked)" />
 							<grid id="gridSharefee">
 								<columns>
-									<column label="Pusat" align="center" />
-									<column label="Provinsi" align="center" />
-									<column label="Kabupaten/Kota" align="center" />
+									<column label="Pusat"
+										align="center" />
+									<column label="Provinsi"
+										align="center" />
+									<column label="Kabupaten/Kota"
+										align="center" />
 								</columns>
 								<rows>
 									<row>
-										<decimalbox value="@bind(e.feepusat)" format="#,##0" maxlength="11" width="100%" style="text-align:right" />
-										<decimalbox value="@bind(e.feeprov)" format="#,##0" maxlength="11" width="100%" style="text-align:right" />
-										<decimalbox value="@bind(e.feekab)" format="#,##0" maxlength="11" width="100%" style="text-align:right" />
+										<decimalbox
+											value="@bind(e.feepusat)" format="#,##0" maxlength="11"
+											width="100%" style="text-align:right" />
+										<decimalbox
+											value="@bind(e.feeprov)" format="#,##0" maxlength="11"
+											width="100%" style="text-align:right" />
+										<decimalbox
+											value="@bind(e.feekab)" format="#,##0" maxlength="11"
+											width="100%" style="text-align:right" />
 									</row>
 								</rows>
 							</grid>
@@ -114,12 +138,70 @@
 						</vlayout>
 					</row>
 					<row>
-						<button sclass="btn btn-info btn-sm"
-							label="Browse Gambar ..." upload="true,maxsize=10000"
+						<label value="Tanggal Tutup Pendaftaran" />
+						<vlayout>
+							<datebox value="@bind(e.closedate)"
+								maxlength="16" cols="12" format="dd-MM-yyyy HH:mm" />
+							<label style="color:gray"
+								value="@load(vmsgs['closedate'])" />
+						</vlayout>
+					</row>
+					<row>
+						<label value="Ada Nilai SKP?" />
+						<vlayout>
+							<radiogroup selectedItem="@bind(e.isskp)"
+								onCheck="@command('doSkp', val=e.isskp)">
+								<radio label="Ya" value="Y" />
+								<radio label="Tidak" value="N" />
+							</radiogroup>
+							<label style="color:gray"
+								value="@load(vmsgs['isskp'])" />
+						</vlayout>
+					</row>
+					<row id="rowSkp">
+						<label value="Nilai SKP" />
+						<vlayout>
+							<intbox id="iboxSkp" value="@bind(e.skp)"
+								maxlength="3" width="100%" />
+							<label style="color:gray"
+								value="@load(vmsgs['skp'])" />
+						</vlayout>
+					</row>
+					<row>
+						<label value="Bersertifikat?" />
+						<vlayout>
+							<radiogroup selectedItem="@bind(e.iscert)"
+								onCheck="@command('doCert', val=e.iscert)">
+								<radio label="Ya" value="Y" />
+								<radio label="Tidak" value="N" />
+							</radiogroup>
+							<label style="color:gray"
+								value="@load(vmsgs['iscert'])" />
+						</vlayout>
+					</row>
+					<row id="rowCert" visible="false">
+						<button sclass="btn btn-success btn-sm"
+							label="Browse Template Sertifikat ..."
+							upload="true,maxsize=10000"
+							onUpload="@command('doUploadCert', upEvent=event)"
+							autodisable="self" />
+						<vlayout>
+							<image id="imgCert" height="120px" />
+							<button sclass="btn btn-success btn-sm"
+								label="Preview Sertifikat" 
+								onClick="@command('doPreview')"
+								autodisable="self" />
+							<label style="color:gray"
+								value="@load(vmsgs['imgCert'])" />
+						</vlayout>
+					</row>
+					<row>
+						<button sclass="btn btn-success btn-sm"
+							label="Browse Gambar Poster..." upload="true,maxsize=10000"
 							onUpload="@command('doUploadPhoto', upEvent=event)"
 							autodisable="self" />
 						<vlayout>
-							<image id="photo" width="100%" />
+							<image id="photo" height="120px" />
 							<label style="color:gray"
 								value="@load(vmsgs['eventimg'])" />
 						</vlayout>

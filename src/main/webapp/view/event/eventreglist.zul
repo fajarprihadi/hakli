@@ -52,7 +52,7 @@
 				<column label="Status Pembayaran" align="center"/>
 				<column label="Nominal Pembayaran" align="right"/>
 				<column label="Waktu Pembayaran" align="center"/>
-				<column label="Naskah" align="center"/>
+				<column label="Download" align="center"/>
 			</columns>
 		</grid>
 

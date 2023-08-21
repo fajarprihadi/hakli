@@ -97,22 +97,34 @@ public class EventInitVm {
 				map.put("isCheckSisdmk", chkSisdmk.isChecked());
 				String page = "/view/anggota/anggotaadd.zul";
 				Tanggota obj = null;
-				List<Tanggota> objList = oDao.listByFilter("noktp = '" + nik.trim() + "'", "tanggotapk desc");
-				if (objList.size() > 0) {
-					obj = objList.get(0);
-					
-					Teventreg eventreg = eventregDao.findByFilter("tevent.teventpk = " + this.obj.getTeventpk() + " and tanggota.tanggotapk = " + obj.getTanggotapk());
-					if (eventreg != null) {
-						map.put("obj", eventreg);
-						page = "/view/event/eventregdone.zul";
-					} else map.put("obj", obj);
-				} else {
-					obj = new Tanggota();
-					obj.setNoktp(nik);
-					map.put("obj", obj);
+				List<Tanggota> objList = oDao.listByFilter("(noktp = '" + nik.trim() + "'", "tanggotapk desc");
+				
+				boolean isValid = true;
+				if (this.obj.getIsmember() != null && this.obj.getIsmember().equals("Y")) {
+					if (objList.size() == 0)
+						isValid = false;
 				}
-				winInit.getChildren().clear();
-				Executions.createComponents(page, winInit, map);
+				
+				if (!isValid) {
+					Messagebox.show("Data Anda tidak terdaftar pada keanggotaan HAKLI", WebApps.getCurrent().getAppName(), Messagebox.OK,
+							Messagebox.EXCLAMATION);
+				} else {
+					if (objList.size() > 0) {
+						obj = objList.get(0);
+						
+						Teventreg eventreg = eventregDao.findByFilter("tevent.teventpk = " + this.obj.getTeventpk() + " and tanggota.tanggotapk = " + obj.getTanggotapk());
+						if (eventreg != null) {
+							map.put("obj", eventreg);
+							page = "/view/event/eventregdone.zul";
+						} else map.put("obj", obj);
+					} else {
+						obj = new Tanggota();
+						obj.setNoktp(nik);
+						map.put("obj", obj);
+					}
+					winInit.getChildren().clear();
+					Executions.createComponents(page, winInit, map);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

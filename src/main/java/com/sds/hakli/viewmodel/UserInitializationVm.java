@@ -156,9 +156,6 @@ public class UserInitializationVm {
 						
 						Map<String, String> map = new HashMap<String, String>();
 						map.put(obj.getMmenu().getMenuparamname(), obj.getMmenu().getMenuparamvalue());
-						
-						System.out.println(obj.getMmenu().getMenuparamname() + " : " + obj.getMmenu().getMenuparamvalue());
-						
 						Executions.createComponents(obj.getMmenu().getMenupath(), divContent, map);
 						divContent.setVisible(true);
 					}

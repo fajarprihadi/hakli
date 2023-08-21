@@ -50,6 +50,7 @@ import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.dao.Tp2kbE10DAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
+import com.sds.hakli.domain.Tp2kbbook;
 import com.sds.hakli.domain.Tp2kbe10;
 import com.sds.hakli.domain.Tp2kbe11;
 import com.sds.hakli.handler.P2KBHandler;
@@ -63,6 +64,15 @@ public class P2kbE11DetailVm {
 	private Tanggota anggota;
 	private Tp2kbE11DAO oDao = new Tp2kbE11DAO();
 	private Tp2kbDAO p2kbDao = new Tp2kbDAO();
+
+	private Tp2kbbook tpb;
+	public Tp2kbbook getTpb() {
+		return tpb;
+	}
+
+	public void setTpb(Tp2kbbook tpb) {
+		this.tpb = tpb;
+	}
 
 	private Tp2kb p2kb;
 	private BigDecimal totalskp;
@@ -411,10 +421,13 @@ public class P2kbE11DetailVm {
 	public void doRefresh() {
 		try {
 			totalskp = new BigDecimal(0);
+//			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
+//					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk() + " and (tglmulai between '"
+//					+ p2kb.getTp2kbbook().getTglmulai() + "' and '" + p2kb.getTp2kbbook().getTglakhir() + "')";
+			
 			String filter = "mp2kbkegiatan.mp2kbkegiatanpk = " + p2kb.getMp2kbkegiatan().getMp2kbkegiatanpk()
-					+ " and tanggota.tanggotapk = " + p2kb.getTanggota().getTanggotapk() + " and (tglmulai between '"
-					+ p2kb.getTp2kbbook().getTglmulai() + "' and '" + p2kb.getTp2kbbook().getTglakhir() + "')";
-
+					+ " and tp2kbbook.tp2kbbookpk = " + p2kb.getTp2kbbook().getTp2kbbookpk();
+			
 			if (approvetype != null && approvetype.equals("T"))
 				filter += " and status = 'W'";
 			else if (approvetype != null && approvetype.equals("K"))

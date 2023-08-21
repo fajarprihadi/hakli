@@ -49,6 +49,17 @@ public class Tp2kbB14DAO {
         return oList;
     }	
 	
+	@SuppressWarnings("unchecked")
+	public List<Tp2kbb14> listNativeByFilter(String filter, String orderby) throws Exception {		
+    	List<Tp2kbb14> oList = null;
+    	if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Tp2kbb14 where " + filter + " order by " + orderby).addEntity(Tp2kbb14.class).list();
+		session.close();
+        return oList;
+    }	
+	
 	public Tp2kbb14 findByPk(Integer pk) throws Exception {
 		session = StoreHibernateUtil.openSession();
 		Tp2kbb14 oForm = (Tp2kbb14) session.createQuery("from Tp2kbb14 where tp2kbb14pk = " + pk).uniqueResult();

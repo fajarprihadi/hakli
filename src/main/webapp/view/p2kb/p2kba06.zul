@@ -7,6 +7,44 @@
 			<n:i class="fas fa-edit"></n:i>
 			<n:span>Borang Pengisian</n:span>
 		</caption>
+		<groupbox mold="3d">
+			<caption label="Informasi Borang Kegiatan Anggota" />
+			<grid>
+				<columns>
+					<column width="20%" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="Nama Anggota" />
+						<label value="@load(vm.tpb.tanggota.nama)" />
+					</row>
+					<row>
+						<label value="Provinsi" />
+						<label value="@load(vm.tpb.tanggota.mcabang.mprov.provname)" />
+					</row>
+					<row>
+						<label value="Cabang" />
+						<label value="@load(vm.tpb.tanggota.mcabang.cabang)" />
+					</row>
+					<row>
+						<label value="Nomor STR" />
+						<label value="@load(vm.tpb.nostr)" />
+					</row>
+					<row>
+						<label value="Periode" />
+						<hlayout>
+							<label value="@load(vm.tpb.tglmulai) @converter('formatedDate', format='dd MMM yyyy')" />
+							<separator />
+							<label value="s/d" />
+							<label value="@load(vm.tpb.tglakhir) @converter('formatedDate', format='dd MMM yyyy')" />
+						</hlayout>
+					</row>
+
+				</rows>
+			</grid>
+		</groupbox>
+		<separator />
 		<groupbox mold="3d"
 			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')
 			@validator(vm.validator) ">

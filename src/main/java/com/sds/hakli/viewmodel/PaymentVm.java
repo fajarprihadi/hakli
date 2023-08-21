@@ -125,10 +125,15 @@ public class PaymentVm {
 			}
 			
 			Calendar cal = Calendar.getInstance();
-			cal.setTime(anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date());
-			
 			Calendar calNext = Calendar.getInstance();
-			calNext.add(Calendar.MONTH, 5);
+			if (anggota.getPeriodekta() == null) {
+				cal.setTime(new Date());
+				calNext.add(Calendar.MONTH, 6);
+			} else {
+				cal.setTime(anggota.getPeriodekta());
+			}
+			//cal.setTime(anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date());
+			//calNext.add(Calendar.MONTH, 5);
 			oList = new ArrayList<>();
 			for (Mcharge obj : objList) {
 				if (obj.getIsbase().equals("Y")) {

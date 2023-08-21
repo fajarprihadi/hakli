@@ -120,9 +120,11 @@
 									cols="15" maxlength="15" readonly="true" />
 								<textbox value="@bind(vm.ketuanama)"
 									width="100%" maxlength="70" readonly="true" />
-								<button label="..."
+								<button label="..." tooltiptext="Browse Daftar Anggota"
 									autodisable="self" width="100%"
 									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='ketua')" />
+								<button id="btDelKetua" sclass="btn btn-danger btn-sm" iconSclass="z-icon-trash-o" 
+								autodisable="self" onClick="@command('doDelPengurus', type='ketua')" tooltiptext="Hapus Sususan Organisasi Ketua" />
 							</hlayout>
 						</row>
 						<row>
@@ -133,9 +135,11 @@
 								<textbox
 									value="@bind(vm.sekretaris1nama)" width="100%" maxlength="70"
 									readonly="true" />
-								<button label="..."
+								<button label="..." tooltiptext="Browse Daftar Anggota"
 									autodisable="self" width="100%"
 									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='sekretaris1')" />
+								<button id="btDelSekretaris" sclass="btn btn-danger btn-sm" iconSclass="z-icon-trash-o" 
+								autodisable="self" onClick="@command('doDelPengurus', type='sekretaris1')" tooltiptext="Hapus Sususan Organisasi Sekretaris 1" />
 							</hlayout>
 						</row>
 						<row>
@@ -146,9 +150,11 @@
 								<textbox
 									value="@bind(vm.sekretaris2nama)" width="100%" maxlength="70"
 									readonly="true" />
-								<button label="..."
+								<button label="..." tooltiptext="Browse Daftar Anggota"
 									autodisable="self" width="100%"
 									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='sekretaris2')" />
+								<button id="btDelSekretaris2" sclass="btn btn-danger btn-sm" iconSclass="z-icon-trash-o" 
+								autodisable="self" onClick="@command('doDelPengurus', type='sekretaris2')" tooltiptext="Hapus Sususan Organisasi Sekretaris 2" />
 							</hlayout>
 						</row>
 						<row>
@@ -158,9 +164,11 @@
 									cols="15" maxlength="15" readonly="true" />
 								<textbox value="@bind(vm.bendahara1nama)"
 									width="100%" maxlength="70" readonly="true" />
-								<button label="..."
+								<button label="..." tooltiptext="Browse Daftar Anggota"
 									autodisable="self" width="100%"
 									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='bendahara1')" />
+								<button id="btDelBendahara1" sclass="btn btn-danger btn-sm" iconSclass="z-icon-trash-o" 
+								autodisable="self" onClick="@command('doDelPengurus', type='bendahara1')" tooltiptext="Hapus Sususan Organisasi Bendahara 1" />
 							</hlayout>
 						</row>
 						<row>
@@ -170,9 +178,11 @@
 									cols="15" maxlength="15" readonly="true" />
 								<textbox value="@bind(vm.bendahara2nama)"
 									width="100%" maxlength="70" readonly="true" />
-								<button label="..."
+								<button label="..." tooltiptext="Browse Daftar Anggota"
 									autodisable="self" width="100%"
 									sclass="btn btn-success btn-sm" onClick="@command('doLookup', type='bendahara2')" />
+								<button id="btDelBendahara2" sclass="btn btn-danger btn-sm" iconSclass="z-icon-trash-o" 
+								autodisable="self" onClick="@command('doDelPengurus', type='bendahara2')" tooltiptext="Hapus Sususan Organisasi Bendahara 2" />
 							</hlayout>
 						</row>
 					</rows>

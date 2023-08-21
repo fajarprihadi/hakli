@@ -38,7 +38,19 @@ public class Tevent {
 	
 	private BigDecimal eventprice;
 	
+	private String iscert;
+	
+	private String certpath;
+	
+	private String isfree;
+	
+	private String ismember;
+	
 	private String issharefee;
+	
+	private String isskp;
+	
+	private Integer skp;
 	
 	private BigDecimal feepusat;
 	
@@ -154,6 +166,22 @@ public class Tevent {
 		this.issharefee = issharefee;
 	}
 
+	public String getIsskp() {
+		return isskp;
+	}
+
+	public void setIsskp(String isskp) {
+		this.isskp = isskp;
+	}
+
+	public Integer getSkp() {
+		return skp;
+	}
+
+	public void setSkp(Integer skp) {
+		this.skp = skp;
+	}
+
 	public BigDecimal getFeepusat() {
 		return feepusat;
 	}
@@ -176,6 +204,39 @@ public class Tevent {
 
 	public void setFeekab(BigDecimal feekab) {
 		this.feekab = feekab;
+	}
+
+	public String getIscert() {
+		return iscert;
+	}
+
+	public void setIscert(String iscert) {
+		this.iscert = iscert;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getCertpath() {
+		return certpath;
+	}
+
+	public void setCertpath(String certpath) {
+		this.certpath = certpath;
+	}
+
+	public String getIsfree() {
+		return isfree;
+	}
+
+	public void setIsfree(String isfree) {
+		this.isfree = isfree;
+	}
+
+	public String getIsmember() {
+		return ismember;
+	}
+
+	public void setIsmember(String ismember) {
+		this.ismember = ismember;
 	}
 	
 	

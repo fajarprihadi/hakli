@@ -469,7 +469,7 @@ public class EventRegVm {
 										String ijazahlink = new TcounterengineDAO().getLastCounter("DOC" + new SimpleDateFormat("yyMM").format(new Date()), 5) + "." + mediaIjazah.getFormat();
 										String folder = Executions.getCurrent().getDesktop().getWebApp()
 												.getRealPath(AppUtils.PATH_IJAZAH);
-										System.out.println("Ijazah Path : " + folder);
+										//System.out.println("Ijazah Path : " + folder);
 										if (media.isBinary()) {
 											Files.copy(new File(folder + "/" + ijazahlink), mediaIjazah.getStreamData());
 										} else {

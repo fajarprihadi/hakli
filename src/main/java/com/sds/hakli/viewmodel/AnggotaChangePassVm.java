@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 
+import com.sds.hakli.bean.ChangePass;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.utils.db.StoreHibernateUtil;
@@ -29,9 +30,7 @@ public class AnggotaChangePassVm {
 	
 	private TanggotaDAO oDao = new TanggotaDAO();
 	
-	private String passold;
-	private String passnew;
-	private String passnewconfirm;
+	private ChangePass objForm;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -39,6 +38,7 @@ public class AnggotaChangePassVm {
 		
 		try {
 			oUser = (Tanggota) zkSession.getAttribute("anggota");
+			objForm = new ChangePass();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,13 +51,11 @@ public class AnggotaChangePassVm {
 		Transaction tx = session.beginTransaction();
 		try {
 			Tanggota obj = oDao.findByPk(oUser.getTanggotapk());
-			obj.setPassword(passnew);
+			obj.setPassword(objForm.getPassnew());
 			oDao.save(session, obj);
 			tx.commit();
 			
-			passold = null;
-			passnew = null;
-			passnewconfirm = null;
+			objForm = new ChangePass();
 			
 			Clients.showNotification("Proses perubahan password berhasil", "info", null, "middle_center", 1500);
 			
@@ -75,6 +73,7 @@ public class AnggotaChangePassVm {
 
 			@Override
 			public void validate(ValidationContext ctx) {
+				String passold = (String) ctx.getProperties("passold")[0].getValue();
 				if (passold == null || "".equals(passold.trim()))
 					this.addInvalidMessage(ctx, "passold", Labels.getLabel("common.validator.empty"));
 				else {
@@ -87,9 +86,13 @@ public class AnggotaChangePassVm {
 						e.printStackTrace();
 					}
 				}
+				String passnew = (String) ctx.getProperties("passnew")[0].getValue();
+				String passnewconfirm = (String) ctx.getProperties("passnewconfirm")[0].getValue();
+				if (passnewconfirm == null || "".equals(passnewconfirm.trim()))
+					this.addInvalidMessage(ctx, "passnewconfirm", Labels.getLabel("common.validator.empty"));
 				if (passnew == null || "".equals(passnew.trim()))
 					this.addInvalidMessage(ctx, "passnew", Labels.getLabel("common.validator.empty"));
-				else {
+				if (passnew != null && passnewconfirm != null) {
 					if (passnew.length() < 8)
 						this.addInvalidMessage(ctx, "passnew", "Minimal 8 karakter");
 					else if (passnewconfirm == null || "".equals(passnewconfirm.trim()))
@@ -103,27 +106,11 @@ public class AnggotaChangePassVm {
 		};
 	}
 
-	public String getPassold() {
-		return passold;
+	public ChangePass getObjForm() {
+		return objForm;
 	}
 
-	public void setPassold(String passold) {
-		this.passold = passold;
-	}
-
-	public String getPassnew() {
-		return passnew;
-	}
-
-	public void setPassnew(String passnew) {
-		this.passnew = passnew;
-	}
-
-	public String getPassnewconfirm() {
-		return passnewconfirm;
-	}
-
-	public void setPassnewconfirm(String passnewconfirm) {
-		this.passnewconfirm = passnewconfirm;
+	public void setObjForm(ChangePass objForm) {
+		this.objForm = objForm;
 	}
 }

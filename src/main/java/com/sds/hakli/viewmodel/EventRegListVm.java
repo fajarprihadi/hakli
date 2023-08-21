@@ -77,37 +77,55 @@ public class EventRegListVm {
 				row.getChildren().add(new Label(data.getPaidamount() != null ? DecimalFormat.getInstance().format(data.getPaidamount()) : ""));
 				row.getChildren().add(new Label(data.getPaidat() != null ? localDateFormatted.format(data.getPaidat()) : ""));
 				if (data.getIspaid().equals("Y")) {
-					Button btNaskah = new Button("Sumpah Profesi");
-					btNaskah.setIconSclass("z-icon-download");
-					btNaskah.setSclass("btn btn-success btn-sm");
-					btNaskah.setAutodisable("self");
-					btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
-					btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-						@Override
-						public void onEvent(Event event) throws Exception {
-							new NaskahHandler().downloadNaskah(data, "sumpah");
-						}
-					});
-
-					Button btEtika = new Button("Etika Profesi");
-					btEtika.setIconSclass("z-icon-download");
-					btEtika.setSclass("btn btn-success btn-sm");
-					btEtika.setAutodisable("self");
-					btEtika.setTooltiptext("Download Naskah Etika");
-					btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-						@Override
-						public void onEvent(Event event) throws Exception {
-							new NaskahHandler().downloadNaskah(data, "etik");
-						}
-					});
 					
-					Hlayout hlayout = new Hlayout();
-					hlayout.appendChild(btNaskah);
-					hlayout.appendChild(new Separator("vertical"));
-					hlayout.appendChild(btEtika);
-					row.getChildren().add(hlayout);
+					if (data.getTevent().getEventtype().equals(AppUtils.EVENTTYPE_SUMPAHPROFESI)) {
+						Button btNaskah = new Button("Sumpah Profesi");
+						btNaskah.setIconSclass("z-icon-download");
+						btNaskah.setSclass("btn btn-success btn-sm");
+						btNaskah.setAutodisable("self");
+						btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
+						btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								new NaskahHandler().downloadNaskah(data, "sumpah");
+							}
+						});
+
+						Button btEtika = new Button("Etika Profesi");
+						btEtika.setIconSclass("z-icon-download");
+						btEtika.setSclass("btn btn-success btn-sm");
+						btEtika.setAutodisable("self");
+						btEtika.setTooltiptext("Download Naskah Etika");
+						btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								new NaskahHandler().downloadNaskah(data, "etik");
+							}
+						});
+						
+						Hlayout hlayout = new Hlayout();
+						hlayout.appendChild(btNaskah);
+						hlayout.appendChild(new Separator("vertical"));
+						hlayout.appendChild(btEtika);
+						row.getChildren().add(hlayout);
+					} else if (data.getTevent().getIscert() != null && data.getTevent().getIscert().equals("Y")) {
+						Button btCert = new Button("Sertifikat");
+						btCert.setIconSclass("z-icon-download");
+						btCert.setSclass("btn btn-success btn-sm");
+						btCert.setAutodisable("self");
+						btCert.setTooltiptext("Download Sertifikat");
+						btCert.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								new NaskahHandler().downloadSertifikat(data);
+							}
+						});
+						row.getChildren().add(btCert);
+					}
+					
 				} else {
 					row.getChildren().add(new Label());
 				}
@@ -131,7 +149,7 @@ public class EventRegListVm {
 			String filepath2 = "naskahsumpah2.jasper";
 			if (arg.equals("sumpah")) {
 				nosurat = data.getSpno();
-				System.out.println("'" + obj.getAgama() + "'");
+				//System.out.println("'" + obj.getAgama() + "'");
 				if (obj.getAgama().toUpperCase().equals("ISLAM")) {
 					parameters.put("SALAMNASKAH", "Semoga Allah Subhanahu wa ta’ala memberikan kekuatan kepada saya");
 					parameters.put("SUMPAHAGAMA", "Demi Allah saya bersumpah");
@@ -166,10 +184,10 @@ public class EventRegListVm {
 
 			File file = new File(AppUtils.PATH_PHOTO + "/" + obj.getPhotolink());
 			if (file.exists()) {
-				System.out.println("ADA FOTO");
+				//System.out.println("ADA FOTO");
 				photoname = obj.getPhotolink();
 			} else {
-				System.out.println("TIDAK ADA FOTO");
+				//System.out.println("TIDAK ADA FOTO");
 				photoname = "default.png";
 			}
 			
