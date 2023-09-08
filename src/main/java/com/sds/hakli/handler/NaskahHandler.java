@@ -34,8 +34,7 @@ public class NaskahHandler {
 
 			String nosurat = "";
 			String eventcity = data.getTevent().getEventcity();
-			//String filepath = "naskahsumpah.jasper";
-			String filepath = "cert.jasper";
+			String filepath = "naskahsumpah.jasper";
 			String filepath2 = "naskahsumpah2.jasper";
 			if (arg.equals("sumpah")) {
 				nosurat = data.getSpno();

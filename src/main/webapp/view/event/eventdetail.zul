@@ -32,6 +32,7 @@
 								label="Sumpah Profesi" />
 							<comboitem value="SM" label="Seminar" />
 							<comboitem value="WS" label="Workshop" />
+							<comboitem value="RK" label="Rakernas" />
 						</combobox>
 					</n:td>
 				</n:tr>
@@ -126,6 +127,15 @@
 										label="Belum Dibayar" />
 								</combobox>
 							</row>
+							<row>
+								<combobox id="cbMember"
+									placeholder="Status Kepesertaan" selectedItem="@bind(vm.ismember)">
+									<comboitem value="Y"
+										label="Anggota" />
+									<comboitem value="N"
+										label="Non Anggota" />
+								</combobox>
+							</row>
 						</rows>
 						<foot>
 							<footer>
@@ -184,6 +194,8 @@
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.nama}" />
 				<column label="${labels.anggota.email}" />
+				<column label="Status Member" />
+				<column label="Instansi" />
 				<column label="${labels.area.prov}" />
 				<column label="${labels.anggota.cabang}" />
 				<column label="Waktu Registrasi" align="center" />
@@ -192,7 +204,6 @@
 				<column label="Status Bayar" align="center" />
 				<column label="Jumlah Bayar" align="center" />
 				<column label="Waktu Bayar" align="center" />
-				<column label="Naskah" align="center"/>
 				<column label="${labels.common.action}" align="center" />
 			</columns>
 		</grid>

@@ -18,6 +18,10 @@ public class Tevent {
 	
 	private Integer teventpk;
 	
+	private String bodymail;
+	
+	private Date docactivedate;
+	
 	private String eventid;
 	
 	private Date eventdate;
@@ -46,6 +50,8 @@ public class Tevent {
 	
 	private String ismember;
 	
+	private String isprivate;
+	
 	private String issharefee;
 	
 	private String isskp;
@@ -70,6 +76,23 @@ public class Tevent {
 	}
 	
 	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getBodymail() {
+		return bodymail;
+	}
+
+	public void setBodymail(String bodymail) {
+		this.bodymail = bodymail;
+	}
+	
+	public Date getDocactivedate() {
+		return docactivedate;
+	}
+
+	public void setDocactivedate(Date docactivedate) {
+		this.docactivedate = docactivedate;
+	}
+
 	@Type(type = "com.sds.utils.usertype.TrimUserType")
 	public String getEventid() {
 		return eventid;
@@ -156,6 +179,14 @@ public class Tevent {
 
 	public void setEventcity(String eventcity) {
 		this.eventcity = eventcity;
+	}
+	
+	public String getIsprivate() {
+		return isprivate;
+	}
+
+	public void setIsprivate(String isprivate) {
+		this.isprivate = isprivate;
 	}
 
 	public String getIssharefee() {

@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Hlayout;
@@ -173,6 +174,13 @@ public class EventVm {
 				li3.setClientAttribute("class", "list-group-item px-4");
 				li3.appendChild(new Html("Realisasi Pendapatan Rp. " + NumberFormat.getInstance().format(vsum.getPaymentamount())));
 				li3.setParent(ul);
+				HtmlNativeComponent link = new HtmlNativeComponent("li");
+				link.setClientAttribute("class", "list-group-item px-4");
+				A aLink = new A("Link Pendaftaran");
+				aLink.setStyle("font-size: 16px");
+				aLink.setHref("https://portofolio.pphakli.org/view/event/eventinit.zul?id=" + obj.getEventid());
+				link.appendChild(aLink);
+				link.setParent(ul);
 				
 				Div cardfooter = new Div();
 				cardfooter.setSclass("card-footer text-muted");

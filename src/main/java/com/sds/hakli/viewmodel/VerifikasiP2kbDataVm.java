@@ -79,8 +79,9 @@ public class VerifikasiP2kbDataVm {
 			public void render(Row row, Tp2kb data, int index) throws Exception {
 				row.getChildren().add(new Label(String.valueOf(index + 1)));
 				row.getChildren().add(new Label(data.getMp2kbkegiatan().getKegiatan()));
-				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatan())));
-				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
+				row.getChildren().add(new Label(data.getMp2kbkegiatan().getMp2kbranah().getRanah()));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatanwv())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskpwv())));
 
 				Button btnDetail = new Button();
 				btnDetail.setIconSclass("z-icon-list");
@@ -118,15 +119,16 @@ public class VerifikasiP2kbDataVm {
 
 	public void doRefresh() {
 		try {
-			filter = "tanggotafk = " + obj.getTanggotapk() + " and totalwaiting > 0";
-			orderby = "tp2kbpk asc";
+			//filter = "tanggotafk = " + obj.getTanggotapk() + " and totalwaiting > 0";
+			filter = "tp2kbbook.tp2kbbookpk = " + obj.getTp2kbbookpk() + " and totalkegiatanwv > 0";
+			orderby = "mp2kbkegiatan.idkegiatan";
 
 			objList = new Tp2kbDAO().listByFilter(filter, orderby);
 			totalkegiatan = 0;
 			totalskp = new BigDecimal(0);
 			for(Tp2kb data: objList) {
-				totalkegiatan = totalkegiatan + data.getTotalkegiatan();
-				totalskp = totalskp.add(data.getTotalskp());
+				totalkegiatan = totalkegiatan + data.getTotalkegiatanwv();
+				totalskp = totalskp.add(data.getTotalskpwv());
 			}
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));

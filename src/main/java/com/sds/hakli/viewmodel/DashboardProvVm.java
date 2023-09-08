@@ -130,10 +130,24 @@ public class DashboardProvVm {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("mprovpk", oUser.getMcabang().getMprov().getMprovpk());
 			map.put("provname", oUser.getMcabang().getMprov().getProvname());
+			map.put("type", "tim");
 			Window win = (Window) Executions
 					.createComponents("/view/p2kb/p2kbsumwaittimkab.zul", null, map);
 			win.setClosable(true);
 			win.setWidth("80%");
+			win.doModal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	public void doViewPendingReg() {
+		try {
+			Window win = (Window) Executions
+					.createComponents("/view/sumpendingreg.zul", null, null);
+			win.setClosable(true);
+			win.setWidth("85%");
 			win.doModal();
 		} catch (Exception e) {
 			e.printStackTrace();

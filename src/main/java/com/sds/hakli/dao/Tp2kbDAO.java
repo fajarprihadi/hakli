@@ -82,10 +82,10 @@ public class Tp2kbDAO {
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
 		oList = session
-				.createSQLQuery("SELECT CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, SUM(TOTALWAITING) AS TOTALWAITING, SUM(TOTALTIMAPPROVE) AS TOTALTIMAPPROVE "
-						+ "FROM TP2KB JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK "
+				.createSQLQuery("SELECT TP2KBBOOKPK, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, CABANG, TP2KBBOOK.NOSTR, TGLMULAI, TGLAKHIR, SUM(TOTALKEGIATANWV) AS TOTALKEGIATANWV "
+						+ "FROM TP2KBBOOK JOIN TP2KB ON TP2KBBOOKPK = TP2KBBOOKFK JOIN TANGGOTA ON TP2KB.TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK "
 						+ "JOIN MP2KBKEGIATAN ON MP2KBKEGIATANFK = MP2KBKEGIATANPK WHERE " + filter
-						+ " GROUP BY CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT HAVING SUM(TOTALWAITING) > 0 ORDER BY " + orderby)
+						+ " GROUP BY TP2KBBOOKPK, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, CABANG, TP2KBBOOK.NOSTR, TGLMULAI, TGLAKHIR HAVING SUM(TOTALKEGIATANWV) > 0 ORDER BY " + orderby)
 				.addEntity(Vp2kb.class).list();
 
 		session.close();
@@ -99,7 +99,7 @@ public class Tp2kbDAO {
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
 		oList = session
-				.createSQLQuery("SELECT CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, SUM(TOTALWAITING) AS TOTALWAITING, SUM(TOTALTIMAPPROVE) AS TOTALTIMAPPROVE "
+				.createSQLQuery("SELECT CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT, SUM(TOTALKEGIATANWV) AS TOTALKEGIATANWV, SUM(TOTALTIMAPPROVE) AS TOTALTIMAPPROVE "
 						+ "FROM TP2KB JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK "
 						+ "JOIN MP2KBKEGIATAN ON MP2KBKEGIATANFK = MP2KBKEGIATANPK WHERE " + filter
 						+ " GROUP BY CABANG, TANGGOTAPK, NOANGGOTA, NAMA, ALAMAT HAVING SUM(TOTALTIMAPPROVE) > 0 ORDER BY " + orderby)
@@ -137,7 +137,7 @@ public class Tp2kbDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select coalesce(sum(totalwaiting),0) from Tp2kb join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where " + filter)
+		count = Integer.parseInt((String) session.createSQLQuery("select coalesce(sum(totalkegiatanwv),0) from Tp2kb join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk where " + filter)
 				.uniqueResult().toString());
 		session.close();
 		return count;
@@ -162,9 +162,9 @@ public class Tp2kbDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, SUM(TOTALWAITING) AS TOTAL FROM TP2KB " + 
+		oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, SUM(TOTALKEGIATANWV) AS TOTAL FROM TP2KB " + 
 				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROV ON MPROVFK = MPROVPK " +
-				"WHERE TOTALWAITING > 0 GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY SUM(TOTALWAITING) DESC").addEntity(BranchTop.class)
+				"WHERE TOTALKEGIATANWV > 0 GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY SUM(TOTALKEGIATANWV) DESC").addEntity(BranchTop.class)
 				.list();
 		session.close();
 		return oList;
@@ -176,10 +176,10 @@ public class Tp2kbDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		oList = session.createSQLQuery("SELECT MCABANGPK AS ID, CABANG AS NAME, SUM(TOTALWAITING) AS TOTAL FROM TP2KB " + 
+		oList = session.createSQLQuery("SELECT MCABANGPK AS ID, CABANG AS NAME, SUM(TOTALKEGIATANWV) AS TOTAL FROM TP2KB " + 
 				"JOIN TANGGOTA ON TANGGOTAFK = TANGGOTAPK JOIN MCABANG ON MCABANGFK = MCABANGPK " +
-				"WHERE TOTALWAITING > 0 AND " + filter + " " + 
-				"GROUP BY MCABANGPK, CABANG ORDER BY SUM(TOTALWAITING) DESC").addEntity(BranchTop.class)
+				"WHERE TOTALKEGIATANWV > 0 AND " + filter + " " + 
+				"GROUP BY MCABANGPK, CABANG ORDER BY SUM(TOTALKEGIATANWV) DESC").addEntity(BranchTop.class)
 				.list();
 		session.close();
 		return oList;

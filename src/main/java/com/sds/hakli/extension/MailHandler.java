@@ -11,10 +11,9 @@ import javax.mail.MessagingException;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.zkoss.zk.ui.Executions;
-
 import com.sds.hakli.dao.TmailingDAO;
 import com.sds.hakli.domain.Tanggota;
+import com.sds.hakli.domain.Teventreg;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.domain.Tmailing;
 import com.sds.utils.AppData;
@@ -45,16 +44,19 @@ public class MailHandler implements Runnable {
 			mailbean = AppData.getSmtpParam();
 			try {
 				if (obj != null) {
-					File file = new File(bodymail);
+					String bodymsg = "";
+					if (bodymail != null) {
+						File file = new File(bodymail);
 
-					BufferedReader br = new BufferedReader(new FileReader(file));
-					StringBuilder template = new StringBuilder();
-					String st;
-					while ((st = br.readLine()) != null) {
-						template.append(st);
+						BufferedReader br = new BufferedReader(new FileReader(file));
+						StringBuilder template = new StringBuilder();
+						String st;
+						while ((st = br.readLine()) != null) {
+							template.append(st);
+						}
+						br.close();
+						bodymsg = template.toString();
 					}
-					br.close();
-					String bodymsg = template.toString();
 					
 					mailbean.setRecipient(recipient);
 					mailbean.setSubject(subject);
@@ -80,6 +82,9 @@ public class MailHandler implements Runnable {
 						bodymsg = bodymsg.replaceAll("%noanggota%", ((Tanggota)obj).getNoanggota());
 						bodymsg = bodymsg.replaceAll("%password%", ((Tanggota)obj).getPassword());
 						bodymsg = bodymsg.replaceAll("%regmemo%", ((Tanggota)obj).getRegmemo());
+					} else if (obj instanceof Teventreg) {
+						bodymsg = ((Teventreg) obj).getTevent().getBodymail();
+						bodymsg = bodymsg.replaceAll("%nama%", ((Teventreg) obj).getTanggota().getNama());
 					}
 					
 					mailbean.setBodymsg(bodymsg);
@@ -118,6 +123,8 @@ public class MailHandler implements Runnable {
 				mail.setTanggota(((Tinvoice) obj).getTanggota());
 			} else if (obj instanceof Tanggota) {
 				mail.setTanggota((Tanggota) obj);
+			} else if (obj instanceof Teventreg) {
+				mail.setTanggota(((Teventreg) obj).getTanggota());
 			}
 			
 			new TmailingDAO().save(session, mail);

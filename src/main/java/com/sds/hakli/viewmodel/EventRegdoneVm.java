@@ -61,7 +61,12 @@ public class EventRegdoneVm {
 			} else {
 				eventimg = AppUtils.PATH_EVENT + "/" + obj.getTevent().getEventimg();
 				boolean isValid = true;
-				if (obj.getIspaid().equals("Y")) {
+				if (obj.getTevent().getIsfree().equals("Y")) {
+					HtmlNativeComponent strong = new HtmlNativeComponent("strong");
+					strong.appendChild(new Html("Proses pendaftaran berhasil. Silakan cek e-mail Anda " + obj.getTanggota().getEmail() + " untuk mengetahui informasi lebih lanjut."));
+					divInfo.appendChild(strong);
+					divInfo.appendChild(new Separator());
+				} else if (obj.getIspaid().equals("Y")) {
 					HtmlNativeComponent strong = new HtmlNativeComponent("strong");
 					strong.appendChild(new Html("Proses pendaftaran dan pembayaran berhasil."));
 					divInfo.appendChild(strong);
@@ -91,7 +96,7 @@ public class EventRegdoneVm {
 					}
 				}
 				
-				if (isValid) {
+				if (isValid && obj.getTevent().getIsfree().equals("N")) {
 					doInfo();
 				}
 			}

@@ -132,6 +132,8 @@ public class AnggotaRegDeclineVm {
 		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || 
 				oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT)) {
 			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG_DECLINE + "'";
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG_DECLINE + "' and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();			
 		} else {
 			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG_DECLINE + "' and mcabangfk = " + oUser.getMcabang().getMcabangpk();
 		}

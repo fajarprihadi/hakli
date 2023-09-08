@@ -135,7 +135,7 @@ public class TanggotaDAO {
 		session = StoreHibernateUtil.openSession();
 		oList = session.createSQLQuery("SELECT MPROVPK AS ID, MPROV.PROVNAME AS NAME, COUNT(*) AS TOTAL FROM TANGGOTA " + 
 				"JOIN MCABANG ON MCABANGFK = MCABANGPK JOIN MPROV ON MPROVFK = MPROVPK " +
-				"WHERE STATUSREG = '1' GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY COUNT(*) DESC").addEntity(BranchTop.class)
+				"WHERE STATUSREG = '1' AND " + filter + " GROUP BY MPROVPK, MPROV.PROVNAME ORDER BY COUNT(*) DESC").addEntity(BranchTop.class)
 				.list();
 		session.close();
 		return oList;

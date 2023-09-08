@@ -132,6 +132,8 @@ public class AnggotaWaitPayVm {
 		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || 
 				oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT)) {
 			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG_PAYMENT + "'";
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG_PAYMENT + "' and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();			
 		} else {
 			filter = "statusreg = '" + AppUtils.STATUS_ANGGOTA_REG_PAYMENT + "' and mcabangfk = " + oUser.getMcabang().getMcabangpk();
 		}

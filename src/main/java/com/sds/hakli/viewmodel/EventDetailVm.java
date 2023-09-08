@@ -81,6 +81,7 @@ public class EventDetailVm {
 	private String status;
 	private String gender;
 	private String agama;
+	private String ismember;
 	
 	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	private SimpleDateFormat datetimeLocalFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -121,50 +122,54 @@ public class EventDetailVm {
 					row.getChildren().add(new Label(String.valueOf((AppUtils.PAGESIZE * pageStartNumber) + index + 1)));
 					row.getChildren().add(new Label(data.getTanggota().getNama()));
 					row.getChildren().add(new Label(data.getTanggota().getEmail()));
-					row.getChildren().add(new Label(data.getTanggota().getMcabang().getMprov().getProvname()));
-					row.getChildren().add(new Label(data.getTanggota().getMcabang().getCabang()));
+					row.getChildren().add(new Label(data.getTanggota().getStatusreg() != null && data.getTanggota().getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_ACTIVE) ? "Anggota" : "Non Anggota"));
+					row.getChildren().add(new Label(data.getTanggota().getInstansi()));
+					row.getChildren().add(new Label(data.getTanggota().getMcabang() != null ? 
+							data.getTanggota().getMcabang().getMprov().getProvname() : ""));
+					row.getChildren().add(new Label(data.getTanggota().getMcabang() != null ? 
+							data.getTanggota().getMcabang().getCabang() : ""));
 					row.getChildren().add(new Label(data.getVacreatedat() != null ? datetimeLocalFormatter.format(data.getVacreatedat()) : ""));
 					row.getChildren().add(new Label(data.getVano()));
 					row.getChildren().add(new Label(data.getVaexpdate() != null ? datetimeLocalFormatter.format(data.getVaexpdate()) : ""));
-					row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
+					row.getChildren().add(new Label(data.getTevent().getIsfree() != null && data.getTevent().getIsfree().equals("Y") ? "Free" : data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
 					row.getChildren().add(new Label(data.getPaidamount() != null ? NumberFormat.getInstance().format(data.getPaidamount()) : ""));
 					row.getChildren().add(new Label(data.getPaidat() != null ? datetimeLocalFormatter.format(data.getPaidat()) : ""));
 					
-					if (data.getIspaid().equals("Y")) {
-						Button btNaskah = new Button("Sumpah Profesi");
-						btNaskah.setIconSclass("z-icon-download");
-						btNaskah.setSclass("btn btn-success btn-sm");
-						btNaskah.setAutodisable("self");
-						btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
-						btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-							@Override
-							public void onEvent(Event event) throws Exception {
-								new NaskahHandler().downloadNaskah(data, "sumpah");
-							}
-						});
-
-						Button btEtika = new Button("Etika Profesi");
-						btEtika.setIconSclass("z-icon-download");
-						btEtika.setSclass("btn btn-success btn-sm");
-						btEtika.setAutodisable("self");
-						btEtika.setTooltiptext("Download Naskah Etika");
-						btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-							@Override
-							public void onEvent(Event event) throws Exception {
-								new NaskahHandler().downloadNaskah(data, "etik");
-							}
-						});
-						
-						Hlayout hlayout = new Hlayout();
-						hlayout.appendChild(btNaskah);
-						hlayout.appendChild(new Separator("vertical"));
-						hlayout.appendChild(btEtika);
-						row.getChildren().add(hlayout);
-					} else {
-						row.getChildren().add(new Label());
-					}
+//					if (data.getIspaid().equals("Y")) {
+//						Button btNaskah = new Button("Sumpah Profesi");
+//						btNaskah.setIconSclass("z-icon-download");
+//						btNaskah.setSclass("btn btn-success btn-sm");
+//						btNaskah.setAutodisable("self");
+//						btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
+//						btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+//
+//							@Override
+//							public void onEvent(Event event) throws Exception {
+//								new NaskahHandler().downloadNaskah(data, "sumpah");
+//							}
+//						});
+//
+//						Button btEtika = new Button("Etika Profesi");
+//						btEtika.setIconSclass("z-icon-download");
+//						btEtika.setSclass("btn btn-success btn-sm");
+//						btEtika.setAutodisable("self");
+//						btEtika.setTooltiptext("Download Naskah Etika");
+//						btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+//
+//							@Override
+//							public void onEvent(Event event) throws Exception {
+//								new NaskahHandler().downloadNaskah(data, "etik");
+//							}
+//						});
+//						
+//						Hlayout hlayout = new Hlayout();
+//						hlayout.appendChild(btNaskah);
+//						hlayout.appendChild(new Separator("vertical"));
+//						hlayout.appendChild(btEtika);
+//						row.getChildren().add(hlayout);
+//					} else {
+//						row.getChildren().add(new Label());
+//					}
 					
 					Button btProcess = new Button();
 					btProcess.setIconSclass("z-icon-eye");
@@ -223,6 +228,13 @@ public class EventDetailVm {
 			filter += " and gender = '" + gender.trim() + "'";
 		if (agama != null && agama.trim().length() > 0)
 			filter += " and agama = '" + agama.trim() + "'";
+		if (ismember != null && ismember.trim().length() > 0) {
+			if (ismember.equals("Y"))
+				filter += " and statusreg = '" + AppUtils.STATUS_ANGGOTA_REG_ACTIVE + "'";
+			else if (ismember.equals("N"))
+				filter += " and (statusreg is null or statusreg != '" + AppUtils.STATUS_ANGGOTA_REG_ACTIVE + "')";
+		}
+			
 		needsPageUpdate = true;
 		pageStartNumber = 0;
 		refreshModel(pageStartNumber);
@@ -329,7 +341,7 @@ public class EventDetailVm {
 				cell.setCellValue(obj.getEventprice().doubleValue());
 				rownum++;
 				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
-				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "No STR", "E-Mail", "Agama", "Region", "Cabang",
+				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "Instansi", "E-Mail", "No HP", "Agama", "Region", "Cabang",
 						"Provinsi Domisili", "Kabupaten Domisili", "Alamat Domisili", 
 						"Tempat Kerja", "Provinsi", "Kabupaten", "Alamat", "Rumpun", "Kepegawaian", "Sub Kepegawian", 
 						"Perguruan Tinggi", "Jenjang", "Peminatan 1", "Peminatan 2", "Periode Awal", "Periode Akhir", "No Ijazah", 
@@ -346,8 +358,8 @@ public class EventDetailVm {
 						pendidikan = pendidikans.get(0);
 					
 					datamap.put(no,
-							new Object[] { no - 1, data.getTanggota().getNoanggota(), data.getTanggota().getNama(), data.getTanggota().getNostr(), data.getTanggota().getEmail(), data.getTanggota().getAgama(),
-									data.getTanggota().getMcabang().getMprov().getProvname(), data.getTanggota().getMcabang().getCabang(), data.getTanggota().getProvname(), data.getTanggota().getKabname(), data.getTanggota().getAlamat(), 
+							new Object[] { no - 1, data.getTanggota().getNoanggota(), data.getTanggota().getNama(), data.getTanggota().getInstansi(), data.getTanggota().getEmail(), data.getTanggota().getHp(), data.getTanggota().getAgama(),
+									data.getTanggota().getMcabang() != null ? data.getTanggota().getMcabang().getMprov().getProvname() : "", data.getTanggota().getMcabang() != null ? data.getTanggota().getMcabang().getCabang() : "", data.getTanggota().getProvname(), data.getTanggota().getKabname(), data.getTanggota().getAlamat(), 
 									pekerjaan.getNamakantor(), pekerjaan.getProvname(), pekerjaan.getKabname(), pekerjaan.getAlamatkantor(), 
 									pekerjaan.getMrumpun() != null ? pekerjaan.getMrumpun().getRumpun() : "", 
 									pekerjaan.getMkepegawaian() != null ? pekerjaan.getMkepegawaian().getKepegawaian() : "",
@@ -474,4 +486,13 @@ public class EventDetailVm {
 	public void setAgama(String agama) {
 		this.agama = agama;
 	}
+	
+	public String getIsmember() {
+		return ismember;
+	}
+
+	public void setIsmember(String ismember) {
+		this.ismember = ismember;
+	}
+
 }

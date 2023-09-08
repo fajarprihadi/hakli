@@ -145,8 +145,7 @@ public class BriapiFundTransferHandler implements InterruptableJob  {
 				
 				FundTrfResp fundTrf = briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
 				//if (fundTrf != null && fundTrf.getResponseCode() != null && fundTrf.getResponseCode().equals("0200")) {
-				//}
-				if (fundTrf != null && fundTrf.getResponseCode() != null && fundTrf.getResponseCode().equals("0200")) {
+				if (fundTrf != null) {
 					trf.setResponsecode(fundTrf.getResponseCode());
 					trf.setJournalseq(fundTrf.getJournalSeq());
 					trf.setResponsedesc(fundTrf.getResponseDescription());

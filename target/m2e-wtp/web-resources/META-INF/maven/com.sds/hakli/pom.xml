@@ -185,6 +185,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>org.zkoss.zkforge</groupId>
+			<artifactId>ckez</artifactId>
+			<version>4.11.1.0</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>fp.font</groupId>
 			<artifactId>fontcustom</artifactId>
 			<version>1.3</version>

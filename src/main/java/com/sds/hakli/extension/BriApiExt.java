@@ -65,16 +65,17 @@ public class BriApiExt {
 		try {
 			System.out.println(new Date().toString());
 			BriapiBean bean = AppData.getBriapibean();
+			System.out.println("FT Consumer Key : " + bean.getBrift_consumerkey());
+			System.out.println("FT Consumer Secret : " + bean.getBrift_consumersecret());
 			//bean.setConsumerkey("HwsO7wCvFZY3lPNsXXGrwMzHi3roBvDC");
 			//bean.setConsumersecret("LP4yghyt4hwGSsjX");
 			BriApiExt briapi = new BriApiExt(bean);
 			BriApiToken briapiToken = briapi.getTokenFundTransfer();
-			
 			if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
-//				FundInqReq inqReq = new FundInqReq();
-//				inqReq.setSourceAccount("888801000157508");
-//				inqReq.setBeneficiaryAccount("888809999999918");
-//				briapi.fundInq(briapiToken.getAccess_token(), inqReq);
+				FundInqReq inqReq = new FundInqReq();
+				inqReq.setSourceAccount("888801000157508");
+				inqReq.setBeneficiaryAccount("888809999999918");
+				briapi.fundInq(briapiToken.getAccess_token(), inqReq);
 //				
 //				FundTrfReq trfReq = new FundTrfReq();
 //				trfReq.setSourceAccount("888801000157508");
@@ -731,7 +732,6 @@ public class BriApiExt {
 			String jsonReq = mapper.writeValueAsString(req);
 			
 			StringBuffer payload = new StringBuffer();
-			//payload.append("path=" + bean.getBriva_pathget() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + custcode);
 			//payload.append("path=/v3.1/transfer/internal/accounts");
 			payload.append("path=" + bean.getBrift_pathaccount());
 			payload.append("&");
@@ -743,7 +743,6 @@ public class BriApiExt {
 			payload.append("&");
 			payload.append("body=" + jsonReq);
 			
-			//String signature = encode(bean.getConsumersecret(), payload.toString());
 			String signature = encode(bean.getBrift_consumersecret(), payload.toString());
 			
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -822,7 +821,6 @@ public class BriApiExt {
 			String jsonReq = mapper.writeValueAsString(req);
 			
 			StringBuffer payload = new StringBuffer();
-			//payload.append("path=" + bean.getBriva_pathget() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + custcode);
 			//payload.append("path=/v3.1/transfer/internal");
 			payload.append("path=" + bean.getBrift_pathtransfer());
 			payload.append("&");

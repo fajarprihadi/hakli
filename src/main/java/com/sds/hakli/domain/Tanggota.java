@@ -114,6 +114,8 @@ public class Tanggota {
 	
 	private Date sisdmklastupdated;
 	
+	private String instansi;
+	
 	private Musergroup musergroup;
 	
 	@Id
@@ -486,6 +488,13 @@ public class Tanggota {
 		this.sisdmklastupdated = sisdmklastupdated;
 	}
 	
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getInstansi() {
+		return instansi;
+	}
+	public void setInstansi(String instansi) {
+		this.instansi = instansi;
+	}
 	@ManyToOne
 	@JoinColumn(name="musergroupfk")
 	public Musergroup getMusergroup() {

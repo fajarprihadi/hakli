@@ -12,7 +12,10 @@
 		<separator />
 		<div id="divTitle" />
 		<groupbox mold="3d">
-			<caption label="Informasi" />
+			<caption>
+				<n:i class="fas fa-book"></n:i>
+				<n:span>Informasi Buku Log</n:span>
+			</caption>
 			<grid>
 				<columns>
 					<column width="20%" />
@@ -44,49 +47,86 @@
 							<label value="@load(vm.enddate)" />
 						</hlayout>
 					</row>
-
+					<row>
+						<label value="Status" />
+						<combobox selectedItem="@load(vm.tpb.status)" buttonVisible="false" readonly="true">
+							<comboitem value="O" label="OPEN" />
+							<comboitem value="R" label="REVIEW" />
+							<comboitem value="C" label="CLOSED" />
+						</combobox>
+					</row>
 				</rows>
 			</grid>
 		</groupbox>
 		<separator />
 		<div id="divAdd" class="row" align="right">
 			<div class="col">
-				<button label="Tambah" autodisable="self"
+				<button id="btAdd" label="Input Kegiatan Baru" autodisable="self"
 					iconSclass="z-icon-plus" sclass="btn btn-primary btn-sm"
 					onClick="@command('doAdd')" />
 			</div>
 		</div>
 		<separator />
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
-			<columns>
-				<column label="No" align="right" width="50px" />
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
+			<columns sizable="true">
+				<column label="No" align="right" />
 				<column label="Nama Kegiatan" />
 				<column label="Ranah" />
 				<column label="Jumlah Kegiatan" align="right" />
 				<column label="Nilai SKP" align="right" />
-				<column label="SKP Waiting" align="right" />
-				<column label="Aksi" align="center" width="70px" />
+				<column label="Kegiatan Disetujui" align="right" />
+				<column label="SKP Disetujui" align="right" />
+				<column label="Kegiatan Direview" align="right" />
+				<column label="SKP Direview" align="right" />
+				<column label="Kegiatan Ditolak" align="right" />
+				<column label="SKP Ditolak" align="right" />				
+				<column label="Aksi" align="center" />
 			</columns>
 			<foot>
 				<footer />
 				<footer>
-					<label value="TOTAL" style="font-size: 20px" />
+					<label value="TOTAL" style="font-size: 18px" />
 				</footer>
 				<footer />
 				<footer>
 					<intbox value="@load(vm.totalkegiatan)"
-						format="#,##0" readonly="true"
-						style="text-align: right; font-size: 20px" />
+						format="#,##0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
 				</footer>
 				<footer>
 					<decimalbox value="@load(vm.totalskp)"
-						format="#,##0.0" readonly="true"
-						style="text-align: right; font-size: 20px" />
+						format="#,##0.0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
 				</footer>
 				<footer>
-					<decimalbox value="@load(vm.totalwaitingskp)"
-						format="#,##0.0" readonly="true"
-						style="text-align: right; font-size: 20px" />
+					<intbox value="@load(vm.totalkegiatanok)"
+						format="#,##0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalskpok)"
+						format="#,##0.0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+				<footer>
+					<intbox value="@load(vm.totalkegiatanwv)"
+						format="#,##0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalskpwv)"
+						format="#,##0.0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+				<footer>
+					<intbox value="@load(vm.totalkegiatanrj)"
+						format="#,##0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
+				</footer>
+				<footer>
+					<decimalbox value="@load(vm.totalskprj)"
+						format="#,##0.0" readonly="true" width="100%"
+						style="text-align: right; font-size: 18px" />
 				</footer>
 				<footer />
 			</foot>

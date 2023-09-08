@@ -90,7 +90,7 @@ public class P2kbSumWaitTimVm {
 			if (type.equals("komisi")) {
 				objList = new Tp2kbbookDAO().listSumWaitKomisiP2KB("0=0");
 			} else if (type.equals("tim")) {
-				objList = oDao.listSumWaitTimP2KB("totalwaiting > 0");
+				objList = oDao.listSumWaitTimP2KB("totalkegiatanwv > 0");
 			}
 			
 			grid.setModel(new ListModelList<>(objList));

@@ -50,7 +50,7 @@
 		<separator />
 		<div id="divAdd" class="row" align="right">
 			<div class="col">
-				<button label="Tambah" autodisable="self"
+				<button label="Buat Buku Log Baru" autodisable="self"
 					iconSclass="z-icon-plus" sclass="btn btn-primary btn-sm"
 					onClick="@command('doAdd')" />
 			</div>

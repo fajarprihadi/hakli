@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
@@ -45,11 +46,14 @@ public class BukuLogFormVm {
 	private String gender;
 
 	private boolean isInsert;
+	private String info;
 
 	@Wire
 	private Window winLogForm;
 	@Wire
 	private Combobox cbUniversitas;
+	@Wire
+	private Button btSave;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
@@ -65,8 +69,16 @@ public class BukuLogFormVm {
 
 		if (objForm != null) {
 			this.objForm = objForm;
-			cbUniversitas.setValue(objForm.getMuniversitas().getUniversitas());
+			if (objForm.getMuniversitas() != null)
+				cbUniversitas.setValue(objForm.getMuniversitas().getUniversitas());
+			if (objForm.getStatus().equals("R")) {
+				btSave.setDisabled(true);
+				info = "Buku Log sudah tidak dapat diubah karena sudah diajukan proses evaluasi.";
+			} else if (objForm.getStatus().equals("C")) {
+				info = "Buku Log sudah tidak dapat diubah karena sudah closed.";
+			}
 			isInsert = false;
+			
 		}
 
 	}
@@ -104,10 +116,9 @@ public class BukuLogFormVm {
 				Transaction trx = session.beginTransaction();
 
 				objForm.setTanggota(obj);
-				objForm.setStatus("O");
-
 				objForm.setTglmulai(cal.getTime());
 				if (isInsert) {
+					objForm.setStatus("O");
 					objForm.setCreatetime(new Date());
 					objForm.setCreatedby(obj.getNoanggota());
 				} else {
@@ -208,5 +219,13 @@ public class BukuLogFormVm {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
 	}
 }

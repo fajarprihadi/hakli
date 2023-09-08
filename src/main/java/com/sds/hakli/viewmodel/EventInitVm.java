@@ -11,6 +11,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.zhtml.H2;
+import org.zkoss.zhtml.H4;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -43,15 +44,20 @@ public class EventInitVm {
 	private String eventimg;
 	private String email;
 	private String nik;
+	private String ismember;
 	
 	@Wire
 	private Window winInit;
 	@Wire
 	private H2 title;
 	@Wire
+	private H4 subtitle;
+	@Wire
 	private Checkbox chkSisdmk;
 	@Wire
 	private Div divReg;
+	@Wire
+	private Div divMember;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -63,7 +69,8 @@ public class EventInitVm {
 		    	obj = eventDao.findByFilter("eventid = '" + id + "'");
 		    	if (obj != null) {
 		    		eventimg = AppUtils.PATH_EVENT + "/" + obj.getEventimg();
-		    		title.appendChild(new Html("Pendaftaran " + obj.getEventname()));
+		    		title.appendChild(new Html(obj.getEventname()));
+		    		subtitle.appendChild(new Html(obj.getEventdesc()));
 		    		
 		    		if (obj.getClosedate().compareTo(new Date()) == -1) {
 		    			divReg.getChildren().clear();
@@ -71,6 +78,10 @@ public class EventInitVm {
 		    			h3.appendChild(new Html("Maaf, Pendaftaran sudah ditutup per tanggal " + 
 		    					new SimpleDateFormat("dd-MM-yyyy HH:mm").format(obj.getClosedate()) + " WIB"));
 		    			divReg.appendChild(h3);
+		    		} else {
+		    			if (obj.getIsmember().equals("N"))
+		    				divMember.setVisible(true);
+		    			else divMember.setVisible(false);
 		    		}
 		    		
 		    	} else Executions.sendRedirect("/timeout.zul");
@@ -85,10 +96,13 @@ public class EventInitVm {
 	@Command
 	public void doSubmit() {
 		if (nik == null || nik.trim().length() == 0) {
-			Messagebox.show("Silahkan masukkan NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
+			Messagebox.show("Silakan masukkan NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
 					Messagebox.INFORMATION);
 		} else if (!StringUtils.digitKtpValidator(nik)) { 
 			Messagebox.show("Data NIK tidak sesuai. Periksa kembali data input NIK Anda", WebApps.getCurrent().getAppName(), Messagebox.OK,
+					Messagebox.EXCLAMATION);
+		} else if (divMember.isVisible() && ismember == null) {
+			Messagebox.show("Silakan pilih status kenaggotaan Hakli", WebApps.getCurrent().getAppName(), Messagebox.OK,
 					Messagebox.EXCLAMATION);
 		} else {
 			try {
@@ -97,12 +111,28 @@ public class EventInitVm {
 				map.put("isCheckSisdmk", chkSisdmk.isChecked());
 				String page = "/view/anggota/anggotaadd.zul";
 				Tanggota obj = null;
-				List<Tanggota> objList = oDao.listByFilter("(noktp = '" + nik.trim() + "'", "tanggotapk desc");
+				List<Tanggota> objList = oDao.listByFilter("noktp = '" + nik.trim() + "'", "tanggotapk desc");
 				
 				boolean isValid = true;
 				if (this.obj.getIsmember() != null && this.obj.getIsmember().equals("Y")) {
 					if (objList.size() == 0)
 						isValid = false;
+					else {
+						obj = objList.get(0);
+						if (obj.getStatusreg() == null | !obj.getStatusreg().equals("3"))
+							isValid = false;
+					}
+				} else if (divMember.isVisible()) {
+					if (ismember.equals("Y")) {
+						if (objList.size() == 0)
+							isValid = false;
+						else {
+							obj = objList.get(0);
+							if (obj.getStatusreg() == null | !obj.getStatusreg().equals("3"))
+								isValid = false;
+						}
+					} else if (ismember.equals("N")) 
+						page = "/view/event/eventpubreg.zul";
 				}
 				
 				if (!isValid) {
@@ -153,5 +183,13 @@ public class EventInitVm {
 
 	public void setNik(String nik) {
 		this.nik = nik;
+	}
+
+	public String getIsmember() {
+		return ismember;
+	}
+
+	public void setIsmember(String ismember) {
+		this.ismember = ismember;
 	}
 }

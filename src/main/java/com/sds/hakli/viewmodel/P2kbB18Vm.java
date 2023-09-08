@@ -101,7 +101,13 @@ public class P2kbB18Vm {
 		try {
 			UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
 			media = event.getMedia();
-			docfilename = media.getName();
+			if (media.getFormat().equalsIgnoreCase("pdf")) {
+				docfilename = media.getName();
+			} else {
+				docfilename = null;
+				media = null;
+				Messagebox.show("Dokumen harus berupa format PDF", WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.EXCLAMATION);
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -152,20 +158,24 @@ public class P2kbB18Vm {
 					book.setMp2kbkegiatan(objForm.getMp2kbkegiatan());
 					book.setTotalkegiatan(0);
 					book.setTotalskp(new BigDecimal(0));
-					book.setTotalwaiting(0);
-					book.setTotalskpwaiting(new BigDecimal(0));
+					book.setTotalkegiatanok(0);
+					book.setTotalskpok(new BigDecimal(0));
+					book.setTotalkegiatanwv(0);
+					book.setTotalskpwv(new BigDecimal(0));
+					book.setTotalkegiatanrj(0);
+					book.setTotalskprj(new BigDecimal(0));
 				}
 
 				if (isInsert) {
 					book.setTotalkegiatan(book.getTotalkegiatan() + 1);
 					book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
-					book.setTotalskpwaiting(book.getTotalskpwaiting().add(objForm.getNilaiskp()));
-					book.setTotalwaiting(book.getTotalwaiting() + 1);
+					book.setTotalkegiatanwv(book.getTotalkegiatanwv() + 1);
+					book.setTotalskpwv(book.getTotalskpwv().add(objForm.getNilaiskp()));
 				} else {
 					book.setTotalskp(book.getTotalskp().subtract(nilaiskp_curr));
 					book.setTotalskp(book.getTotalskp().add(objForm.getNilaiskp()));
-					book.setTotalskpwaiting(book.getTotalskpwaiting().subtract(nilaiskp_curr));
-					book.setTotalskpwaiting(book.getTotalskpwaiting().add(objForm.getNilaiskp()));
+					book.setTotalskpwv(book.getTotalskpwv().subtract(nilaiskp_curr));
+					book.setTotalskpwv(book.getTotalskpwv().add(objForm.getNilaiskp()));
 				}
 				book.setLastupdated(new Date());
 				p2kbDao.save(session, book);

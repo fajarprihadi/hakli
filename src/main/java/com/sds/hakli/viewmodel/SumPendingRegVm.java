@@ -11,6 +11,8 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -26,11 +28,17 @@ import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.domain.BranchTop;
+import com.sds.hakli.domain.Tanggota;
+import com.sds.utils.AppUtils;
 
 public class SumPendingRegVm {
 	
+	private Session session = Sessions.getCurrent();
+	private Tanggota oUser;
+	
 	private TanggotaDAO oDao = new TanggotaDAO();
 	
+	private String filter;
 	private List<BranchTop> objList;
 	private long totaldata;
 	
@@ -40,6 +48,9 @@ public class SumPendingRegVm {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
+		
+		oUser = (Tanggota) session.getAttribute("anggota");
+		
 		grid.setRowRenderer(new RowRenderer<BranchTop>() {
 
 			@Override
@@ -77,7 +88,13 @@ public class SumPendingRegVm {
 	
 	public void refreshModel() {
 		try {
-			objList = oDao.listSumPendingReg("0=0");
+			filter = "0=0";
+			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN))
+				filter = "MCABANGFK = " + oUser.getMcabang().getMcabangpk();
+			else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI))
+				filter = "MPROVFK = " + oUser.getMcabang().getMprov().getMprovpk();
+			
+			objList = oDao.listSumPendingReg(filter);
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
 			e.printStackTrace();

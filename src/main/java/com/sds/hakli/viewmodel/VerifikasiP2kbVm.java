@@ -53,6 +53,7 @@ public class VerifikasiP2kbVm {
 	private Integer pageTotalSize;
 
 	private SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Wire
 	private Grid grid;
@@ -90,7 +91,7 @@ public class VerifikasiP2kbVm {
 									map.put("obj", data);
 									win = (Window) Executions.createComponents("/view/timp2kb/verifikasip2kbdata.zul",
 											null, map);
-									win.setWidth("70%");
+									//win.setWidth("70%");
 									win.setClosable(true);
 									win.doModal();
 									win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
@@ -105,8 +106,9 @@ public class VerifikasiP2kbVm {
 								}
 							});
 							row.getChildren().add(a);
-							row.getChildren().add(new Label(data.getAlamat()));
-							row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalwaiting())));
+							row.getChildren().add(new Label(data.getNostr()));
+							row.getChildren().add(new Label(datelocalFormatter.format(data.getTglmulai()) + " s/d " + datelocalFormatter.format(data.getTglakhir())));
+							row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatanwv())));
 						}
 					});
 				} else {

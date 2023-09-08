@@ -322,7 +322,7 @@ public class BukuLogRequestVm {
 				if (arg != null && arg.equals("req")) {
 					hlayout.appendChild(btEdit);
 					hlayout.appendChild(btDelete);
-					if (data.getIspaid() != null && data.getIspaid().equals("Y"))
+					if (data.getIspaid() != null && data.getIspaid().equals("Y") && data.getStatus().equals("C"))
 						hlayout.appendChild(btLetter);
 				}
 				div.appendChild(hlayout);

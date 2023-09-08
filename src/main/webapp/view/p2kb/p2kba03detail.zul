@@ -21,11 +21,13 @@
 					</row>
 					<row>
 						<label value="Provinsi" />
-						<label value="@load(vm.tpb.tanggota.mcabang.mprov.provname)" />
+						<label
+							value="@load(vm.tpb.tanggota.mcabang.mprov.provname)" />
 					</row>
 					<row>
 						<label value="Cabang" />
-						<label value="@load(vm.tpb.tanggota.mcabang.cabang)" />
+						<label
+							value="@load(vm.tpb.tanggota.mcabang.cabang)" />
 					</row>
 					<row>
 						<label value="Nomor STR" />
@@ -34,32 +36,43 @@
 					<row>
 						<label value="Periode" />
 						<hlayout>
-							<label value="@load(vm.tpb.tglmulai) @converter('formatedDate', format='dd MMM yyyy')" />
+							<label
+								value="@load(vm.tpb.tglmulai) @converter('formatedDate', format='dd MMM yyyy')" />
 							<separator />
 							<label value="s/d" />
-							<label value="@load(vm.tpb.tglakhir) @converter('formatedDate', format='dd MMM yyyy')" />
+							<label
+								value="@load(vm.tpb.tglakhir) @converter('formatedDate', format='dd MMM yyyy')" />
 						</hlayout>
 					</row>
 					<row>
 						<label value="Ranah Kegiatan" />
-						<label value="@load(vm.p2kb.mp2kbkegiatan.mp2kbranah.ranah)" />
+						<label
+							value="@load(vm.p2kb.mp2kbkegiatan.mp2kbranah.ranah)" />
 					</row>
 					<row>
 						<label value="Jenis Kegiatan" />
-						<label value="@load(vm.p2kb.mp2kbkegiatan.kegiatan)" />
+						<label
+							value="@load(vm.p2kb.mp2kbkegiatan.kegiatan)" />
 					</row>
 				</rows>
 			</grid>
 		</groupbox>
-		<separator />
-		<grid id="grid" sclass="z-sticky-header" emptyMessage="${labels.common.emptymsg}">
+		<div class="note note-info mb-3" align="right">
+			<n:strong>
+				Total Nilai SKP Buku Log Disetujui :
+				<label value="@load(vm.p2kb.tp2kbbook.totalskp)"
+					style="font-size: 18px; font-weight: bold" />
+			</n:strong>
+		</div>
+		<grid id="grid" sclass="z-sticky-header"
+			emptyMessage="${labels.common.emptymsg}">
 			<columns>
 				<column label="No" align="right" width="40px"
 					valign="top" />
 				<column label="Keterangan" valign="top" />
 				<column label="Data Kegiatan" valign="top" />
-				<column id="colAksi"  label="Aksi" align="center" width="110px"
-					valign="top" />
+				<column id="colAksi" label="Aksi" align="center"
+					width="110px" valign="top" />
 			</columns>
 			<rows />
 			<foot>

@@ -240,7 +240,7 @@ public class VerifikasiKomisiVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "totalskp > 50 and status = 'R'";
+			filter = "totalskp >= 50 and status = 'R'";
 			orderby = "tglmulai";
 
 			if (nama != null && nama.trim().length() > 0)

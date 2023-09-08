@@ -1,7 +1,6 @@
 package com.sds.hakli.viewmodel;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,7 +57,12 @@ public class LogbookVm {
 	private String filter;
 	private Integer totalkegiatan;
 	private BigDecimal totalskp;
-	private BigDecimal totalwaitingskp;
+	private Integer totalkegiatanok;
+	private BigDecimal totalskpok;
+	private Integer totalkegiatanwv;
+	private BigDecimal totalskpwv;
+	private Integer totalkegiatanrj;
+	private BigDecimal totalskprj;
 
 	private String startdate;
 	private String enddate;
@@ -73,6 +77,8 @@ public class LogbookVm {
 	private Div divAdd;
 	@Wire
 	private Window winBukulog;
+	@Wire
+	private Button btAdd;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("book") Tp2kbbook tpb,
@@ -96,6 +102,10 @@ public class LogbookVm {
 			HtmlNativeComponent h4 = new HtmlNativeComponent("h4");
 			h4.appendChild(new Html("Buku Log P2KB Periode " + startdate + " S/D " + enddate));
 			divTitle.appendChild(h4);
+			
+			if (!tpb.getStatus().equals("O")) {
+				btAdd.setDisabled(true);
+			}
 		}
 
 		grid.setRowRenderer(new RowRenderer<Tp2kb>() {
@@ -108,7 +118,12 @@ public class LogbookVm {
 				row.getChildren().add(new Label(data.getMp2kbkegiatan().getMp2kbranah().getRanah()));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatan())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskp())));
-				row.getChildren().add(new Label(DecimalFormat.getInstance().format(data.getTotalskpwaiting())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatanok())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskpok())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatanwv())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskpwv())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalkegiatanrj())));
+				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getTotalskprj())));				
 				Button btProcess = new Button();
 				btProcess.setIconSclass("z-icon-eye");
 				btProcess.setSclass("btn btn-primary btn-sm");
@@ -125,7 +140,12 @@ public class LogbookVm {
 
 				totalkegiatan = totalkegiatan + data.getTotalkegiatan();
 				totalskp = totalskp.add(data.getTotalskp());
-				totalwaitingskp = totalwaitingskp.add(data.getTotalskpwaiting());
+				totalkegiatanok = totalkegiatanok + data.getTotalkegiatanok();
+				totalskpok = totalskpok.add(data.getTotalskpok());
+				totalkegiatanwv = totalkegiatanwv + data.getTotalkegiatanwv();
+				totalskpwv = totalskpwv.add(data.getTotalskpwv());
+				totalkegiatanrj = totalkegiatanrj + data.getTotalkegiatanrj();
+				totalskprj = totalskprj.add(data.getTotalskprj());
 				BindUtils.postNotifyChange(LogbookVm.this, "*");
 			}
 		});
@@ -171,7 +191,12 @@ public class LogbookVm {
 		try {
 			totalkegiatan = 0;
 			totalskp = new BigDecimal(0);
-			totalwaitingskp = new BigDecimal(0);
+			totalkegiatanok = 0;
+			totalskpok = new BigDecimal(0);
+			totalkegiatanwv = 0;
+			totalskpwv = new BigDecimal(0);
+			totalkegiatanrj = 0;
+			totalskprj = new BigDecimal(0);
 			objList = oDao.listByFilter(filter, "mp2kbkegiatan.idkegiatan");
 			grid.setModel(new ListModelList<>(objList));
 		} catch (Exception e) {
@@ -423,12 +448,54 @@ public class LogbookVm {
 		this.tpb = tpb;
 	}
 
-	public BigDecimal getTotalwaitingskp() {
-		return totalwaitingskp;
+	public Integer getTotalkegiatanok() {
+		return totalkegiatanok;
 	}
 
-	public void setTotalwaitingskp(BigDecimal totalwaitingskp) {
-		this.totalwaitingskp = totalwaitingskp;
+	public void setTotalkegiatanok(Integer totalkegiatanok) {
+		this.totalkegiatanok = totalkegiatanok;
 	}
+
+	public BigDecimal getTotalskpok() {
+		return totalskpok;
+	}
+
+	public void setTotalskpok(BigDecimal totalskpok) {
+		this.totalskpok = totalskpok;
+	}
+
+	public Integer getTotalkegiatanwv() {
+		return totalkegiatanwv;
+	}
+
+	public void setTotalkegiatanwv(Integer totalkegiatanwv) {
+		this.totalkegiatanwv = totalkegiatanwv;
+	}
+
+	public BigDecimal getTotalskpwv() {
+		return totalskpwv;
+	}
+
+	public void setTotalskpwv(BigDecimal totalskpwv) {
+		this.totalskpwv = totalskpwv;
+	}
+
+	public Integer getTotalkegiatanrj() {
+		return totalkegiatanrj;
+	}
+
+	public void setTotalkegiatanrj(Integer totalkegiatanrj) {
+		this.totalkegiatanrj = totalkegiatanrj;
+	}
+
+	public BigDecimal getTotalskprj() {
+		return totalskprj;
+	}
+
+	public void setTotalskprj(BigDecimal totalskprj) {
+		this.totalskprj = totalskprj;
+	}
+
+	
 
 }

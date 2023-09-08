@@ -46,14 +46,12 @@ import org.zkoss.zul.Vlayout;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.Tp2kbE11DAO;
+import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.dao.Tp2kbDAO;
-import com.sds.hakli.dao.Tp2kbE10DAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kb;
 import com.sds.hakli.domain.Tp2kbbook;
-import com.sds.hakli.domain.Tp2kbe10;
 import com.sds.hakli.domain.Tp2kbe11;
-import com.sds.hakli.handler.P2KBHandler;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
@@ -66,14 +64,6 @@ public class P2kbE11DetailVm {
 	private Tp2kbDAO p2kbDao = new Tp2kbDAO();
 
 	private Tp2kbbook tpb;
-	public Tp2kbbook getTpb() {
-		return tpb;
-	}
-
-	public void setTpb(Tp2kbbook tpb) {
-		this.tpb = tpb;
-	}
-
 	private Tp2kb p2kb;
 	private BigDecimal totalskp;
 
@@ -374,46 +364,46 @@ public class P2kbE11DetailVm {
 
 	@NotifyChange("*")
 	public void doSubmit(Tp2kbe11 obj, String action, String memotim) {
+		Session session = StoreHibernateUtil.openSession();
+		Transaction trx = session.beginTransaction();
 		try {
-			Session session = StoreHibernateUtil.openSession();
-			Transaction trx = session.beginTransaction();
-
-			if (approvetype.equals("T")) {
-				if (action.equals("A")) {
-					obj.setStatus(AppUtils.STATUS_APPROVEDTIM);
-				} else {
-					obj.setStatus(AppUtils.STATUS_REJECTEDTIM);
-				}
-				obj.setMemo(memotim);
-				obj.setCheckedby(anggota.getNama());
-				obj.setCheckedbyid(anggota.getNoanggota());
-				obj.setChecktime(new Date());
+			obj.setStatus(action);
+			obj.setMemo(memotim);
+			obj.setCheckedby(anggota.getNama());
+			obj.setCheckedbyid(anggota.getNoanggota());
+			obj.setChecktime(new Date());
+			Tp2kbbook book = null;
+			if (action.equals("A")) {
+				p2kb.setTotalkegiatanok(p2kb.getTotalkegiatanok() + 1);
+				p2kb.setTotalskpok(p2kb.getTotalskpok().add(obj.getNilaiskp()));
+				
+				book = p2kb.getTp2kbbook();
+				book.setTotalkegiatan(book.getTotalkegiatan() + 1);
+				book.setTotalskp(book.getTotalskp().add(obj.getNilaiskp()));
+				
 			} else {
-				if (action.equals("A"))
-					obj.setStatus(AppUtils.STATUS_APPROVEDKOMISI);
-				else
-					obj.setStatus(AppUtils.STATUS_REJECTEDKOMISI);
-
-				obj.setMemokomisi(memotim);
-				obj.setCheckedbykomisi(anggota.getNama());
-				obj.setChecktimekomisi(new Date());
+				p2kb.setTotalkegiatanrj(p2kb.getTotalkegiatanrj() + 1);
+				p2kb.setTotalskprj(p2kb.getTotalskprj().add(obj.getNilaiskp()));
 			}
-
-			p2kb = P2KBHandler.setApproval(p2kb, approvetype, action, obj.getNilaiskp());
-			new Tp2kbDAO().save(session, p2kb);
-
-			new Tp2kbE11DAO().save(session, obj);
-
-			totalskp = totalskp.subtract(obj.getNilaiskp());
+			p2kb.setTotalkegiatanwv(p2kb.getTotalkegiatanwv() - 1);
+			p2kb.setTotalskpwv(p2kb.getTotalskpwv().subtract(obj.getNilaiskp()));
+			
+			oDao.save(session, obj);
+			p2kbDao.save(session, p2kb);
+			if (book != null)
+				new Tp2kbbookDAO().save(session, book);
 
 			trx.commit();
-			session.close();
-
+			
+			totalskp = totalskp.subtract(obj.getNilaiskp());
+			
 			doRefresh();
 			Clients.showNotification(AppData.getLabel(action) + " data berhasil", "info", null, "middle_center", 1500);
-
 		} catch (Exception e) {
 			e.printStackTrace();
+			trx.rollback();
+		} finally {
+			session.close();
 		}
 	}
 
@@ -465,35 +455,28 @@ public class P2kbE11DetailVm {
 							Session session = StoreHibernateUtil.openSession();
 							Transaction trx = session.beginTransaction();
 							try {
-								oDao.delete(session, obj);
-
 								if (p2kb != null) {
-									if (p2kb.getTotalkegiatan() > 1) {
-										p2kb.setTotalkegiatan(p2kb.getTotalkegiatan() - 1);
-										p2kb.setTotalwaiting(p2kb.getTotalwaiting() - 1);
-										p2kb.setTotalskpwaiting(p2kb.getTotalskpwaiting().subtract(obj.getNilaiskp()));
-										p2kb.setTotalskp(p2kb.getTotalskp().subtract(obj.getNilaiskp()));
-										p2kb.setLastupdated(new Date());
-										p2kbDao.save(session, p2kb);
-									} else {
-										p2kbDao.delete(session, p2kb);
-									}
-								} else {
-									System.out.println("P2KB NULL");
-								}
-
+									p2kb.setTotalkegiatan(p2kb.getTotalkegiatan() - 1);
+									p2kb.setTotalskp(p2kb.getTotalskp().subtract(obj.getNilaiskp()));
+									p2kb.setTotalkegiatanwv(p2kb.getTotalkegiatanwv() - 1);
+									p2kb.setTotalskpwv(p2kb.getTotalskpwv().subtract(obj.getNilaiskp()));
+									p2kb.setLastupdated(new Date());
+									p2kbDao.save(session, p2kb);
+								} 
+								oDao.delete(session, obj);
 								trx.commit();
 								Clients.showNotification("Proses hapus data berhasil", "info", null, "middle_center",
 										1500);
 								doRefresh();
 								BindUtils.postNotifyChange(P2kbE11DetailVm.this, "*");
 							} catch (Exception e) {
+								trx.rollback();
+								e.printStackTrace();
 								Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
 										Messagebox.ERROR);
-								e.printStackTrace();
 							} finally {
 								session.close();
-							}
+							}		
 						}
 					}
 
@@ -507,5 +490,21 @@ public class P2kbE11DetailVm {
 	public void setTotalskp(BigDecimal totalskp) {
 		this.totalskp = totalskp;
 	}
+	
+	public Tp2kbbook getTpb() {
+		return tpb;
+	}
 
+	public void setTpb(Tp2kbbook tpb) {
+		this.tpb = tpb;
+	}
+
+	public Tp2kb getP2kb() {
+		return p2kb;
+	}
+
+	public void setP2kb(Tp2kb p2kb) {
+		this.p2kb = p2kb;
+	}
+	
 }

@@ -78,11 +78,11 @@
 						</vlayout>
 					</row>
 					<row>
-						<label value="Dokumen Bukti Kegiatan" />
+						<label value="Dokumen Bukti Kegiatan (*.PDF)" />
 						<vlayout>
 							<hlayout>
 								<button sclass="btn btn-info btn-sm"
-									label="Browse..." upload="true,maxsize=5000"
+									label="Browse..." upload="true,maxsize=8000"
 									onUpload="@command('doUpload', upEvent=event)"
 									autodisable="self" />
 								<separator orient="vertical" />

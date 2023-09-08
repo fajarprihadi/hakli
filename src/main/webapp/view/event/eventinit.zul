@@ -8,50 +8,41 @@
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.EventInitVm')">
 		<!-- Section: Design Block -->
 		<n:section class="text-center">
-			<!-- Background image -->
-			<!-- 
-				<div class="p-5 bg-image"
-				style="
-				background-image: url('/hakli/img/sumpahprofesi.png');
-				height: 300px;
-				">
-				</div>
-			-->
-			<!-- Background image -->
-			<n:br />
-			<n:br />
-			<n:br />
-			<n:br />
-			<n:br />
 			<div class="card mx-0 mx-md-0 shadow-5-strong"
 				style="
         margin-top: -100px;
         background: hsla(0, 0%, 100%, 0.8);
-        backdrop-filter: blur(30px);
-        ">
-
+        backdrop-filter: blur(30px);">
 				<image src="@load(vm.eventimg)" width="100%" />
-
 				<div class="card-body py-5 px-md-3">
 
 					<div class="row d-flex justify-content-center">
 						<div class="col-lg-8">
-							<x:h2 id="title" class="fw-bold mb-4">
-
-							</x:h2>
+							<x:h2 id="title" class="fw-bold mb-4"></x:h2>
+							<x:h4 id="subtitle" class="fw-bold mb-4"></x:h4>
 							<n:form>
 
 								<div id="divReg">
 									<div class="form mb-4">
 										<textbox value="@bind(vm.nik)"
-											placeholder="Input NIK / No Anggota Anda untuk memulai pendaftaran"
+											placeholder="Input NIK Anda untuk memulai pendaftaran"
 											sclass="form-control form-control-lg" />
 									</div>
-
+									<div id="divMember" align="left">
+										<hlayout>
+											<n:h5>Status Keanggotaan Hakli</n:h5>
+										<radiogroup selectedItem="@bind(vm.ismember)">
+											<radio label="Anggota" value="Y" />
+											<radio label="Non Anggota" value="N" />
+										</radiogroup>
+										</hlayout>										
+									</div>
+									<n:hr />
+									<div align="left">
 									<n:p>
 										<n:em>
 											<checkbox id="chkSisdmk" />
-											Jika data belum terdaftar di
+											Jika Anda belum terdaftar di
 											keanggotaan HAKLI tapi sudah
 											terdaftar di SISDMK, maka
 											sistem HAKLI akan secara
@@ -62,7 +53,7 @@
 											HAKLI.
 										</n:em>
 									</n:p>
-
+									</div>
 									<!-- Submit button -->
 									<button label="Submit"
 										onClick="@command('doSubmit')" autodisable="self"
@@ -73,6 +64,7 @@
 							</n:form>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</n:section>

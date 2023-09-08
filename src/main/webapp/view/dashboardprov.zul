@@ -52,7 +52,7 @@
 							value="@load(vm.totalregver)" style="font-size: 20px" /> Calon Anggota
 					</div>
 					<div class="card-footer">
-						<a onClick="@command('doViewTimP2kb')" style="color: white">Tampilkan</a>
+						<a onClick="@command('doViewPendingReg')" style="color: white">Tampilkan</a>
 					</div>
 				</div>
 			</div>

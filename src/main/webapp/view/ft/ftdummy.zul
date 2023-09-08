@@ -1,0 +1,174 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winMutasi" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.FtDummyVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Dummy Test Pemindahbukuan</n:span>
+		</caption>
+		<div class="row">
+			<div class="col">
+				<textbox value="@bind(vm.benefaccno)" maxlength="20"
+					placeholder="Nomor Rekening Tujuan" cols="20" />
+				<decimalbox value="@bind(vm.amount)" maxlength="10"
+					format="#,##0" placeholder="Nominal" cols="12" />
+				<button label="Inquiry" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doInq')" />
+				<button label="Transfer" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doTrf')" />
+				<button label="Reset" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+			</div>
+		</div>
+		<n:hr />
+		<div class="row">
+			<div class="col">
+				<groupbox id="gbResultInq" mold="3d" visible="false">
+					<caption label="Output Inquiry" />
+					<n:table
+						class="table table-sm table-striped mb-0">
+						<n:tr>
+							<n:td width="30%">
+								<label value="Response Code" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.responseCode)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Response Description" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.responseDescription)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Error Description" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.errorDescription)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Source Account No" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.data.sourceAccount)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Source Account Name" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.data.sourceAccountName)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Source Account Status" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.data.sourceAccountStatus)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Source Account Balance" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.data.sourceAccountBalance)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Beneficiary Account No" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.data.beneficiaryAccount)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Beneficiary Account Name" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.data.beneficiaryAccountName)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label
+									value="Beneficiary Account Status" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.inqResp.data.beneficiaryAccountStatus)" />
+							</n:td>
+						</n:tr>
+					</n:table>
+				</groupbox>
+			</div>
+			<separator />
+			<div class="col">
+				<groupbox id="gbResultTrf" mold="3d" visible="false">
+					<caption label="Output Transfer" />
+					<n:table
+						class="table table-sm table-striped mb-0">
+						<n:tr>
+							<n:td width="30%">
+								<label value="Response Code" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.trfResp.responseCode)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Response Description" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.trfResp.responseDescription)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Error Description" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.trfResp.errorDescription)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>
+								<label value="Journal Seq" />
+							</n:td>
+							<n:td>
+								<label
+									value="@load(vm.trfResp.journalSeq)" />
+							</n:td>
+						</n:tr>
+					</n:table>
+				</groupbox>
+			</div>
+		</div>
+
+		<separator />
+
+	</window>
+</zk>

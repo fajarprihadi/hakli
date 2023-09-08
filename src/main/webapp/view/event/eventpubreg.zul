@@ -1,0 +1,200 @@
+<?link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" ?>
+<?link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" ?>
+<!-- MDB -->
+<?link rel="stylesheet" href="/mdb/css/mdb.min.css" ?>
+<!-- Custom styles -->
+<?link rel="stylesheet" href="/mdb/css/admin.css" ?>
+
+<?meta charset="UTF-8" ?>
+<?meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" ?>
+<?meta http-equiv="x-ua-compatible" content="ie=edge" ?>
+
+<zk xmlns:n="native">
+	<window id="winAnggotaAdd" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.EventPubRegVm')"
+		validationMessages="@id('vmsgs')">
+		<caption>
+			<n:i class="fas fa-user-graduate"></n:i>
+			<n:span>Registrasi Event</n:span>
+		</caption>
+		
+		<image id="imgEvent" width="100%" visible="false" />
+		
+		<div id="divForm"
+			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')
+			@validator(vm.validator) ">
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-user-tag"></n:i>
+						Data Pribadi
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="${labels.anggota.nama} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.nama)"
+									maxlength="70" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['nama'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.noktp} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.noktp)"
+									maxlength="20" width="100%" readonly="true" />
+								<label style="color:gray"
+									value="@load(vmsgs['noktp'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.anggota.tempatlahir} (*)" />
+							<vlayout>
+								<textbox
+									value="@bind(e.pribadi.tempatlahir)" maxlength="40"
+									width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['tempatlahir'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label
+								value="${labels.anggota.tgllahir} (*)" />
+							<vlayout>
+								<hlayout>
+									<combobox id="cbDobDay" cols="2" />
+									<combobox id="cbDobMonth" cols="10" />
+									<combobox id="cbDobYear" cols="4" />
+								</hlayout>
+								<label style="color:gray"
+									value="@load(vmsgs['tgllahir'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.gender} (*)" />
+							<vlayout>
+								<radiogroup
+									selectedItem="@bind(e.pribadi.gender)">
+									<radio value="L" label="Laki-Laki" />
+									<radio value="P" label="Perempuan" />
+								</radiogroup>
+								<label style="color:gray"
+									value="@load(vmsgs['gender'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.email} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.email)"
+									maxlength="100" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['email'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.anggota.hp} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.hp)"
+									maxlength="20" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['hp'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="Instansi (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.instansi)"
+									maxlength="100" width="100%" />
+								<label style="color:gray"
+									value="@load(vmsgs['instansi'])" />
+							</vlayout>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<groupbox mold="3d">
+				<caption>
+					<n:span class="h5 fw-bold mb-0">
+						<n:i class="fas fa-home"></n:i>
+						Alamat Tinggal
+					</n:span>
+				</caption>
+				<grid>
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="${labels.area.prov} (*)" />
+							<vlayout>
+								<combobox id="cbProvrumah"
+									model="@load(vm.provrumahModel)"
+									selectedItem="@bind(vm.provrumah)"
+									onChange="@command('doLoadKab', prov=vm.provrumah)"
+									width="100%">
+									<template name="model"
+										var="provinsi">
+										<comboitem
+											label="@load(provinsi.provname)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['provrumah'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.kab} (*)" />
+							<vlayout>
+								<combobox id="cbKabrumah"
+									model="@load(vm.kabrumahModel)"
+									selectedItem="@bind(vm.kabrumah)"
+									width="100%">
+									<template name="model"
+										var="kabupaten">
+										<comboitem
+											label="@load(kabupaten.kabname)" />
+									</template>
+								</combobox>
+								<label style="color:gray"
+									value="@load(vmsgs['kabrumah'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.alamat} (*)" />
+							<vlayout>
+								<textbox value="@bind(e.pribadi.alamat)"
+									maxlength="200" width="100%" rows="5" />
+								<label style="color:gray"
+									value="@load(vmsgs['alamat'])" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="${labels.area.kodepos}" />
+							<textbox value="@bind(e.pribadi.kodepos)"
+								maxlength="5" width="100%" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<separator />
+			<div align="center">
+				<button label="Submit" autodisable="self" width="50%"
+					iconSclass="z-icon-save" sclass="btn btn-primary btn-sm"
+					onClick="@command('doSave')" />
+			</div>
+		</div>
+		
+		<n:br/>
+		<include src="/footer.zul" />
+	</window>
+</zk>

@@ -111,7 +111,7 @@
 								</n:td>
 								<n:td>
 									<vlayout>
-										<textbox value="@bind(e.noktp)" readonly="true"
+										<textbox value="@bind(e.noktp)"
 											maxlength="20" width="100%" />
 										<label style="color:gray"
 											value="@load(vmsgs['noktp'])" />
@@ -352,8 +352,8 @@
 										value="Periode Aktif Keanggotaan s/d" />
 								</n:td>
 								<n:td>
-									<datebox value="@load(k.periodekta)" format="dd-MM-yyyy" buttonVisible="false"
-										readonly="true" />
+									<datebox value="@load(k.periodekta)"
+										format="dd-MM-yyyy" buttonVisible="false" readonly="true" />
 								</n:td>
 							</n:tr>
 							<n:tr>
@@ -363,8 +363,9 @@
 								</n:td>
 								<n:td>
 									<vlayout>
-										<combobox id="cbStatusanggota" buttonVisible="false" 
-											selectedItem="@bind(k.statusanggota)" readonly="true">
+										<combobox id="cbStatusanggota"
+											buttonVisible="false" selectedItem="@bind(k.statusanggota)"
+											readonly="true">
 											<comboitem
 												value="Anggota Biasa" label="Anggota Biasa" />
 											<comboitem
@@ -384,8 +385,9 @@
 								</n:td>
 								<n:td>
 									<vlayout>
-										<combobox id="cbRegion" readonly="true"
-											model="@load(vm.regionModel)" selectedItem="@bind(vm.region)"
+										<combobox id="cbRegion"
+											readonly="true" model="@load(vm.regionModel)"
+											selectedItem="@bind(vm.region)"
 											onSelect="@command('doLoadCabang', prov=vm.region)"
 											width="100%" buttonVisible="false">
 											<template name="model"
@@ -406,7 +408,8 @@
 								</n:td>
 								<n:td>
 									<vlayout>
-										<combobox id="cbCabang" buttonVisible="false" readonly="true"
+										<combobox id="cbCabang"
+											buttonVisible="false" readonly="true"
 											selectedItem="@bind(e.mcabang)" model="@load(vm.cabangModel)"
 											width="100%">
 											<template name="model"
@@ -420,87 +423,109 @@
 									</vlayout>
 								</n:td>
 							</n:tr>
-							<n:tr>
-								<n:td colspan="2">
-									<n:hr />
-								</n:td>
-							</n:tr>
-							<n:tr>
-								<n:td colspan="2">
-									<n:h5>Informasi Kontribusi Iuran</n:h5>
-								</n:td>
-							</n:tr>
-							<n:tr>
-								<n:td>
-									<label value="Periode Terakhir Pembayaran" />
-								</n:td>
-								<n:td>
-									<label value="@load(k.periodekta) @converter('formatedDate', format='dd-MM-yyyy')" />
-								</n:td>
-							</n:tr>
-							<n:tr>
-								<n:td>
-									<label value="Periode Pembayaran s/d" />
-								</n:td>
-								<n:td>
-									<label value="@load(vm.periodeiuran) @converter('formatedDate', format='dd-MM-yyyy')" />
-								</n:td>
-							</n:tr>
-							<n:tr>
-								<n:td>
-									<label value="Keterangan" />
-								</n:td>
-								<n:td>
-									<label value="@load(vm.keteranganiuran)" style="font-size: 16px" />
-								</n:td>
-							</n:tr>
-							<n:tr>
-								<n:td>
-									<label />
-								</n:td>
-								<n:td>
-									<grid id="gridCharge">
-							<columns>
-								<column label="Komponen" />
-								<column label="Biaya" align="right" />
-							</columns>
-							<foot>
-								<footer>
-									<label
-										value="Total Yang Harus Dibayar" />
-								</footer>
-								<footer>
-									<decimalbox
-										value="@load(vm.totalpayment)" format="#,##0" readonly="true"
-										style="text-align: right" />
-								</footer>
-							</foot>
-						</grid>
-								</n:td>
-							</n:tr>
 						</n:table>
+
+						<div id="divIuran" visible="false">
+							<n:hr />
+							<n:table
+								class="table table-sm table-striped mb-0">
+								<n:tr>
+									<n:td colspan="2">
+										<n:h5>
+											Informasi Kontribusi Iuran
+										</n:h5>
+									</n:td>
+								</n:tr>
+								<n:tr>
+									<n:td width="30%">
+										<label
+											value="Periode Terakhir Pembayaran" />
+									</n:td>
+									<n:td>
+										<label
+											value="@load(k.periodekta) @converter('formatedDate', format='dd-MM-yyyy')" />
+									</n:td>
+								</n:tr>
+								<n:tr>
+									<n:td>
+										<label
+											value="Periode Pembayaran s/d" />
+									</n:td>
+									<n:td>
+										<label
+											value="@load(vm.periodeiuran) @converter('formatedDate', format='dd-MM-yyyy')" />
+									</n:td>
+								</n:tr>
+								<n:tr>
+									<n:td>
+										<label value="Keterangan" />
+									</n:td>
+									<n:td>
+										<label
+											value="@load(vm.keteranganiuran)" style="font-size: 16px" />
+									</n:td>
+								</n:tr>
+								<n:tr>
+									<n:td>
+										<label />
+									</n:td>
+									<n:td>
+										<grid id="gridCharge">
+											<columns>
+												<column
+													label="Komponen" />
+												<column label="Biaya"
+													align="right" />
+											</columns>
+											<foot>
+												<footer>
+													<label
+														value="Total Yang Harus Dibayar" />
+												</footer>
+												<footer>
+													<decimalbox
+														value="@load(vm.totalpayment)" format="#,##0"
+														readonly="true" style="text-align: right" />
+												</footer>
+											</foot>
+										</grid>
+									</n:td>
+								</n:tr>
+							</n:table>
+						</div>
 					</div>
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-3"
 					role="tabpanel" aria-labelledby="ex1-tab-3">
-					<grid id="gridPekerjaan" span="true" emptyMessage="${labels.common.emptymsg}">
+					<grid id="gridPekerjaan" span="true"
+						emptyMessage="${labels.common.emptymsg}">
 						<columns sizable="true">
 							<column
 								label="${labels.pekerjaan.namakantor}" width="220px" />
-							<column label="${labels.area.prov}" width="110px" />
-							<column label="${labels.area.kab}" width="110px" />
-							<column label="${labels.area.alamat}" width="220px" />
-							<column label="${labels.pekerjaan.rumpun}" width="150px" />
+							<column label="${labels.area.prov}"
+								width="110px" />
+							<column label="${labels.area.kab}"
+								width="110px" />
+							<column label="${labels.area.alamat}"
+								width="220px" />
+							<column label="${labels.pekerjaan.rumpun}"
+								width="150px" />
 							<column
 								label="${labels.pekerjaan.kepegawaian}" width="120px" />
-							<column label="${labels.pekerjaan.jabatan}" width="105px" />
-							<column label="${labels.pekerjaan.nip}" width="100px" />
-							<column label="${labels.pekerjaan.period}" align="center" width="130px" />
-							<column label="${labels.pekerjaan.nosk}" width="100px" />
+							<column label="${labels.pekerjaan.jabatan}"
+								width="105px" />
+							<column label="${labels.pekerjaan.nip}"
+								width="100px" />
+							<column label="${labels.pekerjaan.period}"
+								align="center" width="130px" />
+							<column label="${labels.pekerjaan.nosk}"
+								width="100px" />
 							<column
 								label="${labels.pekerjaan.keterangan}" width="120px" />
-							<column label="${labels.pekerjaan.notelp}" width="100px" />
-							<column label="${labels.pekerjaan.nofax}" width="100px" />
+							<column label="${labels.pekerjaan.notelp}"
+								width="100px" />
+							<column label="${labels.pekerjaan.nofax}"
+								width="100px" />
 							<column label="${labels.common.action}"
 								align="center" width="110px" />
 						</columns>
@@ -534,7 +559,8 @@
 										<combobox id="cbProvkantor"
 											model="@load(vm.provkantorModel)"
 											selectedItem="@bind(vm.provkantor)"
-											onSelect="@command('doLoadKabkantor', prov=vm.provkantor)" width="100%">
+											onSelect="@command('doLoadKabkantor', prov=vm.provkantor)"
+											width="100%">
 											<template name="model"
 												var="provinsi">
 												<comboitem
@@ -574,8 +600,7 @@
 									</vlayout>
 								</row>
 								<row>
-									<label
-										value="Rumpun (*)" />
+									<label value="Rumpun (*)" />
 									<vlayout>
 										<combobox id="cbRumpun"
 											selectedItem="@bind(f.mrumpun)" model="@load(vm.rumpunModel)"
@@ -717,15 +742,19 @@
 				</n:div>
 				<n:div class="tab-pane fade" id="ex1-tabs-4"
 					role="tabpanel" aria-labelledby="ex1-tab-4">
-					<grid id="gridPendidikan" span="true" emptyMessage="${labels.common.emptymsg}">
+					<grid id="gridPendidikan" span="true"
+						emptyMessage="${labels.common.emptymsg}">
 						<columns sizable="true">
 							<column
 								label="${labels.pendidikan.universitas}" width="220px" />
-							<column
-								label="${labels.pendidikan.jenjang}" width="100px" />
-							<column label="${labels.pendidikan.minat1}" width="150px" />
-							<column label="${labels.pendidikan.minat2}" width="150px" />
-							<column label="${labels.pendidikan.period}" align="center" width="180px" />
+							<column label="${labels.pendidikan.jenjang}"
+								width="100px" />
+							<column label="${labels.pendidikan.minat1}"
+								width="150px" />
+							<column label="${labels.pendidikan.minat2}"
+								width="150px" />
+							<column label="${labels.pendidikan.period}"
+								align="center" width="180px" />
 							<column
 								label="${labels.pendidikan.noijazah}" width="180px" />
 							<column label="${labels.common.action}"
@@ -1026,11 +1055,10 @@
 						<label value="@load(vm.processinfo)" />
 					</div>
 				</n:div>
-				
+
 				<n:div class="tab-pane fade" id="ex1-tabs-7"
 					role="tabpanel" aria-labelledby="ex1-tab-7">
-					<div
-						form="@id('z') @load(vm.pribadi)">
+					<div form="@id('z') @load(vm.pribadi)">
 						<n:table
 							class="table table-sm table-striped mb-0">
 							<n:tr>
@@ -1038,7 +1066,8 @@
 									<label value="User Id" />
 								</n:td>
 								<n:td>
-									<textbox value="@load(z.noanggota)" readonly="true" width="100%" />
+									<textbox value="@load(z.noanggota)"
+										readonly="true" width="100%" />
 								</n:td>
 							</n:tr>
 							<n:tr>
@@ -1046,8 +1075,11 @@
 									<label value="Password" />
 								</n:td>
 								<n:td>
-									<textbox id="tbPass" value="@load(z.password)" readonly="true" type="password" />
-									<checkbox onCheck="@command('doShowPassword')" mold="switch" label="Show Password" />
+									<textbox id="tbPass"
+										value="@load(z.password)" readonly="true" type="password" />
+									<checkbox
+										onCheck="@command('doShowPassword')" mold="switch"
+										label="Show Password" />
 								</n:td>
 							</n:tr>
 							<n:tr>
@@ -1055,7 +1087,9 @@
 									<label value="Kewenangan" />
 								</n:td>
 								<n:td>
-									<textbox value="@load(z.musergroup.usergroupname)" readonly="true" width="100%" />
+									<textbox
+										value="@load(z.musergroup.usergroupname)" readonly="true"
+										width="100%" />
 								</n:td>
 							</n:tr>
 							<n:tr>
@@ -1063,7 +1097,8 @@
 									<label value="Last Login" />
 								</n:td>
 								<n:td>
-									<textbox value="@load(z.lastlogin)" readonly="true" width="100%" />
+									<textbox value="@load(z.lastlogin)"
+										readonly="true" width="100%" />
 								</n:td>
 							</n:tr>
 						</n:table>

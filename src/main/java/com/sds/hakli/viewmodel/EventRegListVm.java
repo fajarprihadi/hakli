@@ -11,8 +11,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
@@ -72,11 +74,11 @@ public class EventRegListVm {
 				row.getChildren().add(new Label(data.getTevent().getEventlocation()));
 				row.getChildren().add(new Label(data.getVaamount() != null ? DecimalFormat.getInstance().format(data.getVaamount()) : ""));
 				row.getChildren().add(new Label(data.getVano()));
-				row.getChildren().add(new Label(localDateFormatted.format(data.getVaexpdate())));
-				row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
+				row.getChildren().add(new Label(data.getVaexpdate() != null ? localDateFormatted.format(data.getVaexpdate()) : ""));
+				row.getChildren().add(new Label(data.getTevent().getIsfree() != null && data.getTevent().getIsfree().equals("Y") ? "Free" : data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
 				row.getChildren().add(new Label(data.getPaidamount() != null ? DecimalFormat.getInstance().format(data.getPaidamount()) : ""));
 				row.getChildren().add(new Label(data.getPaidat() != null ? localDateFormatted.format(data.getPaidat()) : ""));
-				if (data.getIspaid().equals("Y")) {
+				if (((data.getTevent().getIsfree() != null && data.getTevent().getIsfree().equals("Y")) || data.getIspaid().equals("Y")) && data.getTevent().getDocactivedate().compareTo(new Date()) <= 0) {
 					
 					if (data.getTevent().getEventtype().equals(AppUtils.EVENTTYPE_SUMPAHPROFESI)) {
 						Button btNaskah = new Button("Sumpah Profesi");
@@ -232,6 +234,7 @@ public class EventRegListVm {
 		}
 	}
 
+	@Command
 	public void doSearch() {
 		try {
 			orderby = "teventregpk";
@@ -249,6 +252,8 @@ public class EventRegListVm {
 		}
 	}
 
+	@NotifyChange("*")
+	@Command
 	public void doReset() {
 		eventname = null;
 		doSearch();

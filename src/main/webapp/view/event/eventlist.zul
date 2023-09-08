@@ -8,46 +8,27 @@
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.EventListVm')">
 		<!-- Section: Design Block -->
 		<n:section class="text-center">
-			<!-- Background image -->
-			<!-- 
-				<div class="p-5 bg-image"
-				style="
-				background-image: url('/hakli/img/sumpahprofesi.png');
-				height: 300px;
-				">
-				</div>
-			-->
-			<!-- Background image -->
 			<n:br />
-			<n:br />
-			<n:br />
-			<n:br />
-			<n:br />
-			<div class="card mx-0 mx-md-0 shadow-5-strong"
-				style="
-        margin-top: -100px;
-        background: hsla(0, 0%, 100%, 0.8);
-        backdrop-filter: blur(30px);
-        ">
-
-				<div class="card-body py-5 px-md-3">
-
-					<div class="row d-flex justify-content-center">
-						<div class="col-lg-8">
-							<x:h2 id="title" class="fw-bold mb-4">
+			<x:h2 id="title" class="fw-bold mb-4">
 								Daftar Event
 							</x:h2>
-							<n:form>
-
-								<div id="divContent">
-									
-								</div>
-
-							</n:form>
-						</div>
-					</div>
-				</div>
-			</div>
+							<grid id="grid"
+								emptyMessage="${labels.common.emptymsg}" sizedByContent="true"
+								span="true">
+								<columns sizable="true">
+									<column label="${labels.common.no}"
+										align="right" />
+									<column label="Event" align="left" />
+									<column label="Tipe Event" align="left" />
+									<column label="Pelaksanaan"
+										align="center" />
+									<column
+										label="Penutupan Pendaftaran" align="center" />
+									<column label="Lokasi" align="left" />
+									<column label="Biaya" align="right" />
+									<column label="" align="center" />
+								</columns>
+							</grid>
 		</n:section>
 		<!-- Section: Design Block -->
 

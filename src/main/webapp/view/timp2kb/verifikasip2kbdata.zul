@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winVerifikasidata" border="normal"
+	<window id="winVerifikasidata" border="normal" width="90%"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.VerifikasiP2kbDataVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
@@ -15,14 +15,50 @@
 				</div>
 				<div class="col-10">
 					<vlayout>
-						<label value="@load(vm.obj.nama)"
-							style="font-weight: bold" />
-						<label value="@load(vm.obj.alamat)"
-							style="font-weight: bold" />
-						<label value="@load(vm.obj.noanggota)"
-							style="font-weight: bold" />
-						<label value="@load(vm.obj.cabang)"
-							style="font-weight: bold" />
+						<grid>
+							<columns>
+								<column width="120px" />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									<label value="Nama" />
+									<label value="@load(vm.obj.nama)"
+										style="font-weight: bold" />
+								</row>
+								<row>
+									<label value="No Anggota" />
+									<label
+										value="@load(vm.obj.noanggota)" style="font-weight: bold" />
+								</row>
+								<row>
+									<label value="Alamat" />
+									<label value="@load(vm.obj.alamat)"
+										style="font-weight: bold" />
+								</row>
+								<row>
+									<label value="Cabang" />
+									<label value="@load(vm.obj.cabang)"
+										style="font-weight: bold" />
+								</row>
+								<row>
+									<label value="No STR" />
+									<label value="@load(vm.obj.nostr)"
+										style="font-weight: bold" />
+								</row>
+								<row>
+									<label value="Periode Borang" />
+									<hbox>
+										<label
+											value="@load(vm.obj.tglmulai) @converter('formatedDate', format='dd-MM-yyyy')" style="font-weight: bold" />
+										<label value="s/d" style="font-weight: bold" />
+										<label
+											value="@load(vm.obj.tglmulai) @converter('formatedDate', format='dd-MM-yyyy')" style="font-weight: bold" />
+									</hbox>
+
+								</row>
+							</rows>
+						</grid>
 					</vlayout>
 				</div>
 			</div>
@@ -30,37 +66,40 @@
 		<separator />
 		<div class="row">
 			<div class="col-md" />
-				<div class="col-md-2" align="right">
-					<label value="Total Data :"
-						style="font-weight: bold" />
-					<label value="@load(vm.pageTotalSize)"
-						style="font-weight: bold" />
-				</div>
+			<div class="col-md-2" align="right">
+				<label value="Total Data :" style="font-weight: bold" />
+				<label value="@load(vm.pageTotalSize)"
+					style="font-weight: bold" />
+			</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
-			<columns>
-				<column label="${labels.common.no}" align="right" width="40px" />
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
+			sizedByContent="true" span="true">
+			<columns sizable="true">
+				<column label="${labels.common.no}" align="right" />
 				<column label="Kegiatan" />
-				<column label="Total Kegiatan" align="right" width="150px"/>
-				<column label="Total SKP" align="right" width="150px"/>
-				<column label="Action" align="center" width="100px"/>
+				<column label="Ranah" />
+				<column label="Total Kegiatan Menunggu Verifikasi"
+					align="right" />
+				<column label="Total SKP Menunggu Verifikasi"
+					align="right" />
+				<column label="Action" align="center" />
 			</columns>
 			<foot>
 				<footer />
-				<footer>
-					<label value="Total Nilai SKP"
-						style="font-size: 18px" />
+				<footer span="2">
+					<label value="Total" style="font-size: 18px" />
 				</footer>
 				<footer>
 					<decimalbox value="@load(vm.totalkegiatan)"
-						format="#,##0.0" readonly="true"
+						format="#,##0.0" readonly="true" width="100%"
 						style="text-align: right; font-size: 18px" />
 				</footer>
 				<footer>
 					<decimalbox value="@load(vm.totalskp)"
-						format="#,##0.0" readonly="true"
+						format="#,##0.0" readonly="true" width="100%"
 						style="text-align: right; font-size: 18px" />
 				</footer>
+				<footer />
 			</foot>
 		</grid>
 	</window>

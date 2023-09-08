@@ -36,6 +36,18 @@ public class Tp2kb {
 	
 	private BigDecimal totalskpwaiting = new BigDecimal(0);
 	
+	private Integer totalkegiatanwv = 0;
+	
+	private BigDecimal totalskpwv = new BigDecimal(0);
+	
+	private Integer totalkegiatanok = 0;
+	
+	private BigDecimal totalskpok = new BigDecimal(0);
+	
+	private Integer totalkegiatanrj = 0;
+	
+	private BigDecimal totalskprj = new BigDecimal(0);
+	
 	private String isscrap;
 	
 	@Id
@@ -126,6 +138,54 @@ public class Tp2kb {
 
 	public void setTotalskpwaiting(BigDecimal totalskpwaiting) {
 		this.totalskpwaiting = totalskpwaiting;
+	}
+
+	public Integer getTotalkegiatanwv() {
+		return totalkegiatanwv;
+	}
+
+	public void setTotalkegiatanwv(Integer totalkegiatanwv) {
+		this.totalkegiatanwv = totalkegiatanwv;
+	}
+
+	public BigDecimal getTotalskpwv() {
+		return totalskpwv;
+	}
+
+	public void setTotalskpwv(BigDecimal totalskpwv) {
+		this.totalskpwv = totalskpwv;
+	}
+
+	public Integer getTotalkegiatanok() {
+		return totalkegiatanok;
+	}
+
+	public void setTotalkegiatanok(Integer totalkegiatanok) {
+		this.totalkegiatanok = totalkegiatanok;
+	}
+
+	public BigDecimal getTotalskpok() {
+		return totalskpok;
+	}
+
+	public void setTotalskpok(BigDecimal totalskpok) {
+		this.totalskpok = totalskpok;
+	}
+
+	public Integer getTotalkegiatanrj() {
+		return totalkegiatanrj;
+	}
+
+	public void setTotalkegiatanrj(Integer totalkegiatanrj) {
+		this.totalkegiatanrj = totalkegiatanrj;
+	}
+
+	public BigDecimal getTotalskprj() {
+		return totalskprj;
+	}
+
+	public void setTotalskprj(BigDecimal totalskprj) {
+		this.totalskprj = totalskprj;
 	}
 
 	public String getIsscrap() {

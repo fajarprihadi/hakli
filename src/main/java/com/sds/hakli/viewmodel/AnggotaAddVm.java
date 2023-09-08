@@ -533,6 +533,7 @@ public class AnggotaAddVm {
 							Session session = StoreHibernateUtil.openSession();
 							Transaction trx = null;
 							Tinvoice inv = null;
+							Teventreg eventreg = null;
 							try {
 								if (media != null) {
 									try {
@@ -605,8 +606,13 @@ public class AnggotaAddVm {
 								objForm.getPekerjaan().setKabname(kabkantor.getKabname());
 								pekerjaanDao.save(session, objForm.getPekerjaan());
 								
+								
 								if (tevent != null) {
-									inv = doSaveEvent(session);
+									Object objEvent = doSaveEvent(session);
+									if (objEvent instanceof Tinvoice)
+										inv = (Tinvoice) objEvent;
+									else if (objEvent instanceof Teventreg)
+										eventreg = (Teventreg) objEvent;
 								} else {
 									objForm.getPribadi().setStatusreg(AppUtils.STATUS_ANGGOTA_REG);
 								}
@@ -617,6 +623,10 @@ public class AnggotaAddVm {
 									String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 											.getRealPath("/themes/mail/mailinv.html");
 									new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path)).start();
+								} else {
+									if (tevent != null && tevent.getIsfree().equals("Y")) {
+										new Thread(new MailHandler(eventreg, tevent.getEventname(), objForm.getPribadi().getEmail(), null)).start();
+									}
 								}
 								
 								if (tevent != null) {
@@ -624,7 +634,7 @@ public class AnggotaAddVm {
 									comp.getChildren().clear();
 									divForm.getChildren().clear();
 									Map<String, Object> map = new HashMap<>();
-									map.put("obj", inv.getTeventreg());
+									map.put("obj", inv != null ? inv.getTeventreg() : eventreg);
 									Executions.createComponents("/view/event/eventregdone.zul", comp, map);
 								} else {
 									divForm.getChildren().clear();
@@ -633,9 +643,9 @@ public class AnggotaAddVm {
 									map.put("regstatus", "reg");
 									Executions.createComponents("/regdone.zul", divForm, map);
 								}
-							} catch (Exception e) {
-								trx.rollback();
+							} catch (Exception e) {								
 								e.printStackTrace();
+								trx.rollback();
 								Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK,
 										Messagebox.ERROR);
 							} finally {
@@ -647,10 +657,11 @@ public class AnggotaAddVm {
 				});
 	}
 	
-	private Tinvoice doSaveEvent(Session session) throws Exception {
+	private Object doSaveEvent(Session session) throws Exception {
+		Object objResp = null;
 		Tinvoice inv = null;
+		Teventreg eventreg = new Teventreg();
 		try {
-			Teventreg eventreg = new Teventreg();
 			eventreg.setTevent(tevent);
 			eventreg.setTanggota(objForm.getPribadi());
 			eventreg.setIspaid("N");
@@ -692,15 +703,17 @@ public class AnggotaAddVm {
 						inv = new InvoiceGenerator().doInvoice(eventreg, eventreg.getVano(), AppUtils.INVOICETYPE_EVENT, tevent.getEventprice(), tevent.getEventname(), vaexpdate);
 						inv.setTanggota(objForm.getPribadi());
 						new TinvoiceDAO().save(session, inv);
+						objResp = inv;
 					}
 				}
 			} else {
 				eventregDao.save(session, eventreg);
+				objResp = eventreg;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return inv;
+		return objResp;
 	}
 
 	public Validator getValidator() {

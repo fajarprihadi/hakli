@@ -111,10 +111,6 @@ public class AppUtils {
 			return "DISETUJUI";
 		else if (code.trim().equals("R"))
 			return "DITOLAK";
-		else if (code.trim().equals("A"))
-			return "DISETUJUI";
-		else if (code.trim().equals("R"))
-			return "DITOLAK";
 		else
 			return code;
 	}

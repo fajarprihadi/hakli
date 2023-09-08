@@ -10,7 +10,7 @@
 
 		<n:h3>Formulir Permohonan Melakukan P2KB</n:h3>
 		<n:hr />
-
+		<label value="@load(vm.info)" style="font-size: 18px; color: red" />
 		<groupbox mold="3d">
 			<caption>
 				<n:i class="fas fa-info"></n:i>

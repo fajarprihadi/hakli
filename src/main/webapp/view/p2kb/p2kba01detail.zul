@@ -47,11 +47,13 @@
 					<row>
 						<label value="Jenis Kegiatan" />
 						<label value="@load(vm.p2kb.mp2kbkegiatan.kegiatan)" />
-					</row>
+					</row>					
 				</rows>
 			</grid>
 		</groupbox>
-		<separator />
+		<div class="note note-info mb-3" align="right">
+			<n:strong>Total Nilai SKP Buku Log Disetujui : <label value="@load(vm.p2kb.tp2kbbook.totalskp)" style="font-size: 18px; font-weight: bold" /></n:strong>			
+		</div>
 		<grid id="grid" sclass="z-sticky-header" emptyMessage="${labels.common.emptymsg}">
 			<columns>
 				<column label="No" align="right" width="40px"
@@ -62,18 +64,6 @@
 					valign="top" />
 			</columns>
 			<rows />
-			<foot>
-				<footer />
-				<footer>
-					<label value="Total Nilai SKP"
-						style="font-size: 18px" />
-				</footer>
-				<footer>
-					<decimalbox value="@load(vm.totalskp)"
-						format="#,##0.0" readonly="true"
-						style="text-align: right; font-size: 18px" />
-				</footer>
-			</foot>
 		</grid>
 	</window>
 </zk>

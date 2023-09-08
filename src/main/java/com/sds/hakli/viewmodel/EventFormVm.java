@@ -25,7 +25,6 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.io.Files;
-import org.zkoss.lang.Threads;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
@@ -66,6 +65,7 @@ public class EventFormVm {
 	private String title;
 	private Media media;
 	private Media mediaCert;
+	private String bodymail;
 
 	@Wire
 	private Window winEventform;
@@ -94,6 +94,7 @@ public class EventFormVm {
 			title = "Edit Event";
 			isInsert = false;
 			objForm = obj;
+			bodymail = objForm.getBodymail();
 			doFree(objForm.getIsfree());
 			doCert(objForm.getIscert());
 			if (objForm.getEventimg() != null) {
@@ -120,6 +121,7 @@ public class EventFormVm {
 		objForm = new Tevent();
 		objForm.setIsfree("N");
 		objForm.setIsmember("N");
+		objForm.setIsprivate("N");
 	}
 	
 	@Command
@@ -265,13 +267,14 @@ public class EventFormVm {
 		try {
 			String folder = Executions.getCurrent().getDesktop().getWebApp()
 					.getRealPath(AppUtils.PATH_EVENT);
+			System.out.println(folder);
 			String eventid = "";
 			if (isInsert)
 				eventid = new TcounterengineDAO().getLastCounter("EVT" + new SimpleDateFormat("yyMM").format(new Date()), 3);
 			else eventid = objForm.getEventid();
 			if (media != null) {
 				try {
-					String imgid = eventid + "." + media.getFormat();
+					String imgid = eventid + "_" + new SimpleDateFormat("HHmmss").format(new Date()) + "." + media.getFormat();
 					if (media.isBinary()) {
 						Files.copy(new File(folder + "/" + imgid), media.getStreamData());
 					} else {
@@ -310,6 +313,9 @@ public class EventFormVm {
 				}
 			}
 			
+			objForm.setBodymail(bodymail);
+			if (objForm.getIsfree().equals("Y"))
+				objForm.setEventprice(new BigDecimal(0));
 			objForm.setIssharefee(chkSharefee.isChecked() == true ? "Y" : "N");
 			if (!chkSharefee.isChecked()) {
 				objForm.setFeepusat(null);
@@ -369,6 +375,9 @@ public class EventFormVm {
 				Date closedate = (Date) ctx.getProperties("closedate")[0].getValue();
 				if (closedate == null)
 					this.addInvalidMessage(ctx, "closedate", Labels.getLabel("common.validator.empty"));
+				Date docactivedate = (Date) ctx.getProperties("docactivedate")[0].getValue();
+				if (docactivedate == null)
+					this.addInvalidMessage(ctx, "docactivedate", Labels.getLabel("common.validator.empty"));
 				String isskp = (String) ctx.getProperties("isskp")[0].getValue();
 				if (isskp == null || "".equals(isskp.trim()))
 					this.addInvalidMessage(ctx, "isskp", Labels.getLabel("common.validator.empty"));
@@ -425,6 +434,14 @@ public class EventFormVm {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getBodymail() {
+		return bodymail;
+	}
+
+	public void setBodymail(String bodymail) {
+		this.bodymail = bodymail;
 	}
 	
 	

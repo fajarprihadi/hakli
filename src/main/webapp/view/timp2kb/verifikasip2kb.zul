@@ -51,14 +51,15 @@
 		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
 			mold="paging" pageSize="20" sizedByContent="true" span="true"
 			pagingPosition="both">
-			<columns>
+			<columns sizable="true">
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.cabang}" />
 				<column label="${labels.anggota.noanggota}"
 					align="center" />
 				<column label="${labels.anggota.nama}" />
-				<column label="Alamat" />
-				<column label="Total Waiting" align="right" />
+				<column label="No STR" />
+				<column label="Periode Borang" align="center" />
+				<column label="Total Review Kegiatan" align="right" />
 			</columns>
 		</grid>
 

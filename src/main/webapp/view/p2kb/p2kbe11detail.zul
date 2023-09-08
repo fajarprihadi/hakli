@@ -43,7 +43,9 @@
 				</rows>
 			</grid>
 		</groupbox>
-		<separator />
+		<div class="note note-info mb-3" align="right">
+			<n:strong>Total Nilai SKP Buku Log Disetujui : <label value="@load(vm.p2kb.tp2kbbook.totalskp)" style="font-size: 18px; font-weight: bold" /></n:strong>			
+		</div>
 		<grid id="grid" sclass="z-sticky-header" emptyMessage="${labels.common.emptymsg}">
 			<columns>
 				<column label="No" align="right" width="40px"

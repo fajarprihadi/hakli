@@ -147,6 +147,17 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Private?" />
+						<vlayout>
+							<radiogroup selectedItem="@bind(e.isprivate)">
+								<radio label="Tidak" value="N" />
+								<radio label="Ya" value="Y" />								
+							</radiogroup>
+							<label style="color:gray"
+								value="@load(vmsgs['iscert'])" />
+						</vlayout>
+					</row>
+					<row>
 						<label value="Ada Nilai SKP?" />
 						<vlayout>
 							<radiogroup selectedItem="@bind(e.isskp)"
@@ -196,6 +207,15 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Tanggal Penerbitan Dokumen" />
+						<vlayout>
+							<datebox value="@bind(e.docactivedate)"
+								maxlength="16" cols="12" format="dd-MM-yyyy" />
+							<label style="color:gray"
+								value="@load(vmsgs['docactivedate'])" />
+						</vlayout>
+					</row>
+					<row>
 						<button sclass="btn btn-success btn-sm"
 							label="Browse Gambar Poster..." upload="true,maxsize=10000"
 							onUpload="@command('doUploadPhoto', upEvent=event)"
@@ -205,6 +225,12 @@
 							<label style="color:gray"
 								value="@load(vmsgs['eventimg'])" />
 						</vlayout>
+					</row>
+					<row spans="2">
+						<vlayout>
+							<n:h5>Template Narasi E-Mail</n:h5>
+							<ckeditor id="ckEditor" value="@bind(vm.bodymail)" />
+						</vlayout>						
 					</row>
 				</rows>
 				<foot>
