@@ -14,30 +14,30 @@
 			<rows>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
+						<div class="col-3">
 							<label value="Nomor Anggota" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<label value="@load(vm.anggota.noanggota)" />
 						</div>
 					</div>
 				</row>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
+						<div class="col-3">
 							<label value="Nama Lengkap" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<label value="@load(vm.anggota.nama)" />
 						</div>
 					</div>
 				</row>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
+						<div class="col-3">
 							<label value="DPW" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<label
 								value="@load(vm.anggota.mcabang.mprov.provname)" />
 						</div>
@@ -45,10 +45,10 @@
 				</row>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
+						<div class="col-3">
 							<label value="Cabang" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<label
 								value="@load(vm.anggota.mcabang.cabang)" />
 						</div>
@@ -65,10 +65,10 @@
 			<rows>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
+						<div class="col-3">
 							<label value="Wilayah Tujuan" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<combobox id="cbRegion"
 								placeholder="-- Pilih Provinsi --" model="@load(vm.mprovmodel)"
 								cols="30" selectedItem="@bind(vm.mprov)"
@@ -83,10 +83,10 @@
 				</row>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
+						<div class="col-3">
 							<label value="Cabang Tujuan" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<vlayout>
 								<combobox id="cbCabang"
 									placeholder="-- Pilih Kota --" model="@load(vm.mcabangmodel)"
@@ -105,14 +105,14 @@
 				</row>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
-							<label value="Surat Pengantar Mutasi" />
+						<div class="col-3">
+							<label value="Surat Pengantar Mutasi (PDF / Gambar)" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<vlayout>
 								<hlayout>
 									<button sclass="btn btn-info btn-sm"
-										label="Browse..." upload="true,maxsize=1000"
+										label="Browse..." upload="true,maxsize=8000"
 										onUpload="@command('doUpload', upEvent=event)"
 										autodisable="self" />
 									<separator orient="vertical" />
@@ -127,10 +127,10 @@
 				</row>
 				<row>
 					<div class="row" align="left">
-						<div class="col-2">
+						<div class="col-3">
 							<label value="Keterangan" />
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<vlayout>
 								<textbox value="@bind(e.memo)" width="100%"
 									rows="3" maxlength="200" />

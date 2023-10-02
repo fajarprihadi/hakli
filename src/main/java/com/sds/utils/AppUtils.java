@@ -25,6 +25,7 @@ public class AppUtils {
 	public static final String STATUS_ANGGOTA_REG = "1";
 	public static final String STATUS_ANGGOTA_REG_PAYMENT = "2";
 	public static final String STATUS_ANGGOTA_REG_ACTIVE = "3";
+	public static final String STATUS_ANGGOTA_DELETE = "4";
 	public static final String STATUS_ANGGOTA_REG_DECLINE = "9";
 
 	public static final String STATUS_APPROVEDTIM = "AT";

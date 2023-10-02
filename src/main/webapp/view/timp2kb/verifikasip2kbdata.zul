@@ -53,7 +53,7 @@
 											value="@load(vm.obj.tglmulai) @converter('formatedDate', format='dd-MM-yyyy')" style="font-weight: bold" />
 										<label value="s/d" style="font-weight: bold" />
 										<label
-											value="@load(vm.obj.tglmulai) @converter('formatedDate', format='dd-MM-yyyy')" style="font-weight: bold" />
+											value="@load(vm.obj.tglakhir) @converter('formatedDate', format='dd-MM-yyyy')" style="font-weight: bold" />
 									</hbox>
 
 								</row>

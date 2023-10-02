@@ -178,7 +178,15 @@ public class MutasiVm {
 		try {
 			UploadEvent event = (UploadEvent) ctx.getTriggerEvent();
 			media = event.getMedia();
-			docfilename = media.getName();
+			if (media.getFormat().equalsIgnoreCase("pdf") || media.getFormat().equalsIgnoreCase("jpg") 
+					|| media.getFormat().equalsIgnoreCase("jpeg") || media.getFormat().equalsIgnoreCase("png") 
+					|| media.getFormat().equalsIgnoreCase("gif")) {
+				docfilename = media.getName();
+			} else {
+				docfilename = null;
+				media = null;
+				Messagebox.show("Dokumen harus berupa format PDF / Gambar", WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.EXCLAMATION);
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

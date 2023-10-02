@@ -1,0 +1,106 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<window id="winAnggotaDel" border="normal" width="75%"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.AnggotaDelVm')"
+		validationMessages="@id('vmsgs')">
+		<caption>
+			<n:i class="fas fa-user-secret"></n:i>
+			<n:span>Delete Data Anggota</n:span>
+		</caption>
+		<div
+			form="@id('e') @load(vm.objForm) @save(vm.objForm, before='doSave')">
+			
+			<div class="row">
+				<div class="col-md-3" align="center">
+					<separator />
+					<image id="photo" width="120px" />
+				</div>
+				<div class="col-md-9">
+					<n:table class="table table-sm table-striped mb-0">
+				<n:tr>
+					<n:td width="30%">
+						<label value="${labels.anggota.noanggota}" />
+					</n:td>
+					<n:td>
+						<label value="@bind(e.noanggota)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td width="30%">
+						<label value="${labels.anggota.nama}" />
+					</n:td>
+					<n:td>
+						<label value="@bind(e.nama)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="${labels.anggota.tgllahir}" />
+					</n:td>
+					<n:td>
+						<datebox value="@load(e.tgllahir)"
+							format="dd-MM-yyyy" buttonVisible="false" readonly="true" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="${labels.anggota.gender}" />
+					</n:td>
+					<n:td>
+						<radiogroup selectedItem="@bind(e.gender)" disabled="true">
+							<radio value="L" label="Laki-Laki" />
+							<radio value="P" label="Perempuan" />
+						</radiogroup>
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="${labels.anggota.nostr}" />
+					</n:td>
+					<n:td>
+						<label value="@bind(e.nostr)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="Periode Aktif Keanggotaan s/d" />
+					</n:td>
+					<n:td>
+						<datebox value="@load(e.periodekta)"
+							format="dd-MM-yyyy" buttonVisible="false" readonly="true" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="${labels.area.prov}" />
+					</n:td>
+					<n:td>
+						<label value="@bind(e.mcabang.mprov.provname)" />
+					</n:td>
+				</n:tr>
+				<n:tr>
+					<n:td>
+						<label value="${labels.anggota.cabang}" />
+					</n:td>
+					<n:td>
+						<label value="@bind(e.mcabang.cabang)" />
+					</n:td>
+				</n:tr>				
+				<n:tr>
+					<n:td>
+						<label />
+					</n:td>
+					<n:td>
+						<button width="100%" label="Delete"
+							autodisable="self" sclass="btn btn-danger btn-sm"
+							iconSclass="z-icon-trash" onClick="@command('doSave')" />
+					</n:td>
+				</n:tr>
+			</n:table>
+				</div>
+			</div>
+			
+			
+		</div>
+	</window>
+</zk>

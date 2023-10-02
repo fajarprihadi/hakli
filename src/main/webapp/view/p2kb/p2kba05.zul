@@ -96,7 +96,7 @@
 						</vlayout>
 					</row>
 					<row>
-						<label value="Dokumen Bukti Kegiatan (*.PDF)" />
+						<label value="Dokumen Bukti Kegiatan (PDF / Gambar)" />
 						<vlayout>
 							<hlayout>
 								<button sclass="btn btn-info btn-sm"

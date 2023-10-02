@@ -155,6 +155,47 @@ public class AnggotaVm {
 				Hlayout hlayout = new Hlayout();
 				hlayout.appendChild(btView);
 				
+				if (act == null) {
+					Button btDel = new Button();
+					btDel.setIconSclass("z-icon-trash");
+					btDel.setSclass("btn btn-danger btn-sm");
+					btDel.setAutodisable("self");
+					btDel.setTooltiptext("Delete");
+					btDel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+						@Override
+						public void onEvent(Event event) throws Exception {
+							Messagebox.show("Apakah anda yakin ingin menghapus data anggota atas nama " + data.getNama() + "?", "Confirm Dialog",
+									Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new EventListener<Event>() {
+										@Override
+										public void onEvent(Event event) throws Exception {
+											if (event.getName().equals("onOK")) {
+												try {
+													Map<String, Object> map = new HashMap<String, Object>();
+													map.put("obj", data);
+													Window win = (Window) Executions
+															.createComponents("/view/anggota/anggotadel.zul", null, map);
+													win.setClosable(true);
+													win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+
+														@Override
+														public void onEvent(Event event) throws Exception {
+															doReset();
+															BindUtils.postNotifyChange(AnggotaVm.this, "*");
+														}
+													});
+													win.doModal();
+												} catch(Exception e) {
+													e.printStackTrace();
+												}
+											}
+										}
+							});							
+						}
+					});
+					hlayout.appendChild(btDel);
+				}
+				
 				if (act != null && act.equals("role")) {
 					Button btSetRoles = new Button();
 					btSetRoles.setIconSclass("z-icon-user-secret");

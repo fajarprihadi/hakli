@@ -23,37 +23,73 @@
 							<n:form>
 
 								<div id="divReg">
+									<n:hr />
 									<div class="form mb-4">
-										<textbox value="@bind(vm.nik)"
-											placeholder="Input NIK Anda untuk memulai pendaftaran"
-											sclass="form-control form-control-lg" />
+										<div class="form-group"
+											align="left">
+											<n:label for="inputNik">
+												NIK
+											</n:label>
+											<textbox
+												value="@bind(vm.nik)" id="inputNik"
+												placeholder="Input NIK Anda untuk memulai pendaftaran"
+												sclass="form-control form-control-lg" />
+										</div>
+
+									</div>
+									<div class="form mb-4">
+										<div class="form-group"
+											align="left">
+											<n:label for="inputDob">
+												Tanggal Lahir
+											</n:label>
+											<div id="inputDob">
+												<combobox id="cbDobDay"
+													cols="2" />
+												<combobox
+													id="cbDobMonth" cols="10" />
+												<combobox id="cbDobYear"
+													cols="4" />
+											</div>
+										</div>
 									</div>
 									<div id="divMember" align="left">
-										<hlayout>
-											<n:h5>Status Keanggotaan Hakli</n:h5>
-										<radiogroup selectedItem="@bind(vm.ismember)">
-											<radio label="Anggota" value="Y" />
-											<radio label="Non Anggota" value="N" />
-										</radiogroup>
-										</hlayout>										
+										<div class="form-group"
+											align="left">
+											<n:label
+												for="inputMember">
+												Status Keanggotaan Hakli
+											</n:label>
+											<radiogroup id="inputMember"
+												sclass="form-control form-control-lg"
+												selectedItem="@bind(vm.ismember)">
+												<radio label="Anggota"
+													value="Y" />
+												<radio
+													label="Non Anggota" value="N" />
+											</radiogroup>
+										</div>
 									</div>
 									<n:hr />
-									<div align="left">
-									<n:p>
-										<n:em>
-											<checkbox id="chkSisdmk" />
-											Jika Anda belum terdaftar di
-											keanggotaan HAKLI tapi sudah
-											terdaftar di SISDMK, maka
-											sistem HAKLI akan secara
-											otomatis mengambil data Anda
-											dari SISDMK untuk membantu
-											Anda melengkapi data
-											pendaftaran pada sistem
-											HAKLI.
-										</n:em>
-									</n:p>
-									</div>
+									<!-- <div align="left">
+										<n:p>
+											<n:em>
+												<checkbox
+													id="chkSisdmk" />
+												Jika Anda belum
+												terdaftar di keanggotaan
+												HAKLI tapi sudah
+												terdaftar di SISDMK,
+												maka sistem HAKLI akan
+												secara otomatis
+												mengambil data Anda dari
+												SISDMK untuk membantu
+												Anda melengkapi data
+												pendaftaran pada sistem
+												HAKLI.
+											</n:em>
+										</n:p>
+									</div> -->
 									<!-- Submit button -->
 									<button label="Submit"
 										onClick="@command('doSubmit')" autodisable="self"
