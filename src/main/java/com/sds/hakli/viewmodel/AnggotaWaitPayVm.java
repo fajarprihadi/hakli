@@ -79,6 +79,9 @@ public class AnggotaWaitPayVm {
 				row.getChildren().add(new Label(data.getNoktp()));
 				row.getChildren().add(new Label(data.getMcabang().getCabang()));
 				row.getChildren().add(new Label(datetimeFormatter.format(data.getCreatetime())));
+				row.getChildren().add(new Label(data.getRegdecisiontime() != null ? 
+						datetimeFormatter.format(data.getRegdecisiontime()) : ""));
+				row.getChildren().add(new Label(data.getRegverbyid() != null ? data.getRegverbyid() + " - " + data.getRegverbyname() : ""));
 				row.getChildren().add(new Label(data.getVareg()));
 				Button btProcess = new Button();
 				btProcess.setIconSclass("z-icon-eye");

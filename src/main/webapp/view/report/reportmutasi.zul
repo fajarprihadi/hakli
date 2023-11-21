@@ -1,0 +1,109 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winReportMutasi" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.ReportMutasiVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Laporan Mutasi Anggota</n:span>
+		</caption>
+		<groupbox mold="3d">
+			<caption label="Pencarian" iconSclass="z-icon-search" />
+			<grid>
+				<columns>
+					<column width="10%" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="Provinsi Asal" />
+						<combobox id="cbProvAsal" placeholder="Provinsi Asal"
+							cols="50" onSelect="@command('doLoadCabangAsal', prov=vm.provasal)"
+							model="@load(vm.provasalModel)" selectedItem="@bind(vm.provasal)">
+							<template name="model" var="region">
+								<comboitem
+									label="@load(region.provname)" />
+							</template>
+						</combobox>
+					</row>
+					<row>
+						<label value="Cabang Asal" />
+						<combobox id="cbCabangAsal" placeholder="Cabang Asal"
+							cols="50" model="@load(vm.cabangasalModel)"
+							selectedItem="@bind(vm.cabangasal)">
+							<template name="model" var="cabang">
+								<comboitem label="@load(cabang.cabang)" />
+							</template>
+						</combobox>
+					</row>
+					<row>
+						<label value="Provinsi Tujuan" />
+						<combobox id="cbProvTujuan" placeholder="Provinsi Tujuan"
+							cols="50" onSelect="@command('doLoadCabangTujuan', prov=vm.provtujuan)"
+							model="@load(vm.provtujuanModel)" selectedItem="@bind(vm.provtujuan)">
+							<template name="model" var="region">
+								<comboitem
+									label="@load(region.provname)" />
+							</template>
+						</combobox>
+					</row>
+					<row>
+						<label value="Cabang Tujuan" />
+						<combobox id="cbCabangTujuan" placeholder="Cabang Tujuan"
+							cols="50" model="@load(vm.cabangtujuanModel)"
+							selectedItem="@bind(vm.cabangtujuan)">
+							<template name="model" var="cabang">
+								<comboitem label="@load(cabang.cabang)" />
+							</template>
+						</combobox>
+					</row>					
+				</rows>
+				<foot>
+					<footer/>
+					<footer>
+						<hlayout>
+							<button label="Telusuri" autodisable="self"
+								iconSclass="z-icon-search" width="100%"
+								sclass="btn btn-success btn-sm" onClick="@command('doSearch')" />
+							<button label="Reset" autodisable="self"
+								iconSclass="z-icon-retweet" width="100%"
+								sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+						</hlayout>
+					</footer>
+				</foot>
+			</grid>
+		</groupbox>
+		<separator />
+		<div class="row">
+			<div class="col-md-10">
+				<paging id="paging" autohide="true" />
+			</div>
+			<div class="col-md-2" align="right">
+				<label value="${labels.common.totalrecord} :"
+					style="font-weight: bold" />
+				<label value="@load(vm.pageTotalSize)"
+					style="font-weight: bold" />
+				<button autodisable="self" iconSclass="z-icon-download"
+					tooltiptext="Download Data" sclass="btn btn-success btn-sm"
+					onClick="@command('doExport')" />
+			</div>
+		</div>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}"
+			sizedByContent="true" span="true">
+			<columns>
+				<column label="${labels.common.no}" align="right" />
+				<column label="No Anggota" />
+				<column label="Nama Lengkap" />
+				<column label="Prov Asal" />
+				<column label="Cabang Asal" />
+				<column label="Tgl Pengajuan" align="center" />
+				<column label="Prov Tujuan" />
+				<column label="Cabang Tujuan" />
+				<column label="Surat Pengantar" />
+				<column label="Keterangan" />
+				<column label="Status" />
+				<column label="Tgl Diperiksa" align="center"/>
+				<column label="Pemeriksa" />
+			</columns>			
+		</grid>
+	</window>
+</zk>

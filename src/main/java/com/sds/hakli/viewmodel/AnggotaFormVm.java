@@ -109,7 +109,8 @@ import com.sds.utils.db.StoreHibernateUtil;
 public class AnggotaFormVm {
 
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
-
+	private Tanggota oUser; 
+	
 	private String acttype;
 
 	private TanggotaDAO oDao = new TanggotaDAO();
@@ -255,6 +256,7 @@ public class AnggotaFormVm {
 			Tanggota anggota = (Tanggota) zkSession.getAttribute("anggota");
 			if (anggota == null)
 				anggota = new Tanggota();
+			oUser = anggota;
 
 			if (obj != null)
 				pribadi = obj;
@@ -1088,6 +1090,10 @@ public class AnggotaFormVm {
 								pribadi.setPassword(AppData.passwordGenerator());
 								pribadi.setRegdecisiontime(new Date());
 								// pribadi.setPeriodekta(new Date());
+								
+								pribadi.setRegverbyid(oUser.getNoanggota());
+								pribadi.setRegverbyname(oUser.getNama());
+								
 								oDao.save(session, pribadi);
 
 								Tinvoice inv = new InvoiceGenerator().doInvoice(pribadi,

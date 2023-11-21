@@ -19,7 +19,7 @@ public class TmutasiDAO {
     	if (filter == null || "".equals(filter))
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
-    	oList = session.createSQLQuery("select * from Tmutasi  "
+    	oList = session.createSQLQuery("select * from Tmutasi join Mcabang on mcabangfk = mcabangpk "
 				+ "where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
 				.addEntity(Tmutasi.class).list();		
 
@@ -32,7 +32,7 @@ public class TmutasiDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tmutasi "
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tmutasi join Mcabang on mcabangfk = mcabangpk "
 				+ "where " + filter).uniqueResult().toString());
 		session.close();
         return count;
@@ -45,6 +45,17 @@ public class TmutasiDAO {
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
 		oList = session.createQuery("from Tmutasi where " + filter + " order by " + orderby).list();
+		session.close();
+        return oList;
+    }	
+	
+	@SuppressWarnings("unchecked")
+	public List<Tmutasi> listNative(String filter, String orderby) throws Exception {		
+    	List<Tmutasi> oList = null;
+    	if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select Tmutasi.* from Tmutasi join Mcabang on mcabangfk = mcabangpk where " + filter + " order by " + orderby).addEntity(Tmutasi.class).list();
 		session.close();
         return oList;
     }	

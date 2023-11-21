@@ -116,6 +116,10 @@ public class Tanggota {
 	
 	private String instansi;
 	
+	private String regverbyid;
+	
+	private String regverbyname;
+	
 	private Musergroup musergroup;
 	
 	@Id
@@ -494,6 +498,19 @@ public class Tanggota {
 	}
 	public void setInstansi(String instansi) {
 		this.instansi = instansi;
+	}	
+	
+	public String getRegverbyid() {
+		return regverbyid;
+	}
+	public void setRegverbyid(String regverbyid) {
+		this.regverbyid = regverbyid;
+	}
+	public String getRegverbyname() {
+		return regverbyname;
+	}
+	public void setRegverbyname(String regverbyname) {
+		this.regverbyname = regverbyname;
 	}
 	@ManyToOne
 	@JoinColumn(name="musergroupfk")

@@ -18,6 +18,8 @@ import org.hibernate.annotations.Type;
 public class Tmutasi {
 
 	private Integer tmutasipk;
+	private String kodecabangcurr;
+	private String kodeprovcurr;
 	private String cabangcurr;
 	private String provcurr;
 	private String docid;
@@ -115,6 +117,24 @@ public class Tmutasi {
 
 	public void setMcabang(Mcabang mcabang) {
 		this.mcabang = mcabang;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getKodecabangcurr() {
+		return kodecabangcurr;
+	}
+
+	public void setKodecabangcurr(String kodecabangcurr) {
+		this.kodecabangcurr = kodecabangcurr;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getKodeprovcurr() {
+		return kodeprovcurr;
+	}
+
+	public void setKodeprovcurr(String kodeprovcurr) {
+		this.kodeprovcurr = kodeprovcurr;
 	}
 
 	@Type(type = "com.sds.utils.usertype.TrimUserType")

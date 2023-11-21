@@ -1094,6 +1094,39 @@
 							</n:tr>
 							<n:tr>
 								<n:td>
+									<label value="Waktu Pendaftaran" />
+								</n:td>
+								<n:td>
+									<textbox value="@load(z.createtime)"
+										readonly="true" width="100%" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label
+										value="Waktu Verifikasi Pendaftaran" />
+								</n:td>
+								<n:td>
+									<textbox
+										value="@load(z.regdecisiontime)" readonly="true" width="100%" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label
+										value="Pemeriksa Pendaftaran" />
+								</n:td>
+								<n:td>
+									<hlayout>
+										<textbox
+											value="@load(z.regverbyid)" readonly="true" cols="12" />
+										<textbox
+											value="@load(z.regverbyname)" readonly="true" width="100%" />
+									</hlayout>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
 									<label value="Last Login" />
 								</n:td>
 								<n:td>

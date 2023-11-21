@@ -110,6 +110,7 @@ public class MutasiVm {
 				row.getChildren().add(new Label(data.getMemo()));
 				row.getChildren().add(new Label(AppUtils.getStatusLabel(data.getStatus())));
 				row.getChildren().add(new Label(data.getChecktime() != null ? new SimpleDateFormat("dd-MM-yyyy").format(data.getChecktime()) : "-"));
+				row.getChildren().add(new Label(data.getCheckedby()));
 			}
 		});
 	}
@@ -136,7 +137,9 @@ public class MutasiVm {
 			obj.setMcabang(mcabang);
 			obj.setTanggota(anggota);
 			obj.setStatus(AppUtils.STATUS_WAITCONFIRM);
+			obj.setKodeprovcurr(anggota.getMcabang().getMprov().getProvcode());
 			obj.setProvcurr(anggota.getMcabang().getMprov().getProvname());
+			obj.setKodecabangcurr(anggota.getMcabang().getKodecabang());
 			obj.setCabangcurr(anggota.getMcabang().getCabang());
 			obj.setCreatedby(anggota.getNama());
 			obj.setCreatetime(new Date());

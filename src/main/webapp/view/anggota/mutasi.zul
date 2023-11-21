@@ -170,7 +170,8 @@
 				<column label="Surat Pengantar" />
 				<column label="Keterangan" />
 				<column label="Status" />
-				<column label="Tgl Disetujui" align="center"/>
+				<column label="Tgl Diperiksa" align="center"/>
+				<column label="Pemeriksa" />
 			</columns>
 		</grid>
 	</window>

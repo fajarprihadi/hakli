@@ -41,14 +41,16 @@
 					style="font-weight: bold" />
 			</div>
 		</div>
-		<grid id="grid" emptyMessage="${labels.common.emptymsg}">
-			<columns>
+		<grid id="grid" emptyMessage="${labels.common.emptymsg}" sizedByContent="true" span="true">
+			<columns sizable="true">
 				<column label="${labels.common.no}" align="right" width="40px" />
 				<column label="${labels.anggota.nama}" />
 				<column label="${labels.anggota.noktp}" />
 				<column label="${labels.anggota.cabang}" />
 				<column label="${labels.anggota.waktureg}" align="center" />
-				<column label="${labels.anggota.vano}" />
+				<column label="Waktu Pemeriksaan" align="center" />
+				<column label="Pemeriksa" align="center" />
+				<column label="${labels.anggota.vano}" align="center" />
 				<column label="${labels.common.action}" align="center" width="70px" />
 			</columns>
 		</grid>

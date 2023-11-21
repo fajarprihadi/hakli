@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cetakkta" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1797a0a-6826-4e1a-877f-337eec26aa05">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="80"/>
+	<property name="ireport.zoom" value="4.287177620000004"/>
+	<property name="ireport.x" value="268"/>
+	<property name="ireport.y" value="187"/>
 	<parameter name="CARD1" class="java.lang.String"/>
 	<parameter name="CARD2" class="java.lang.String"/>
 	<parameter name="FOTO" class="java.lang.String"/>
@@ -27,7 +27,7 @@
 				<imageExpression><![CDATA[$P{CARD1}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="144" y="67" width="58" height="11" uuid="d5cf7298-aa5e-4e77-922e-ef75dbd9e9d0"/>
+				<reportElement x="144" y="67" width="78" height="11" uuid="d5cf7298-aa5e-4e77-922e-ef75dbd9e9d0"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -115,7 +115,7 @@
 				<textFieldExpression><![CDATA[": " + $F{mcabang.cabang}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="207" y="77" width="49" height="11" uuid="ec2a9171-81a0-41ba-a313-2e09dde42d83"/>
+				<reportElement x="222" y="77" width="34" height="11" uuid="ec2a9171-81a0-41ba-a313-2e09dde42d83"/>
 				<textElement>
 					<font size="8" isItalic="true"/>
 				</textElement>
@@ -161,7 +161,7 @@
 				<text><![CDATA[Berlaku s.d]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="207" y="67" width="49" height="11" uuid="afec08dc-e72e-4b99-82e7-54ad622d2bf5"/>
+				<reportElement x="222" y="67" width="34" height="11" uuid="afec08dc-e72e-4b99-82e7-54ad622d2bf5"/>
 				<textElement>
 					<font size="8" isBold="true" isItalic="false"/>
 				</textElement>

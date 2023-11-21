@@ -18,7 +18,7 @@ public class TcounterengineDAO {
 		String strCounter = "";
 		String finalCounter = "";
 		String counterCode = "NOANGGOTA" + counterName;
-		int counter = 4;
+		int counter = 5;
 		char[] fillUploadid = new char[counter];
 		Session session = StoreHibernateUtil.openSession();
 		Transaction transaction = session.beginTransaction();
