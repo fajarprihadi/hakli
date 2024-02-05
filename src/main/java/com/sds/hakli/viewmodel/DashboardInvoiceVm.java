@@ -1,13 +1,24 @@
 package com.sds.hakli.viewmodel;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -17,15 +28,18 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.A;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
@@ -35,6 +49,7 @@ import org.zkoss.zul.event.PagingEvent;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
+import com.sds.hakli.domain.Ttransfer;
 import com.sds.hakli.model.TinvoiceListModel;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
@@ -65,6 +80,7 @@ public class DashboardInvoiceVm {
 	private String invno;
 	private String invstatus;
 	private String vano;	
+	private String nama;
 	private Date begindate;
 	private Date enddate;
 	
@@ -115,6 +131,8 @@ public class DashboardInvoiceVm {
 					}
 				});
 				row.getChildren().add(aNama);
+				row.getChildren().add(new Label(data.getTanggota().getMcabang().getMprov().getProvname()));
+				row.getChildren().add(new Label(data.getTanggota().getMcabang().getCabang()));
 				row.getChildren().add(new Label(data.getInvoiceno()));
 				row.getChildren().add(new Label(datelocalFormatter.format(data.getInvoicedate())));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getInvoiceamount())));
@@ -130,6 +148,103 @@ public class DashboardInvoiceVm {
 		
 		doSummary();
 		doReset();
+	}
+	
+	@Command
+	public void doExport() {
+		try {
+			List<Tinvoice> objList = oDao.listNative(filter, "tinvoicepk desc");
+			if (objList.size() > 0) {
+				XSSFWorkbook workbook = new XSSFWorkbook();
+				XSSFSheet sheet = workbook.createSheet();
+				XSSFCellStyle style = workbook.createCellStyle();
+				style.setBorderTop(BorderStyle.MEDIUM);
+				style.setBorderBottom(BorderStyle.MEDIUM);
+				style.setBorderLeft(BorderStyle.MEDIUM);
+				style.setBorderRight(BorderStyle.MEDIUM);
+
+				int rownum = 0;
+				int cellnum = 0;
+				Integer no = 0;
+				//org.apache.poi.ss.usermodel.Row row = sheet.createRow(rownum++);
+				//Cell cell = row.createCell(0);
+				org.apache.poi.ss.usermodel.Row row = null;
+				Cell cell = null;
+				rownum++;
+				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
+				datamap.put(1, new Object[] { "No", "Tipe Tagihan", "Nama", "Provoinsi", "Cabang", "Kode Tagihan", "Tanggal Tagihan", "Nominal Tagihan", "Tanggal Jatuh Tempo", 
+						"Nomor VA", "Keterangan", "Status", 
+						"Tanggal Bayar", "No Ref Bayar" });
+				no = 2;
+				for (Tinvoice data : objList) {
+					datamap.put(no,
+							new Object[] { no - 1, AppData.getInvoiceType(data.getInvoicetype()), data.getTanggota().getNama(), data.getTanggota().getMcabang().getMprov().getProvname(), data.getTanggota().getMcabang().getCabang(),  
+									data.getInvoiceno(), datelocalFormatter.format(data.getInvoicedate()), data.getInvoiceamount().doubleValue(), 
+									datelocalFormatter.format(data.getInvoiceduedate()), data.getVano(), data.getInvoicedesc(), data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar", 
+									data.getPaidtime() != null ? datelocalFormatter.format(data.getPaidtime()) : "",
+									data.getPaidrefno() != null ? data.getPaidrefno() : "" });
+					no++;
+				}
+				Set<Integer> keyset = datamap.keySet();
+				for (Integer key : keyset) {
+					row = sheet.createRow(rownum++);
+					Object[] objArr = datamap.get(key);
+					cellnum = 0;
+					if (rownum == 6) {
+						XSSFCellStyle styleHeader = workbook.createCellStyle();
+						styleHeader.setBorderTop(BorderStyle.MEDIUM);
+						styleHeader.setBorderBottom(BorderStyle.MEDIUM);
+						styleHeader.setBorderLeft(BorderStyle.MEDIUM);
+						styleHeader.setBorderRight(BorderStyle.MEDIUM);
+						styleHeader.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+						//styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
+						for (Object obj : objArr) {
+							cell = row.createCell(cellnum++);
+							if (obj instanceof String) {
+								cell.setCellValue((String) obj);
+								cell.setCellStyle(styleHeader);
+							} else if (obj instanceof Integer) {
+								cell.setCellValue((Integer) obj);
+								cell.setCellStyle(styleHeader);
+							} else if (obj instanceof Double) {
+								cell.setCellValue((Double) obj);
+								cell.setCellStyle(styleHeader);
+							}
+						}
+					} else {
+						for (Object obj : objArr) {
+							cell = row.createCell(cellnum++);
+							if (obj instanceof String) {
+								cell.setCellValue((String) obj);
+								cell.setCellStyle(style);
+							} else if (obj instanceof Integer) {
+								cell.setCellValue((Integer) obj);
+								cell.setCellStyle(style);
+							} else if (obj instanceof Double) {
+								cell.setCellValue((Double) obj);
+								cell.setCellStyle(style);
+							}
+						}
+					}
+				}
+
+				String path = Executions.getCurrent().getDesktop().getWebApp()
+						.getRealPath(AppUtils.PATH_REPORT);
+				String filename = "HAKLI_INVOICE_" + new SimpleDateFormat("yyMMddHHmm").format(new Date()) + ".xlsx";
+				FileOutputStream out = new FileOutputStream(new File(path + "/" + filename));
+				workbook.write(out);
+				out.close();
+				workbook.close();
+
+				Filedownload.save(new File(path + "/" + filename),
+						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			} else {
+				Messagebox.show("Tidak ada data", WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.INFORMATION);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@NotifyChange("*")
@@ -204,6 +319,8 @@ public class DashboardInvoiceVm {
 			filter += " and invoicetype = '" + invoicetype + "'";
 		if (vano != null  && vano.trim().length() > 0)
 			filter += " and tinvoice.vano = '" + vano.trim() + "'";
+		if (nama != null  && nama.trim().length() > 0)
+			filter += " and upper(tanggota.nama) like '%" + nama.trim().toUpperCase() + "%'";
 		if (invno != null  && invno.trim().length() > 0)
 			filter += " and invoiceno = '" + invno.trim() + "'";
 		if (invstatus != null  && invstatus.trim().length() > 0)
@@ -241,6 +358,7 @@ public class DashboardInvoiceVm {
 		invoicetype = null;
 		invno = null;
 		vano = null;
+		nama = null;
 		invstatus = null;
 		
 		Calendar cal = Calendar.getInstance();
@@ -361,6 +479,14 @@ public class DashboardInvoiceVm {
 
 	public void setUnpaidamount(BigDecimal unpaidamount) {
 		this.unpaidamount = unpaidamount;
+	}
+
+	public String getNama() {
+		return nama;
+	}
+
+	public void setNama(String nama) {
+		this.nama = nama;
 	}
 	
 }

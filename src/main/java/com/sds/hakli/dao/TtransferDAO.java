@@ -21,7 +21,7 @@ public class TtransferDAO {
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
     	oList = session.createSQLQuery("select * from ttransfer join Tinvoice on tinvoicefk = tinvoicepk "
-				+ "where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
+				+ "join Tanggota on tanggotafk = tanggotapk where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
 				.addEntity(Ttransfer.class).list();		
 
 		session.close();
@@ -33,7 +33,8 @@ public class TtransferDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Ttransfer join Tinvoice on tinvoicefk = tinvoicepk "
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Ttransfer "
+				+ "join Tinvoice on tinvoicefk = tinvoicepk join Tanggota on tanggotafk = tanggotapk "
 				+ "where " + filter).uniqueResult().toString());
 		session.close();
         return count;
@@ -46,6 +47,17 @@ public class TtransferDAO {
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
 		oList = session.createQuery("from Ttransfer where " + filter + " order by " + orderby).list();
+		session.close();
+        return oList;
+    }	
+	
+	@SuppressWarnings("unchecked")
+	public List<Ttransfer> listNative(String filter, String orderby) throws Exception {		
+    	List<Ttransfer> oList = null;
+    	if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Ttransfer join Tinvoice on tinvoicefk = tinvoicepk where " + filter + " order by " + orderby).addEntity(Ttransfer.class).list();
 		session.close();
         return oList;
     }	
@@ -86,7 +98,7 @@ public class TtransferDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(amount),0) from Ttransfer "
+		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(amount),0) from Ttransfer join Tinvoice on tinvoicefk = tinvoicepk join Tanggota on tanggotafk = tanggotapk "
 				+ "where " + filter).uniqueResult();
 		session.close();
         return amount;

@@ -1,0 +1,62 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winMutasi" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.BiFastDummyVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Dummy Test Pemindahbukuan BI Fast</n:span>
+		</caption>
+		<div class="row">
+			<div class="col">
+				<textbox value="@bind(vm.bankcode)" maxlength="20"
+					placeholder="Kode Bank Tujuan" cols="20" />
+				<textbox value="@bind(vm.benefaccno)" maxlength="20"
+					placeholder="Nomor Rekening Tujuan" cols="20" />
+				<decimalbox value="@bind(vm.amount)" maxlength="10"
+					format="#,##0" placeholder="Nominal" cols="12" />
+				<textbox value="@bind(vm.custref)" maxlength="30"
+					placeholder="Customer Reference" cols="30" />
+				<textbox value="@bind(vm.refno)" maxlength="40"
+					placeholder="Reference Number" cols="40" />
+				<textbox value="@bind(vm.sourceacc)" maxlength="20"
+					placeholder="Nomor Rekening Sumber" cols="20" />
+				<textbox value="@bind(vm.trxdate)" maxlength="10"
+					placeholder="Tanggal" cols="10" />
+				<button label="Inquiry" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doInq')" />
+				<button label="Transfer" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doTrf')" />
+				<button label="Status" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doStatus')" />
+				<button label="Reset" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+			</div>
+		</div>
+		<n:hr />
+		<div class="row">
+			<div class="col">
+				<groupbox id="gbResultInq" mold="3d" visible="false">
+					<caption label="Output Inquiry" />
+					<textbox value="@load(vm.inqRespMsg)" multiline="true" width="100%" rows="5" />
+				</groupbox>
+			</div>
+			<separator />
+			<div class="col">
+				<groupbox id="gbResultTrf" mold="3d" visible="false">
+					<caption label="Output Transfer" />
+					<textbox value="@load(vm.trfRespMsg)" multiline="true" width="100%" rows="5" />
+				</groupbox>
+			</div>
+			<separator />
+			<div class="col">
+				<groupbox id="gbResultStatus" mold="3d" visible="false">
+					<caption label="Output Status" />
+					<textbox value="@load(vm.statusRespMsg)" multiline="true" width="100%" rows="5" />
+				</groupbox>
+			</div>
+		</div>
+
+		<separator />
+
+	</window>
+</zk>

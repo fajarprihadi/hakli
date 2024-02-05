@@ -4,11 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.sds.hakli.domain.Tcounterengine;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class TcounterengineDAO {
@@ -187,26 +189,41 @@ public class TcounterengineDAO {
 		return finalCounter;
 	}
 	
-	public String generateSeqnum() throws Exception {
+	public synchronized String generateSeqnum() throws Exception {
 		Integer lastCounter = 0;
 		String strCounter = "";
 		String finalCounter = "";
-		int len = 3;
+		int len = 13;
 		char[] fillUploadid = new char[len];
 		Session session = StoreHibernateUtil.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String counterName = new SimpleDateFormat("YY").format(new Date()) + new SimpleDateFormat("MM").format(new Date());
+			String julianDay = "000" + Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+			julianDay = julianDay.substring(julianDay.length()-3, julianDay.length());
+			String counterName = new SimpleDateFormat("YYYY").format(new Date()) + julianDay;
 			
-			Query q = session.createQuery("select lastcounter from Tcounterengine where countername = '" + counterName + "'");
-			lastCounter = (Integer) q.uniqueResult();
-			if (lastCounter != null) {
+			List<Tcounterengine> oList = session.createQuery("from Tcounterengine where countername = '" + counterName + "'").list();
+			if (oList.size() > 0) {
+				Tcounterengine counter = oList.get(0);
+				lastCounter = counter.getLastcounter();
+				
 				lastCounter++;
-				session.createSQLQuery("update Tcounterengine set lastcounter = lastcounter + 1 where countername = '" + counterName + "'").executeUpdate();				
+				session.createSQLQuery("update Tcounterengine set lastcounter = " + lastCounter + " where countername = '" + counterName + "'").executeUpdate();
 			} else {
 				lastCounter = 1;
 				session.createSQLQuery("insert into Tcounterengine values ('" + counterName + "', " + lastCounter + ")").executeUpdate();
-			}			
+			}				
+			
+//			Query q = session.createQuery("select lastcounter from Tcounterengine where countername = '" + counterName + "'");
+//			lastCounter = (Integer) q.uniqueResult();
+//			if (lastCounter != null) {
+//				lastCounter++;
+//				session.createSQLQuery("update Tcounterengine set lastcounter = lastcounter + 1 where countername = '" + counterName + "'").executeUpdate();				
+//			} else {
+//				lastCounter = 1;
+//				session.createSQLQuery("insert into Tcounterengine values ('" + counterName + "', " + lastCounter + ")").executeUpdate();
+//			}
+			
 			transaction.commit();
 			session.close();
 			Arrays.fill(fillUploadid, '0');

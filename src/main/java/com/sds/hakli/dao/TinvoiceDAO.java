@@ -52,6 +52,27 @@ public class TinvoiceDAO {
         return oList;
     }	
 	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listPaidPendingDisburse() throws Exception {		
+    	List<Tinvoice> oList = null;
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Tinvoice where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') order by tinvoicepk").addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }	
+	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listNative(String filter, String orderby) throws Exception {		
+    	List<Tinvoice> oList = null;
+    	if (filter == null || "".equals(filter))
+			filter = "0 = 0";
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Tinvoice join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
+				+ "where " + filter + " order by " + orderby).addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }	
+	
 	public Tinvoice findByPk(Integer pk) throws Exception {
 		session = StoreHibernateUtil.openSession();
 		Tinvoice oForm = (Tinvoice) session.createQuery("from Tinvoice where tinvoicepk = " + pk).uniqueResult();

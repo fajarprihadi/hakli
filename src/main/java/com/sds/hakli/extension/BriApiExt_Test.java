@@ -3,12 +3,19 @@ package com.sds.hakli.extension;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Signature;
@@ -42,6 +49,8 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sds.hakli.bean.BriapiBean;
+import com.sds.hakli.pojo.BIFastAdditionalInfo;
+import com.sds.hakli.pojo.BIFastAmount;
 import com.sds.hakli.pojo.BIFastInqReq;
 import com.sds.hakli.pojo.BIFastInqResp;
 import com.sds.hakli.pojo.BIFastStatusReq;
@@ -60,6 +69,7 @@ import com.sds.hakli.pojo.BrivaStatus;
 import com.sds.hakli.pojo.BrivaUpdateResp;
 import com.sds.hakli.pojo.FundInqReq;
 import com.sds.hakli.pojo.FundInqResp;
+import com.sds.hakli.pojo.FundOtherValidationResp;
 import com.sds.hakli.pojo.FundRcReq;
 import com.sds.hakli.pojo.FundRcResp;
 import com.sds.hakli.pojo.FundTrfReq;
@@ -69,30 +79,30 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-public class BriApiExt {
-	
-//	String url_briapi = "https://partner.api.bri.co.id/oauth/client_credential/accesstoken";
-//	String url_briva = "https://partner.api.bri.co.id/v1/briva";
+public class BriApiExt_Test {
+
+//	String url_briapi = "https://sandbox.partner.api.bri.co.id/oauth/client_credential/accesstoken";
+//	String url_briva = "https://sandbox.partner.api.bri.co.id/v1/briva";
 //	String client_id = "P0HhD42Hk5zNQ8Me58gxRA9XIznRBQkN";
 //	String client_secret = "nUmPkHfO5qnxgZ9a";
-	
-	String url_fund = "https://partner.api.bri.co.id/v3.1/transfer/internal";
-	String url_fundother = "https://partner.api.bri.co.id/sandbox/v2/transfer/external";
-	
+
+	String url_fund = "https://sandbox.partner.api.bri.co.id/v3.1/transfer/internal";
+	String url_bifast = "https://sandbox.partner.api.bri.co.id/";
+
 	private BriapiBean bean;
-	
-	public BriApiExt(BriapiBean bean) {
+
+	public BriApiExt_Test(BriapiBean bean) {
 		this.bean = bean;
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main_transfer(String[] args) {
 		try {
 			System.out.println(new Date().toString());
 			BriapiBean bean = AppData.getBriapibean();
-			System.out.println("FT Consumer Key : " + bean.getBrift_consumerkey());
-			System.out.println("FT Consumer Secret : " + bean.getBrift_consumersecret());
-			//bean.setConsumerkey("HwsO7wCvFZY3lPNsXXGrwMzHi3roBvDC");
-			//bean.setConsumersecret("LP4yghyt4hwGSsjX");
+			// System.out.println("FT Consumer Key : " + bean.getBrift_consumerkey());
+			// System.out.println("FT Consumer Secret : " + bean.getBrift_consumersecret());
+			bean.setConsumerkey("HwsO7wCvFZY3lPNsXXGrwMzHi3roBvDC");
+			bean.setConsumersecret("LP4yghyt4hwGSsjX");
 			BriApiExt briapi = new BriApiExt(bean);
 			BriApiToken briapiToken = briapi.getTokenFundTransfer();
 			if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
@@ -111,13 +121,13 @@ public class BriApiExt {
 //				trfReq.setTransactionDateTime("04-07-2023 15:08:00");
 //				
 //				briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
-				
+
 				FundRcReq rcReq = new FundRcReq();
-				//rcReq.setNoReferral("99999999999999999918");
+				// rcReq.setNoReferral("99999999999999999918");
 				rcReq.setNoReferral("88888888888888888884");
 				rcReq.setTransactionDate("09-07-2021");
 				briapi.fundRcStatus(briapiToken.getAccess_token(), rcReq);
-				
+
 			} else {
 				System.out.println("NOT OK");
 			}
@@ -125,55 +135,115 @@ public class BriApiExt {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	public static void main(String[] args) {
+		try {
+			System.out.println(new Date().toString());
+			BriapiBean bean = AppData.getBriapibean();
+			// System.out.println("FT Consumer Key : " + bean.getBrift_consumerkey());
+			// System.out.println("FT Consumer Secret : " + bean.getBrift_consumersecret());
+			bean.setConsumerkey("HwsO7wCvFZY3lPNsXXGrwMzHi3roBvDC");
+			bean.setConsumersecret("LP4yghyt4hwGSsjX");
+			BriApiExt_Test briapi = new BriApiExt_Test(bean);
+			BIFastToken token = briapi.getTokenBIFast();
+			if (token != null) {
+//				BIFastStatusReq bifastStatusReq = new BIFastStatusReq();
+//				bifastStatusReq.setOriginalPartnerReferenceNo("54321");
+//				bifastStatusReq.setServiceCode("80");
+//				bifastStatusReq.setTransactionDate("22-02-2022");
+//				briapi.bifastStatus(token.getAccessToken(), bifastStatusReq);
+//				System.exit(0);
+
+				BIFastInqReq bifastInqReq = new BIFastInqReq();
+				bifastInqReq.setBeneficiaryBankCode("CENAIDJA");
+				bifastInqReq.setBeneficiaryAccountNo("12345678900");
+
+				// bifastInqReq.setBeneficiaryBankCode("CENAIDJA");
+				// bifastInqReq.setBeneficiaryAccountNo("14040");
+				BIFastInqResp bifastInqResp = briapi.bifastInq(token.getAccessToken(), bifastInqReq);
+				if (bifastInqResp != null && bifastInqResp.getResponseCode().equals("2008100")) {
+
+					BIFastTrfReq bifastTrfReq = new BIFastTrfReq();
+					bifastTrfReq.setCustomerReference("9999999999999999999999999999999999999999");
+					bifastTrfReq.setSenderIdentityNumber("3515085211930002");
+					bifastTrfReq.setSourceAccountNo("001901000378301");
+					BIFastAmount amount = new BIFastAmount();
+					amount.setValue("10000.00");
+					amount.setCurrency("IDR");
+					bifastTrfReq.setAmount(amount);
+					bifastTrfReq.setBeneficiaryBankCode("CENAIDJA");
+					bifastTrfReq.setBeneficiaryAccountNo("12345678900");
+					bifastTrfReq.setReferenceNo("20220127BRINIDJA61050000018");
+					bifastTrfReq.setExternalId("53394951711");
+					bifastTrfReq.setTransactionDate("2022-02-22T13:07:24Z");
+					bifastTrfReq.setPaymentInfo("testing bifast");
+					bifastTrfReq.setSenderType("01");
+					bifastTrfReq.setSenderResidentStatus("01");
+					bifastTrfReq.setSenderTownName("0300");
+					BIFastAdditionalInfo additional = new BIFastAdditionalInfo();
+					additional.setDeviceId("12345679237");
+					additional.setChannel("mobilephone");
+					bifastTrfReq.setAdditionalInfo(additional);
+
+					BIFastTrfResp bifastTrfResp = briapi.bifastTrf(token.getAccessToken(), bifastTrfReq);
+
+				}
+			} else {
+				System.out.println("NOT OK");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public BriApiToken getToken() throws Exception {
 		BriApiToken obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Access Token***");
-			
-		    MultivaluedMap<String, String> input = new MultivaluedHashMap<String, String>();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Access Token***");
+
+			MultivaluedMap<String, String> input = new MultivaluedHashMap<String, String>();
 			input.add("client_id", bean.getConsumerkey());
 			input.add("client_secret", bean.getConsumersecret());
-			
+
 			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
 
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBriapi_pathtoken());
-			ClientResponse response = webResource.queryParam("grant_type", "client_credentials").type(MediaType.APPLICATION_FORM_URLENCODED)
-					.post(ClientResponse.class, input);
+			ClientResponse response = webResource.queryParam("grant_type", "client_credentials")
+					.type(MediaType.APPLICATION_FORM_URLENCODED).post(ClientResponse.class, input);
 
 			output = response.getEntity(String.class);
 			System.out.println(output);
@@ -187,54 +257,55 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public BriApiToken getTokenFundTransfer() throws Exception {
 		BriApiToken obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Access Token***");
-			
-		    MultivaluedMap<String, String> input = new MultivaluedHashMap<String, String>();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Access Token***");
+
+			MultivaluedMap<String, String> input = new MultivaluedHashMap<String, String>();
 			input.add("client_id", bean.getBrift_consumerkey());
 			input.add("client_secret", bean.getBrift_consumersecret());
-			
+
 			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
 
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBriapi_pathtoken());
-			ClientResponse response = webResource.queryParam("grant_type", "client_credentials").type(MediaType.APPLICATION_FORM_URLENCODED)
-					.post(ClientResponse.class, input);
+			ClientResponse response = webResource.queryParam("grant_type", "client_credentials")
+					.type(MediaType.APPLICATION_FORM_URLENCODED).post(ClientResponse.class, input);
 
 			output = response.getEntity(String.class);
 			System.out.println(output);
@@ -248,53 +319,54 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public BrivaCreateResp createBriva(String token, BrivaData data) throws Exception {
 		BrivaCreateResp obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Create BRIVA***");
-	
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Create BRIVA***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
 			String jsonReq = mapper.writeValueAsString(data);
-			
+
 			StringBuffer payload = new StringBuffer();
 			payload.append("path=" + bean.getBriva_pathcreate());
 			payload.append("&");
@@ -305,23 +377,20 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=" + jsonReq);
-			
+
 			String signature = encode(bean.getConsumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Request body : " + jsonReq);
 			System.out.println("Payload : " + payload.toString());
-			
+
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathcreate());
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.type(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class, jsonReq);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonReq);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);
@@ -334,54 +403,56 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public BrivaInquiryResp getBriva(String token, String custcode) throws Exception {
 		BrivaInquiryResp obj = new BrivaInquiryResp();
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Get BRIVA***");
-			
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Get BRIVA***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
-			
+
 			StringBuffer payload = new StringBuffer();
-			payload.append("path=" + bean.getBriva_pathget() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + custcode);
+			payload.append("path=" + bean.getBriva_pathget() + "/" + bean.getBriva_institutioncode() + "/"
+					+ bean.getBriva_cid() + "/" + custcode);
 			payload.append("&");
 			payload.append("verb=GET");
 			payload.append("&");
@@ -390,25 +461,23 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=");
-			
+
 			String signature = encode(bean.getConsumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Payload : " + payload.toString());
-			
-			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathget() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + custcode);
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.accept(MediaType.APPLICATION_JSON)
-					.get(ClientResponse.class);
+
+			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathget() + "/"
+					+ bean.getBriva_institutioncode() + "/" + bean.getBriva_cid() + "/" + custcode);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);
-			
+
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, BrivaInquiryResp.class);
 			if (obj.getStatus()) {
@@ -417,7 +486,8 @@ public class BriApiExt {
 				data.setInstitutionCode(json.getJSONObject("data").getString("institutionCode"));
 				data.setAmount(json.getJSONObject("data").getString("Amount"));
 				data.setNama(json.getJSONObject("data").getString("Nama"));
-				data.setBrivaNo(json.getJSONObject("data").getString("BrivaNo") + json.getJSONObject("data").getString("CustCode"));
+				data.setBrivaNo(json.getJSONObject("data").getString("BrivaNo")
+						+ json.getJSONObject("data").getString("CustCode"));
 				data.setKeterangan(json.getJSONObject("data").getString("Keterangan"));
 				data.setStatusBayar(json.getJSONObject("data").getString("statusBayar"));
 				data.setExpiredDate(json.getJSONObject("data").getString("expiredDate"));
@@ -430,53 +500,54 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public BrivaUpdateResp updateBriva(String token, BrivaDataUpdate data) throws Exception {
 		BrivaUpdateResp obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Update Status BRIVA***");
-			
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Update Status BRIVA***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
 			String jsonReq = mapper.writeValueAsString(data);
-			
+
 			StringBuffer payload = new StringBuffer();
 			payload.append("path=" + bean.getBriva_pathupdate());
 			payload.append("&");
@@ -487,23 +558,20 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=" + jsonReq);
-			
+
 			String signature = encode(bean.getConsumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Payload : " + payload.toString());
 			System.out.println("Request Body : " + jsonReq);
-			
+
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathupdate());
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.type(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.put(ClientResponse.class, jsonReq);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, jsonReq);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);
@@ -516,53 +584,54 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public BrivaCreateResp updateDataBriva(String token, BrivaData data) throws Exception {
 		BrivaCreateResp obj = null;
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Update Data BRIVA***");
-	
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Update Data BRIVA***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
 			String jsonReq = mapper.writeValueAsString(data);
-			
+
 			StringBuffer payload = new StringBuffer();
 			payload.append("path=" + bean.getBriva_pathupdateva());
 			payload.append("&");
@@ -573,23 +642,20 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=" + jsonReq);
-			
+
 			String signature = encode(bean.getConsumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Request body : " + jsonReq);
 			System.out.println("Payload : " + payload.toString());
-			
+
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathupdateva());
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.type(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.put(ClientResponse.class, jsonReq);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, jsonReq);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);
@@ -602,54 +668,56 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public BrivaReportResp getBrivaReport(String token, String startdate, String enddate) throws Exception {
 		BrivaReportResp obj = new BrivaReportResp();
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Get BRIVA Report***");
-			
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Get BRIVA Report***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
-			
+
 			StringBuffer payload = new StringBuffer();
-			payload.append("path=" + bean.getBriva_pathreport() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + startdate + "/" + enddate);
+			payload.append("path=" + bean.getBriva_pathreport() + "/" + bean.getBriva_institutioncode() + "/"
+					+ bean.getBriva_cid() + "/" + startdate + "/" + enddate);
 			payload.append("&");
 			payload.append("verb=GET");
 			payload.append("&");
@@ -658,33 +726,31 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=");
-			
+
 			String signature = encode(bean.getConsumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Payload : " + payload.toString());
-			
-			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathreport() + "/" + bean.getBriva_institutioncode() +"/" + bean.getBriva_cid() + "/" + startdate + "/" + enddate);
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.accept(MediaType.APPLICATION_JSON)
-					.get(ClientResponse.class);
+
+			WebResource webResource = client.resource(bean.getUrl() + bean.getBriva_pathreport() + "/"
+					+ bean.getBriva_institutioncode() + "/" + bean.getBriva_cid() + "/" + startdate + "/" + enddate);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
 			output = response.getEntity(String.class);
 			System.out.println(output);
-			
+
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, BrivaReportResp.class);
 			if (obj.getStatus()) {
 				JSONObject json = new JSONObject(output);
-				
+
 				List<BrivaReport> datas = new ArrayList<>();
 				JSONArray jsonArray = json.getJSONArray("data");
-				for (int i=0; i<jsonArray.length(); i++) {
+				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject jsonObj = jsonArray.getJSONObject(i);
 					BrivaReport data = new BrivaReport();
 					data.setAmount(jsonObj.getString("amount"));
@@ -697,7 +763,7 @@ public class BriApiExt {
 					data.setCustCode(jsonObj.getString("custCode"));
 					datas.add(data);
 				}
-				
+
 				obj.setData(datas);
 			}
 			client.destroy();
@@ -707,56 +773,57 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public FundInqResp fundInq(String token, FundInqReq req) throws Exception {
 		FundInqResp obj = new FundInqResp();
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Fund Inquiry***");
-			
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Fund Inquiry***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
-			
+
 			String jsonReq = mapper.writeValueAsString(req);
-			
+
 			StringBuffer payload = new StringBuffer();
-			//payload.append("path=/v3.1/transfer/internal/accounts");
+			// payload.append("path=/v3.1/transfer/internal/accounts");
 			payload.append("path=" + bean.getBrift_pathaccount());
 			payload.append("&");
 			payload.append("verb=POST");
@@ -766,27 +833,24 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=" + jsonReq);
-			
+
 			String signature = encode(bean.getBrift_consumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Payload : " + payload.toString());
-			
-			//WebResource webResource = client.resource(url_fund + "/accounts");
+
+			// WebResource webResource = client.resource(url_fund + "/accounts");
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBrift_pathaccount());
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.type(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class, jsonReq);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonReq);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);
-			
+
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, FundInqResp.class);
 			client.destroy();
@@ -796,56 +860,57 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public FundTrfResp fundTrf(String token, FundTrfReq req) throws Exception {
 		FundTrfResp obj = new FundTrfResp();
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Fund Trf***");
-			
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Fund Trf***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
-			
+
 			String jsonReq = mapper.writeValueAsString(req);
-			
+
 			StringBuffer payload = new StringBuffer();
-			//payload.append("path=/v3.1/transfer/internal");
+			// payload.append("path=/v3.1/transfer/internal");
 			payload.append("path=" + bean.getBrift_pathtransfer());
 			payload.append("&");
 			payload.append("verb=POST");
@@ -855,28 +920,25 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=" + jsonReq);
-			
-			//String signature = encode(bean.getConsumersecret(), payload.toString());
+
+			// String signature = encode(bean.getConsumersecret(), payload.toString());
 			String signature = encode(bean.getBrift_consumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Payload : " + payload.toString());
-			
-			//WebResource webResource = client.resource(url_fund);
+
+			// WebResource webResource = client.resource(url_fund);
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBrift_pathtransfer());
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.type(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class, jsonReq);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonReq);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);
-			
+
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, FundTrfResp.class);
 			client.destroy();
@@ -886,56 +948,57 @@ public class BriApiExt {
 		}
 		return obj;
 	}
-	
+
 	public FundRcResp fundRcStatus(String token, FundRcReq req) throws Exception {
 		FundRcResp obj = new FundRcResp();
 		ObjectMapper mapper = new ObjectMapper();
 		String output = null;
 		try {
-			 // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-		        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-		            return null;
-		        }
-		        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		        }
-		        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		        }
-		    }
-		    };
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
 
-		    // Create all-trusting host name verifier
-		    HostnameVerifier allHostsValid = new HostnameVerifier() {
-				
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+
 				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return false;
 				}
 			};
 
-		    // Install the all-trusting host verifier
-		    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		    
-		    System.out.println("***Begin Fund RC Status***");
-			
-		    Client client = Client.create();
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			System.out.println("***Begin Fund RC Status***");
+
+			Client client = Client.create();
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
-			
+
 			String auth = "Bearer " + token;
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 			String xtimestamp = dateFormatter.format(new Date());
-			
+
 			String jsonReq = mapper.writeValueAsString(req);
-			
+
 			StringBuffer payload = new StringBuffer();
-			//payload.append("path=/v3.1/transfer/internal/check-rekening");
+			// payload.append("path=/v3.1/transfer/internal/check-rekening");
 			payload.append("path=" + bean.getBrift_pathcheckstatus());
 			payload.append("&");
 			payload.append("verb=POST");
@@ -945,28 +1008,25 @@ public class BriApiExt {
 			payload.append("timestamp=" + xtimestamp);
 			payload.append("&");
 			payload.append("body=" + jsonReq);
-			
-			//String signature = encode(bean.getConsumersecret(), payload.toString());
+
+			// String signature = encode(bean.getConsumersecret(), payload.toString());
 			String signature = encode(bean.getBrift_consumersecret(), payload.toString());
-			
+
 			System.out.println("Request Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("Header - Authorization : " + auth);
 			System.out.println("Header - BRI-Signature : " + signature);
 			System.out.println("Header - BRI-Timestamp : " + xtimestamp);
 			System.out.println("Payload : " + payload.toString());
-			
-			//WebResource webResource = client.resource(url_fund + "/check-rekening");
+
+			// WebResource webResource = client.resource(url_fund + "/check-rekening");
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBrift_pathcheckstatus());
-			ClientResponse response = webResource.header("Authorization", auth)
-					.header("BRI-Timestamp", xtimestamp)
-					.header("BRI-Signature", signature)
-					.type(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class, jsonReq);
+			ClientResponse response = webResource.header("Authorization", auth).header("BRI-Timestamp", xtimestamp)
+					.header("BRI-Signature", signature).type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonReq);
 
 			output = response.getEntity(String.class);
 			System.out.println("Response : " + output);
-			
+
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			obj = mapper.readValue(output, FundRcResp.class);
 			client.destroy();
@@ -975,15 +1035,8 @@ public class BriApiExt {
 			e.printStackTrace();
 		}
 		return obj;
-	}	
-	
-	public static String encode(String key, String data) throws Exception {
-		Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-		SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(), "HmacSHA256");
-		sha256_HMAC.init(secret_key);
-		return Base64.getEncoder().encodeToString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
 	}
-	
+
 	public BIFastToken getTokenBIFast() throws Exception {
 		BIFastToken obj = null;
 		ObjectMapper mapper = new ObjectMapper();
@@ -1034,7 +1087,7 @@ public class BriApiExt {
 			String xtimestamp = dateFormatter.format(new Date());
 			// xtimestamp = "2021-11-02T13:14:15.000+07:00";
 
-			String privateKeyPath = "/home/noc/hakli_snapkey/hakli_key.pem";
+			String privateKeyPath = "C:/Projects/SDS/HAKLI/BRIAPI/Key/hakli_key.pem";
 			String privKeyPEM = getKeyFromFile(privateKeyPath);
 			byte[] privKeyBytes = Base64.getDecoder().decode(privKeyPEM);
 			String signature = generateSignatureToken(privKeyBytes, bean.getBrift_consumerkey(), xtimestamp);
@@ -1044,7 +1097,7 @@ public class BriApiExt {
 			String json = "{\"grantType\": \"client_credentials\"}";
 
 			WebResource webResource = client
-					.resource("https://partner.api.bri.co.id/snap/v1.0/access-token/b2b");
+					.resource("https://sandbox.partner.api.bri.co.id/snap/v1.0/access-token/b2b");
 			ClientResponse response = webResource.header("X-TIMESTAMP", xtimestamp)
 					.header("X-CLIENT-KEY", bean.getConsumerkey()).header("X-SIGNATURE", signature)
 					.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
@@ -1173,7 +1226,7 @@ public class BriApiExt {
 			// WebResource webResource = client.resource(url_bifast +
 			// "/v1.0/transfer-bifast/inquiry-bifast");
 			WebResource webResource = client
-					.resource("https://partner.api.bri.co.id/v1.0/transfer-bifast/inquiry-bifast");
+					.resource("https://sandbox.partner.api.bri.co.id/v1.0/transfer-bifast/inquiry-bifast");
 			// WebResource webResource = client.resource(bean.getUrl() +
 			// bean.getBrift_pathaccount());
 			ClientResponse response = webResource.header("Authorization", auth).header("X-TIMESTAMP", xtimestamp)
@@ -1315,7 +1368,7 @@ public class BriApiExt {
 			System.out.println("Payload : " + payload.toString());
 
 			WebResource webResource = client
-					.resource("https://partner.api.bri.co.id/v1.0/transfer-bifast/payment-bifast");
+					.resource("https://sandbox.partner.api.bri.co.id/v1.0/transfer-bifast/payment-bifast");
 			// WebResource webResource = client.resource(bean.getUrl() +
 			// bean.getBrift_pathtransfer());
 			ClientResponse response = webResource.header("Authorization", auth).header("X-Timestamp", xtimestamp)
@@ -1407,7 +1460,7 @@ public class BriApiExt {
 			System.out.println("Payload : " + payload.toString());
 
 			WebResource webResource = client
-					.resource("https://partner.api.bri.co.id/v1.0/transfer-bifast/check-status-bifast");
+					.resource("https://sandbox.partner.api.bri.co.id/v1.0/transfer-bifast/check-status-bifast");
 			// WebResource webResource = client.resource(bean.getUrl() +
 			// bean.getBrift_pathtransfer());
 			ClientResponse response = webResource.header("Authorization", auth).header("X-Timestamp", xtimestamp)
@@ -1425,6 +1478,13 @@ public class BriApiExt {
 			e.printStackTrace();
 		}
 		return obj;
+	}
+
+	public static String encode(String key, String data) throws Exception {
+		Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+		SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(), "HmacSHA256");
+		sha256_HMAC.init(secret_key);
+		return Base64.getEncoder().encodeToString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
 	}
 
 	public static String encode2(PrivateKey key, String data) throws Exception {
@@ -1471,5 +1531,22 @@ public class BriApiExt {
 		byte[] signature = rsaSigner.sign();
 
 		System.out.println(new String(signature));
+	}
+
+	public void test() {
+		try {
+			KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+			kpg.initialize(2048);
+			KeyPair kp = kpg.generateKeyPair();
+			try (FileOutputStream out = new FileOutputStream("C:\\Projects\\SDS\\HAKLI\\BRIAPI\\Key\\hakli_key.pem")) {
+				out.write(kp.getPrivate().getEncoded());
+			}
+
+			try (FileOutputStream out = new FileOutputStream("C:\\Projects\\SDS\\HAKLI\\BRIAPI\\Key\\hakli_pub.pem")) {
+				out.write(kp.getPublic().getEncoded());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

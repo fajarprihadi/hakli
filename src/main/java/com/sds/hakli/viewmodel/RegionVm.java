@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
@@ -58,6 +59,7 @@ public class RegionVm {
 	private String filter;
 	private String provcode;
 	private String provname;
+	private String accno;
 	private Integer totalrecords;
 	private boolean isInsert;
 	
@@ -86,6 +88,8 @@ public class RegionVm {
 	private Textbox tbCode;
 	@Wire
 	private Textbox tbName;
+	@Wire
+	private Checkbox chkDisburse;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -103,6 +107,7 @@ public class RegionVm {
 				row.getChildren().add(new Label(data.getBankname()));
 				row.getChildren().add(new Label(data.getAccno()));
 				row.getChildren().add(new Label(data.getAccname()));
+				row.getChildren().add(new Label(data.getIsdisburse() != null && data.getIsdisburse().equals("Y") ? "Yes" : "No"));
 				
 				A aKetua = new A();
 				if (data.getKetuaid() != null && !data.getKetuaid().equals(""))
@@ -349,7 +354,9 @@ public class RegionVm {
 	@Command
 	@NotifyChange("*")
 	public void doReset() {
+		provcode = null;
 		provname = null;
+		accno = null;
 		ketuaid = null;
 		ketuanama = null;
 		sekretaris1id = null;
@@ -386,6 +393,8 @@ public class RegionVm {
 			filter += " and upper(provcode) like '%" + provcode.trim().toUpperCase() + "%'";
 		if (provname != null && provname.trim().length() > 0)
 			filter += " and upper(provname) like '%" + provname.trim().toUpperCase() + "%'";
+		if (accno != null && accno.trim().length() > 0)
+			filter += " and accno = '" + accno.trim() + "'";
 		doRefresh();
 	}
 	
@@ -422,6 +431,9 @@ public class RegionVm {
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Perbarui");
 			tbCode.setDisabled(true);
+			if (objForm.getIsdisburse() != null && objForm.getIsdisburse().equals("Y"))
+				chkDisburse.setChecked(true);
+			else chkDisburse.setChecked(false);
 		} else if (btAdd.getLabel().equals("Tambah Provinsi")) {
 			isInsert = true;
 			objForm = new Mprov();
@@ -430,11 +442,13 @@ public class RegionVm {
 			btAdd.setIconSclass("z-icon-reply");
 			btSave.setLabel("Submit");
 			tbCode.setDisabled(false);
+			chkDisburse.setChecked(false);
 		} else {
 			divForm.setVisible(false);
 			btAdd.setLabel("Tambah Provinsi");
 			btAdd.setIconSclass("z-icon-plus-square");
 			tbCode.setDisabled(false);
+			chkDisburse.setChecked(false);
 		}
 	}
 	
@@ -444,6 +458,10 @@ public class RegionVm {
 		Session session = StoreHibernateUtil.openSession();
 		Transaction trx = session.beginTransaction();
 		try {
+			if (chkDisburse.isChecked())
+				objForm.setIsdisburse("Y");
+			else objForm.setIsdisburse("Y");
+			
 			if (ketuaid != null && !ketuaid.equals("")) {
 				objForm.setKetuaid(ketuaid);
 				objForm.setKetuanama(ketuanama);
@@ -642,6 +660,14 @@ public class RegionVm {
 
 	public void setBendahara2nama(String bendahara2nama) {
 		this.bendahara2nama = bendahara2nama;
+	}
+
+	public String getAccno() {
+		return accno;
+	}
+
+	public void setAccno(String accno) {
+		this.accno = accno;
 	}
 
 	

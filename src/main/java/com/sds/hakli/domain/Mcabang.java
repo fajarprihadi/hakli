@@ -54,6 +54,8 @@ public class Mcabang {
 	private String updatedby;
 	
 	private Mprov mprov;
+	
+	private String isdisburse;
 
 	@Id
 	@SequenceGenerator(name = "mcabang_seq", sequenceName = "mcabang_seq", allocationSize = 1)
@@ -261,6 +263,14 @@ public class Mcabang {
 
 	public void setBendahara2nama(String bendahara2nama) {
 		this.bendahara2nama = bendahara2nama;
+	}
+
+	public String getIsdisburse() {
+		return isdisburse;
+	}
+
+	public void setIsdisburse(String isdisburse) {
+		this.isdisburse = isdisburse;
 	}
 
 }

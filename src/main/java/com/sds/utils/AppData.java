@@ -14,6 +14,9 @@ import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.bean.SisdmkBean;
 
 public class AppData {
+	
+	public static boolean isActiveFundTransfer = false;
+	public static boolean isInitFundTransfer = false;
 
 	public static BriapiBean getBriapibean() throws Exception {
 		BriapiBean bean = new BriapiBean();

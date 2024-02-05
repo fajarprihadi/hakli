@@ -88,6 +88,10 @@
 									value="@load(vmsgs['accname'])" />
 							</vlayout>
 						</row>
+						<row>
+							<label value="Aktif Disbursement (*)" />
+							<checkbox id="chkDisburse" mold="switch" />
+						</row>
 						<row spans="2">
 							<vlayout>
 								<n:hr />
@@ -204,8 +208,15 @@
 						onOK="@command('doSearch')" />
 				</column>
 				<column label="Bank" align="center" />
-				<column label="Nomor Rekening" align="center" />
+				<column align="center">
+					<textbox inplace="true" value="@bind(vm.accno)"
+						style="text-align: center" width="100%" maxlength="100"
+						placeholder="Nomor Rekening"
+						tooltiptext="${labels.common.searchonheader}"
+						onOK="@command('doSearch')" />
+				</column>
 				<column label="Nama Rekening" />
+				<column label="Aktif Disbursement" align="center" />
 				<column label="Ketua" />
 				<column label="Sekretaris 1" />
 				<column label="Sekretaris 2" />

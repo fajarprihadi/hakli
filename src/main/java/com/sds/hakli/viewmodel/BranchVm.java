@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
@@ -44,7 +45,6 @@ import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MprovDAO;
-import com.sds.hakli.domain.Anggota;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
@@ -64,6 +64,7 @@ public class BranchVm {
 	private String kodecabang;
 	private String cabang;
 	private String prov;
+	private String accno;
 	private Integer totalrecords;
 	private boolean isInsert;
 	
@@ -94,6 +95,8 @@ public class BranchVm {
 	private Combobox cbBank;
 	@Wire
 	private Textbox tbCode;
+	@Wire
+	private Checkbox chkDisburse;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -111,6 +114,7 @@ public class BranchVm {
 				row.getChildren().add(new Label(data.getBankname()));
 				row.getChildren().add(new Label(data.getAccno()));
 				row.getChildren().add(new Label(data.getAccname()));
+				row.getChildren().add(new Label(data.getIsdisburse() != null && data.getIsdisburse().equals("Y") ? "Yes" : "No"));
 				
 				A aKetua = new A();
 				if (data.getKetuaid() != null && !data.getKetuaid().equals(""))
@@ -271,6 +275,7 @@ public class BranchVm {
 	public void doReset() {
 		cabang = null;
 		prov = null;
+		accno = null;
 		kodecabang = null;
 		ketuaid = null;
 		ketuanama = null;
@@ -311,6 +316,8 @@ public class BranchVm {
 			filter += " and upper(cabang) like '%" + cabang.trim().toUpperCase() + "%'";
 		if (prov != null && prov.trim().length() > 0)
 			filter += " and upper(mprov.provname) like '%" + prov.trim().toUpperCase() + "%'";
+		if (accno != null && accno.trim().length() > 0)
+			filter += " and accno = '" + accno.trim() + "'";
 		doRefresh();
 	}
 	
@@ -436,6 +443,9 @@ public class BranchVm {
 			cbRegion.setValue(objForm.getMprov().getProvname());
 			cbBank.setValue(objForm.getBankname());
 			tbCode.setDisabled(true);
+			if (objForm.getIsdisburse() != null && objForm.getIsdisburse().equals("Y"))
+				chkDisburse.setChecked(true);
+			else chkDisburse.setChecked(false);
 		} else if (btAdd.getLabel().equals("Tambah Kabupaten/Kota")) {
 			isInsert = true;
 			objForm = new Mcabang();
@@ -446,11 +456,13 @@ public class BranchVm {
 			
 			cbRegion.setValue(null);
 			tbCode.setDisabled(false);
+			chkDisburse.setChecked(false);
 		} else {
 			divForm.setVisible(false);
 			btAdd.setLabel("Tambah Kabupaten/Kota");
 			btAdd.setIconSclass("z-icon-plus-square");
 			tbCode.setDisabled(false);
+			chkDisburse.setChecked(false);
 		}
 	}
 	
@@ -467,6 +479,10 @@ public class BranchVm {
 				objForm.setLastupdated(new Date());
 				//objForm.setUpdatedby(oUser.getUserid());
 			}
+			
+			if (chkDisburse.isChecked())
+				objForm.setIsdisburse("Y");
+			else objForm.setIsdisburse("Y");
 			
 			if (ketuaid != null && !ketuaid.equals("")) {
 				objForm.setKetuaid(ketuaid);
@@ -676,6 +692,14 @@ public class BranchVm {
 
 	public void setBendahara2nama(String bendahara2nama) {
 		this.bendahara2nama = bendahara2nama;
+	}
+
+	public String getAccno() {
+		return accno;
+	}
+
+	public void setAccno(String accno) {
+		this.accno = accno;
 	}
 
 }

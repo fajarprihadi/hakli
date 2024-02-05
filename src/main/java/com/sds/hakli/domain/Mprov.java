@@ -40,6 +40,8 @@ public class Mprov {
 	private String bendahara2id;
 	
 	private String bendahara2nama;
+	
+	private String isdisburse;
 
 	@Id
 	@SequenceGenerator(name = "mprov_seq", sequenceName = "mprov_seq", allocationSize = 1)
@@ -194,6 +196,14 @@ public class Mprov {
 
 	public void setBendahara2nama(String bendahara2nama) {
 		this.bendahara2nama = bendahara2nama;
+	}
+
+	public String getIsdisburse() {
+		return isdisburse;
+	}
+
+	public void setIsdisburse(String isdisburse) {
+		this.isdisburse = isdisburse;
 	}
 	
 }

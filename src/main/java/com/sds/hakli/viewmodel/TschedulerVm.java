@@ -148,7 +148,7 @@ public class TschedulerVm {
 											if (oForm.getSchedulerstatus().equals(AppUtils.SCHEDULER_DISABLE_VALUE))
 												scheduler.pauseTrigger(new TriggerKey(oForm.getSchedulername(), oForm.getSchedulergroup()));
 											else scheduler.resumeTrigger(new TriggerKey(oForm.getSchedulername(), oForm.getSchedulergroup()));
-																						
+																
 											refreshModel();
 										} catch (HibernateException e) {	
 											transaction.rollback();

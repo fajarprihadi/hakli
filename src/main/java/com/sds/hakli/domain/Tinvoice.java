@@ -64,6 +64,12 @@ public class Tinvoice {
 	
 	private Date trfkabtime;
 	
+	private BigDecimal trfprovamount;
+	
+	private BigDecimal trfkabamount;
+	
+	private BigDecimal baseamount;
+	
 	@Id
 	@SequenceGenerator(name = "tinvoice_seq", sequenceName = "tinvoice_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tinvoice_seq")
@@ -266,6 +272,30 @@ public class Tinvoice {
 
 	public void setTrfkabtime(Date trfkabtime) {
 		this.trfkabtime = trfkabtime;
+	}
+
+	public BigDecimal getTrfprovamount() {
+		return trfprovamount;
+	}
+
+	public void setTrfprovamount(BigDecimal trfprovamount) {
+		this.trfprovamount = trfprovamount;
+	}
+
+	public BigDecimal getTrfkabamount() {
+		return trfkabamount;
+	}
+
+	public void setTrfkabamount(BigDecimal trfkabamount) {
+		this.trfkabamount = trfkabamount;
+	}
+
+	public BigDecimal getBaseamount() {
+		return baseamount;
+	}
+
+	public void setBaseamount(BigDecimal baseamount) {
+		this.baseamount = baseamount;
 	}
 
 }

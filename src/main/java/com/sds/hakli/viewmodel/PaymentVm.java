@@ -114,58 +114,46 @@ public class PaymentVm {
 				}
 			});
 
-			objList = chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_IURAN + "'", "isbase desc");
-			oList = objList;
-			amountbase = new BigDecimal(0);
-			for (Mcharge obj : objList) {
-				if (obj.getIsbase().equals("Y")) {
-					amountbase = obj.getChargeamount();
-					break;
-				}
-			}
-			
-			Calendar cal = Calendar.getInstance();
-			Calendar calNext = Calendar.getInstance();
-			if (anggota.getPeriodekta() == null) {
-				cal.setTime(new Date());
-				calNext.add(Calendar.MONTH, 6);
-			} else {
-				cal.setTime(anggota.getPeriodekta());
-			}
-			//cal.setTime(anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date());
-			//calNext.add(Calendar.MONTH, 5);
-			oList = new ArrayList<>();
-			for (Mcharge obj : objList) {
-				if (obj.getIsbase().equals("Y")) {
-					qty = 0;
-					BigDecimal totalbase = new BigDecimal(0);
-					while (cal.getTime().compareTo(calNext.getTime()) == -1) {
-						qty++;
-						totalbase = amountbase.multiply(new BigDecimal(qty));
-						cal.add(Calendar.MONTH, 6);
-					}
-					periode = cal.getTime();
-					keterangan = "Pembayaran Iuran Untuk " + (6 * qty) + " Bulan";
-					obj.setChargeamount(totalbase);
-					obj.setChargedesc(keterangan);
-				}
-				
-				oList.add(obj);
-			}
-
-//			for (int i = 1; i <= 12; i++) {
-//				Comboitem item = new Comboitem();
-//				item.setValue(i);
-//				item.setLabel(i + " Bulan / Rp. "
-//						+ (NumberFormat.getInstance().format(amountbase.multiply(new BigDecimal(i)))));
-//				cbCharge.appendChild(item);
-//
-//				if (i == 1)
-//					cbCharge.setSelectedItem(item);
+//			objList = chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_IURAN + "'", "isbase desc");
+//			oList = objList;
+//			amountbase = new BigDecimal(0);
+//			for (Mcharge obj : objList) {
+//				if (obj.getIsbase().equals("Y")) {
+//					amountbase = obj.getChargeamount();
+//					break;
+//				}
 //			}
-//			qty = 1;
-
-			gridCharge.setModel(new ListModelList<>(objList));
+//			
+//			Calendar cal = Calendar.getInstance();
+//			Calendar calNext = Calendar.getInstance();
+//			if (anggota.getPeriodekta() == null) {
+//				cal.setTime(new Date());
+//				calNext.add(Calendar.MONTH, 6);
+//			} else {
+//				cal.setTime(anggota.getPeriodekta());
+//			}
+//			oList = new ArrayList<>();
+//			for (Mcharge obj : objList) {
+//				if (obj.getIsbase().equals("Y")) {
+//					qty = 0;
+//					BigDecimal totalbase = new BigDecimal(0);
+//					while (cal.getTime().compareTo(calNext.getTime()) == -1) {
+//						qty++;
+//						totalbase = amountbase.multiply(new BigDecimal(qty));
+//						cal.add(Calendar.MONTH, 6);
+//					}
+//					periode = cal.getTime();
+//					keterangan = "Pembayaran Iuran Untuk " + (6 * qty) + " Bulan";
+//					obj.setChargeamount(totalbase);
+//					obj.setChargedesc(keterangan);
+//				}
+//				
+//				oList.add(obj);
+//			}
+//
+//			gridCharge.setModel(new ListModelList<>(objList));
+			
+			doCalInvoice();
 			
 			if (paging != null) {
 				paging.addEventListener("onPaging", new EventListener<Event>() {
@@ -190,7 +178,17 @@ public class PaymentVm {
 					row.getChildren().add(new Label(datelocalFormatter.format(data.getInvoiceduedate())));
 					row.getChildren().add(new Label(data.getVano()));
 					row.getChildren().add(new Label(data.getInvoicedesc()));
-					row.getChildren().add(new Label(data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
+					
+					String status = "";
+					Calendar cal = Calendar.getInstance();
+					if (data.getIspaid().equals("Y")) {
+						status = "Sudah Dibayar";
+					} else {
+						if (cal.getTime().compareTo(data.getInvoiceduedate()) > 0)
+							status = "Tidak Terbayar";
+						else status = "Belum Dibayar";
+					}
+					row.getChildren().add(new Label(status));
 				}
 			});
 			
@@ -209,6 +207,91 @@ public class PaymentVm {
 		}
 	}
 	
+	public void doCalInvoice() {
+		try {
+			objList = chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_IURAN + "'", "isbase desc");
+			amountbase = new BigDecimal(0);
+			for (Mcharge obj : objList) {
+				if (obj.getIsbase().equals("Y")) {
+					amountbase = obj.getChargeamount();
+					break;
+				}
+			}
+			
+			Calendar calCurrent = Calendar.getInstance();
+			
+			if (calCurrent.get(Calendar.MONTH) < 4) {
+				calCurrent.set(Calendar.MONTH, 5);
+				calCurrent.set(Calendar.DAY_OF_MONTH, 30);
+			} else if (calCurrent.get(Calendar.MONTH) >= 4 && calCurrent.get(Calendar.MONTH) < 10) {
+				calCurrent.set(Calendar.MONTH, 11);
+				calCurrent.set(Calendar.DAY_OF_MONTH, 31);
+			} else if (calCurrent.get(Calendar.MONTH) >= 10) {
+				calCurrent.set(Calendar.MONTH, 5);
+				calCurrent.set(Calendar.DAY_OF_MONTH, 30);
+				calCurrent.add(Calendar.YEAR, 1);
+			}
+			calCurrent.set(Calendar.HOUR_OF_DAY, 0);
+			calCurrent.set(Calendar.MINUTE, 0);
+			calCurrent.set(Calendar.SECOND, 0);
+			calCurrent.set(Calendar.MILLISECOND, 0);
+			
+			Calendar calPeriodeKta = Calendar.getInstance();
+			calPeriodeKta.setTime(anggota.getPeriodekta());
+			
+			if (calPeriodeKta.get(Calendar.MONTH) <= 4) {
+				calPeriodeKta.set(Calendar.MONTH, 11);
+				calPeriodeKta.set(Calendar.DAY_OF_MONTH, 31);
+				calPeriodeKta.add(Calendar.YEAR, -1);
+			} else if (calPeriodeKta.get(Calendar.MONTH) > 5 && calPeriodeKta.get(Calendar.MONTH) <= 10) {
+				calPeriodeKta.set(Calendar.MONTH, 5);
+				calPeriodeKta.set(Calendar.DAY_OF_MONTH, 30);
+			} 
+			calPeriodeKta.set(Calendar.HOUR_OF_DAY, 0);
+			calPeriodeKta.set(Calendar.MINUTE, 0);
+			calPeriodeKta.set(Calendar.SECOND, 0);
+			calPeriodeKta.set(Calendar.MILLISECOND, 0);
+			
+			if (calPeriodeKta.getTime().compareTo(calCurrent.getTime()) > 0) {
+				periode = calCurrent.getTime();
+				keterangan = "Anda sudah melakukan pembayaran Iuran Untuk periode iuran " + datelocalFormatter.format(calCurrent.getTime());
+				btSave.setDisabled(true);
+			} else {
+				
+				qty = 0;
+				while (calPeriodeKta.getTime().compareTo(calCurrent.getTime()) == -1) {
+					if (calPeriodeKta.get(Calendar.MONTH) == 11) {
+						calPeriodeKta.set(Calendar.MONTH, 5);
+						calPeriodeKta.set(Calendar.DAY_OF_MONTH, 30);
+						calPeriodeKta.add(Calendar.YEAR, 1);
+					} else {
+						calPeriodeKta.set(Calendar.MONTH, 11);
+						calPeriodeKta.set(Calendar.DAY_OF_MONTH, 31);
+					}
+					//calPeriodeKta.add(Calendar.MONTH, 6);
+					qty++;
+				}
+				periode = calPeriodeKta.getTime();
+				
+				oList = new ArrayList<>();
+				for (Mcharge obj : objList) {
+					if (obj.getIsbase().equals("Y")) {
+						BigDecimal totalbase = amountbase.multiply(new BigDecimal(qty));
+						keterangan = "Pembayaran Iuran Untuk " + (6 * qty) + " Bulan";
+						obj.setChargeamount(totalbase);
+						obj.setChargedesc(keterangan);
+					}
+					oList.add(obj);
+				}
+				
+				gridCharge.setModel(new ListModelList<>(objList));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@NotifyChange("pageTotalSize")
 	public void refreshModel(int activePage) {
 		paging.setPageSize(AppUtils.PAGESIZE);
@@ -217,32 +300,6 @@ public class PaymentVm {
 		pageTotalSize = model.getTotalSize(filter);
 		paging.setTotalSize(pageTotalSize);
 		gridHist.setModel(model);
-	}
-	
-	public void doCountPayment() {
-		do {
-			
-		} while (true);
-	}
-
-	@Command
-	@NotifyChange("totalpayment")
-	public void doCal(@BindingParam("qty") Integer qty) {
-		if (qty != null) {
-			oList = new ArrayList<>();
-			for (Mcharge obj : objList) {
-				if (obj.getIsbase().equals("Y")) {
-					Mcharge charge = obj;
-					charge.setChargeamount(obj.getChargeamount().multiply(new BigDecimal(qty)));
-
-					oList.add(charge);
-				} else {
-					oList.add(obj);
-				}
-			}
-			totalpayment = new BigDecimal(0);
-			gridCharge.setModel(new ListModelList<>(oList));
-		}
 	}
 
 	@Command
@@ -277,16 +334,21 @@ public class PaymentVm {
 										String custcode = custcode_cabang.substring(custcode_cabang.length()-4, custcode_cabang.length());
 										briva.setCustCode(new TcounterengineDAO().getVaCounter());
 										
-										Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
-										Calendar cal = Calendar.getInstance();
-										cal.setTime(startperiod);
-										cal.add(Calendar.MONTH, 6 * qty);
-										Date periodektanext = cal.getTime();
-										String invdesc = "Iuran Periode " + datelocalFormatter.format(startperiod) + " s/d " + datelocalFormatter.format(periodektanext);
+//										Date startperiod = anggota.getPeriodekta() != null ? anggota.getPeriodekta() : new Date();
+//										Calendar cal = Calendar.getInstance();
+//										cal.setTime(startperiod);
+//										cal.add(Calendar.MONTH, 6 * qty);
+//										if (cal.get(Calendar.MONTH) == 5) {
+//											cal.set(Calendar.DAY_OF_MONTH, 30);
+//										} else if (cal.get(Calendar.MONTH) == 11) {
+//											cal.set(Calendar.DAY_OF_MONTH, 31);
+//										}
+//										Date periodektanext = cal.getTime();
+										String invdesc = "Iuran Periode " + datelocalFormatter.format(anggota.getPeriodekta()) + " s/d " + datelocalFormatter.format(periode);
 										
 										briva.setKeterangan(invdesc);
 										briva.setNama(anggota.getNama().trim().length() > 40 ? anggota.getNama().trim().substring(0, 40) : anggota.getNama().trim());
-										cal.setTime(new Date());
+										Calendar cal = Calendar.getInstance();
 										cal.add(Calendar.DAY_OF_MONTH, 14);
 										vaexpdate = cal.getTime();
 										briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
@@ -296,9 +358,10 @@ public class PaymentVm {
 											trx = session.beginTransaction();
 											
 											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
+											inv.setBaseamount(amountbase);
 											invDao.save(session, inv);
 											
-											anggota.setPeriodektanext(periodektanext);
+											anggota.setPeriodektanext(periode);
 											anggotaDao.save(session, anggota);
 											
 											trx.commit();

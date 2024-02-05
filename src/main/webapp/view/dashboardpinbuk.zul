@@ -92,9 +92,14 @@
 						<textbox value="@bind(vm.invno)" maxlength="30" />
 					</row>
 					<row>
+						<label value="Nama" />
+						<textbox value="@bind(vm.nama)" maxlength="70"
+							cols="70" />
+					</row>
+					<row>
 						<label value="No Rekening Tujuan" />
-						<textbox value="@bind(vm.benefacc)" id="tbBenefAcc"
-							maxlength="20" />
+						<textbox value="@bind(vm.benefacc)"
+							id="tbBenefAcc" maxlength="20" />
 					</row>
 					<row>
 						<label value="Status Pemindahbukuan" />
@@ -141,6 +146,9 @@
 						style="font-weight: bold" />
 					<label value="@load(vm.pageTotalSize)"
 						style="font-weight: bold" />
+					<button autodisable="self"
+						iconSclass="z-icon-download" tooltiptext="Download Data"
+						sclass="btn btn-success btn-sm" onClick="@command('doExport')" />
 				</div>
 			</div>
 			<grid id="grid" sizedByContent="true" span="true"
@@ -161,6 +169,13 @@
 					<column label="Keterangan" />
 				</columns>
 			</grid>
+			<separator />
+			<div align="right">
+				<label value="Total Nominal" style="font-size: 14px" />
+				<decimalbox readonly="true"
+					value="@load(vm.totalamount)" format='###,##0'
+					style="font-size: 18px; text-align: right; font-weight: bold" />
+			</div>
 		</groupbox>
 		<separator />
 	</window>

@@ -50,6 +50,10 @@ public class Ttransfer {
 	
 	private String trfto;
 	
+	private String trftocode;
+	
+	private String trftoname;
+	
 	@Id
 	@SequenceGenerator(name = "ttransfer_seq", sequenceName = "ttransfer_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ttransfer_seq")
@@ -194,6 +198,24 @@ public class Ttransfer {
 
 	public void setTrfto(String trfto) {
 		this.trfto = trfto;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getTrftocode() {
+		return trftocode;
+	}
+
+	public void setTrftocode(String trftocode) {
+		this.trftocode = trftocode;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getTrftoname() {
+		return trftoname;
+	}
+
+	public void setTrftoname(String trftoname) {
+		this.trftoname = trftoname;
 	}
 
 	
