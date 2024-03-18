@@ -50,16 +50,72 @@ public class TinvoiceDAO {
 		oList = session.createQuery("from Tinvoice where " + filter + " order by " + orderby).list();
 		session.close();
         return oList;
-    }	
+    }
 	
 	@SuppressWarnings("unchecked")
-	public List<Tinvoice> listPaidPendingDisburse() throws Exception {		
+	public List<Tinvoice> listPaidPendingDisburse(int limit) throws Exception {		
     	List<Tinvoice> oList = null;
     	session = StoreHibernateUtil.openSession();
-		oList = session.createSQLQuery("select * from Tinvoice where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') order by tinvoicepk").addEntity(Tinvoice.class).list();
+		oList = session.createSQLQuery("select * from Tinvoice where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') "
+				+ "and tinvoicepk >= 6906 " //12 Feb 2024
+				+ "order by tinvoicepk limit " + limit).addEntity(Tinvoice.class).list();
 		session.close();
         return oList;
-    }	
+    }
+	
+	public Integer countPaidPendingDisburseProv(String invoicetype, String prov) throws Exception {		
+		Integer count = 0;
+    	session = StoreHibernateUtil.openSession();
+    	count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice "
+    			+ "join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
+    			+ "join mprov on mprovfk = mprovpk where ispaid = 'Y' and istrfprov != 'X' and invoicetype = '" + invoicetype + "' and provamount - provamounttrf > 0 and mprov.provname = '" + prov + "'").uniqueResult().toString());
+		session.close();
+        return count;
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listPaidPendingDisburseProv(String invoicetype, String prov, int limit) throws Exception {		
+    	List<Tinvoice> oList = null;
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Tinvoice "
+				+ "join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
+				+ "join mprov on mprovfk = mprovpk "
+				+ "where ispaid = 'Y' and istrfprov != 'X' and "
+				+ "invoicetype = '" + invoicetype + "' and provamount - provamounttrf > 0 and mprov.provname = '" + prov + "' order by tinvoicepk limit " + limit).addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }
+	
+	public Integer countPaidPendingDisburseKab(String invoicetype, String kab) throws Exception {		
+		Integer count = 0;
+    	session = StoreHibernateUtil.openSession();
+    	count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice "
+    			+ "join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
+    			+ "where ispaid = 'Y' and istrfkab != 'X' and invoicetype = '" + invoicetype + "' and kabamount - kabamounttrf > 0 and mcabang.cabang = '" + kab + "'").uniqueResult().toString());
+		session.close();
+        return count;
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listPaidPendingDisburseKab(String invoicetype, String kab, int limit) throws Exception {		
+    	List<Tinvoice> oList = null;
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Tinvoice "
+				+ "join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
+				+ "where ispaid = 'Y' and istrfkab != 'X' and "
+				+ "invoicetype = '" + invoicetype + "' and kabamount - kabamounttrf > 0 and mcabang.cabang = '" + kab + "' order by tinvoicepk limit " + limit).addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listPaidPendingDisburseKab() throws Exception {		
+    	List<Tinvoice> oList = null;
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Tinvoice where ispaid = 'Y' and kabamount - kabamounttrf > 0 order by tinvoicepk").addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }
 	
 	@SuppressWarnings("unchecked")
 	public List<Tinvoice> listNative(String filter, String orderby) throws Exception {		

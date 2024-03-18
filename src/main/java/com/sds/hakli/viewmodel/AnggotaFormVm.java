@@ -67,6 +67,7 @@ import org.zkoss.zul.Window;
 import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MchargeDAO;
+import com.sds.hakli.dao.MfeeDAO;
 import com.sds.hakli.dao.MjenjangDAO;
 import com.sds.hakli.dao.MkabDAO;
 import com.sds.hakli.dao.MkepegawaianDAO;
@@ -82,6 +83,7 @@ import com.sds.hakli.dao.TpekerjaanDAO;
 import com.sds.hakli.dao.TpendidikanDAO;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mcharge;
+import com.sds.hakli.domain.Mfee;
 import com.sds.hakli.domain.Mjenjang;
 import com.sds.hakli.domain.Mkab;
 import com.sds.hakli.domain.Mkepegawaian;
@@ -1148,6 +1150,16 @@ public class AnggotaFormVm {
 							.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_REG + "'", "isbase desc")) {
 						invamount = invamount.add(charge.getChargeamount());
 					}
+					
+					BigDecimal provamount = new BigDecimal(0);
+					BigDecimal kabamount = new BigDecimal(0);
+					for (Mfee fee : new MfeeDAO().listAll()) {
+						if (fee.getFeetype().equals(AppUtils.CHARGETYPE_REG)) {
+							provamount = fee.getFeeprov();
+							kabamount = fee.getFeekab();
+							break;
+						}
+					}
 
 					BriapiBean bean = AppData.getBriapibean();
 					BriApiExt briapi = new BriApiExt(bean);
@@ -1199,6 +1211,10 @@ public class AnggotaFormVm {
 								Tinvoice inv = new InvoiceGenerator().doInvoice(pribadi,
 										briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_REG, invamount,
 										"Pendaftararan Anggota HAKLI", vaexpdate);
+								inv.setInvoiceqty(1);
+								inv.setBaseamount(invamount);
+								inv.setProvamount(provamount);
+								inv.setKabamount(kabamount);
 								new TinvoiceDAO().save(session, inv);
 
 								trx.commit();

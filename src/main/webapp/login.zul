@@ -59,7 +59,7 @@
 										</div>
 										
 											<a class="small text-muted" href="/forgotpass.zul">Lupa Password?</a>
-											<n:p class="mb-5 pb-lg-2" style="color: #393f81;">Belum terdaftar sebagai anggota HAKLI? <n:a href="/hakli/reginit.zul"
+											<n:p class="mb-5 pb-lg-2" style="color: #393f81;">Belum terdaftar sebagai anggota HAKLI? <n:a href="/reginit.zul"
 											style="color: #393f81;">Daftar Disini</n:a></n:p>
 										<!-- 
 										<div align="right">

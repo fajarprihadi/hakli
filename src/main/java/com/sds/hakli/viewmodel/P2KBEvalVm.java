@@ -41,11 +41,13 @@ import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.MchargeDAO;
+import com.sds.hakli.dao.MfeeDAO;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Mcharge;
+import com.sds.hakli.domain.Mfee;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.domain.Tp2kbbook;
@@ -110,7 +112,7 @@ public class P2KBEvalVm {
 				}
 			});
 			
-			objList = chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_P2KB+ "'", "isbase desc");
+			objList = chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_P2KB + "'", "isbase desc");
 			gridCharge.setModel(new ListModelList<>(objList));
 			doRefreshModel();
 
@@ -187,6 +189,16 @@ public class P2KBEvalVm {
 								Session session = StoreHibernateUtil.openSession();
 								Transaction trx = null;
 								try {
+									BigDecimal provamount = new BigDecimal(0);
+									BigDecimal kabamount = new BigDecimal(0);
+									for (Mfee fee : new MfeeDAO().listAll()) {
+										if (fee.getFeetype().equals(AppUtils.CHARGETYPE_P2KB)) {
+											provamount = fee.getFeeprov();
+											kabamount = fee.getFeekab();
+											break;
+										}
+									}
+									
 									BriapiBean bean = AppData.getBriapibean();
 									BriApiExt briapi = new BriApiExt(bean);
 									BriApiToken briapiToken = briapi.getToken();
@@ -223,6 +235,10 @@ public class P2KBEvalVm {
 													briva.getBrivaNo() + briva.getCustCode(),
 													AppUtils.INVOICETYPE_P2KB, totalpayment, invdesc, vaexpdate);
 											inv.setTanggota(anggota);
+											inv.setInvoiceqty(1);
+											inv.setBaseamount(totalpayment);
+											inv.setProvamount(provamount);
+											inv.setKabamount(kabamount);
 											invDao.save(session, inv);
 											
 											p2kbbook.setStatus("R");

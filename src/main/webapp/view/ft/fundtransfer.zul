@@ -1,0 +1,41 @@
+<?page title="HAKLI - Pinbuk" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winFundTransfer" border="normal"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.FundTransferVm')">
+		<caption>
+			<n:i class="fas fa-list"></n:i>
+			<n:span>Pemindahbukuan</n:span>
+		</caption>
+		<div class="row">
+			<div class="col">
+				<radiogroup selectedItem="@bind(vm.trftype)">
+					<radio label="Provinsi" value="PROV" />
+					<radio label="Kabupaten" value="KAB" />
+				</radiogroup>
+				<textbox value="@bind(vm.trftoname)" maxlength="40"
+					placeholder="Trf To Name" cols="40" />
+				<combobox selectedItem="@bind(vm.invoicetype)">
+					<comboitem value="01" label="Pendaftaran" />
+					<comboitem value="02" label="Iuran" />
+					<comboitem value="04" label="STR" />
+				</combobox>
+				<intbox value="@bind(vm.limit)" maxlength="5"
+					placeholder="Limit Record" cols="10" />
+				<button label="Counting" autodisable="self"
+					sclass="btn btn-primary btn-sm" onClick="@command('doCount')" />
+				<button label="Submit" autodisable="self"
+					sclass="btn btn-primary btn-sm" onClick="@command('doSubmit')" />
+				<button label="Reset" autodisable="self"
+					sclass="btn btn-success btn-sm" onClick="@command('doReset')" />
+			</div>
+		</div>
+		<separator />
+		<div class="row">
+			<div class="col">
+				<label value="Total Records : "  />
+				<label value="@bind(vm.count)" />
+			</div>
+		</div>
+		<separator />
+	</window>
+</zk>

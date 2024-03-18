@@ -460,7 +460,7 @@ public class RegionVm {
 		try {
 			if (chkDisburse.isChecked())
 				objForm.setIsdisburse("Y");
-			else objForm.setIsdisburse("Y");
+			else objForm.setIsdisburse("N");
 			
 			if (ketuaid != null && !ketuaid.equals("")) {
 				objForm.setKetuaid(ketuaid);

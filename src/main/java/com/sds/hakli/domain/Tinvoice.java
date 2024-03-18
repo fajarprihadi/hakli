@@ -70,6 +70,16 @@ public class Tinvoice {
 	
 	private BigDecimal baseamount;
 	
+	private int invoiceqty;
+	
+	private BigDecimal provamount;
+	
+	private BigDecimal kabamount;
+	
+	private BigDecimal provamounttrf;
+	
+	private BigDecimal kabamounttrf;
+	
 	@Id
 	@SequenceGenerator(name = "tinvoice_seq", sequenceName = "tinvoice_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tinvoice_seq")
@@ -296,6 +306,46 @@ public class Tinvoice {
 
 	public void setBaseamount(BigDecimal baseamount) {
 		this.baseamount = baseamount;
+	}
+
+	public int getInvoiceqty() {
+		return invoiceqty;
+	}
+
+	public void setInvoiceqty(int invoiceqty) {
+		this.invoiceqty = invoiceqty;
+	}
+
+	public BigDecimal getProvamount() {
+		return provamount;
+	}
+
+	public void setProvamount(BigDecimal provamount) {
+		this.provamount = provamount;
+	}
+
+	public BigDecimal getKabamount() {
+		return kabamount;
+	}
+
+	public void setKabamount(BigDecimal kabamount) {
+		this.kabamount = kabamount;
+	}
+
+	public BigDecimal getProvamounttrf() {
+		return provamounttrf;
+	}
+
+	public void setProvamounttrf(BigDecimal provamounttrf) {
+		this.provamounttrf = provamounttrf;
+	}
+
+	public BigDecimal getKabamounttrf() {
+		return kabamounttrf;
+	}
+
+	public void setKabamounttrf(BigDecimal kabamounttrf) {
+		this.kabamounttrf = kabamounttrf;
 	}
 
 }

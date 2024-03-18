@@ -2,6 +2,7 @@ package com.sds.hakli.extension;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,9 +10,6 @@ import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 
 import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.MfeeDAO;
@@ -20,7 +18,6 @@ import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.dao.TtransferDAO;
 import com.sds.hakli.domain.Mfee;
-import com.sds.hakli.domain.Msysparam;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.domain.Ttransfer;
 import com.sds.hakli.pojo.BriApiToken;
@@ -32,7 +29,7 @@ import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
-public class BriapiFundTransferHandler implements Job {
+public class BriapiFundTransfer {
 
 	private BriapiBean bean;
 	private BriApiToken briapiToken;
@@ -45,31 +42,30 @@ public class BriapiFundTransferHandler implements Job {
 	private Map<String, Mfee> mapFee = new HashMap<>();
 	private BriApiExt briapi;
 	private String sourceacc;
-	BigDecimal disburse_min_balance = new BigDecimal(0);
+	private int limit;
+	private String trftype;
+	private String trftoname;
+	private String invoicetype;
+	
+	public BriapiFundTransfer(String invoicetype, String trftype, String trftoname, int limit) {
+		this.invoicetype = invoicetype;
+		this.trftype = trftype;
+		this.trftoname = trftoname;
+		this.limit = limit;
+	}
 
-	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {		
+	public void init() throws Exception {		
 		synchronized(this) {
 			if (!AppData.isActiveFundTransfer) {
 				System.out.println(new Date() + " Fund Transfer Handler is Started...");
 				AppData.isActiveFundTransfer = true;
 				try {
-					int disburse_limit = 1;
-					Msysparam param = new MsysparamDAO()
-							.findByCode("DISBURSE_LIMIT");
-					if (param != null) {
-						disburse_limit = Integer.parseInt(param.getParamvalue());
+					List<Tinvoice> listInvoice = new ArrayList<>();
+					if (trftype.equals("PROV")) {
+						listInvoice = invDao.listPaidPendingDisburseProv(invoicetype, trftoname, limit);
+					} else if (trftype.equals("KAB")) {
+						listInvoice = invDao.listPaidPendingDisburseKab(invoicetype, trftoname, limit);
 					}
-					
-					param = new MsysparamDAO()
-							.findByCode("DISBURSE_MIN_BALANCE");
-					if (param != null) {
-						disburse_min_balance = new BigDecimal(param.getParamvalue());
-					}
-					
-					List<Tinvoice> listInvoice = invDao.listPaidPendingDisburse(disburse_limit);
-					//List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N')", "tinvoicepk");
-					//List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 6035", "tinvoicepk");
 					System.out.println("Fund Transfer Records : " + listInvoice.size());
 					if (listInvoice.size() > 0) {
 						sourceacc = sysparamDao.getParamvalue(AppUtils.SYSPARAM_BANK_ACCNO);
@@ -79,6 +75,8 @@ public class BriapiFundTransferHandler implements Job {
 						bean = AppData.getBriapibean();
 						briapi = new BriApiExt(bean);
 						briapiToken = briapi.getTokenFundTransfer();
+						//briapiToken = new BriApiToken();
+						//briapiToken.setStatus("approved");
 
 						for (Mfee fee : new MfeeDAO().listAll()) {
 							mapFee.put(fee.getFeetype(), fee);
@@ -86,25 +84,38 @@ public class BriapiFundTransferHandler implements Job {
 
 						if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
 							for (Tinvoice inv : listInvoice) {
-								//System.out.println(inv.getTinvoicepk() + ", " + inv.getInvoiceno() + ", " + inv.getIstrfkab() + ", " + inv.getIstrfprov());
-								
-								// doFundTransfer(inv, "PROV");
+								if (invoicetype.equals(AppUtils.INVOICETYPE_IURAN)) {
+									if (trftype.equals("PROV")
+											&& inv.getTanggota().getMcabang().getMprov().getIsdisburse() != null
+											&& inv.getTanggota().getMcabang().getMprov().getIsdisburse().equals("Y")
+											&& inv.getTanggota().getMcabang().getMprov().getAccno().length() > 0) {
+										doFundTransfer(inv, "PROV");
+										//Thread.sleep(2000);
+									}
+									if (trftype.equals("KAB")
+											&& inv.getTanggota().getMcabang().getIsdisburse() != null
+											&& inv.getTanggota().getMcabang().getIsdisburse().equals("Y")
+											&& inv.getTanggota().getMcabang().getAccno().length() > 0) {
+										doFundTransfer(inv, "KAB");
+										//Thread.sleep(2000);
+									}
+								} else {
+									if (trftype.equals("PROV") && inv.getIstrfprov().equals("N")
+											&& inv.getTanggota().getMcabang().getMprov().getIsdisburse() != null
+											&& inv.getTanggota().getMcabang().getMprov().getIsdisburse().equals("Y")
+											&& inv.getTanggota().getMcabang().getMprov().getAccno().length() > 0) {
+										doFundTransfer(inv, "PROV");
+										//Thread.sleep(2000);
+									}
+									if (trftype.equals("KAB") && inv.getIstrfkab().equals("N") && inv.getTanggota().getMcabang().getIsdisburse() != null
+											&& inv.getTanggota().getMcabang().getIsdisburse().equals("Y")
+											&& inv.getTanggota().getMcabang().getAccno().length() > 0) {
+										doFundTransfer(inv, "KAB");
+										Thread.sleep(2000);
+									}
+								}
 								
 								Thread.sleep(2000);
-
-								if (inv.getIstrfprov().equals("N")
-										&& inv.getTanggota().getMcabang().getMprov().getIsdisburse() != null
-										&& inv.getTanggota().getMcabang().getMprov().getIsdisburse().equals("Y")
-										&& inv.getTanggota().getMcabang().getMprov().getAccno().length() > 0) {
-									doFundTransfer(inv, "PROV");
-									Thread.sleep(2000);
-								}
-								if (inv.getIstrfkab().equals("N") && inv.getTanggota().getMcabang().getIsdisburse() != null
-										&& inv.getTanggota().getMcabang().getIsdisburse().equals("Y")
-										&& inv.getTanggota().getMcabang().getAccno().length() > 0) {
-									doFundTransfer(inv, "KAB");
-									Thread.sleep(2000);
-								}
 							}
 						}
 					}
@@ -133,13 +144,11 @@ public class BriapiFundTransferHandler implements Job {
 					trf.setAmount(inv.getTeventreg().getTevent().getFeekab());
 			} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)) {
 				if (beneftype.equals("PROV")) {
-					//BigDecimal amounttrf = inv.getProvamounttrf() == null ? new BigDecimal(0) : inv.getProvamounttrf();
-					//trf.setAmount(inv.getProvamount().subtract(amounttrf));
-					trf.setAmount(inv.getProvamount());
+					BigDecimal amounttrf = inv.getProvamounttrf() == null ? new BigDecimal(0) : inv.getProvamounttrf();
+					trf.setAmount(inv.getProvamount().subtract(amounttrf));
 				} else if (beneftype.equals("KAB")) {
-					//BigDecimal amounttrf = inv.getKabamounttrf() == null ? new BigDecimal(0) : inv.getKabamounttrf();
-					//trf.setAmount(inv.getKabamount().subtract(amounttrf));
-					trf.setAmount(inv.getKabamount());
+					BigDecimal amounttrf = inv.getKabamounttrf() == null ? new BigDecimal(0) : inv.getKabamounttrf();
+					trf.setAmount(inv.getKabamount().subtract(amounttrf));
 				}
 			} else {
 				Mfee fee = mapFee.get(inv.getInvoicetype());
@@ -152,8 +161,6 @@ public class BriapiFundTransferHandler implements Job {
 			trf.setSourceacc(sourceacc);
 			trf.setFeetype("BEN");
 			trf.setNoreferral(counterDao.generateSeqnum());
-			// trf.setNoreferral("99999999999999999918");
-			// trf.setNoreferral("99999999999999999993");
 			trf.setTrxtime(new Date());
 			if (beneftype.equals("PROV")) {
 				trf.setBenefacc(inv.getTanggota().getMcabang().getMprov().getAccno());
@@ -175,57 +182,54 @@ public class BriapiFundTransferHandler implements Job {
 			FundInqReq inqReq = new FundInqReq();
 			inqReq.setSourceAccount(trf.getSourceacc());
 			inqReq.setBeneficiaryAccount(trf.getBenefacc());
-			// inqReq.setSourceAccount("888801000157508");
-			// inqReq.setBeneficiaryAccount("888809999999918");
+			
 			FundInqResp fundInq = briapi.fundInq(briapiToken.getAccess_token(), inqReq);
+			//FundInqResp fundInq = new FundInqResp();
+			//fundInq.setResponseCode("0100");
+			
 			if (fundInq != null && fundInq.getResponseCode() != null && fundInq.getResponseCode().equals("0100")) {
+				FundTrfReq trfReq = new FundTrfReq();
+				trfReq.setSourceAccount(trf.getSourceacc());
+				trfReq.setBeneficiaryAccount(trf.getBenefacc());
+				trfReq.setAmount(trf.getAmount() + ".00");
+				trfReq.setFeeType(trf.getFeetype());
+				trfReq.setNoReferral(trf.getNoreferral());
+				trfReq.setRemark(trf.getRemark());
+				trfReq.setTransactionDateTime(dateLocalFormatter.format(trf.getTrxtime()));
 
-				// trf.setSourceacc("888801000003301");
-				// trf.setBenefacc("888809999999993");
+				FundTrfResp fundTrf = briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
+				//FundTrfResp fundTrf = new FundTrfResp();
+				//fundTrf.setResponseCode("0200");
 				
-				if (new BigDecimal(fundInq.getData().getSourceAccountBalance()).compareTo(disburse_min_balance) > 0) {
-					FundTrfReq trfReq = new FundTrfReq();
-					trfReq.setSourceAccount(trf.getSourceacc());
-					trfReq.setBeneficiaryAccount(trf.getBenefacc());
-					trfReq.setAmount(trf.getAmount() + ".00");
-					trfReq.setFeeType(trf.getFeetype());
-					trfReq.setNoReferral(trf.getNoreferral());
-					trfReq.setRemark(trf.getRemark());
-					trfReq.setTransactionDateTime(dateLocalFormatter.format(trf.getTrxtime()));
+				if (fundTrf != null) {
+					Session session = StoreHibernateUtil.openSession();
+					Transaction trx = session.beginTransaction();
+					try {
+						trf.setResponsecode(fundTrf.getResponseCode());
+						trf.setJournalseq(fundTrf.getJournalSeq());
+						trf.setResponsedesc(fundTrf.getResponseDescription());
+						trf.setErrordesc(fundTrf.getErrorDescription());
+						trfDao.save(session, trf);
 
-					FundTrfResp fundTrf = briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
-					// if (fundTrf != null && fundTrf.getResponseCode() != null &&
-					// fundTrf.getResponseCode().equals("0200")) {
-					if (fundTrf != null) {
-						Session session = StoreHibernateUtil.openSession();
-						Transaction trx = session.beginTransaction();
-						try {
-							trf.setResponsecode(fundTrf.getResponseCode());
-							trf.setJournalseq(fundTrf.getJournalSeq());
-							trf.setResponsedesc(fundTrf.getResponseDescription());
-							trf.setErrordesc(fundTrf.getErrorDescription());
-							trfDao.save(session, trf);
-
-							if (fundTrf.getResponseCode().equals("0200")) {
-								if (beneftype.equals("PROV")) {
-									inv.setIstrfprov("Y");
-									inv.setTrfprovamount(trf.getAmount());
-									inv.setProvamounttrf(trf.getAmount());
-									inv.setTrfprovtime(new Date());
-								} else if (beneftype.equals("KAB")) {
-									inv.setIstrfkab("Y");
-									inv.setTrfkabamount(trf.getAmount());
-									inv.setKabamounttrf(trf.getAmount());
-									inv.setTrfkabtime(new Date());
-								}
-								invDao.save(session, inv);
+						if (fundTrf.getResponseCode().equals("0200")) {
+							if (beneftype.equals("PROV")) {
+								inv.setIstrfprov("Y");
+								inv.setTrfprovamount((inv.getTrfprovamount() == null ? new BigDecimal(0) : inv.getTrfprovamount()).add(trf.getAmount()));
+								inv.setProvamounttrf((inv.getProvamounttrf() == null ? new BigDecimal(0) : inv.getProvamounttrf()).add(trf.getAmount()));
+								inv.setTrfprovtime(new Date());
+							} else if (beneftype.equals("KAB")) {
+								inv.setIstrfkab("Y");
+								inv.setTrfkabamount((inv.getTrfkabamount() == null ? new BigDecimal(0) : inv.getTrfkabamount()).add(trf.getAmount()));
+								inv.setKabamounttrf((inv.getKabamounttrf() == null ? new BigDecimal(0) : inv.getKabamounttrf()).add(trf.getAmount()));
+								inv.setTrfkabtime(new Date());
 							}
-							trx.commit();
-						} catch (Exception e) {
-							trx.rollback();
-						} finally {
-							session.close();
+							invDao.save(session, inv);
 						}
+						trx.commit();
+					} catch (Exception e) {
+						trx.rollback();
+					} finally {
+						session.close();
 					}
 				}
 			}

@@ -39,10 +39,12 @@ import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.MchargeDAO;
+import com.sds.hakli.dao.MfeeDAO;
 import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.domain.Mcharge;
+import com.sds.hakli.domain.Mfee;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.extension.BriApiExt;
@@ -357,8 +359,21 @@ public class PaymentVm {
 										if (brivaCreated != null && brivaCreated.getStatus()) {
 											trx = session.beginTransaction();
 											
+											BigDecimal provamount = new BigDecimal(0);
+											BigDecimal kabamount = new BigDecimal(0);
+											for (Mfee fee : new MfeeDAO().listAll()) {
+												if (fee.getFeetype().equals(AppUtils.CHARGETYPE_IURAN)) {
+													provamount = fee.getFeeprov();
+													kabamount = fee.getFeekab();
+													break;
+												}
+											}
+											
 											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
 											inv.setBaseamount(amountbase);
+											inv.setInvoiceqty(qty);
+											inv.setProvamount(provamount.multiply(new BigDecimal(qty)));
+											inv.setKabamount(kabamount.multiply(new BigDecimal(qty)));
 											invDao.save(session, inv);
 											
 											anggota.setPeriodektanext(periode);
