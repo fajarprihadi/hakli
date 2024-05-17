@@ -641,17 +641,26 @@ public class AnggotaFormVm {
 			
 			Calendar calCurrent = Calendar.getInstance();
 			
-			if (calCurrent.get(Calendar.MONTH) < 4) {
-				calCurrent.set(Calendar.MONTH, 5);
-				calCurrent.set(Calendar.DAY_OF_MONTH, 30);
-			} else if (calCurrent.get(Calendar.MONTH) >= 4 && calCurrent.get(Calendar.MONTH) < 10) {
+			if (calCurrent.get(Calendar.MONTH) >= 5 && calCurrent.get(Calendar.MONTH) <= 11) {
 				calCurrent.set(Calendar.MONTH, 11);
 				calCurrent.set(Calendar.DAY_OF_MONTH, 31);
-			} else if (calCurrent.get(Calendar.MONTH) >= 10) {
+			} else {
 				calCurrent.set(Calendar.MONTH, 5);
 				calCurrent.set(Calendar.DAY_OF_MONTH, 30);
-				calCurrent.add(Calendar.YEAR, 1);
 			}
+			
+//			if (calCurrent.get(Calendar.MONTH) < 4) {
+//				calCurrent.set(Calendar.MONTH, 5);
+//				calCurrent.set(Calendar.DAY_OF_MONTH, 30);
+//			} else if (calCurrent.get(Calendar.MONTH) >= 4 && calCurrent.get(Calendar.MONTH) < 10) {
+//				calCurrent.set(Calendar.MONTH, 11);
+//				calCurrent.set(Calendar.DAY_OF_MONTH, 31);
+//			} else if (calCurrent.get(Calendar.MONTH) >= 10) {
+//				calCurrent.set(Calendar.MONTH, 5);
+//				calCurrent.set(Calendar.DAY_OF_MONTH, 30);
+//				calCurrent.add(Calendar.YEAR, 1);
+//			}
+			
 			calCurrent.set(Calendar.HOUR_OF_DAY, 0);
 			calCurrent.set(Calendar.MINUTE, 0);
 			calCurrent.set(Calendar.SECOND, 0);

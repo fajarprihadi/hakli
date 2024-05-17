@@ -171,6 +171,7 @@ public class BriApiExt {
 			client.setConnectTimeout(60 * 1000);
 			client.setReadTimeout(60 * 1000);
 
+			System.out.println("URL : " + bean.getUrl() + bean.getBriapi_pathtoken());
 			WebResource webResource = client.resource(bean.getUrl() + bean.getBriapi_pathtoken());
 			ClientResponse response = webResource.queryParam("grant_type", "client_credentials").type(MediaType.APPLICATION_FORM_URLENCODED)
 					.post(ClientResponse.class, input);

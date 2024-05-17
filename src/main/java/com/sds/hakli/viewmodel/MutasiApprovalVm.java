@@ -179,12 +179,12 @@ public class MutasiApprovalVm {
 	@NotifyChange("pageTotalSize")
 	public void doRefresh() {
 		try {
-			String filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "' and mcabangfk = " + anggota.getMcabang().getMcabangpk();
+			String filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "' and mcabang.mcabangpk = " + anggota.getMcabang().getMcabangpk();
 			if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || 
 					anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT))
 				filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "'";
 			else if (anggota.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI))
-				filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "' and mprovfk = " + anggota.getMcabang().getMprov().getMprovpk();			
+				filter ="status = '" + AppUtils.STATUS_WAITCONFIRM + "' and mcabang.mprov.mprovpk = " + anggota.getMcabang().getMprov().getMprovpk();			
 			objList = oDao.listByFilter(filter, "tmutasipk");
 			pageTotalSize = objList.size();
 			grid.setModel(new ListModelList<>(objList));

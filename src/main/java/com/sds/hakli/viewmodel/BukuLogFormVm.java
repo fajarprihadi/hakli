@@ -35,6 +35,7 @@ import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Muniversitas;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tp2kbbook;
+import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class BukuLogFormVm {
@@ -96,7 +97,7 @@ public class BukuLogFormVm {
 					+ new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime())
 					+ "' BETWEEN TGLMULAI AND TGLAKHIR) OR ('"
 					+ new SimpleDateFormat("yyyy-MM-dd").format(objForm.getTglakhir())
-					+ "' BETWEEN TGLMULAI AND TGLAKHIR))", "tp2kbbookpk");
+					+ "' BETWEEN TGLMULAI AND TGLAKHIR)) AND STATUS != 'C'", "tp2kbbookpk");
 
 			if (objForm.getTp2kbbookpk() != null) {
 				for (Tp2kbbook data : tpb) {
