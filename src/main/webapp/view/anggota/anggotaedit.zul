@@ -359,6 +359,16 @@
 							<n:tr>
 								<n:td>
 									<label
+										value="Periode Aktif Akses Borang s/d" />
+								</n:td>
+								<n:td>
+									<datebox value="@load(k.periodekta)"
+										format="dd-MM-yyyy" buttonVisible="false" readonly="true" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td>
+									<label
 										value="${labels.anggota.statusanggota} (*)" />
 								</n:td>
 								<n:td>

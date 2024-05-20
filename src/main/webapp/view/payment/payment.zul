@@ -34,11 +34,18 @@
 						<label value="@load(vm.anggota.mcabang.cabang)" />
 					</row>
 					<row>
-						<label value="Periode Terakhir Pembayaran" />
-						<label value="@load(vm.anggota.periodekta) @converter('formatedDate', format='dd-MM-yyyy')" />
+						<label value="Tipe Pembayaran" />
+						<radiogroup selectedItem="@bind(vm.paymenttype)" onCheck="@command('doPaymenttypeSelected', type=vm.paymenttype)">
+							<radio value="I" label="Iuran" />
+							<radio value="B" label="Borang" />
+						</radiogroup>
 					</row>
 					<row>
-						<label value="Periode Pembayaran Sampai Dengan" />
+						<label value="Periode Terakhir Pembayaran Iuran Keanggotaan" />
+						<label value="@load(vm.periodstart) @converter('formatedDate', format='dd-MM-yyyy')" />
+					</row>
+					<row>
+						<label value="Periode Pembayaran Iuran Keanggotaan Sampai Dengan" />
 						<label value="@load(vm.periode) @converter('formatedDate', format='dd-MM-yyyy')" />
 					</row>
 					<row>

@@ -137,6 +137,8 @@ public class AppData {
 			name = "Event";
 		else if (code.equals(AppUtils.INVOICETYPE_P2KB))
 			name = "Rekomendasi STR";
+		else if (code.equals(AppUtils.INVOICETYPE_BORANG))
+			name = "Akses Borang";
 		return name;
 	}
 	

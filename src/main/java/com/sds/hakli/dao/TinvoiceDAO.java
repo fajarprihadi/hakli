@@ -63,6 +63,18 @@ public class TinvoiceDAO {
         return oList;
     }
 	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listPaidPendingDisburseBIFast(String bankcode, int limit) throws Exception {		
+    	List<Tinvoice> oList = null;
+    	session = StoreHibernateUtil.openSession();
+		oList = session.createSQLQuery("select * from Tinvoice join Tanggota on tanggotafk = tanggotapk "
+				+ "join Mcabang on mcabangfk = mcabangpk "
+				+ "where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') and bankcode = '" + bankcode + "' "
+				+ "order by tinvoicepk limit " + limit).addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }
+	
 	public Integer countPaidPendingDisburseProv(String invoicetype, String prov) throws Exception {		
 		Integer count = 0;
     	session = StoreHibernateUtil.openSession();

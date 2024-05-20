@@ -54,6 +54,10 @@ public class Ttransfer {
 	
 	private String trftoname;
 	
+	private BigDecimal bankfee;
+	
+	private String bankrefno;
+	
 	@Id
 	@SequenceGenerator(name = "ttransfer_seq", sequenceName = "ttransfer_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ttransfer_seq")
@@ -216,6 +220,22 @@ public class Ttransfer {
 
 	public void setTrftoname(String trftoname) {
 		this.trftoname = trftoname;
+	}
+
+	public BigDecimal getBankfee() {
+		return bankfee;
+	}
+
+	public void setBankfee(BigDecimal bankfee) {
+		this.bankfee = bankfee;
+	}
+
+	public String getBankrefno() {
+		return bankrefno;
+	}
+
+	public void setBankrefno(String bankrefno) {
+		this.bankrefno = bankrefno;
 	}
 
 	

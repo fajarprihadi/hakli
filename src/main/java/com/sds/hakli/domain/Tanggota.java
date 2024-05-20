@@ -120,6 +120,8 @@ public class Tanggota {
 	
 	private String regverbyname;
 	
+	private Date periodeborang;
+	
 	private Musergroup musergroup;
 	
 	@Id
@@ -519,6 +521,12 @@ public class Tanggota {
 	}
 	public void setMusergroup(Musergroup musergroup) {
 		this.musergroup = musergroup;
+	}
+	public Date getPeriodeborang() {
+		return periodeborang;
+	}
+	public void setPeriodeborang(Date periodeborang) {
+		this.periodeborang = periodeborang;
 	}
 	
 }

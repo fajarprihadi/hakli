@@ -200,9 +200,11 @@ public class BukuLogRequestVm {
 								Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 								Date d2 = sdformat
 										.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
+								
+								Date d3 = obj.getPeriodeborang() != null ? sdformat
+										.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodeborang())) : null;
 
-								//System.out.println(d1 + ", " + d2);
-								if (d1.compareTo(d2) < 0) {
+								if (d1.compareTo(d2) < 0 || (d3 != null && d1.compareTo(d3) < 0)) {
 									Component comp = winBookLogReq.getParent();
 									comp.getChildren().clear();
 									Executions.createComponents("/view/p2kb/bukulog.zul", comp, map);

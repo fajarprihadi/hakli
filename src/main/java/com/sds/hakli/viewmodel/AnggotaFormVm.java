@@ -244,6 +244,8 @@ public class AnggotaFormVm {
 	private Grid gridCharge;
 	@Wire
 	private Div divIuran;
+	
+	private Date periodeborang;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tanggota obj,
@@ -270,6 +272,14 @@ public class AnggotaFormVm {
 				pribadi = oDao.findByPk(anggota.getTanggotapk());
 				if (pribadi == null)
 					pribadi = new Tanggota();
+			}
+			
+			if (obj.getPeriodeborang() != null) {
+				if (obj.getPeriodeborang().compareTo(obj.getPeriodekta()) > 0)
+					periodeborang = obj.getPeriodeborang();
+				else periodeborang = obj.getPeriodekta();
+			} else {
+				periodeborang = obj.getPeriodekta();
 			}
 
 			init();
@@ -1667,6 +1677,14 @@ public class AnggotaFormVm {
 
 	public void setKeteranganiuran(String keteranganiuran) {
 		this.keteranganiuran = keteranganiuran;
+	}
+
+	public Date getPeriodeborang() {
+		return periodeborang;
+	}
+
+	public void setPeriodeborang(Date periodeborang) {
+		this.periodeborang = periodeborang;
 	}
 
 }

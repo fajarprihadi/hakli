@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -23,6 +24,12 @@ import com.sds.hakli.domain.Mfee;
 import com.sds.hakli.domain.Msysparam;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.domain.Ttransfer;
+import com.sds.hakli.pojo.BIFastAmount;
+import com.sds.hakli.pojo.BIFastInqReq;
+import com.sds.hakli.pojo.BIFastInqResp;
+import com.sds.hakli.pojo.BIFastToken;
+import com.sds.hakli.pojo.BIFastTrfReq;
+import com.sds.hakli.pojo.BIFastTrfResp;
 import com.sds.hakli.pojo.BriApiToken;
 import com.sds.hakli.pojo.FundInqReq;
 import com.sds.hakli.pojo.FundInqResp;
@@ -32,10 +39,10 @@ import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
-public class BriapiFundTransferHandler implements Job {
+public class BriapiBIFastHandler implements Job {
 
 	private BriapiBean bean;
-	private BriApiToken briapiToken;
+	private BIFastToken briapiToken;
 	private TinvoiceDAO invDao = new TinvoiceDAO();
 	private MsysparamDAO sysparamDao = new MsysparamDAO();
 	private TtransferDAO trfDao = new TtransferDAO();
@@ -51,7 +58,7 @@ public class BriapiFundTransferHandler implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {		
 		synchronized(this) {
 			if (!AppData.isActiveFundTransfer) {
-				System.out.println(new Date() + " Fund Transfer Handler is Started...");
+				System.out.println(new Date() + " BIFast Fund Transfer Handler is Started...");
 				AppData.isActiveFundTransfer = true;
 				try {
 					int disburse_limit = 1;
@@ -67,7 +74,7 @@ public class BriapiFundTransferHandler implements Job {
 						disburse_min_balance = new BigDecimal(param.getParamvalue());
 					}
 					
-					List<Tinvoice> listInvoice = invDao.listPaidPendingDisburse(disburse_limit);
+					List<Tinvoice> listInvoice = invDao.listPaidPendingDisburseBIFast("DJARIDJ1", disburse_limit);
 					//List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N')", "tinvoicepk");
 					//List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 6035", "tinvoicepk");
 					System.out.println("Fund Transfer Records : " + listInvoice.size());
@@ -78,13 +85,13 @@ public class BriapiFundTransferHandler implements Job {
 
 						bean = AppData.getBriapibean();
 						briapi = new BriApiExt(bean);
-						briapiToken = briapi.getTokenFundTransfer();
+						briapiToken = briapi.getTokenBIFast();
 
 						for (Mfee fee : new MfeeDAO().listAll()) {
 							mapFee.put(fee.getFeetype(), fee);
 						}
 
-						if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+						if (briapiToken != null) {
 							for (Tinvoice inv : listInvoice) {
 								// doFundTransfer(inv, "PROV");
 																
@@ -106,11 +113,11 @@ public class BriapiFundTransferHandler implements Job {
 					e.printStackTrace();
 				} finally {
 					AppData.isActiveFundTransfer = false;
-					System.out.println(new Date() + " Fund Transfer Handler is Finished...");
+					System.out.println(new Date() + " BIFast Fund Transfer Handler is Finished...");
 				}
 			} else {
 				System.out.println(
-						new Date().toString() + " Fund Transfer Handler Start Canceled [Prev Thread Still Running]");
+						new Date().toString() + " BIFast Fund Transfer Handler Start Canceled [Prev Thread Still Running]");
 			}
 		}
 	}
@@ -125,7 +132,7 @@ public class BriapiFundTransferHandler implements Job {
 					trf.setAmount(inv.getTeventreg().getTevent().getFeeprov());
 				else if (beneftype.equals("KAB"))
 					trf.setAmount(inv.getTeventreg().getTevent().getFeekab());
-			} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)) {
+			} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN) || inv.getInvoicetype().equals(AppUtils.INVOICETYPE_BORANG)) {
 				if (beneftype.equals("PROV")) {
 					//BigDecimal amounttrf = inv.getProvamounttrf() == null ? new BigDecimal(0) : inv.getProvamounttrf();
 					//trf.setAmount(inv.getProvamount().subtract(amounttrf));
@@ -142,12 +149,13 @@ public class BriapiFundTransferHandler implements Job {
 				else if (beneftype.equals("KAB"))
 					trf.setAmount(fee.getFeekab());
 			}
+			
+			trf.setBankfee(new BigDecimal(2500));
+			trf.setAmount(trf.getAmount().subtract(trf.getBankfee()));
 
 			trf.setSourceacc(sourceacc);
 			trf.setFeetype("BEN");
 			trf.setNoreferral(counterDao.generateSeqnum());
-			// trf.setNoreferral("99999999999999999918");
-			// trf.setNoreferral("99999999999999999993");
 			trf.setTrxtime(new Date());
 			if (beneftype.equals("PROV")) {
 				trf.setBenefacc(inv.getTanggota().getMcabang().getMprov().getAccno());
@@ -166,60 +174,72 @@ public class BriapiFundTransferHandler implements Job {
 			}
 			trf.setRemark(trf.getRemark().replaceAll("/", ""));
 			
-			FundInqReq inqReq = new FundInqReq();
-			inqReq.setSourceAccount(trf.getSourceacc());
-			inqReq.setBeneficiaryAccount(trf.getBenefacc());
-			// inqReq.setSourceAccount("888801000157508");
-			// inqReq.setBeneficiaryAccount("888809999999918");
-			FundInqResp fundInq = briapi.fundInq(briapiToken.getAccess_token(), inqReq);
-			if (fundInq != null && fundInq.getResponseCode() != null && fundInq.getResponseCode().equals("0100")) {
-
-				// trf.setSourceacc("888801000003301");
-				// trf.setBenefacc("888809999999993");
+			BIFastInqReq bifastInqReq = new BIFastInqReq();
+			bifastInqReq.setBeneficiaryBankCode(trf.getBenefbankcode());
+			bifastInqReq.setBeneficiaryAccountNo(trf.getBenefacc());
+			BIFastInqResp inqResp = briapi.bifastInq(briapiToken.getAccessToken(), bifastInqReq);
+			
+			if (inqResp != null && inqResp.getResponseCode() != null && inqResp.getResponseCode().equals("2008100")) {
 				
-				if (new BigDecimal(fundInq.getData().getSourceAccountBalance()).compareTo(disburse_min_balance) > 0) {
-					FundTrfReq trfReq = new FundTrfReq();
-					trfReq.setSourceAccount(trf.getSourceacc());
-					trfReq.setBeneficiaryAccount(trf.getBenefacc());
-					trfReq.setAmount(trf.getAmount() + ".00");
-					trfReq.setFeeType(trf.getFeetype());
-					trfReq.setNoReferral(trf.getNoreferral());
-					trfReq.setRemark(trf.getRemark());
-					trfReq.setTransactionDateTime(dateLocalFormatter.format(trf.getTrxtime()));
+				trf.setBankrefno(inqResp.getReferenceNo());
+				
+				BIFastTrfReq bifastTrfReq = new BIFastTrfReq();
+				bifastTrfReq.setCustomerReference(trf.getNoreferral());
+				bifastTrfReq.setSenderIdentityNumber(sourceacc);
+				bifastTrfReq.setSourceAccountNo(sourceacc);
+				BIFastAmount objamount = new BIFastAmount();
+				objamount.setValue(trf.getAmount() + ".00");
+				objamount.setCurrency("IDR");
+				bifastTrfReq.setAmount(objamount);
+				bifastTrfReq.setBeneficiaryBankCode(trf.getBenefbankcode());
+				bifastTrfReq.setBeneficiaryAccountNo(trf.getBenefacc());
+				bifastTrfReq.setReferenceNo(inqResp.getReferenceNo());
+				bifastTrfReq.setExternalId(inqResp.getExternalId());
+				
+				SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+				dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+				String xtimestamp = dateFormatter.format(trf.getTrxtime());
+				
+				bifastTrfReq.setTransactionDate(xtimestamp);
+				bifastTrfReq.setPaymentInfo(trf.getTinvoice().getInvoicedesc());
+				bifastTrfReq.setSenderType("01");
+				bifastTrfReq.setSenderResidentStatus("01");
+				bifastTrfReq.setSenderTownName("0300");
+//				BIFastAdditionalInfo additional = new BIFastAdditionalInfo();
+//				additional.setDeviceId("12345679237");
+//				additional.setChannel("mobilephone");
+//				bifastTrfReq.setAdditionalInfo(additional);
+				
+				BIFastTrfResp trfResp = briapi.bifastTrf(briapiToken.getAccessToken(), bifastTrfReq);			
+				if (trfResp != null) {
+					Session session = StoreHibernateUtil.openSession();
+					Transaction trx = session.beginTransaction();
+					try {
+						trf.setResponsecode(trfResp.getResponseCode());
+						trf.setJournalseq(trfResp.getJournalSequence());
+						trf.setResponsedesc(trfResp.getResponseMessage());
+						trf.setErrordesc(trfResp.getResponseMessage());
+						trfDao.save(session, trf);
 
-					FundTrfResp fundTrf = briapi.fundTrf(briapiToken.getAccess_token(), trfReq);
-					// if (fundTrf != null && fundTrf.getResponseCode() != null &&
-					// fundTrf.getResponseCode().equals("0200")) {
-					if (fundTrf != null) {
-						Session session = StoreHibernateUtil.openSession();
-						Transaction trx = session.beginTransaction();
-						try {
-							trf.setResponsecode(fundTrf.getResponseCode());
-							trf.setJournalseq(fundTrf.getJournalSeq());
-							trf.setResponsedesc(fundTrf.getResponseDescription());
-							trf.setErrordesc(fundTrf.getErrorDescription());
-							trfDao.save(session, trf);
-
-							if (fundTrf.getResponseCode().equals("0200")) {
-								if (beneftype.equals("PROV")) {
-									inv.setIstrfprov("Y");
-									inv.setTrfprovamount(trf.getAmount());
-									inv.setProvamounttrf(trf.getAmount());
-									inv.setTrfprovtime(new Date());
-								} else if (beneftype.equals("KAB")) {
-									inv.setIstrfkab("Y");
-									inv.setTrfkabamount(trf.getAmount());
-									inv.setKabamounttrf(trf.getAmount());
-									inv.setTrfkabtime(new Date());
-								}
-								invDao.save(session, inv);
+						if (trfResp.getResponseCode().equals("2008000")) {
+							if (beneftype.equals("PROV")) {
+								inv.setIstrfprov("Y");
+								inv.setTrfprovamount(trf.getAmount());
+								inv.setProvamounttrf(trf.getAmount());
+								inv.setTrfprovtime(new Date());
+							} else if (beneftype.equals("KAB")) {
+								inv.setIstrfkab("Y");
+								inv.setTrfkabamount(trf.getAmount());
+								inv.setKabamounttrf(trf.getAmount());
+								inv.setTrfkabtime(new Date());
 							}
-							trx.commit();
-						} catch (Exception e) {
-							trx.rollback();
-						} finally {
-							session.close();
+							invDao.save(session, inv);
 						}
+						trx.commit();
+					} catch (Exception e) {
+						trx.rollback();
+					} finally {
+						session.close();
 					}
 				}
 			}
