@@ -74,7 +74,7 @@ public class BriapiBIFastHandler implements Job {
 						disburse_min_balance = new BigDecimal(param.getParamvalue());
 					}
 					
-					List<Tinvoice> listInvoice = invDao.listPaidPendingDisburseBIFast("DJARIDJ1", disburse_limit);
+					List<Tinvoice> listInvoice = invDao.listPaidPendingDisburseBIFast("BSMDIDJA", disburse_limit);
 					//List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N')", "tinvoicepk");
 					//List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 6035", "tinvoicepk");
 					System.out.println("Fund Transfer Records : " + listInvoice.size());

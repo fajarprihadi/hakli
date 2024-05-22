@@ -63,7 +63,7 @@
 									selectedItem="@bind(e.bankcode)" width="100%" maxlength="40">
 									<comboitem value="BRINIDJA"
 										label="Bank Rakyat Indonesia" />
-									<comboitem value="DJARIDJ1"
+									<comboitem value="BSMDIDJA"
 										label="Bank Syariah Indonesia" />
 								</combobox>
 								<label style="color:gray"

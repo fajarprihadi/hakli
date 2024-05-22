@@ -53,6 +53,7 @@ import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tpekerjaan;
 import com.sds.hakli.domain.Tpendidikan;
 import com.sds.hakli.domain.Ttransfer;
+import com.sds.hakli.domain.Vsumtransfer;
 import com.sds.hakli.model.TtransferListModel;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
@@ -74,6 +75,8 @@ public class DashboardPinbukVm {
 	private BigDecimal totalpinbukprov;
 	private BigDecimal totalpinbukkab;
 	private BigDecimal totalamount;
+	private BigDecimal totaltransfered;
+	private Vsumtransfer vsumtransfer;
 	
 	private String invoicetype;
 	private String invno;
@@ -152,6 +155,8 @@ public class DashboardPinbukVm {
 				row.getChildren().add(new Label(data.getBenefbankcode()));
 				row.getChildren().add(new Label(data.getTrfto() + " - " + data.getTrftoname()));
 				row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getAmount())));
+				row.getChildren().add(new Label(data.getBankfee() != null ? 
+						NumberFormat.getInstance().format(data.getBankfee()) : "-"));
 				row.getChildren().add(new Label(datetimelocalFormatter.format(data.getTrxtime())));
 				row.getChildren().add(new Label(data.getResponsecode() != null && data.getResponsecode().equals("0200") ? data.getResponsedesc() : data.getErrordesc()));
 			}
@@ -185,14 +190,14 @@ public class DashboardPinbukVm {
 				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
 				datamap.put(1, new Object[] { "No", "Tipe Tagihan", "Nama", "Kode Tagihan", "Tanggal Bayar", "No Referral", "No Rekening Tujuan", 
 						"Nama Rekening Tujuan", "Bank Tujuan", "Tingkat Tujuan", 
-						"Nominal", "Waktu", "Keterangan" });
+						"Nominal", "Bank Fee", "Waktu", "Keterangan" });
 				no = 2;
 				for (Ttransfer data : objList) {
 					datamap.put(no,
 							new Object[] { no - 1, AppData.getInvoiceType(data.getTinvoice().getInvoicetype()), data.getTinvoice().getTanggota().getNama(), 
 									data.getTinvoice().getInvoiceno(), datetimelocalFormatter.format(data.getTinvoice().getPaidtime()), data.getNoreferral(), 
 									data.getBenefacc() , data.getBenefname(), data.getBenefbankcode(), data.getTrfto() + " - " + data.getTrftoname(), 
-									data.getAmount().doubleValue(), datetimelocalFormatter.format(data.getTrxtime()),
+									data.getAmount().doubleValue(), data.getBankfee() != null ? data.getBankfee().doubleValue() : 0, datetimelocalFormatter.format(data.getTrxtime()),
 									data.getResponsecode() != null && data.getResponsecode().equals("0200") ? data.getResponsedesc() : data.getErrordesc() });
 					no++;
 				}
@@ -297,8 +302,8 @@ public class DashboardPinbukVm {
 			filter += " and invoiceno = '" + invno.trim() + "'";
 		if (status != null  && status.trim().length() > 0) {
 			if (status.equals("Y"))
-				filter += " and responsecode = '0200'";
-			else filter += " and responsecode != '0200'";
+				filter += " and responsecode in ('0200', '2008100')";
+			else filter += " and responsecode != '0200' and responsecode != '2008100'";
 		}
 		if (begindate != null && enddate != null) {
 			filter += " and date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "'";
@@ -320,11 +325,12 @@ public class DashboardPinbukVm {
 	@NotifyChange("*")
 	public void doListSummary() {
 		try {
-			String filterperiod = "date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "' and responsecode = '0200'";
+			String filterperiod = "date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "' and responsecode in ('0200', '2008100')";
 			totalpinbuk = oDao.sumAmount(filterperiod);
 			totalpinbukprov = oDao.sumAmount(filterperiod + " and trfto = 'PROV'");
 			totalpinbukkab = oDao.sumAmount(filterperiod + " and trfto = 'KAB'");
 			totalamount = oDao.sumAmount(filter);
+			vsumtransfer = oDao.sumTransfer(filter);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -450,6 +456,22 @@ public class DashboardPinbukVm {
 
 	public void setNama(String nama) {
 		this.nama = nama;
+	}
+
+	public BigDecimal getTotaltransfered() {
+		return totaltransfered;
+	}
+
+	public void setTotaltransfered(BigDecimal totaltransfered) {
+		this.totaltransfered = totaltransfered;
+	}
+
+	public Vsumtransfer getVsumtransfer() {
+		return vsumtransfer;
+	}
+
+	public void setVsumtransfer(Vsumtransfer vsumtransfer) {
+		this.vsumtransfer = vsumtransfer;
 	}
 
 	

@@ -125,7 +125,7 @@ public class BriapiFundTransferHandler implements Job {
 					trf.setAmount(inv.getTeventreg().getTevent().getFeeprov());
 				else if (beneftype.equals("KAB"))
 					trf.setAmount(inv.getTeventreg().getTevent().getFeekab());
-			} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)) {
+			} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN) || inv.getInvoicetype().equals(AppUtils.INVOICETYPE_BORANG)) {
 				if (beneftype.equals("PROV")) {
 					//BigDecimal amounttrf = inv.getProvamounttrf() == null ? new BigDecimal(0) : inv.getProvamounttrf();
 					//trf.setAmount(inv.getProvamount().subtract(amounttrf));
@@ -142,7 +142,7 @@ public class BriapiFundTransferHandler implements Job {
 				else if (beneftype.equals("KAB"))
 					trf.setAmount(fee.getFeekab());
 			}
-
+			trf.setBankfee(new BigDecimal(1000));
 			trf.setSourceacc(sourceacc);
 			trf.setFeetype("BEN");
 			trf.setNoreferral(counterDao.generateSeqnum());

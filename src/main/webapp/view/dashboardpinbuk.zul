@@ -165,6 +165,7 @@
 					<column label="Bank Tujuan" />
 					<column label="Tingkat Tujuan" />
 					<column label="Nominal" align="right" />
+					<column label="Bank Fee" align="right" />
 					<column label="Waktu" align="center" />
 					<column label="Keterangan" />
 				</columns>
@@ -173,7 +174,12 @@
 			<div align="right">
 				<label value="Total Nominal" style="font-size: 14px" />
 				<decimalbox readonly="true"
-					value="@load(vm.totalamount)" format='###,##0'
+					value="@load(vm.vsumtransfer.totalamount)" format='###,##0'
+					style="font-size: 18px; text-align: right; font-weight: bold" />
+				<separator orient="vertical" />
+				<label value="Total Nominal Setelah Dikurang Bank Fee" style="font-size: 14px" />
+				<decimalbox readonly="true"
+					value="@load(vm.vsumtransfer.totaltransfered)" format='###,##0'
 					style="font-size: 18px; text-align: right; font-weight: bold" />
 			</div>
 		</groupbox>

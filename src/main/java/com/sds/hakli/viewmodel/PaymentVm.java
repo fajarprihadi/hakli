@@ -237,9 +237,8 @@ public class PaymentVm {
 				for (Mcharge obj : objList) {
 					if (obj.getIsbase().equals("Y")) {
 						BigDecimal totalbase = amountbase.divide(new BigDecimal(6));
-						keterangan = "Pembayaran Akses Borang Untuk 1 Bulan";
 						obj.setChargeamount(totalbase);
-						obj.setChargedesc(keterangan);
+						obj.setChargedesc("Pembayaran Akses Borang Untuk 1 Bulan");
 					}
 					oList.add(obj);
 				}

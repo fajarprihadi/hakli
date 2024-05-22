@@ -101,7 +101,7 @@ public class AppData {
 		String name = "";
 		if (code.equals("BRINIDJA"))
 			name = "Bank Rakyat Indonesia";
-		else if (code.equals("DJARIDJ1"))
+		else if (code.equals("BSMDIDJA"))
 			name = "Bank Syariah Indonesia";
 		return name;
 	}
