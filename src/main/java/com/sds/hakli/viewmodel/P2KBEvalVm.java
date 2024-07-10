@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
@@ -37,6 +38,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
+import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.bean.BriapiBean;
@@ -85,6 +87,8 @@ public class P2KBEvalVm {
 	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Wire
+	private Window winP2kbEval;
+	@Wire
 	private Combobox cbPeriod;
 	@Wire
 	private Grid gridCharge;
@@ -100,6 +104,41 @@ public class P2KBEvalVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			anggota = (Tanggota) zkSession.getAttribute("anggota");
+			
+			try {
+				SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+				if (anggota.getPeriodekta() != null) {
+					Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+					Date d2 = sdformat
+							.parse(new SimpleDateFormat("yyyy-MM-dd").format(anggota.getPeriodekta()));
+					
+					Date d3 = anggota.getPeriodeborang() != null ? sdformat
+							.parse(new SimpleDateFormat("yyyy-MM-dd").format(anggota.getPeriodeborang())) : null;
+
+					if (d1.compareTo(d2) < 0 || (d3 != null && d1.compareTo(d3) < 0)) {
+						
+					} else {
+						Window win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, null);
+						win.setWidth("50%");
+						win.setClosable(true);
+						win.doModal();
+						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+							@Override
+							public void onEvent(Event event) throws Exception {
+								winP2kbEval.getChildren().clear();
+								winP2kbEval.setBorder(false);
+								Executions.createComponents("/view/payment/payment.zul", winP2kbEval,
+										null);
+							}
+
+						});
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
 			gridCharge.setRowRenderer(new RowRenderer<Mcharge>() {
 
 				@Override
@@ -145,23 +184,26 @@ public class P2KBEvalVm {
 				isUpdate = false;
 				keterangan = "";
 				btSave.setDisabled(true);
+				
 				if (p2kbbook.getTotalskp().compareTo(new BigDecimal(50)) < 0) {
-					keterangan = "Anda belum dapat melakukan pengajuan evaluasi dikarenakan total nilai SKP Anda belum mencapai minimum kecukupan nilai SKP, yaitu 50 SKP.";
+					keterangan = "SKP ANDA BELUM TERCUKUPI. Ingin mengajukan Surat Keterangan Pemutakhiran dan Verifikasi Data Satuan Kredit Profesi? Silakan Generate Tagihan.";
 				} else {
-					Tinvoice inv = invDao.findByFilter("tp2kbbook.tp2kbbookpk = " + p2kbbook.getTp2kbbookpk());
-					if (inv != null) {
-						if (inv.getIspaid().equals("Y"))
-							keterangan = "Anda sudah melakukan pembayaran dan pengajuan evaluasi Anda sedang dalam proses review oleh Komisi P2KB. Mohon ditunggu.";
-						else if (inv.getIspaid().equals("N") && inv.getInvoiceduedate().compareTo(new Date()) >= 0) {
-							keterangan = "Anda sudah melakukan generate tagihan dan tagihan Anda masih aktif sampai dengan " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(inv.getInvoiceduedate()) + " dengan Nomor VA " + inv.getVano() + ". Silakan segera lakukan pembayaran sebelum tanggal jatuh tempo tagihan.";
-						} else if (inv.getIspaid().equals("N") && inv.getInvoiceduedate().compareTo(new Date()) < 0) {
-							keterangan = "Tagihan Anda sudah kadaluarsa. Silakan Klik tombol Generate Tagihan untuk membuat tagihan baru.";
-							isUpdate = true;
-							btSave.setDisabled(false);
-						}
-					} else {
+					keterangan = "";
+				}
+				
+				Tinvoice inv = invDao.findByFilter("tp2kbbook.tp2kbbookpk = " + p2kbbook.getTp2kbbookpk());
+				if (inv != null) {
+					if (inv.getIspaid().equals("Y"))
+						keterangan = "Anda sudah melakukan pembayaran dan pengajuan evaluasi Anda sedang dalam proses review oleh Komisi P2KB. Mohon ditunggu.";
+					else if (inv.getIspaid().equals("N") && inv.getInvoiceduedate().compareTo(new Date()) >= 0) {
+						keterangan = "Anda sudah melakukan generate tagihan dan tagihan Anda masih aktif sampai dengan " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(inv.getInvoiceduedate()) + " dengan Nomor VA " + inv.getVano() + ". Silakan segera lakukan pembayaran sebelum tanggal jatuh tempo tagihan.";
+					} else if (inv.getIspaid().equals("N") && inv.getInvoiceduedate().compareTo(new Date()) < 0) {
+						keterangan = "Tagihan Anda sudah kadaluarsa. Silakan Klik tombol Generate Tagihan untuk membuat tagihan baru.";
+						isUpdate = true;
 						btSave.setDisabled(false);
 					}
+				} else {
+					btSave.setDisabled(false);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -175,9 +217,9 @@ public class P2KBEvalVm {
 		if (p2kbbook == null) {
 			Messagebox.show("Tidak ada data periode P2KB yang terisi", WebApps.getCurrent().getAppName(), Messagebox.OK,
 					Messagebox.INFORMATION);
-		} else if (p2kbbook.getTotalskp().compareTo(new BigDecimal(50)) < 0) {
-			Messagebox.show("Anda belum dapat melakukan pengajuan evaluasi dikarenakan total nilai SKP Anda belum mencapai minimum kecukupan nilai SKP, yaitu 50 SKP.", WebApps.getCurrent().getAppName(), Messagebox.OK,
-					Messagebox.INFORMATION);
+//		} else if (p2kbbook.getTotalskp().compareTo(new BigDecimal(50)) < 0) {
+//			Messagebox.show("Anda belum dapat melakukan pengajuan evaluasi dikarenakan total nilai SKP Anda belum mencapai minimum kecukupan nilai SKP, yaitu 50 SKP.", WebApps.getCurrent().getAppName(), Messagebox.OK,
+//					Messagebox.INFORMATION);
 		} else {
 			Messagebox.show(
 					"Apakah data pembayaran yang anda input sudah benar? Jika sudah benar silahkan pilih OK untuk mengirim data tagihan ke email anda",

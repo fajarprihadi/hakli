@@ -64,7 +64,40 @@ public class BorangPengisianVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			obj = (Tanggota) session.getAttribute("anggota");
+			
+			try {
+				SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+				if (obj.getPeriodekta() != null) {
+					Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+					Date d2 = sdformat
+							.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
+					
+					Date d3 = obj.getPeriodeborang() != null ? sdformat
+							.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodeborang())) : null;
 
+					if (d1.compareTo(d2) < 0 || (d3 != null && d1.compareTo(d3) < 0)) {
+						
+					} else {
+						Window win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, null);
+						win.setWidth("50%");
+						win.setClosable(true);
+						win.doModal();
+						win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+							@Override
+							public void onEvent(Event event) throws Exception {
+								winBorang.getChildren().clear();
+								winBorang.setBorder(false);
+								Executions.createComponents("/view/payment/payment.zul", winBorang,
+										null);
+							}
+
+						});
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			grid.setRowRenderer(new RowRenderer<Mp2kbkegiatan>() {
 
 				@Override

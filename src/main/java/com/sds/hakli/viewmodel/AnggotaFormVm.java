@@ -274,12 +274,12 @@ public class AnggotaFormVm {
 					pribadi = new Tanggota();
 			}
 			
-			if (obj.getPeriodeborang() != null) {
-				if (obj.getPeriodeborang().compareTo(obj.getPeriodekta()) > 0)
-					periodeborang = obj.getPeriodeborang();
-				else periodeborang = obj.getPeriodekta();
+			if (pribadi.getPeriodeborang() != null) {
+				if (pribadi.getPeriodeborang().compareTo(pribadi.getPeriodekta()) > 0)
+					periodeborang = pribadi.getPeriodeborang();
+				else periodeborang = pribadi.getPeriodekta();
 			} else {
-				periodeborang = obj.getPeriodekta();
+				periodeborang = pribadi.getPeriodekta();
 			}
 
 			init();

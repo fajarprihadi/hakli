@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winP2kbeval" border="normal"
+	<window id="winP2kbEval" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.P2KBEvalVm')"
 		validationMessages="@id('vmsgs')">
 		<caption>

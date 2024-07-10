@@ -1,5 +1,6 @@
 package com.sds.hakli.viewmodel;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,6 +97,39 @@ public class BukuLogRequestVm {
 		Selectors.wireComponents(view, this, false);
 		obj = (Tanggota) session.getAttribute("anggota");
 		this.arg = arg;
+		
+		try {
+			SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+			if (obj.getPeriodekta() != null) {
+				Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+				Date d2 = sdformat
+						.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodekta()));
+				
+				Date d3 = obj.getPeriodeborang() != null ? sdformat
+						.parse(new SimpleDateFormat("yyyy-MM-dd").format(obj.getPeriodeborang())) : null;
+
+				if (d1.compareTo(d2) < 0 || (d3 != null && d1.compareTo(d3) < 0)) {
+					
+				} else {
+					Window win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, null);
+					win.setWidth("50%");
+					win.setClosable(true);
+					win.doModal();
+					win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+						@Override
+						public void onEvent(Event event) throws Exception {
+							winBookLogReq.getChildren().clear();
+							winBookLogReq.setBorder(false);
+							Executions.createComponents("/view/payment/payment.zul", winBookLogReq,
+									null);
+						}
+
+					});
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		if (arg != null && arg.equals("list")) {
 			doLoadCabang();
@@ -195,7 +229,6 @@ public class BukuLogRequestVm {
 						if (arg != null && arg.equals("req")) {
 
 							SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-
 							if (obj.getPeriodekta() != null) {
 								Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 								Date d2 = sdformat
@@ -310,14 +343,17 @@ public class BukuLogRequestVm {
 						parameters.put("NOSURAT", nosurat);
 						parameters.put("CURRENTDATE", currentdate);
 						parameters.put("TTD_KETUAUMUM",
-								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/ttd_kolegium.jpg"));
 						parameters.put("LOGO",
-								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/kolegium.jpg"));
 
 						session.setAttribute("parameters", parameters);
-						session.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+						if (data.getTotalskp().compareTo(new BigDecimal(50)) >= 0)
+							session.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
 								.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi.jasper"));
-
+						else 
+							session.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+									.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi_belumcukup.jasper"));
 						Executions.getCurrent().sendRedirect("/view/jasperviewer.zul", "_blank");
 					}
 				});
