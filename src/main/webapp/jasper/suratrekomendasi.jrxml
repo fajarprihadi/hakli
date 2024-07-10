@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suratrekomendasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="453" leftMargin="71" rightMargin="71" topMargin="71" bottomMargin="71" uuid="100a43fe-4d12-436b-a606-fd2314220f9c">
-	<property name="ireport.zoom" value="1.4641000000000013"/>
+	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="93"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
@@ -12,167 +12,190 @@
 	<field name="nostr" class="java.lang.String"/>
 	<field name="tanggota.mcabang.cabang" class="java.lang.String"/>
 	<field name="tanggota.mcabang.mprov.provname" class="java.lang.String"/>
+	<field name="tanggota.noktp" class="java.lang.String"/>
+	<field name="totalskp" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="96" splitType="Stretch">
+		<band height="89" splitType="Stretch">
 			<staticText>
-				<reportElement x="102" y="0" width="340" height="31" uuid="b4489dfd-6a4e-4ba1-8ad9-46b5bc04fbaa"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font size="11" isBold="true"/>
+				<reportElement x="81" y="0" width="371" height="31" uuid="b4489dfd-6a4e-4ba1-8ad9-46b5bc04fbaa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[HIMPUNAN AHLI KESEHATAN LINGKUNGAN INDONESIA
-(INDONESIAN ASSOCIATION OF ENVIRONMENTAL HEALTH) ]]></text>
+				<text><![CDATA[KOLEGIUM KESEHATAN LINGKUNGAN]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="10" width="81" height="71" uuid="4bbdd5c7-b2fb-4b62-a4f5-62c2c22573cd"/>
 				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
 			</image>
 			<line>
-				<reportElement x="0" y="95" width="453" height="1" uuid="730910c1-71a6-4ac1-8e0e-fd5dedf6ac63"/>
+				<reportElement x="0" y="88" width="453" height="1" uuid="730910c1-71a6-4ac1-8e0e-fd5dedf6ac63"/>
 			</line>
 			<staticText>
-				<reportElement x="102" y="31" width="340" height="50" uuid="e5a885a6-641d-476c-b2c8-328fd40d3ccf"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font size="9" isBold="false"/>
+				<reportElement x="81" y="31" width="371" height="36" uuid="e5a885a6-641d-476c-b2c8-328fd40d3ccf"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
+					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Sekretariat : Equity Tower 49 Floor Jalan Jenderal Sudirman
-Kavling 52 – 53 SCBD Jakarta 12190 Indonesia
+				<text><![CDATA[Kantor : Equity Tower 49 Floor Jalan Jenderal Sudirman Kavling 52 – 53 SCBD Jakarta 12190 Indonesia
 Phone +62 21 2965 1162 Fax +62 21 2965 1222 WA : +62 812 8379 9257
-Website : www.hakli.or.id E-mail: sekertariat_pp@hakli.or.id ]]></text>
+Website : www.pphakli.org E-mail: kolegiumkesehatanlingkungan@gmail.com]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="154" splitType="Stretch">
+		<band height="123" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="29" width="451" height="15" uuid="4b0f9df7-95d8-46be-a0dc-fb74b6e2308e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Nomor : " + $P{NOSURAT}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="81" y="40" width="5" height="15" uuid="642efb6f-984a-4ae5-a4f4-699f9d35b4e6"/>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="1" y="107" width="452" height="39" uuid="ca98a7b9-2090-4c49-b069-a0224cf25b18"/>
-				<textElement markup="html">
+				<reportElement x="3" y="52" width="452" height="64" uuid="ca98a7b9-2090-4c49-b069-a0224cf25b18"/>
+				<textElement markup="none">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Kepada Yth,
-Kepala Dinas Pelayanan Terpadu Satu Pintu/
-Kepala Dinas Kesehatan Kabupaten/Kota]]></text>
+1. Direktur Peningkatan Mutu Tenaga Kesehatan, Ditjen Nakes Kemenkes RI
+2. Kepala Dinas Kesehatan Kabupaten/Kota
+3. Kepala Dinas Penanaman Modal dan Pelayan Terpadu Satu Pintu Daerah Kabupaten/Kota
+4. Tenaga Sanitasi Lingkungan, yang bersangkutan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="86" y="70" width="79" height="15" uuid="dfe5b4c8-6412-4775-852a-dbd0070abd53"/>
-				<text><![CDATA[-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="1" y="10" width="452" height="15" uuid="c5e873e0-0eaa-4d8b-9634-e80b49d515e7"/>
+				<reportElement x="1" y="1" width="452" height="15" uuid="c5e873e0-0eaa-4d8b-9634-e80b49d515e7"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[SURAT REKOMENDASI KECUKUPAN SKP]]></text>
+				<text><![CDATA[SURAT KETERANGAN  PEMUTAKHIRAN DAN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="81" y="70" width="5" height="15" uuid="118cbca9-0dcd-4d48-b2b5-bbb8beb903a6"/>
-				<text><![CDATA[:]]></text>
+				<reportElement x="1" y="15" width="452" height="15" uuid="68246d70-44d3-4b00-af23-5bc43c7843c2"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[VERIFIKASI DATA  SATUAN KREDIT PROFESI TENAGA SANITASI LINGKUNGAN ]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="2" y="55" width="79" height="15" uuid="ef6dd15a-0ff1-49ab-a954-2e32e5f2db03"/>
-				<text><![CDATA[Perihal]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="40" width="79" height="15" uuid="9bbfff85-f299-41c4-b72e-6daab6825f95"/>
-				<text><![CDATA[No]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="70" width="79" height="15" uuid="60953776-a967-436d-8721-e0d9f99ee626"/>
-				<text><![CDATA[Lampiran]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="81" y="55" width="5" height="15" uuid="9bfed283-2bfe-46dc-afd1-2a8fc1b43031"/>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="86" y="55" width="79" height="15" uuid="3a95bfd3-0d5e-4d53-b430-d88dc1ca737b"/>
-				<text><![CDATA[Kecukupan SKP]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="86" y="40" width="351" height="15" uuid="4b0f9df7-95d8-46be-a0dc-fb74b6e2308e"/>
-				<textFieldExpression><![CDATA[$P{NOSURAT}]]></textFieldExpression>
-			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="368" splitType="Stretch">
+		<band height="508" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="109" width="453" height="69" uuid="20c4ddb4-ceae-44e5-9d06-fd3f8a11b850"/>
+				<reportElement x="1" y="0" width="453" height="41" uuid="5fe27d6f-28e2-4db1-a0cb-b1626a5db6e7"/>
 				<textElement textAlignment="Justified">
-					<font isBold="false"/>
+					<font size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Berkas tersebut setelah diverifikasi oleh Tim Verifikasi telah memenuhi persayaratan yang dipergunakan dalam pengajuan SIP. Demikian surat rekomendasi kami sampaikan untuk diproses lebih lanjut sesuai dengan ketentuan yang berlaku.
-
-Atas perhatian dan kerja sama yang baik diucapkan terima kasih]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="125" y="58" width="329" height="15" uuid="fc483108-f017-4626-b096-303f91714af1"/>
-				<textFieldExpression><![CDATA[": " + $F{tanggota.mcabang.cabang}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="1" y="72" width="123" height="15" uuid="43122416-1dcb-4f4c-8fec-f2da931f94d2"/>
-				<text><![CDATA[Provinsi]]></text>
+				<text><![CDATA[Hal yang menjadi perhatian dari Undang-Undang Nomor 17 Tahun 2023 Tentang Kesehatan dalam kerangka untuk menjamin mutu pelayanan kesehatan serta keselamatan masyarakat penerima pelayanan kesehatan, maka dengan ini disampaikan hal sebagai berikut :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="44" width="123" height="15" uuid="913114ca-6234-4543-a096-e0054b9cee16"/>
-				<text><![CDATA[Nomor KTA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="1" y="30" width="123" height="15" uuid="e03c6151-c0c7-4e1c-ac8f-f52bf0079487"/>
-				<text><![CDATA[Nama]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="125" y="72" width="329" height="15" uuid="d91eded2-f2fd-45f0-b3a4-1cd4df605486"/>
-				<textFieldExpression><![CDATA[": " + $F{tanggota.mcabang.mprov.provname}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="125" y="44" width="329" height="15" uuid="c548264a-0fb5-413a-b43b-cd0bf5fc1d76"/>
-				<textFieldExpression><![CDATA[": " + $F{tanggota.noanggota}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="1" y="58" width="123" height="15" uuid="cac274fa-a666-40fc-b016-cda4dc32e44e"/>
-				<text><![CDATA[Kota]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="125" y="30" width="329" height="15" uuid="efa2eb58-dcb6-4556-833a-0941a5f233cf"/>
-				<textFieldExpression><![CDATA[": " + $F{tanggota.nama}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="1" y="0" width="453" height="30" uuid="5fe27d6f-28e2-4db1-a0cb-b1626a5db6e7"/>
+				<reportElement x="35" y="41" width="418" height="71" uuid="41f0f0c0-2d01-49f5-a64a-827f75da541f"/>
 				<textElement textAlignment="Justified">
-					<font isBold="false"/>
+					<font size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Sesuai dengan Undang-Undang Nomor 17 Tahun 2023 Tentang Kesehatan, bersamaan ini kami sampaikan kecukupan SKP : ]]></text>
+				<text><![CDATA[Berdasarkan surat edaran Direktur Jenderal Tenaga Kesehatan tertanggal 29 Januari 2024 Nomor HK .02 .02/F/154/2024 tentang Pemutahiran dan Verifikasi Data Satuan Kredit Profesi Tenaga Medis dan Tenaga Kesehatan, pada periode tanggal 29 Januari 2024 - 29 Februari 2024 Tim verifikator P2KB Tenaga Sanitasi Lingkungan Tingkat Kabupaten / Kota, Provinsi dan Pusat telah melakukan verifikasi dan validasi isian borang SKP yang telah diajukan oleh Tenaga Sanitasi Lingkungan dalam sistem informasi P2KB Tenaga Sanitasi Lingkungan.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="157" y="337" width="296" height="15" uuid="0da01e3d-741c-4bc2-9dac-c0476491c9d9"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[Prof. DR. H. Arif Sumantri SKM. M.Kes]]></text>
+				<reportElement x="35" y="220" width="417" height="15" uuid="d805a412-e6eb-4861-98c5-2659345867f8"/>
+				<textElement textAlignment="Justified">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dari hasil re-verifikasi dan re-validasi oleh Kolegium Kesehatan Lingkungan disimpulkan :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="477" width="256" height="15" uuid="0da01e3d-741c-4bc2-9dac-c0476491c9d9"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Prof. Dr. Khayan, SKM., M.Kes]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="157" y="194" width="296" height="15" uuid="346d7e2e-aa54-455a-a236-ff0939dcf418"/>
+				<reportElement x="157" y="364" width="296" height="15" uuid="346d7e2e-aa54-455a-a236-ff0939dcf418"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["Jakarta, " + $P{CURRENTDATE}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="157" y="208" width="296" height="26" uuid="b748255e-09bf-4d22-96be-65dbab131d91"/>
+				<reportElement x="157" y="378" width="296" height="16" uuid="b748255e-09bf-4d22-96be-65dbab131d91"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[Ketua Umum
-Himpunan Ahli Kesehatan Lingkungan Indonesia]]></text>
+				<text><![CDATA[Ketua Kolegium Kesehatan Lingkungan Indonesia]]></text>
 			</staticText>
 			<image>
-				<reportElement x="212" y="234" width="181" height="103" uuid="59d9d93d-ecb2-4e48-8c53-cd75a5399016"/>
+				<reportElement x="233" y="395" width="142" height="72" uuid="59d9d93d-ecb2-4e48-8c53-cd75a5399016"/>
 				<imageExpression><![CDATA[$P{TTD_KETUAUMUM}]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="196" y="492" width="259" height="15" uuid="d5627ef3-7391-4ffe-87eb-84e9a50b88ad"/>
+				<text><![CDATA[No KTA. 617111334]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="136" y="240" width="304" height="15" uuid="efa2eb58-dcb6-4556-833a-0941a5f233cf"/>
+				<textFieldExpression><![CDATA[": " + $F{tanggota.nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="136" y="254" width="304" height="15" uuid="c8b8122d-790f-4cf2-8ff7-596cf55026ab"/>
+				<textFieldExpression><![CDATA[": " + $F{tanggota.noktp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="35" y="254" width="100" height="15" uuid="bffa02e5-bdf5-43a1-bd1f-51b6e4fe8003"/>
+				<text><![CDATA[NIK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="41" width="22" height="15" uuid="1d9476b7-e45d-4aea-be23-c7c002f0e424"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[1.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="220" width="22" height="15" uuid="63194a7c-a65c-4ca1-9241-4f3d7adeff83"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[3.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2" y="298" width="450" height="66" uuid="4071e2c9-73c1-464f-8e72-cc3c0968ede9"/>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Telah mengumpulkan satuan kredit profesi (SKP) sejumlah " + $F{totalskp} + ", dengan demikian yang bersangkutan telah mencukupi minimal 50 SKP dan dapat diajukan sebagai dasar capaian SKP pada sistem informasi SKP platform Kementerian Kesehatan. Demikian untuk perhatian dan untuk dipergunakan secara seksama sebagai dasar tindaklanjut dalam koordinasi sebagaimana mestinya, atas perhatian dan perkenan diucapkan terima kasih."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="35" y="240" width="100" height="15" uuid="e03c6151-c0c7-4e1c-ac8f-f52bf0079487"/>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="113" width="418" height="111" uuid="d1167a9b-dde3-4606-8190-a31dc99aa2ec"/>
+				<textElement textAlignment="Justified">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Berdasarkan surat edaran Menteri Kesehatan tertanggal 10 Juni 2024 Nomor HK.02.01/MENKES/1063/2024 tentang Pemenuhan Satuan Kredit Profesi dalam Penerbitan Perpanjangan Surat Izin Praktik Tenaga Medis dan Tenaga Kesehatan, Kolegium Kesehatan Lingkungan telah mengambi alih dengan re-verifikasi dan re-validasi isian borang SKP yang telah diajukan dalam sistem informasi P2KB Tenaga Sanitasi Lingkungan. maka bagi Tenaga Sanitasi Lingkungan yang belum memperpanjang SIP karena terkendala dengan pemenuhan SKP tetap dapat mengajukan perpanjangan SIP melalui permohonan kepada Kepala Dinas Kesehatan atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota dengan melampirkan bukti kecukupan SKP yang dimiliki]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="113" width="22" height="15" uuid="f8e5db22-a533-4cb9-8ffc-d2cd805d5a3b"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="137" y="269" width="304" height="15" uuid="fc483108-f017-4626-b096-303f91714af1"/>
+				<textFieldExpression><![CDATA[": " + $F{tanggota.mcabang.cabang}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="36" y="283" width="100" height="15" uuid="43122416-1dcb-4f4c-8fec-f2da931f94d2"/>
+				<text><![CDATA[Provinsi]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="137" y="283" width="304" height="15" uuid="d91eded2-f2fd-45f0-b3a4-1cd4df605486"/>
+				<textFieldExpression><![CDATA[": " + $F{tanggota.mcabang.mprov.provname}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="36" y="269" width="100" height="15" uuid="cac274fa-a666-40fc-b016-cda4dc32e44e"/>
+				<text><![CDATA[Kota]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

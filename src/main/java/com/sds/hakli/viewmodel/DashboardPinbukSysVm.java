@@ -3,7 +3,6 @@ package com.sds.hakli.viewmodel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,9 +48,7 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
-import com.sds.hakli.bean.BriapiBean;
 import com.sds.hakli.dao.MfeeDAO;
-import com.sds.hakli.dao.MsysparamDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
 import com.sds.hakli.dao.TtransferDAO;
 import com.sds.hakli.domain.Mfee;
@@ -59,34 +56,24 @@ import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
 import com.sds.hakli.domain.Ttransfer;
 import com.sds.hakli.domain.Vsumtransfer;
-import com.sds.hakli.extension.BriApiExt;
 import com.sds.hakli.model.TtransferListModel;
-import com.sds.hakli.pojo.BriApiToken;
-import com.sds.hakli.pojo.FundInqReq;
-import com.sds.hakli.pojo.FundInqResp;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
-public class DashboardPinbukVm {
+public class DashboardPinbukSysVm {
 	
 	private Session session = Sessions.getCurrent();
 	private Tanggota oUser;
 	
 	private TtransferListModel model;
 	
-	private MsysparamDAO sysparamDao = new MsysparamDAO();
 	private TtransferDAO oDao = new TtransferDAO();
 	
 	private int pageStartNumber;
 	private int pageTotalSize;
 	private String filter;
 	
-	private BigDecimal balance;
-	private BigDecimal totalpinbukpusat;
-	private BigDecimal totalpending;
 	private BigDecimal totalpinbuk;
-	private BigDecimal totalpinbukprov;
-	private BigDecimal totalpinbukkab;
 	private BigDecimal totalamount;
 	private BigDecimal totaltransfered;
 	private Vsumtransfer vsumtransfer;
@@ -99,7 +86,9 @@ public class DashboardPinbukVm {
 	private Date begindate;
 	private Date enddate;
 	private String period;
+	private BigDecimal totalpending;
 	
+	final BigDecimal SYSTEM_DISBURSE_PERCENT = new BigDecimal(0.35);
 	private Map<String, Mfee> mapFee = new HashMap<>();
 	
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -122,7 +111,6 @@ public class DashboardPinbukVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			oUser = (Tanggota) session.getAttribute("anggota");
-			
 			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || 
 					oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT)) {
 				divHead.setVisible(true);
@@ -174,19 +162,17 @@ public class DashboardPinbukVm {
 					row.getChildren().add(new Label(data.getBenefname()));
 					row.getChildren().add(new Label(data.getBenefbankcode()));
 					row.getChildren().add(new Label(data.getTrfto() + " - " + data.getTrftoname()));
-					row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getAmount())));
-					row.getChildren().add(new Label(data.getBankfee() != null ? 
-							NumberFormat.getInstance().format(data.getBankfee()) : "-"));
+					row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getAmount())));					
 					row.getChildren().add(new Label(datetimelocalFormatter.format(data.getTrxtime())));
 					row.getChildren().add(new Label(data.getResponsecode() != null && data.getResponsecode().equals("0200") ? data.getResponsedesc() : data.getErrordesc()));
 				}
 			
 			});
+			
+			doReset();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-		doReset();
+		}		
 	}
 	
 	@Command
@@ -213,14 +199,14 @@ public class DashboardPinbukVm {
 				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
 				datamap.put(1, new Object[] { "No", "Tipe Tagihan", "Nama", "Kode Tagihan", "Tanggal Bayar", "No Referral", "No Rekening Tujuan", 
 						"Nama Rekening Tujuan", "Bank Tujuan", "Tingkat Tujuan", 
-						"Nominal", "Bank Fee", "Waktu", "Keterangan" });
+						"Nominal", "Waktu", "Keterangan" });
 				no = 2;
 				for (Ttransfer data : objList) {
 					datamap.put(no,
 							new Object[] { no - 1, AppData.getInvoiceType(data.getTinvoice().getInvoicetype()), data.getTinvoice().getTanggota().getNama(), 
 									data.getTinvoice().getInvoiceno(), datetimelocalFormatter.format(data.getTinvoice().getPaidtime()), data.getNoreferral(), 
 									data.getBenefacc() , data.getBenefname(), data.getBenefbankcode(), data.getTrfto() + " - " + data.getTrftoname(), 
-									data.getAmount().doubleValue(), data.getBankfee() != null ? data.getBankfee().doubleValue() : 0, datetimelocalFormatter.format(data.getTrxtime()),
+									data.getAmount().doubleValue(), datetimelocalFormatter.format(data.getTrxtime()),
 									data.getResponsecode() != null && data.getResponsecode().equals("0200") ? data.getResponsedesc() : data.getErrordesc() });
 					no++;
 				}
@@ -300,8 +286,7 @@ public class DashboardPinbukVm {
 	@Command
 	@NotifyChange("*")
 	public void doSearch() {
-		//filter = "0=0";
-		filter = "trfto != 'SYS'";
+		filter = "trfto = 'SYS'";
 		
 		if (begindate == null || enddate == null) {
 			Calendar cal = Calendar.getInstance();
@@ -334,12 +319,6 @@ public class DashboardPinbukVm {
 		}
 		period = "Periode Pemindahbukuan " + datelocalFormatter.format(begindate) + " s/d " + datelocalFormatter.format(enddate);
 		
-//		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
-//			filter += " and benefacc = '" + oUser.getMcabang().getMprov().getAccno() + "'";
-//		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
-//			filter += " and benefacc = '" + oUser.getMcabang().getAccno() + "'";
-//		}
-		
 		pageStartNumber = 0;
 		refreshModel(pageStartNumber);
 	}
@@ -349,80 +328,34 @@ public class DashboardPinbukVm {
 	@NotifyChange("*")
 	public void doListSummary() {
 		try {
-			String filterperiod = "trfto != 'SYS' and date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "' and responsecode in ('0200', '2008100')";
+			String filterperiod = "trfto = 'SYS' and date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "' and responsecode in ('0200', '2008100')";
 			totalpinbuk = oDao.sumAmount(filterperiod);
-			totalpinbukprov = oDao.sumAmount(filterperiod + " and trfto = 'PROV'");
-			totalpinbukkab = oDao.sumAmount(filterperiod + " and trfto = 'KAB'");
 			totalamount = oDao.sumAmount(filter);
 			vsumtransfer = oDao.sumTransfer(filter);
 			
-			String filterperiodpusat = "date(paidtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "'";
-			totalpinbukpusat = new TinvoiceDAO().sumBalance(filterperiodpusat);
-			
-			filterperiodpusat = "tinvoicepk >= 8214 and date(paidtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "'";
-			BigDecimal pinbukpusatsys = new TinvoiceDAO().sumBalance(filterperiodpusat);
-			pinbukpusatsys = pinbukpusatsys.multiply(new BigDecimal(0.35));
-			pinbukpusatsys = pinbukpusatsys.setScale(2, RoundingMode.UP);
-			totalpinbukpusat = totalpinbukpusat.subtract(pinbukpusatsys);
-			
-			List<Tinvoice> listDisbursePending = new TinvoiceDAO().listPaidPendingDisburseAll();
+			List<Tinvoice> listInvoice = new TinvoiceDAO().listSysPendingDisburse(0);
 			totalpending = new BigDecimal(0);
-			BigDecimal pendingamount = new BigDecimal(0);
-			for (Tinvoice inv : listDisbursePending) {
+			BigDecimal sysamount = new BigDecimal(0);
+			for (Tinvoice inv : listInvoice) {
 				if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_EVENT)) {
-					if (inv.getIstrfprov().equals("N")) {
-						pendingamount = inv.getTeventreg().getTevent().getFeeprov();
-						totalpending = totalpending.add(pendingamount);
-					}
-					if (inv.getIstrfkab().equals("N")) {
-						pendingamount = inv.getTeventreg().getTevent().getFeekab();
-						totalpending = totalpending.add(pendingamount);
-					}
-					if (inv.getIstrfsys().equals("N")) {
-						pendingamount = inv.getTeventreg().getTevent().getFeepusat().multiply(new BigDecimal(0.35));
-						totalpending = totalpending.add(pendingamount);
-						totalpending = totalpending.setScale(2, RoundingMode.UP);
-					}
+					sysamount = inv.getPaidamount().subtract(inv.getTeventreg().getTevent().getFeeprov()).subtract(inv.getTeventreg().getTevent().getFeekab());
+					sysamount = sysamount.multiply(SYSTEM_DISBURSE_PERCENT);
+					totalpending = totalpending.add(sysamount);
+				} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)) {
+					Mfee fee = mapFee.get(inv.getInvoicetype());
+					sysamount = (fee.getFeepusat().multiply(SYSTEM_DISBURSE_PERCENT)).multiply(new BigDecimal(inv.getInvoiceqty()));
+					totalpending = totalpending.add(sysamount);
+				} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_BORANG)) {
+					sysamount = inv.getPaidamount().subtract(inv.getProvamount()).subtract(inv.getKabamount());
+					sysamount = sysamount.multiply(SYSTEM_DISBURSE_PERCENT);
+					totalpending = totalpending.add(sysamount);
 				} else {
-					if (inv.getIstrfprov().equals("N")) {
-						pendingamount = inv.getProvamount();
-						totalpending = totalpending.add(pendingamount);
-					}
-					if (inv.getIstrfkab().equals("N")) {
-						pendingamount = inv.getKabamount();
-						totalpending = totalpending.add(pendingamount);
-					}
-					if (inv.getIstrfsys().equals("N")) {
-						Mfee fee = mapFee.get(inv.getInvoicetype());
-						if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)) {
-							pendingamount = fee.getFeepusat().multiply(new BigDecimal(inv.getInvoiceqty())).multiply(new BigDecimal(0.35));
-						} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_BORANG)) {
-							pendingamount = inv.getPaidamount().subtract(inv.getProvamount()).subtract(inv.getKabamount());
-							pendingamount = pendingamount.multiply(new BigDecimal(0.35));
-						} else {
-							pendingamount = fee.getFeepusat().multiply(new BigDecimal(0.35));
-						}
-						totalpending = totalpending.add(pendingamount);
-						totalpending = totalpending.setScale(2, RoundingMode.UP);
-					}
-				}
+					Mfee fee = mapFee.get(inv.getInvoicetype());
+					sysamount = fee.getFeepusat().multiply(SYSTEM_DISBURSE_PERCENT);
+					totalpending = totalpending.add(sysamount);
+				}	
+				
 			}
-			
-			String sourceacc = sysparamDao.getParamvalue(AppUtils.SYSPARAM_BANK_ACCNO);
-			if (sourceacc != null)
-				sourceacc = sourceacc.trim();
-			BriapiBean bean = AppData.getBriapibean();
-			BriApiExt briapi = new BriApiExt(bean);
-			BriApiToken briapiToken = briapi.getTokenFundTransfer();
-			if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
-				FundInqReq inqReq = new FundInqReq();
-				inqReq.setSourceAccount(sourceacc);
-				inqReq.setBeneficiaryAccount("033901089934506");
-				FundInqResp inqResp = briapi.fundInq(briapiToken.getAccess_token(), inqReq);
-				if (inqResp != null && inqResp.getResponseCode().equals("0100")) {
-					balance = new BigDecimal(inqResp.getData().getSourceAccountBalance());
-				}
-			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -430,18 +363,17 @@ public class DashboardPinbukVm {
 	
 	@Command
 	@NotifyChange("*")
-	public void doReset() {
-		
+	public void doReset() {		
 		invoicetype = null;
 		invno = null;
 		nama = null;
 		benefacc = null;
 		status = "Y";
 		
-//		Calendar cal = Calendar.getInstance();
-//		enddate = cal.getTime();
-//		cal.add(Calendar.MONTH, -1);
-//		begindate = cal.getTime();
+		Calendar cal = Calendar.getInstance();
+		enddate = cal.getTime();
+		cal.add(Calendar.MONTH, -1);
+		begindate = cal.getTime();	 
 		
 		doSearch();
 	}
@@ -492,22 +424,6 @@ public class DashboardPinbukVm {
 
 	public void setTotalpinbuk(BigDecimal totalpinbuk) {
 		this.totalpinbuk = totalpinbuk;
-	}
-
-	public BigDecimal getTotalpinbukprov() {
-		return totalpinbukprov;
-	}
-
-	public void setTotalpinbukprov(BigDecimal totalpinbukprov) {
-		this.totalpinbukprov = totalpinbukprov;
-	}
-
-	public BigDecimal getTotalpinbukkab() {
-		return totalpinbukkab;
-	}
-
-	public void setTotalpinbukkab(BigDecimal totalpinbukkab) {
-		this.totalpinbukkab = totalpinbukkab;
 	}
 
 	public String getBenefacc() {
@@ -564,22 +480,6 @@ public class DashboardPinbukVm {
 
 	public void setVsumtransfer(Vsumtransfer vsumtransfer) {
 		this.vsumtransfer = vsumtransfer;
-	}
-
-	public BigDecimal getBalance() {
-		return balance;
-	}
-
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
-
-	public BigDecimal getTotalpinbukpusat() {
-		return totalpinbukpusat;
-	}
-
-	public void setTotalpinbukpusat(BigDecimal totalpinbukpusat) {
-		this.totalpinbukpusat = totalpinbukpusat;
 	}
 
 	public BigDecimal getTotalpending() {

@@ -651,7 +651,7 @@ public class AnggotaFormVm {
 			
 			Calendar calCurrent = Calendar.getInstance();
 			
-			if (calCurrent.get(Calendar.MONTH) >= 5 && calCurrent.get(Calendar.MONTH) <= 11) {
+			if (calCurrent.get(Calendar.MONTH) > 5 && calCurrent.get(Calendar.MONTH) <= 11) {
 				calCurrent.set(Calendar.MONTH, 11);
 				calCurrent.set(Calendar.DAY_OF_MONTH, 31);
 			} else {

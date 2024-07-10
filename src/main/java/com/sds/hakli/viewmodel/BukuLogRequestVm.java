@@ -297,8 +297,11 @@ public class BukuLogRequestVm {
 						List<Tp2kbbook> dataList = new ArrayList<>();
 						String currentdate = "";
 
+//						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID"))
+//								.format(data.getReviewtime());
+						
 						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID"))
-								.format(data.getReviewtime());
+								.format(new Date());
 
 						String nosurat = data.getLetterno();
 						dataList.add(data);

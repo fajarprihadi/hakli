@@ -1,5 +1,7 @@
 package com.sds.utils;
 
+import java.math.BigDecimal;
+
 public class AppUtils {
 
 	public static final String PATH_PHOTO = "/files/photo";
@@ -96,7 +98,6 @@ public class AppUtils {
 	public static final String SCHEDULER_REPEAT_PERMINUTE = "PER MINUTE";
 	public static final String SCHEDULER_REPEAT_ATHOUR = "AT HOUR";
 	public static final String SCHEDULER_REPEAT_ATDAY = "PER DAY";
-	
 
 	public static String getStatusLabel(String code) {
 		if (code.trim().equals(AppUtils.STATUS_APPROVEDTIM))

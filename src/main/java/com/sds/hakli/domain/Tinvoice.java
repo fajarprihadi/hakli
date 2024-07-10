@@ -80,6 +80,11 @@ public class Tinvoice {
 	
 	private BigDecimal kabamounttrf;
 	
+	private String istrfsys = "N";
+	private BigDecimal sysamounttrf;
+	private Date trfsystime;
+	
+	
 	@Id
 	@SequenceGenerator(name = "tinvoice_seq", sequenceName = "tinvoice_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tinvoice_seq")
@@ -346,6 +351,31 @@ public class Tinvoice {
 
 	public void setKabamounttrf(BigDecimal kabamounttrf) {
 		this.kabamounttrf = kabamounttrf;
+	}
+
+	public String getIstrfsys() {
+		return istrfsys;
+	}
+
+	public void setIstrfsys(String istrfsys) {
+		this.istrfsys = istrfsys;
+	}
+
+	public BigDecimal getSysamounttrf() {
+		return sysamounttrf;
+	}
+
+	public void setSysamounttrf(BigDecimal sysamounttrf) {
+		this.sysamounttrf = sysamounttrf;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getTrfsystime() {
+		return trfsystime;
+	}
+
+	public void setTrfsystime(Date trfsystime) {
+		this.trfsystime = trfsystime;
 	}
 
 }

@@ -200,13 +200,7 @@ public class PaymentVm {
 			
 			paymenttype = "I";
 			
-			List<Tinvoice> invList = invDao.listByFilter("tanggota.tanggotapk = '" + anggota.getTanggotapk() + "' and invoicetype = '" + AppUtils.INVOICETYPE_IURAN + "' and ispaid = 'N'", "tinvoicepk desc");
-			if (invList.size() > 0) {
-				if (invList.get(0).getInvoiceduedate().compareTo(new Date()) >= 0) {
-					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar dengan Nomor VA " + invList.get(0).getVano() + " yang akan kadaluarsa pada tanggal" + datelocalFormatter.format(invList.get(0).getInvoiceduedate()) + ". \n Silahkan lihat tabel Riwayat Tagihan dihalaman bawah.";
-					btSave.setDisabled(true);
-				}
-			}
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -220,6 +214,22 @@ public class PaymentVm {
 		if (type != null) {
 			doCalInvoice(type);
 		}
+		
+		try {
+			String invoicetype = AppUtils.INVOICETYPE_IURAN;
+			if (type != null && type.equals("B")) 
+				invoicetype = AppUtils.INVOICETYPE_BORANG;
+			List<Tinvoice> invList = invDao.listByFilter("tanggota.tanggotapk = '" + anggota.getTanggotapk() + "' and invoicetype = '" + invoicetype+ "' and ispaid = 'N'", "tinvoicepk desc");
+			if (invList.size() > 0) {
+				if (invList.get(0).getInvoiceduedate().compareTo(new Date()) >= 0) {
+					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar dengan Nomor VA " + invList.get(0).getVano() + " yang akan kadaluarsa pada tanggal" + datelocalFormatter.format(invList.get(0).getInvoiceduedate()) + ". \n Silahkan lihat tabel Riwayat Tagihan dihalaman bawah.";
+					btSave.setDisabled(true);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@NotifyChange({"totalpayment", "keterangan", "periodstart", "periode"})
@@ -227,7 +237,7 @@ public class PaymentVm {
 		try {
 			totalpayment = new BigDecimal(0);
 			if (type.equals("B")) {
-				keterangan = "Pembayaran hanya untuk akses Borang dengan masa akses 1 Bulan kedepan dan pembayaran ini tidak mengurangi tunggakan Iuran.";
+				keterangan = "Pembayaran hanya untuk akses Borang dengan masa akses 30 hari terhitung dari tanggal bayar dan pembayaran ini tidak mengurangi tunggakan Iuran.";
 				periodstart = anggota.getPeriodeborang();
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.MONTH, 1);
@@ -238,7 +248,7 @@ public class PaymentVm {
 					if (obj.getIsbase().equals("Y")) {
 						BigDecimal totalbase = amountbase.divide(new BigDecimal(6));
 						obj.setChargeamount(totalbase);
-						obj.setChargedesc("Pembayaran Akses Borang Untuk 1 Bulan");
+						obj.setChargedesc("Pembayaran Akses Borang Untuk 30 Hari");
 					}
 					oList.add(obj);
 				}
@@ -256,8 +266,8 @@ public class PaymentVm {
 				}
 				
 				Calendar calCurrent = Calendar.getInstance();
-				
-				if (calCurrent.get(Calendar.MONTH) >= 5 && calCurrent.get(Calendar.MONTH) <= 11) {
+				System.out.println("Calendar.MONTH : " + calCurrent.get(Calendar.MONTH));
+				if (calCurrent.get(Calendar.MONTH) > 5 && calCurrent.get(Calendar.MONTH) <= 11) {
 					calCurrent.set(Calendar.MONTH, 11);
 					calCurrent.set(Calendar.DAY_OF_MONTH, 31);
 				} else {
@@ -341,7 +351,7 @@ public class PaymentVm {
 	@NotifyChange("pageTotalSize")
 	public void refreshModel(int activePage) {
 		paging.setPageSize(AppUtils.PAGESIZE);
-		filter = "tanggotafk = " + anggota.getTanggotapk() + " and invoicetype = '" + AppUtils.INVOICETYPE_IURAN + "'";
+		filter = "tanggotafk = " + anggota.getTanggotapk() + " and invoicetype in ('" + AppUtils.INVOICETYPE_IURAN + "', '" + AppUtils.INVOICETYPE_BORANG + "')";
 		model = new TinvoiceListModel(activePage, AppUtils.PAGESIZE, filter, "tinvoicepk desc");
 		pageTotalSize = model.getTotalSize(filter);
 		paging.setTotalSize(pageTotalSize);
@@ -393,7 +403,7 @@ public class PaymentVm {
 										
 										String invdesc = "";
 										if (paymenttype.equals("B")) {
-											invdesc = "Akses Borang 1 Bulan";
+											invdesc = "Akses Borang 30 Hari";
 										} else {
 											invdesc = "Iuran Periode " + datelocalFormatter.format(anggota.getPeriodekta()) + " s/d " + datelocalFormatter.format(periode);
 										}
@@ -412,7 +422,7 @@ public class PaymentVm {
 											BigDecimal provamount = new BigDecimal(0);
 											BigDecimal kabamount = new BigDecimal(0);
 											
-											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), AppUtils.INVOICETYPE_BORANG, totalpayment, invdesc, vaexpdate);
+											Tinvoice inv = new InvoiceGenerator().doInvoice(anggota, briva.getBrivaNo() + briva.getCustCode(), paymenttype.equals("B") ? AppUtils.INVOICETYPE_BORANG : AppUtils.INVOICETYPE_IURAN, totalpayment, invdesc, vaexpdate);
 											
 											if (paymenttype.equals("B")) {
 												inv.setBaseamount(amountbase.divide(new BigDecimal(6)));

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.stat.Statistics;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;

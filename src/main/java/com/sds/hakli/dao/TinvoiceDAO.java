@@ -23,7 +23,7 @@ public class TinvoiceDAO {
 			filter = "0 = 0";
     	session = StoreHibernateUtil.openSession();
     	oList = session.createSQLQuery("select * from tinvoice join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
-				+ "where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
+				+ "join mprov on mprovfk = mprovpk where " + filter + " order by " + orderby + " limit " + second +" offset " + first)
 				.addEntity(Tinvoice.class).list();		
 
 		session.close();
@@ -35,7 +35,8 @@ public class TinvoiceDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
+		count = Integer.parseInt((String) session.createSQLQuery("select count(*) from Tinvoice join tanggota on tanggotafk = tanggotapk "
+				+ "join mcabang on mcabangfk = mcabangpk join mprov on mprovfk = mprovpk "
 				+ "where " + filter).uniqueResult().toString());
 		session.close();
         return count;
@@ -52,13 +53,43 @@ public class TinvoiceDAO {
         return oList;
     }
 	
+	public BigDecimal sumBalance(String filter) throws Exception {		
+		BigDecimal amount = new BigDecimal(0);
+    	session = StoreHibernateUtil.openSession();
+    	amount = new BigDecimal((String) session.createSQLQuery("select "
+    			+ "coalesce(sum(paidamount - provamount - kabamount),0) from Tinvoice "
+    			+ "where ispaid = 'Y' and " + filter).uniqueResult().toString());
+		session.close();
+        return amount;
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listPaidPendingDisburseAll() throws Exception {		
+    	List<Tinvoice> oList = null;
+    	session = StoreHibernateUtil.openSession();
+    	String sql = "select * from Tinvoice "
+				+ "join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk join Mprov on mprovfk = mprovpk "
+				+ "where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') "
+				+ "order by tinvoicepk desc ";
+		oList = session.createSQLQuery(sql).addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }
+	
 	@SuppressWarnings("unchecked")
 	public List<Tinvoice> listPaidPendingDisburse(int limit) throws Exception {		
     	List<Tinvoice> oList = null;
     	session = StoreHibernateUtil.openSession();
-		oList = session.createSQLQuery("select * from Tinvoice where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') "
+    	String sql = "select * from Tinvoice "
+				+ "join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk join Mprov on mprovfk = mprovpk "
+				+ "where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') "
+				+ "and (mcabang.isdisburse = 'Y' or mprov.isdisburse = 'Y') " 
+				+ "and mcabang.bankcode = 'BRINIDJA' " 
 				+ "and tinvoicepk >= 6906 " //12 Feb 2024
-				+ "order by tinvoicepk limit " + limit).addEntity(Tinvoice.class).list();
+				+ "order by tinvoicepk desc ";
+    	if (limit > 0) 
+    		sql += "limit " + limit;
+		oList = session.createSQLQuery(sql).addEntity(Tinvoice.class).list();
 		session.close();
         return oList;
     }
@@ -68,9 +99,28 @@ public class TinvoiceDAO {
     	List<Tinvoice> oList = null;
     	session = StoreHibernateUtil.openSession();
 		oList = session.createSQLQuery("select * from Tinvoice join Tanggota on tanggotafk = tanggotapk "
-				+ "join Mcabang on mcabangfk = mcabangpk "
-				+ "where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') and bankcode = '" + bankcode + "' "
-				+ "order by tinvoicepk limit " + limit).addEntity(Tinvoice.class).list();
+				+ "join Mcabang on mcabangfk = mcabangpk join Mprov on mprovfk = mprovpk "
+				+ "where ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N') "
+				+ "and (mcabang.isdisburse = 'Y' or mprov.isdisburse = 'Y') " 
+				+ "and mcabang.bankcode = '" + bankcode + "' "
+				+ "order by tinvoicepk desc limit " + limit).addEntity(Tinvoice.class).list();
+		session.close();
+        return oList;
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Tinvoice> listSysPendingDisburse(int limit) throws Exception {		
+    	List<Tinvoice> oList = null;
+    	session = StoreHibernateUtil.openSession();
+    	String sql = "select * from Tinvoice "
+				+ "join Tanggota on tanggotafk = tanggotapk join Mcabang on mcabangfk = mcabangpk join Mprov on mprovfk = mprovpk "
+				+ "where ispaid = 'Y' and istrfsys = 'N' "
+				+ "and tinvoicepk >= 8214 " //27 Mei 2024
+				+ "order by tinvoicepk desc ";
+    	if (limit > 0)
+    		sql += "limit " + limit;
+    	
+		oList = session.createSQLQuery(sql).addEntity(Tinvoice.class).list();
 		session.close();
         return oList;
     }
@@ -200,7 +250,8 @@ public class TinvoiceDAO {
 		if (filter == null || "".equals(filter))
 			filter = "0 = 0";
 		session = StoreHibernateUtil.openSession();
-		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(invoiceamount),0) from Tinvoice  join tanggota on tanggotafk = tanggotapk join mcabang on mcabangfk = mcabangpk "
+		amount = (BigDecimal) session.createSQLQuery("select coalesce(sum(invoiceamount),0) from Tinvoice  join tanggota on tanggotafk = tanggotapk join "
+				+ "mcabang on mcabangfk = mcabangpk join mprov on mprovfk = mprovpk "
 				+ "where " + filter).uniqueResult();
 		session.close();
         return amount;

@@ -120,6 +120,8 @@
 							<comboitem label="Event" value="03" />
 							<comboitem label="Rekomendasi STR"
 								value="04" />
+							<comboitem label="Akses Borang"
+								value="05" />
 						</combobox>
 					</row>
 					<row>
@@ -152,6 +154,27 @@
 							<datebox value="@bind(vm.enddate)"
 								format="dd-MM-yyyy" />
 						</hlayout>
+					</row>
+					<row>
+						<label value="Provinsi" />
+						<combobox id="cbRegion" placeholder="Provinsi"
+							cols="50" onSelect="@command('doLoadCabang', prov=vm.region)"
+							model="@load(vm.regionModel)" selectedItem="@bind(vm.region)">
+							<template name="model" var="region">
+								<comboitem
+									label="@load(region.provname)" />
+							</template>
+						</combobox>
+					</row>
+					<row>
+						<label value="Cabang" />
+						<combobox id="cbCabang" placeholder="Cabang"
+							cols="50" model="@load(vm.cabangModel)"
+							selectedItem="@bind(vm.cabang)">
+							<template name="model" var="cabang">
+								<comboitem label="@load(cabang.cabang)" />
+							</template>
+						</combobox>
 					</row>
 				</rows>
 				<foot>

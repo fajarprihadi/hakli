@@ -17,6 +17,8 @@ public class AppData {
 	
 	public static boolean isActiveFundTransfer = false;
 	public static boolean isInitFundTransfer = false;
+	
+	public static boolean isActiveSysFundTransfer = false;
 
 	public static BriapiBean getBriapibean() throws Exception {
 		BriapiBean bean = new BriapiBean();

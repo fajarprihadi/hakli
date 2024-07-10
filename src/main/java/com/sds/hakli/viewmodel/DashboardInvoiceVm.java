@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -35,10 +36,12 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.A;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
@@ -46,10 +49,13 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.event.PagingEvent;
 
+import com.sds.hakli.dao.McabangDAO;
+import com.sds.hakli.dao.MprovDAO;
 import com.sds.hakli.dao.TinvoiceDAO;
+import com.sds.hakli.domain.Mcabang;
+import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tinvoice;
-import com.sds.hakli.domain.Ttransfer;
 import com.sds.hakli.model.TinvoiceListModel;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
@@ -60,6 +66,7 @@ public class DashboardInvoiceVm {
 	private Tanggota oUser;
 	
 	private TinvoiceListModel model;
+	private ListModelList<Mcabang> cabangModel;
 	
 	private TinvoiceDAO oDao = new TinvoiceDAO();
 	
@@ -83,6 +90,8 @@ public class DashboardInvoiceVm {
 	private String nama;
 	private Date begindate;
 	private Date enddate;
+	private Mprov region;
+	private Mcabang cabang;
 	
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	private SimpleDateFormat datelocalFormatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -93,6 +102,10 @@ public class DashboardInvoiceVm {
 	private Grid grid;
 	@Wire
 	private Paging paging;
+	@Wire
+	private Combobox cbRegion;
+	@Wire
+	private Combobox cbCabang;
 	
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
@@ -251,7 +264,11 @@ public class DashboardInvoiceVm {
 	public void doSummary() {
 		try {
 			filter = "CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7 AND INVOICEDUEDATE >= DATE(NOW())";
-			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			if (region != null) {
+				if (cabang != null)
+					filter += " and mcabangfk = " + cabang.getMcabangpk();
+				else filter += " and mcabang.mprovfk = " + region.getMprovpk();
+			} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
 				filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
 			} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
 				filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
@@ -259,7 +276,11 @@ public class DashboardInvoiceVm {
 			totaldue = oDao.pageCount(filter);
 			totaldueamount = oDao.sumAmount(filter);
 			filter = "ISPAID = 'N' AND INVOICEDUEDATE >= DATE(NOW())";
-			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+			if (region != null) {
+				if (cabang != null)
+					filter += " and mcabangfk = " + cabang.getMcabangpk();
+				else filter += " and mcabang.mprovfk = " + region.getMprovpk();
+			} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
 				filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
 			} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
 				filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
@@ -288,7 +309,11 @@ public class DashboardInvoiceVm {
 		doReset();
 		gbSearch.setOpen(false);
 		filter = "CURRENT_DATE - INVOICEDUEDATE BETWEEN 0 AND 7 AND INVOICEDUEDATE >= DATE(NOW())";
-		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+		if (region != null) {
+			if (cabang != null)
+				filter += " and mcabangfk = " + cabang.getMcabangpk();
+			else filter += " and mcabang.mprovfk = " + region.getMprovpk();
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
 			filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
 		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
 			filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
@@ -303,7 +328,11 @@ public class DashboardInvoiceVm {
 		doReset();
 		gbSearch.setOpen(false);
 		filter = "ispaid = 'N' AND INVOICEDUEDATE >= DATE(NOW())";
-		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
+		if (region != null) {
+			if (cabang != null)
+				filter += " and mcabangfk = " + cabang.getMcabangpk();
+			else filter += " and mcabang.mprovfk = " + region.getMprovpk();
+		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
 			filter += " and mprovfk = " + oUser.getMcabang().getMprov().getMprovpk();
 		} else if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN)) {
 			filter += " and mcabangfk = " + oUser.getMcabang().getMcabangpk();
@@ -327,6 +356,11 @@ public class DashboardInvoiceVm {
 			filter += " and tinvoice.ispaid = '" + invstatus.trim() + "'";
 		if (begindate != null && enddate != null) {
 			filter += " and invoicedate between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "'";
+		}
+		if (region != null) {
+			if (cabang != null)
+				filter += " and mcabangfk = " + cabang.getMcabangpk();
+			else filter += " and mcabang.mprovfk = " + region.getMprovpk();
 		}
 		
 		if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPROVINSI)) {
@@ -352,6 +386,25 @@ public class DashboardInvoiceVm {
 	}
 	
 	@Command
+	@NotifyChange("cabangModel")
+	public void doLoadCabang(@BindingParam("prov") Mprov prov) {
+		try {
+			if (prov != null) {
+				String filter = "";
+				if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSKABUPATEN))
+					filter = "mcabangpk = " + oUser.getMcabang().getMcabangpk();
+				else filter = "mprov.mprovpk = " + prov.getMprovpk(); 
+				
+				cbCabang.setValue(null);
+				cabangModel = new ListModelList<>(
+						new McabangDAO().listByFilter(filter, "cabang"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
 	@NotifyChange("*")
 	public void doReset() {
 		
@@ -367,6 +420,18 @@ public class DashboardInvoiceVm {
 		begindate = cal.getTime();
 		
 		doSearch();
+	}
+	
+	public ListModelList<Mprov> getRegionModel() {
+		ListModelList<Mprov> oList = null;
+		try {
+			if (oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_ADMIN) || oUser.getMusergroup().getUsergroupcode().equals(AppUtils.ANGGOTA_ROLE_PENGURUSPUSAT))
+				oList = new ListModelList<>(new MprovDAO().listAll());
+			else oList = new ListModelList<>(new MprovDAO().listByFilter("mprovpk = " + oUser.getMcabang().getMprov().getMprovpk(), "provname"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return oList;
 	}
 
 	public int getPageTotalSize() {
@@ -487,6 +552,30 @@ public class DashboardInvoiceVm {
 
 	public void setNama(String nama) {
 		this.nama = nama;
+	}
+
+	public Mprov getRegion() {
+		return region;
+	}
+
+	public void setRegion(Mprov region) {
+		this.region = region;
+	}
+
+	public Mcabang getCabang() {
+		return cabang;
+	}
+
+	public void setCabang(Mcabang cabang) {
+		this.cabang = cabang;
+	}
+
+	public ListModelList<Mcabang> getCabangModel() {
+		return cabangModel;
+	}
+
+	public void setCabangModel(ListModelList<Mcabang> cabangModel) {
+		this.cabangModel = cabangModel;
 	}
 	
 }

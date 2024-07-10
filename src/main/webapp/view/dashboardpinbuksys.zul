@@ -1,11 +1,12 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?page title="Pemindahbukuan System" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
 	<window id="winInvoiceList" border="normal"
-		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardPinbukVm')">
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.DashboardPinbukSysVm')">
 		<caption>
 			<n:i class="fas fa-file-invoice"></n:i>
-			<n:span>Pemindahbukuan</n:span>
+			<n:span>Pemindahbukuan System</n:span>
 		</caption>
+		
 		<groupbox id="gbSearch" mold="3d" open="false">
 			<caption label="Pencarian" iconSclass="z-icon-search" />
 			<grid>
@@ -35,11 +36,6 @@
 						<label value="Nama" />
 						<textbox value="@bind(vm.nama)" maxlength="70"
 							cols="70" />
-					</row>
-					<row>
-						<label value="No Rekening Tujuan" />
-						<textbox value="@bind(vm.benefacc)"
-							id="tbBenefAcc" maxlength="20" />
 					</row>
 					<row>
 						<label value="Status Pemindahbukuan" />
@@ -85,61 +81,6 @@
 					<div class="card text-white bg-primary mb-3"
 						style="max-width: 18rem;">
 						<div class="card-header">
-							<n:h5 class="card-title">Balance</n:h5>
-						</div>
-						<div class="card-body">
-							<hlayout>
-								<n:h5>Rp.</n:h5>
-								<label sclass="card-text"
-									value="@load(vm.balance) @converter('formatedNumber', format='###,##0')"
-									style="font-size: 20px" />
-							</hlayout>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-4 col-sm-4">
-					<div class="card text-white bg-success mb-3"
-						style="max-width: 18rem;">
-						<div class="card-header">
-							<n:h5 class="card-title">
-								Pinbuk Pusat
-							</n:h5>
-						</div>
-						<div class="card-body">
-							<hlayout>
-								<n:h5>Rp.</n:h5>
-								<label sclass="card-text"
-									value="@load(vm.totalpinbukpusat) @converter('formatedNumber', format='###,##0')"
-									style="font-size: 20px" />
-							</hlayout>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-4">
-					<div class="card text-white bg-warning mb-3"
-						style="max-width: 18rem;">
-						<div class="card-header">
-							<n:h5 class="card-title">
-								Pending Pinbuk
-							</n:h5>
-						</div>
-						<div class="card-body">
-							<hlayout>
-								<n:h5>Rp.</n:h5>
-								<label sclass="card-text"
-									value="@load(vm.totalpending) @converter('formatedNumber', format='###,##0')"
-									style="font-size: 20px" />
-							</hlayout>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row" align="center">
-				<div class="col-md-4 col-sm-4">
-					<div class="card text-white bg-primary mb-3"
-						style="max-width: 18rem;">
-						<div class="card-header">
 							<n:h5 class="card-title">Total Pinbuk</n:h5>
 						</div>
 						<div class="card-body">
@@ -151,44 +92,23 @@
 							</hlayout>
 						</div>
 					</div>
-				</div>
-
+				</div>		
 				<div class="col-md-4 col-sm-4">
 					<div class="card text-white bg-success mb-3"
 						style="max-width: 18rem;">
 						<div class="card-header">
-							<n:h5 class="card-title">
-								Pinbuk Provinsi
-							</n:h5>
+							<n:h5 class="card-title">Total Pending</n:h5>
 						</div>
 						<div class="card-body">
 							<hlayout>
 								<n:h5>Rp.</n:h5>
 								<label sclass="card-text"
-									value="@load(vm.totalpinbukprov) @converter('formatedNumber', format='###,##0')"
+									value="@load(vm.totalpending) @converter('formatedNumber', format='###,##0')"
 									style="font-size: 20px" />
 							</hlayout>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-4 col-sm-4">
-					<div class="card text-white bg-warning mb-3"
-						style="max-width: 18rem;">
-						<div class="card-header">
-							<n:h5 class="card-title">
-								Pinbuk Kabupaten
-							</n:h5>
-						</div>
-						<div class="card-body">
-							<hlayout>
-								<n:h5>Rp.</n:h5>
-								<label sclass="card-text"
-									value="@load(vm.totalpinbukkab) @converter('formatedNumber', format='###,##0')"
-									style="font-size: 20px" />
-							</hlayout>
-						</div>
-					</div>
-				</div>
+				</div>			
 			</div>
 		</div>
 		<separator />
@@ -223,7 +143,6 @@
 					<column label="Bank Tujuan" />
 					<column label="Tingkat Tujuan" />
 					<column label="Nominal" align="right" />
-					<column label="Bank Fee" align="right" />
 					<column label="Waktu" align="center" />
 					<column label="Keterangan" />
 				</columns>
@@ -233,12 +152,7 @@
 				<label value="Total Nominal" style="font-size: 14px" />
 				<decimalbox readonly="true"
 					value="@load(vm.vsumtransfer.totalamount)" format='###,##0'
-					style="font-size: 18px; text-align: right; font-weight: bold" />
-				<separator orient="vertical" />
-				<label value="Total Nominal Setelah Dikurang Bank Fee" style="font-size: 14px" />
-				<decimalbox readonly="true"
-					value="@load(vm.vsumtransfer.totaltransfered)" format='###,##0'
-					style="font-size: 18px; text-align: right; font-weight: bold" />
+					style="font-size: 18px; text-align: right; font-weight: bold" />				
 			</div>
 		</groupbox>
 		<separator />
