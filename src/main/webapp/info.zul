@@ -1,0 +1,48 @@
+<?page title="${desktop.webApp.appName}" contentType="text/html;charset=UTF-8"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/app_icon.ico" ?>
+<?link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" ?>
+<?link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" ?>
+<?link rel="stylesheet" type="text/css"	href="/mdb/css/mdb.min.css" ?>
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<window id="winInfo" border="normal" width="80%" closable="true" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoVm')">
+		<caption label="Informasi" style="font-size: 18px" />
+		<grid>
+			<columns>
+				<column width="40px" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label value="1." style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Menu ini merupakan update sehubungan dengan adanya Surat Edaran No. HK.02.01/Menkes/1063/2024 tentang Pemenuhan Satuan Kredit Profesi Dalam Penerbitan Perpanjangan Surat Izin Praktik Tenaga Medis dan Tenaga Kesehatan, yang merupakan tindak lanjut dari Undang-undang No. 17 Tahun 2023, tentang Kesehatan" />
+				</row>
+				<row>
+					<label value="2. " style="font-size: 14px" />
+					<label style="font-size: 14px" 
+						value="Tenaga Sanitasi Lingkungan yang belum memperpanjang SIP karena terkendala dengan pemenuhan SKP tetap dapat mengajukan perpanjangan SIP melalui permohonan kepada Kepala Dinas Kesehatan Kabupaten/Kota atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota dengan melampirkan bukti kecukupan SKP yang dimiliki dan persyaratan lain yang dituangkan dalam Surat Edaran Nomor HK.02.01/Menkes/6/2024 tentang Penyelenggaraan Perizinan bagi Tenaga Medis dan Tenaga Kesehatan Pasca Terbitnya Undang-Undang Nomor 17 Tahun 2023 Tentang Kesehatan" />
+				</row>
+				<row>
+					<label value="3. " style="font-size: 14px" />
+					<label style="font-size: 14px" 
+						value="Tenaga Sanitasi Lingkungan yang ingin memperpanjag SIP harus memenuhi 50 SKP sampai dengan tanggal 31 Desember 2024" />
+				</row>
+				<row>
+					<label value="4. " style="font-size: 14px" />
+					<label style="font-size: 14px" 
+						value="Bila belum memenuhi 50 SKP, TSL dapat memperloleh Surat Keterangan Pemutakhiran dan Verifikasi Data Satuan Kredit Profesi dari Kolegium Kesehatan Lingkungan (surat perolehan SKP) dan perlu membuat surat pernyataan kepada Kepala Dinas Kesehatan atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota untuk sanggup mengumpulkan kecukupan 50 SKP sampai dengan 31 Desember 2024" />
+				</row>
+				<row>
+					<label value="5. " style="font-size: 14px" />
+					<label style="font-size: 14px" 
+						value="Untuk memenuhi jumlah SKP sesuai ketentuan sampai dengan tanggal 31 Desember 2024 TSL dapat mengikuti peningkatan kompetensi ataupun pelatihan yang diselenggarakan oleh lembaga terakreditasi Kementerian Kesehatan melalui https://lms.kemkes.go.id/login" />
+				</row>
+			</rows>
+			<foot>
+				<footer span="2" align="right">
+					<button label="Selanjutnya" onClick="@command('doClose')" sclass="btn btn-dark btn-lg" />
+				</footer>
+			</foot>
+		</grid>
+	</window>
+</zk>

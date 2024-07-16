@@ -359,7 +359,7 @@
 							<n:tr>
 								<n:td>
 									<label
-										value="Periode Aktif Akses Borang s/d" />
+										value="Periode Aktif Akses Preview SKP s/d" />
 								</n:td>
 								<n:td>
 									<datebox value="@load(k.periodekta)"

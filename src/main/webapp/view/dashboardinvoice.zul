@@ -120,7 +120,7 @@
 							<comboitem label="Event" value="03" />
 							<comboitem label="Rekomendasi STR"
 								value="04" />
-							<comboitem label="Akses Borang"
+							<comboitem label="Preview SKP"
 								value="05" />
 						</combobox>
 					</row>

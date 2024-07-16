@@ -345,7 +345,7 @@ public class BukuLogRequestVm {
 						parameters.put("TTD_KETUAUMUM",
 								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/ttd_kolegium.jpg"));
 						parameters.put("LOGO",
-								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/kolegium.jpg"));
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/kolegium2.png"));
 
 						session.setAttribute("parameters", parameters);
 						if (data.getTotalskp().compareTo(new BigDecimal(50)) >= 0)

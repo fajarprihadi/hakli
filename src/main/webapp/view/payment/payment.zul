@@ -37,7 +37,7 @@
 						<label value="Tipe Pembayaran" />
 						<radiogroup selectedItem="@bind(vm.paymenttype)" onCheck="@command('doPaymenttypeSelected', type=vm.paymenttype)">
 							<radio value="I" label="Iuran" />
-							<radio value="B" label="Borang" />
+							<radio value="B" label="Preview SKP" />
 						</radiogroup>
 					</row>
 					<row>

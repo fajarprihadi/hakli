@@ -30,11 +30,6 @@ import com.sds.hakli.pojo.BIFastInqResp;
 import com.sds.hakli.pojo.BIFastToken;
 import com.sds.hakli.pojo.BIFastTrfReq;
 import com.sds.hakli.pojo.BIFastTrfResp;
-import com.sds.hakli.pojo.BriApiToken;
-import com.sds.hakli.pojo.FundInqReq;
-import com.sds.hakli.pojo.FundInqResp;
-import com.sds.hakli.pojo.FundTrfReq;
-import com.sds.hakli.pojo.FundTrfResp;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 import com.sds.utils.db.StoreHibernateUtil;
@@ -47,7 +42,6 @@ public class BriapiBIFastHandler implements Job {
 	private MsysparamDAO sysparamDao = new MsysparamDAO();
 	private TtransferDAO trfDao = new TtransferDAO();
 	private TcounterengineDAO counterDao = new TcounterengineDAO();
-	private SimpleDateFormat dateLocalFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 	private Map<String, Mfee> mapFee = new HashMap<>();
 	private BriApiExt briapi;
@@ -62,45 +56,51 @@ public class BriapiBIFastHandler implements Job {
 				AppData.isActiveFundTransfer = true;
 				try {
 					int disburse_limit = 1;
-					Msysparam param = new MsysparamDAO()
+					Msysparam param = sysparamDao
 							.findByCode("DISBURSE_LIMIT");
 					if (param != null) {
 						disburse_limit = Integer.parseInt(param.getParamvalue());
 					}
 					
-					param = new MsysparamDAO()
+					param = sysparamDao
 							.findByCode("DISBURSE_MIN_BALANCE");
 					if (param != null) {
 						disburse_min_balance = new BigDecimal(param.getParamvalue());
 					}
 					
-					List<Tinvoice> listInvoice = invDao.listPaidPendingDisburseBIFast("BSMDIDJA", disburse_limit);
-					//List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N')", "tinvoicepk");
-					//List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 6035", "tinvoicepk");
-					System.out.println("Fund Transfer Records : " + listInvoice.size());
-					if (listInvoice.size() > 0) {
-						sourceacc = sysparamDao.getParamvalue(AppUtils.SYSPARAM_BANK_ACCNO);
-						if (sourceacc != null)
-							sourceacc = sourceacc.trim();
-
-						bean = AppData.getBriapibean();
-						briapi = new BriApiExt(bean);
-						briapiToken = briapi.getTokenBIFast();
-
+					sourceacc = sysparamDao.getParamvalue(AppUtils.SYSPARAM_BANK_ACCNO);
+					if (sourceacc != null)
+						sourceacc = sourceacc.trim();
+					
+					bean = AppData.getBriapibean();
+					briapi = new BriApiExt(bean);
+					briapiToken = briapi.getTokenBIFast();
+					
+					if (briapiToken != null) {
 						for (Mfee fee : new MfeeDAO().listAll()) {
 							mapFee.put(fee.getFeetype(), fee);
 						}
-
-						if (briapiToken != null) {
+						
+						//List<Tinvoice> listInvoice = invDao.listPaidPendingDisburseBIFast("BSMDIDJA", disburse_limit);
+						//List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N')", "tinvoicepk");
+						//List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 6035", "tinvoicepk");
+						List<Tinvoice> listInvoice = invDao.listPaidPendingDisburseProvBIFast("BSMDIDJA", disburse_limit);
+						System.out.println("Fund Transfer Prov Records : " + listInvoice.size());
+						if (listInvoice.size() > 0) {
 							for (Tinvoice inv : listInvoice) {
-								// doFundTransfer(inv, "PROV");
-																
 								if (inv.getIstrfprov().equals("N")
 										&& inv.getTanggota().getMcabang().getMprov().getIsdisburse() != null
 										&& inv.getTanggota().getMcabang().getMprov().getIsdisburse().equals("Y")
 										&& inv.getTanggota().getMcabang().getMprov().getAccno().length() > 0) {											
 									doFundTransfer(inv, "PROV");
 								}
+							}
+						}
+						
+						listInvoice = invDao.listPaidPendingDisburseKabBIFast("BSMDIDJA", disburse_limit);
+						System.out.println("Fund Transfer Kab Records : " + listInvoice.size());
+						if (listInvoice.size() > 0) {
+							for (Tinvoice inv : listInvoice) {
 								if (inv.getIstrfkab().equals("N") && inv.getTanggota().getMcabang().getIsdisburse() != null
 										&& inv.getTanggota().getMcabang().getIsdisburse().equals("Y")
 										&& inv.getTanggota().getMcabang().getAccno().length() > 0) {

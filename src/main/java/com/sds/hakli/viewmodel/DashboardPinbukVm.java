@@ -174,11 +174,12 @@ public class DashboardPinbukVm {
 					row.getChildren().add(new Label(data.getBenefname()));
 					row.getChildren().add(new Label(data.getBenefbankcode()));
 					row.getChildren().add(new Label(data.getTrfto() + " - " + data.getTrftoname()));
+					//row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getBenefbankcode().equals("BRINIDJA") ? data.getAmount() : data.getAmount().add(data.getBankfee()))));
 					row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getAmount())));
 					row.getChildren().add(new Label(data.getBankfee() != null ? 
 							NumberFormat.getInstance().format(data.getBankfee()) : "-"));
 					row.getChildren().add(new Label(datetimelocalFormatter.format(data.getTrxtime())));
-					row.getChildren().add(new Label(data.getResponsecode() != null && data.getResponsecode().equals("0200") ? data.getResponsedesc() : data.getErrordesc()));
+					row.getChildren().add(new Label(data.getResponsecode() != null && (data.getResponsecode().equals("0200") || data.getResponsecode().equals("2008000")) ? data.getResponsedesc() : data.getErrordesc()));
 				}
 			
 			});
@@ -326,8 +327,8 @@ public class DashboardPinbukVm {
 			filter += " and invoiceno = '" + invno.trim() + "'";
 		if (status != null  && status.trim().length() > 0) {
 			if (status.equals("Y"))
-				filter += " and responsecode in ('0200', '2008100')";
-			else filter += " and responsecode != '0200' and responsecode != '2008100'";
+				filter += " and responsecode in ('0200', '2008000')";
+			else filter += " and responsecode != '0200' and responsecode != '2008000'";
 		}
 		if (begindate != null && enddate != null) {
 			filter += " and date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "'";
@@ -349,7 +350,7 @@ public class DashboardPinbukVm {
 	@NotifyChange("*")
 	public void doListSummary() {
 		try {
-			String filterperiod = "trfto != 'SYS' and date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "' and responsecode in ('0200', '2008100')";
+			String filterperiod = "trfto != 'SYS' and date(trxtime) between '" + dateFormatter.format(begindate) + "' and '" + dateFormatter.format(enddate) + "' and responsecode in ('0200', '2008000')";
 			totalpinbuk = oDao.sumAmount(filterperiod);
 			totalpinbukprov = oDao.sumAmount(filterperiod + " and trfto = 'PROV'");
 			totalpinbukkab = oDao.sumAmount(filterperiod + " and trfto = 'KAB'");

@@ -237,7 +237,7 @@ public class PaymentVm {
 		try {
 			totalpayment = new BigDecimal(0);
 			if (type.equals("B")) {
-				keterangan = "Pembayaran hanya untuk akses Borang dengan masa akses 30 hari terhitung dari tanggal bayar dan pembayaran ini tidak mengurangi tunggakan Iuran.";
+				keterangan = "Pembayaran hanya untuk akses preview SKP dengan masa akses 30 hari terhitung dari tanggal bayar dan pembayaran ini tidak mengurangi tunggakan Iuran.";
 				periodstart = anggota.getPeriodeborang();
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.MONTH, 1);
@@ -248,7 +248,7 @@ public class PaymentVm {
 					if (obj.getIsbase().equals("Y")) {
 						BigDecimal totalbase = amountbase.divide(new BigDecimal(6));
 						obj.setChargeamount(totalbase);
-						obj.setChargedesc("Pembayaran Akses Borang Untuk 30 Hari");
+						obj.setChargedesc("Pembayaran Akses Preview SKP Untuk 30 Hari");
 					}
 					oList.add(obj);
 				}
@@ -274,18 +274,6 @@ public class PaymentVm {
 					calCurrent.set(Calendar.MONTH, 5);
 					calCurrent.set(Calendar.DAY_OF_MONTH, 30);
 				}
-				
-//				if (calCurrent.get(Calendar.MONTH) < 4) {
-//					calCurrent.set(Calendar.MONTH, 5);
-//					calCurrent.set(Calendar.DAY_OF_MONTH, 30);
-//				} else if (calCurrent.get(Calendar.MONTH) >= 4 && calCurrent.get(Calendar.MONTH) < 10) {
-//					calCurrent.set(Calendar.MONTH, 11);
-//					calCurrent.set(Calendar.DAY_OF_MONTH, 31);
-//				} else if (calCurrent.get(Calendar.MONTH) >= 10) {
-//					calCurrent.set(Calendar.MONTH, 5);
-//					calCurrent.set(Calendar.DAY_OF_MONTH, 30);
-//					calCurrent.add(Calendar.YEAR, 1);
-//				}
 				
 				calCurrent.set(Calendar.HOUR_OF_DAY, 0);
 				calCurrent.set(Calendar.MINUTE, 0);

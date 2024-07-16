@@ -29,7 +29,8 @@
 
 										<div
 											class="d-flex align-items-center mb-3 pb-1">
-											<image src="/img/logo_hakli_blue.png" height="55px" />
+											<!-- <image src="/img/logo_hakli_blue.png" height="55px" /> -->
+											<image src="/img/kolegium2.png" height="100px" />
 										</div>
 
 										<n:h5

@@ -48,56 +48,64 @@ public class BriapiFundTransferHandler implements Job {
 	BigDecimal disburse_min_balance = new BigDecimal(0);
 
 	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {		
-		synchronized(this) {
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		synchronized (this) {
 			if (!AppData.isActiveFundTransfer) {
 				System.out.println(new Date() + " Fund Transfer Handler is Started...");
 				AppData.isActiveFundTransfer = true;
 				try {
 					int disburse_limit = 1;
-					Msysparam param = new MsysparamDAO()
-							.findByCode("DISBURSE_LIMIT");
+					Msysparam param = sysparamDao.findByCode("DISBURSE_LIMIT");
 					if (param != null) {
 						disburse_limit = Integer.parseInt(param.getParamvalue());
 					}
-					
-					param = new MsysparamDAO()
-							.findByCode("DISBURSE_MIN_BALANCE");
+
+					param = sysparamDao.findByCode("DISBURSE_MIN_BALANCE");
 					if (param != null) {
 						disburse_min_balance = new BigDecimal(param.getParamvalue());
 					}
-					
-					List<Tinvoice> listInvoice = invDao.listPaidPendingDisburse(disburse_limit);
-					//List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov = 'N' or istrfkab = 'N')", "tinvoicepk");
-					//List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 6035", "tinvoicepk");
-					System.out.println("Fund Transfer Records : " + listInvoice.size());
-					if (listInvoice.size() > 0) {
-						sourceacc = sysparamDao.getParamvalue(AppUtils.SYSPARAM_BANK_ACCNO);
-						if (sourceacc != null)
-							sourceacc = sourceacc.trim();
 
-						bean = AppData.getBriapibean();
-						briapi = new BriApiExt(bean);
-						briapiToken = briapi.getTokenFundTransfer();
+					sourceacc = sysparamDao.getParamvalue(AppUtils.SYSPARAM_BANK_ACCNO);
+					if (sourceacc != null)
+						sourceacc = sourceacc.trim();
 
+					bean = AppData.getBriapibean();
+					briapi = new BriApiExt(bean);
+					briapiToken = briapi.getTokenFundTransfer();
+
+					// List<Tinvoice> listInvoice = invDao.listPaidPendingDisburse(disburse_limit);
+					// List<Tinvoice> listInvoice = invDao.listByFilter("ispaid = 'Y' and (istrfprov
+					// = 'N' or istrfkab = 'N')", "tinvoicepk");
+					// List<Tinvoice> listInvoice = invDao.listByFilter("tinvoicepk = 6035",
+					// "tinvoicepk");
+
+					if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
 						for (Mfee fee : new MfeeDAO().listAll()) {
 							mapFee.put(fee.getFeetype(), fee);
 						}
-
-						if (briapiToken != null && briapiToken.getStatus().equals("approved")) {
+						
+						List<Tinvoice> listInvoice = invDao.listPaidPendingDisburseProv(disburse_limit);
+						System.out.println("Fund Transfer Prov Records : " + listInvoice.size());
+						if (listInvoice.size() > 0) {
 							for (Tinvoice inv : listInvoice) {
-								// doFundTransfer(inv, "PROV");
-																
 								if (inv.getIstrfprov().equals("N")
 										&& inv.getTanggota().getMcabang().getMprov().getIsdisburse() != null
 										&& inv.getTanggota().getMcabang().getMprov().getIsdisburse().equals("Y")
-										&& inv.getTanggota().getMcabang().getMprov().getAccno().length() > 0) {											
+										&& inv.getTanggota().getMcabang().getMprov().getAccno().length() > 0) {
 									doFundTransfer(inv, "PROV");
 								}
-								if (inv.getIstrfkab().equals("N") && inv.getTanggota().getMcabang().getIsdisburse() != null
+							}
+						}
+
+						listInvoice = invDao.listPaidPendingDisburseKab(disburse_limit);
+						System.out.println("Fund Transfer Kab Records : " + listInvoice.size());
+						if (listInvoice.size() > 0) {
+							for (Tinvoice inv : listInvoice) {
+								if (inv.getIstrfkab().equals("N")
+										&& inv.getTanggota().getMcabang().getIsdisburse() != null
 										&& inv.getTanggota().getMcabang().getIsdisburse().equals("Y")
 										&& inv.getTanggota().getMcabang().getAccno().length() > 0) {
-									doFundTransfer(inv, "KAB");								
+									doFundTransfer(inv, "KAB");
 								}
 							}
 						}
@@ -125,14 +133,17 @@ public class BriapiFundTransferHandler implements Job {
 					trf.setAmount(inv.getTeventreg().getTevent().getFeeprov());
 				else if (beneftype.equals("KAB"))
 					trf.setAmount(inv.getTeventreg().getTevent().getFeekab());
-			} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN) || inv.getInvoicetype().equals(AppUtils.INVOICETYPE_BORANG)) {
+			} else if (inv.getInvoicetype().equals(AppUtils.INVOICETYPE_IURAN)
+					|| inv.getInvoicetype().equals(AppUtils.INVOICETYPE_BORANG)) {
 				if (beneftype.equals("PROV")) {
-					//BigDecimal amounttrf = inv.getProvamounttrf() == null ? new BigDecimal(0) : inv.getProvamounttrf();
-					//trf.setAmount(inv.getProvamount().subtract(amounttrf));
+					// BigDecimal amounttrf = inv.getProvamounttrf() == null ? new BigDecimal(0) :
+					// inv.getProvamounttrf();
+					// trf.setAmount(inv.getProvamount().subtract(amounttrf));
 					trf.setAmount(inv.getProvamount());
 				} else if (beneftype.equals("KAB")) {
-					//BigDecimal amounttrf = inv.getKabamounttrf() == null ? new BigDecimal(0) : inv.getKabamounttrf();
-					//trf.setAmount(inv.getKabamount().subtract(amounttrf));
+					// BigDecimal amounttrf = inv.getKabamounttrf() == null ? new BigDecimal(0) :
+					// inv.getKabamounttrf();
+					// trf.setAmount(inv.getKabamount().subtract(amounttrf));
 					trf.setAmount(inv.getKabamount());
 				}
 			} else {
@@ -165,7 +176,7 @@ public class BriapiFundTransferHandler implements Job {
 				trf.setTrftoname(inv.getTanggota().getMcabang().getCabang());
 			}
 			trf.setRemark(trf.getRemark().replaceAll("/", ""));
-			
+
 			FundInqReq inqReq = new FundInqReq();
 			inqReq.setSourceAccount(trf.getSourceacc());
 			inqReq.setBeneficiaryAccount(trf.getBenefacc());
@@ -176,7 +187,7 @@ public class BriapiFundTransferHandler implements Job {
 
 				// trf.setSourceacc("888801000003301");
 				// trf.setBenefacc("888809999999993");
-				
+
 				if (new BigDecimal(fundInq.getData().getSourceAccountBalance()).compareTo(disburse_min_balance) > 0) {
 					FundTrfReq trfReq = new FundTrfReq();
 					trfReq.setSourceAccount(trf.getSourceacc());
@@ -228,5 +239,5 @@ public class BriapiFundTransferHandler implements Job {
 			e.printStackTrace();
 		}
 	}
-	
+
 }
