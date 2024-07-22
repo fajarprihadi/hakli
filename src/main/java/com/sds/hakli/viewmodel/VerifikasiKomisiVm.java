@@ -209,8 +209,10 @@ public class VerifikasiKomisiVm {
 
 									for (Entry<Integer, Tp2kbbook> entry : mapData.entrySet()) {
 										Tp2kbbook obj = entry.getValue();
+//										String nosurat = obj.getTanggota().getProvcode() + new TcounterengineDAO()
+//												.getLetterRecomNo("/REKOM/PP-HAKLI/" + mapRomawi.get(month) + "/" + year, 4);
 										String nosurat = obj.getTanggota().getProvcode() + new TcounterengineDAO()
-												.getLetterRecomNo("/REKOM/PP-HAKLI/" + mapRomawi.get(month) + "/" + year, 4);
+												.getLetterRecomNo("/REKOM/KOLEGIUM/" + mapRomawi.get(month) + "/" + year, 4);
 										obj.setLetterno(nosurat);
 										obj.setReviewerid(anggota.getNoanggota());
 										obj.setReviewername(anggota.getNama());
@@ -240,7 +242,8 @@ public class VerifikasiKomisiVm {
 	@NotifyChange("*")
 	public void doSearch() {
 		try {
-			filter = "totalskp >= 50 and status = 'R'";
+			//filter = "totalskp >= 50 and status = 'R'";
+			filter = "status = 'R'";
 			orderby = "tglmulai";
 
 			if (nama != null && nama.trim().length() > 0)

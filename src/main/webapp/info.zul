@@ -3,46 +3,191 @@
 <?link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" ?>
 <?link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" ?>
 <?link rel="stylesheet" type="text/css"	href="/mdb/css/mdb.min.css" ?>
-<zk xmlns:n="native" xmlns:x="xhtml">
-	<window id="winInfo" border="normal" width="80%" closable="true" viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoVm')">
-		<caption label="Informasi" style="font-size: 18px" />
-		<grid>
+<zk xmlns:n="native" xmlns:x="xhtml">	
+	<window id="winInfo" border="normal" width="80%"
+		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.InfoVm')">
+		<caption label="KONFIRMASI/PEMBERITAHUAN"
+			style="font-size: 18px" focus="true" />
+		<grid sclass="msgBox" style="overflow-y: scroll;">
 			<columns>
+				<column width="40px" />
+				<column width="40px" />
 				<column width="40px" />
 				<column />
 			</columns>
 			<rows>
 				<row>
 					<label value="1." style="font-size: 14px" />
-					<label style="font-size: 14px"
-						value="Menu ini merupakan update sehubungan dengan adanya Surat Edaran No. HK.02.01/Menkes/1063/2024 tentang Pemenuhan Satuan Kredit Profesi Dalam Penerbitan Perpanjangan Surat Izin Praktik Tenaga Medis dan Tenaga Kesehatan, yang merupakan tindak lanjut dari Undang-undang No. 17 Tahun 2023, tentang Kesehatan" />
+					<cell colspan="3">
+						<label style="font-size: 14px"
+							value="Menu ini merupakan update sehubungan dengan adanya Surat Edaran No. HK.02.01/Menkes/1063/2024 tentang Pemenuhan Satuan Kredit Profesi Dalam Penerbitan Perpanjangan Surat Izin Praktik Tenaga Medis dan Tenaga Kesehatan, yang merupakan tindak lanjut dari Undang-undang No. 17 Tahun 2023, tentang Kesehatan" />
+					</cell>
 				</row>
 				<row>
 					<label value="2. " style="font-size: 14px" />
-					<label style="font-size: 14px" 
-						value="Tenaga Sanitasi Lingkungan yang belum memperpanjang SIP karena terkendala dengan pemenuhan SKP tetap dapat mengajukan perpanjangan SIP melalui permohonan kepada Kepala Dinas Kesehatan Kabupaten/Kota atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota dengan melampirkan bukti kecukupan SKP yang dimiliki dan persyaratan lain yang dituangkan dalam Surat Edaran Nomor HK.02.01/Menkes/6/2024 tentang Penyelenggaraan Perizinan bagi Tenaga Medis dan Tenaga Kesehatan Pasca Terbitnya Undang-Undang Nomor 17 Tahun 2023 Tentang Kesehatan" />
+					<cell colspan="3">
+						<label style="font-size: 14px"
+							value="Tenaga Sanitasi Lingkungan yang belum memperpanjang SIP karena terkendala dengan pemenuhan SKP tetap dapat mengajukan perpanjangan SIP melalui permohonan kepada Kepala Dinas Kesehatan Kabupaten/Kota atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota dengan melampirkan bukti kecukupan SKP yang dimiliki dan persyaratan lain yang dituangkan dalam Surat Edaran Nomor HK.02.01/Menkes/6/2024 tentang Penyelenggaraan Perizinan bagi Tenaga Medis dan Tenaga Kesehatan Pasca Terbitnya Undang-Undang Nomor 17 Tahun 2023 Tentang Kesehatan" />
+					</cell>
 				</row>
 				<row>
-					<label value="3. " style="font-size: 14px" />
-					<label style="font-size: 14px" 
-						value="Tenaga Sanitasi Lingkungan yang ingin memperpanjag SIP harus memenuhi 50 SKP sampai dengan tanggal 31 Desember 2024" />
+					<label />
+					<label value="a. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="Kolegium Kesehatan Lingkungan telah mengambi alih dengan re-verifikasi dan re-validasi isian borang SKP yang telah diajukan dalam sistem informasi P2KB Tenaga Sanitasi Lingkungan." />
+					</cell>
 				</row>
 				<row>
-					<label value="4. " style="font-size: 14px" />
-					<label style="font-size: 14px" 
-						value="Bila belum memenuhi 50 SKP, TSL dapat memperloleh Surat Keterangan Pemutakhiran dan Verifikasi Data Satuan Kredit Profesi dari Kolegium Kesehatan Lingkungan (surat perolehan SKP) dan perlu membuat surat pernyataan kepada Kepala Dinas Kesehatan atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota untuk sanggup mengumpulkan kecukupan 50 SKP sampai dengan 31 Desember 2024" />
+					<label />
+					<label value="b. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="Dengan demikian TSL anggota HAKLI aktif dapat melakukan preview SKP ( melalui tombol Kollegium/ dahulu SKP portofolio )." />
+					</cell>
 				</row>
 				<row>
-					<label value="5. " style="font-size: 14px" />
-					<label style="font-size: 14px" 
-						value="Untuk memenuhi jumlah SKP sesuai ketentuan sampai dengan tanggal 31 Desember 2024 TSL dapat mengikuti peningkatan kompetensi ataupun pelatihan yang diselenggarakan oleh lembaga terakreditasi Kementerian Kesehatan melalui https://lms.kemkes.go.id/login" />
+					<label />
+					<label value="c. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="TSL anggota HAKLI aktif dalam melakukan preview untuk kebutuhan SKP , anggota bisa mendapatkan dengan cara mendownload pada menu portofolio hasilnya akan menginformasikan sudah memenuhi kecukupan 50 SKP atau angka jumlah capaian SKP bagi yang belum memenuhi kecukupan 50 SKP " />
+					</cell>
+				</row>
+				<row>
+					<label />
+					<label value="d. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="Bagi Tenaga Sanitasi Lingkungan yang dalam melakukan preview SKP mendapatkan hasil sudah mencukupi 50 SKP dan belum memperpanjang SIP karena terkendala dengan pemenuhan SKP tetap dapat mengajukan perpanjangan SIP melalui permohonan kepada Kepala Dinas Kesehatan atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota dengan melampirkan bukti kecukupan SKP yang dimiliki/ dikeluarkan oleh Kolegium Kesehatan Lingkungan dalam aplikasi ini." />
+					</cell>
+				</row>
+				<row>
+					<label />
+					<label value="e. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="Pada saat melakukan preview, bagi TSL yang hasilnya belum mencukupi minimal 50 SKP (&#60; 50 SKP), maka untuk mengurus perpanjangan SIP,  yang bersangkutan harus:" />
+					</cell>
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="•	" style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Membuat surat pernyataan kepada Kepala Dinas Kesehatan atau Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah Kabupaten/Kota untuk sanggup mengumpulkan kecukupan 50 SKP sampai dengan 31 Desember 2024." />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="•	" style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Memenuhi jumlah SKP sesuai ketentuan sampai dengan tanggal 31 Desember 2024 dengan mengikuti peningkatan kompetensi ataupun pelatihan yang diselenggarakan oleh lembaga terakreditasi Kementerian Kesehatan (HAKLI mempunyai institusi Pendidikan pelatihan yaitu LPP MENDSHO dengan Akreditasi A Kemenkes), melalui https://lms.kemkes.go.id/login•	Memenuhi jumlah SKP sesuai ketentuan sampai dengan tanggal 31 Desember 2024 dengan mengikuti peningkatan kompetensi ataupun pelatihan yang diselenggarakan oleh lembaga terakreditasi Kementerian Kesehatan (HAKLI mempunyai institusi Pendidikan pelatihan yaitu LPP MENDSHO dengan Akreditasi A Kemenkes), melalui https://lms.kemkes.go.id/login" />
+				</row>
+				<row>
+					<label />
+					<label value="f. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="Tenaga Sanitasi Lingkungan yang dapat melakukan preview kecukupan SKP dalam aplikasi ini adalah TSL anggota HAKLI aktif, yang dimaksud anggota HAKLI aktif adalah anggota yang memenuhi kewajiban membayar iuran anggota secara rutin." />
+					</cell>
+				</row>
+				<row>
+					<label />
+					<label value="g. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="Terkait pembayaran iuran anggota, telah diberikan kemudahan bagi TSL anggota HAKLI untuk membayar iuran sebagaimana dimaksud dalam  Surat Ketua Umum  PP-HAKLI  No 1780/K/PP-HAKLI/V/2024, di mana dengan terbitnya surat di maksud,  maka : " />
+					</cell>
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="•	" style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Seluruh TSL se-indonesia per per tanggal periode bulan Juni 2024 dapat membayar iuran HAKLI secara bulanan sebesar Rp. 40.000 perbulan, ditagihkan secara kumulatif (misalnya anggota bayar bulan Juni,  membayar Rp.40.000, tetapi apabila anggota belum membayar iuran bulan Juni dan mulai pembayaran pada bulan Juli,  maka akan ditagihkan sebesar 2 bulan ( yaitu Rp. 40.000 x 2 =  Rp. 80.000 ) begitu seterusnya" />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="•	" style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Apabila ada tunggakan iuran pada bulan / Tahun sebelumnya,  maka sementara tunggakan di HOLD, hanya menjadi catatan dan tidak ditagihkan (hanya untuk dicatat sampai ada keputusan pada waktu Munas HAKLI  pada bulan November 2024)" />
+				</row>
+				<row>
+					<label />
+					<label value="h. " style="font-size: 14px" />
+					<cell colspan="2">
+						<label style="font-size: 14px"
+							value="Dengan segala kemudahan fasilitas pelayanan kepada anggota,  diharapkan anggota juga melakukan kewajibannya membayar iuran secara rutin.
+Anggota Himpunan Ahli Kesehatan Lingkungan Indonesia (HAKLI) yang membayar iuran secara rutin mendapatkan berbagai manfaat spesifik yang mendukung pengembangan profesional mereka serta kontribusi terhadap komunitas kesehatan lingkungan. Berikut adalah beberapa manfaat tersebut: :" />
+					</cell>
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="1) " style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Akses ke Informasi dan Pengetahuan Terbaru: Anggota HAKLI mendapatkan akses ke berbagai publikasi, jurnal, dan penelitian terbaru di bidang kesehatan lingkungan yang membantu memperbarui pengetahuan dan praktik mereka." />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="2) " style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Pelatihan, kegiatan peningkatan kompetensi dan Pengembangan Profesional: HAKLI secara berkala mengadakan seminar, workshop, dan pelatihan yang bertujuan meningkatkan keterampilan dan kompetensi anggotanya,  termasuk melaksanakan kegiatan webinar bagi TSL secara gratis dengan  e- Sertifikat SKP Kemenkes ( ter regeristasi SIAKPEL ) secara rutin setiap 2 bulan sekali." />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="3) " style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Jaringan dan Kolaborasi: Anggota dapat berpartisipasi dalam berbagai forum dan kegiatan yang diselenggarakan oleh HAKLI, memungkinkan mereka untuk berjejaring dengan profesional lain di bidang yang sama, berbagi pengalaman, dan menjalin kolaborasi." />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="4) " style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Dukungan Advokasi: Sebagai anggota HAKLI yang aktif, mereka mendapatkan dukungan dalam hal advokasi dan perlindungan hak-hak profesional, termasuk termasuk perlindungan hukum lagi tsl dalam menjalankan tugasnya." />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="5) " style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Peluang Karir dan Pengembangan Jaringan Profesional: HAKLI menyediakan informasi tentang peluang karir, proyek, dan penelitian yang relevan." />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="6) " style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Keterlibatan dalam Program dan Proyek. Anggota dapat lebih mudah terlibat dalam berbagai program dan proyek yang diinisiasi oleh HAKLI, seperti proyek sanitasi lingkungan, penelitian kolaboratif, dan kegiatan pengabdian masyarakat." />
+				</row>
+				<row>
+					<label />
+					<label />
+					<label value="7) " style="font-size: 14px" />
+					<label style="font-size: 14px"
+						value="Kontribusi Terhadap Pembangunan Profesi: Iuran anggota digunakan untuk mendukung berbagai kegiatan dan inisiatif yang bertujuan untuk memajukan bidang kesehatan lingkungan di Indonesia." />
 				</row>
 			</rows>
 			<foot>
-				<footer span="2" align="right">
-					<button label="Selanjutnya" onClick="@command('doClose')" sclass="btn btn-dark btn-lg" />
+				<footer span="4" align="right">
+					<button label="Selanjutnya"
+						onClick="@command('doClose')" sclass="btn btn-dark btn-lg" />
 				</footer>
 			</foot>
 		</grid>
 	</window>
+	<script>
+	window.addEventListener('load', async function() {
+            await new Promise(r => setTimeout(r, 50));
+            console.log("READY");
+          document.getElementsByClassName(`msgBox`)[0].scrollTo({ top: 0, behavior: 'smooth' });
+                  
+          
+        })
+	</script>
 </zk>

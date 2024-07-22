@@ -255,11 +255,7 @@ public class AnggotaFormVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			this.acttype = acttype;
-//			if (this.acttype == null)
-//				this.acttype = "edit";
 			Tanggota anggota = (Tanggota) zkSession.getAttribute("anggota");
-			if (anggota == null)
-				anggota = new Tanggota();
 			oUser = anggota;
 
 			if (obj != null)
@@ -287,59 +283,7 @@ public class AnggotaFormVm {
 			if (pribadi.getStatusreg() != null && pribadi.getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_ACTIVE)) {
 				divIuran.setVisible(true);
 				try {
-//					List<Mcharge> charges = new MchargeDAO().listByFilter("chargetype = '" + AppUtils.CHARGETYPE_IURAN + "'", "isbase desc");
-//					BigDecimal amountbase = new BigDecimal(0);
-//					for (Mcharge charge : charges) {
-//						if (charge.getIsbase().equals("Y")) {
-//							amountbase = charge.getChargeamount();
-//							break;
-//						}
-//					}
-//					
-//					Calendar cal = Calendar.getInstance();
-//					Calendar calNext = Calendar.getInstance();
-//					if (pribadi.getPeriodekta() == null) {
-//						cal.setTime(new Date());
-//						calNext.add(Calendar.MONTH, 6);
-//					} else {
-//						cal.setTime(pribadi.getPeriodekta());
-//					}
-//					int qty = 0;
-//					List<Mcharge> oListIuran = new ArrayList<>();
-//					for (Mcharge charge : charges) {
-//						if (charge.getIsbase().equals("Y")) {
-//							qty = 0;
-//							BigDecimal totalbase = new BigDecimal(0);
-//							while (cal.getTime().compareTo(calNext.getTime()) == -1) {
-//								qty++;
-//								totalbase = amountbase.multiply(new BigDecimal(qty));
-//								cal.add(Calendar.MONTH, 6);
-//							}
-//							periodeiuran = cal.getTime();
-//							keteranganiuran = "Pembayaran Iuran Untuk " + (6 * qty) + " Bulan";
-//							charge.setChargeamount(totalbase);
-//							charge.setChargedesc(keteranganiuran);
-//						}
-//						
-//						oListIuran.add(charge);
-//					}
-//
-//					totalpayment = new BigDecimal(0);
-//					gridCharge.setRowRenderer(new RowRenderer<Mcharge>() {
-//
-//						@Override
-//						public void render(Row row, Mcharge data, int index) throws Exception {
-//							row.getChildren().add(new Label(data.getChargedesc()));
-//							row.getChildren().add(new Label(NumberFormat.getInstance().format(data.getChargeamount())));
-//
-//							totalpayment = totalpayment.add(data.getChargeamount());
-//							BindUtils.postNotifyChange(AnggotaFormVm.this, "totalpayment");
-//						}
-//					});
-//					gridCharge.setModel(new ListModelList<>(oListIuran));
-					
 					doCalInvoice();
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

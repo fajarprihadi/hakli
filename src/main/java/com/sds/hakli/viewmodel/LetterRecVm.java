@@ -1,8 +1,10 @@
 package com.sds.hakli.viewmodel;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -97,7 +99,8 @@ public class LetterRecVm {
 						List<Tp2kbbook>dataList = new ArrayList<>();
 						String currentdate = "";
 						
-						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getReviewtime());
+						//currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(data.getReviewtime());
+						currentdate = new SimpleDateFormat("dd MMMMM yyyy", new Locale("id", "ID")).format(new Date());
 						
 						String nosurat = data.getLetterno();
 						dataList.add(data);
@@ -106,13 +109,19 @@ public class LetterRecVm {
 						parameters.put("NOSURAT", nosurat);
 						parameters.put("CURRENTDATE", currentdate);
 						parameters.put("TTD_KETUAUMUM",
-								Executions.getCurrent().getDesktop().getWebApp().getRealPath("images/ttd_ketum.png"));
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/ttd_kolegium.jpg"));
 						parameters.put("LOGO",
-								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/hakli.png"));
+								Executions.getCurrent().getDesktop().getWebApp().getRealPath("img/kolegium2.png"));
 						
 						zkSession.setAttribute("parameters", parameters);
-						zkSession.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+//						zkSession.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+//								.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi.jasper"));
+						if (data.getTotalskp().compareTo(new BigDecimal(50)) >= 0)
+							zkSession.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
 								.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi.jasper"));
+						else 
+							zkSession.setAttribute("reportPath", Executions.getCurrent().getDesktop().getWebApp()
+									.getRealPath(AppUtils.PATH_JASPER + "/suratrekomendasi_belumcukup.jasper"));
 						
 						Executions.getCurrent().sendRedirect("/view/jasperviewer.zul", "_blank");
 					}

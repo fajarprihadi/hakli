@@ -42,11 +42,15 @@
 					</row>
 					<row>
 						<label value="Periode Terakhir Pembayaran Iuran Keanggotaan" />
-						<label value="@load(vm.periodstart) @converter('formatedDate', format='dd-MM-yyyy')" />
+						<label value="@load(vm.periodstart) @converter('formatedDate', format='dd MMMMM yyyy')" />
 					</row>
 					<row>
-						<label value="Periode Pembayaran Iuran Keanggotaan Sampai Dengan" />
-						<label value="@load(vm.periode) @converter('formatedDate', format='dd-MM-yyyy')" />
+						<label value="Periode Akses Preview SKP" />
+						<label value="@load(vm.anggota.periodeborang) @converter('formatedDate', format='dd MMMMM yyyy')" />
+					</row>
+					<row>
+						<label value="Periode Pembayaran Sampai Dengan" />
+						<label value="@load(vm.periode) @converter('formatedDate', format='dd MMMMM yyyy')" />
 					</row>
 					<row>
 						<label value="Keterangan" />
@@ -64,7 +68,7 @@
 						<label />
 						<grid id="gridCharge">
 							<columns>
-								<column label="Komponen" />
+								<column label="Komponen" width="65%" />
 								<column label="Biaya" align="right" />
 							</columns>
 							<foot>
