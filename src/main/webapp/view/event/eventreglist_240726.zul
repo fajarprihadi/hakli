@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:n="native">
-	<window id="winEventRegList" border="normal"
+	<window id="winAnggotaRegList" border="normal"
 		viewModel="@id('vm') @init('com.sds.hakli.viewmodel.EventRegListVm')">
 		<caption>
 			<n:i class="fas fa-list"></n:i>
@@ -43,12 +43,16 @@
 			<columns sizable="true">
 				<column label="${labels.common.no}" align="right" />
 				<column label="Event" />
-				<column label="Jenis Event" />
+				<column label="Tipe Event" />
 				<column label="Tanggal Pelaksanaan" align="center" />
-				<column label="Batas Akhir Pendaftaran" align="center" />
+				<column label="Lokasi" />
 				<column label="Biaya"  align="right"/>
-				<column label="Status Pendaftaran" align="center" />
-				<column label="Action" align="center"/>
+				<column label="Nomor VA" />
+				<column label="Tgl Jatuh Tempo VA" align="center"/>
+				<column label="Status Pembayaran" align="center"/>
+				<column label="Nominal Pembayaran" align="right"/>
+				<column label="Waktu Pembayaran" align="center"/>
+				<column label="Download" align="center"/>
 			</columns>
 		</grid>
 

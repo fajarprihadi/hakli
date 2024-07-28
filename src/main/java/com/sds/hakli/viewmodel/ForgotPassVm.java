@@ -52,7 +52,7 @@ public class ForgotPassVm {
 								
 								String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 										.getRealPath("/themes/mail/mailresetpass.html");
-								new Thread(new MailHandler(anggota, "Reset Password", anggota.getEmail(), bodymail_path)).start();
+								new Thread(new MailHandler(anggota, "Reset Password", anggota.getEmail(), bodymail_path, null)).start();
 								
 								lblMessage = "Reset password berhasil. Silahkan cek email Anda " + anggota.getEmail() + " untuk melihat password baru Anda.";
 								btSubmit.setDisabled(true);

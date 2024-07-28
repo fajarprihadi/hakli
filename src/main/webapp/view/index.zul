@@ -39,7 +39,7 @@
             <n:nav id="main-navbar"
                    class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <!-- Container wrapper -->
-                <n:div class="container-fluid" style="background-color: #262626">>
+                <n:div class="container-fluid" style="background-color: #262626">
                     <!-- Toggle button -->
                     <n:button class="navbar-toggler tombolmenu" 
                               type="button" data-mdb-toggle="collapse"
@@ -62,7 +62,9 @@
                     <!-- Brand -->
                     <n:a class="navbar-brand"
                          href="index.zul">
-                        <image src="/img/logo_hakli.png" height="40px"/>
+                        <!-- <image src="/img/logo_hakli.png" height="40px"/> -->
+                        <image src="/img/kolegium1.png" height="40px"/>
+                        KOLEGIUM KESEHATAN LINGKUNGAN
                     </n:a>
 
                     <!-- Right links -->

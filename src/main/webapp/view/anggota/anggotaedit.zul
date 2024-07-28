@@ -362,7 +362,7 @@
 										value="Periode Aktif Akses Preview SKP s/d" />
 								</n:td>
 								<n:td>
-									<datebox value="@load(k.periodekta)"
+									<datebox value="@load(vm.periodeborang)"
 										format="dd-MM-yyyy" buttonVisible="false" readonly="true" />
 								</n:td>
 							</n:tr>

@@ -114,6 +114,7 @@
 		<mapping class="com.sds.hakli.domain.Vrecp2kb" />
 		<mapping class="com.sds.hakli.domain.Vreportproduktivitas" />
 		<mapping class="com.sds.hakli.domain.Vsumtransfer" />
+		<mapping class="com.sds.hakli.domain.Veventreg" />		
 		
 	</session-factory>
 </hibernate-configuration>

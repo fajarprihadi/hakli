@@ -125,7 +125,8 @@ public class PaymentVm {
 				}
 			});
 
-			doCalInvoice("I");
+			//doCalInvoice("I");
+			doPaymenttypeSelected("I");
 			
 			if (paging != null) {
 				paging.addEventListener("onPaging", new EventListener<Event>() {
@@ -188,10 +189,10 @@ public class PaymentVm {
 			List<Tinvoice> invList = invDao.listByFilter("tanggota.tanggotapk = '" + anggota.getTanggotapk() + "' and invoicetype = '" + invoicetype+ "' and ispaid = 'N'", "tinvoicepk desc");
 			if (invList.size() > 0) {
 				if (invList.get(0).getInvoiceduedate().compareTo(new Date()) >= 0) {
-					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar dengan Nomor VA " + invList.get(0).getVano() + " yang akan kadaluarsa pada tanggal" + datelocalFormatter.format(invList.get(0).getInvoiceduedate()) + ". \n Silahkan lihat tabel Riwayat Tagihan dihalaman bawah.";
+					keterangan = "Anda tidak dapat melakukan generate tagihan baru dikarenakan Anda masih memiliki tagihan yang belum dibayar dengan Nomor VA " + invList.get(0).getVano() + " yang akan kadaluarsa pada tanggal " + datelocalFormatter.format(invList.get(0).getInvoiceduedate()) + ". \n Silahkan lihat tabel Riwayat Tagihan dihalaman bawah.";
 					btSave.setDisabled(true);
 				}
-			}
+			} else btSave.setDisabled(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -250,10 +251,12 @@ public class PaymentVm {
 					}
 				} else {
 					Mcharge obj = new Mcharge();
+					obj.setChargeamount(new BigDecimal(0));
 					obj.setChargedesc("Pembayaran Akses Preview SKP Untuk 0 Bulan");
+					oList.add(obj);
 				}
 				
-				gridCharge.setModel(new ListModelList<>(objList));
+				gridCharge.setModel(new ListModelList<>(oList));
 			} else {
 				periodstart = anggota.getPeriodekta();
 				objList = chargeDao.listByFilter("chargetype = '" + AppUtils.CHARGETYPE_IURAN + "'", "isbase desc");
@@ -328,7 +331,8 @@ public class PaymentVm {
 						oList.add(obj);
 					}
 					
-					gridCharge.setModel(new ListModelList<>(objList));
+					//gridCharge.setModel(new ListModelList<>(objList));
+					gridCharge.setModel(new ListModelList<>(oList));
 				}
 			}
 		} catch (Exception e) {
@@ -435,7 +439,7 @@ public class PaymentVm {
 											
 											String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 													.getRealPath("/themes/mail/mailinv.html");
-											new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path)).start();
+											new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path, null)).start();
 
 											processinfo = "Proses generate pembayaran berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
 													+ briva.getBrivaNo() + briva.getCustCode();

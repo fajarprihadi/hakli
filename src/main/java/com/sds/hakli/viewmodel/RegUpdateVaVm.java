@@ -142,7 +142,7 @@ public class RegUpdateVaVm {
 						
 						String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 								.getRealPath("/themes/mail/mailinv.html");
-						new Thread(new MailHandler(objInvoice, objInvoice.getInvoicedesc().trim(), objInvoice.getTanggota().getEmail(), bodymail_path)).start();
+						new Thread(new MailHandler(objInvoice, objInvoice.getInvoicedesc().trim(), objInvoice.getTanggota().getEmail(), bodymail_path, null)).start();
 						
 						//Messagebox.show("Update data virtual account berhasil", WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.INFORMATION);
 						btSubmit.setDisabled(true);

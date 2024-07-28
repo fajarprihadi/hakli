@@ -64,6 +64,10 @@ public class Tevent {
 	
 	private BigDecimal feekab;
 	
+	private Date periodekta;
+	
+	private Date periodeborang;
+	
 	@Id
 	@SequenceGenerator(name = "tevent_seq", sequenceName = "tevent_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tevent_seq")
@@ -268,6 +272,22 @@ public class Tevent {
 
 	public void setIsmember(String ismember) {
 		this.ismember = ismember;
+	}
+
+	public Date getPeriodekta() {
+		return periodekta;
+	}
+
+	public void setPeriodekta(Date periodekta) {
+		this.periodekta = periodekta;
+	}
+
+	public Date getPeriodeborang() {
+		return periodeborang;
+	}
+
+	public void setPeriodeborang(Date periodeborang) {
+		this.periodeborang = periodeborang;
 	}
 	
 	

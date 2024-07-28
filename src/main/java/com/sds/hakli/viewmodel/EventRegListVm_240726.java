@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -31,23 +30,20 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
-import org.zkoss.zul.Window;
+import org.zkoss.zul.Separator;
 
-import com.sds.hakli.dao.TeventDAO;
 import com.sds.hakli.dao.TeventregDAO;
 import com.sds.hakli.domain.Tanggota;
-import com.sds.hakli.domain.Tevent;
 import com.sds.hakli.domain.Teventreg;
-import com.sds.hakli.domain.Veventreg;
 import com.sds.hakli.handler.NaskahHandler;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
 
-public class EventRegListVm {
+public class EventRegListVm_240726 {
 	private org.zkoss.zk.ui.Session zkSession = Sessions.getCurrent();
 	private Tanggota obj;
 
-	private List<Veventreg> objList = new ArrayList<>();
+	private List<Teventreg> objList = new ArrayList<>();
 
 	private String filter;
 	private String orderby;
@@ -56,135 +52,88 @@ public class EventRegListVm {
 
 	private Integer pageTotalSize;
 	private SimpleDateFormat dateLocalFormatted = new SimpleDateFormat("dd-MM-yyyy");
-	private SimpleDateFormat localDateFormatted = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+	private SimpleDateFormat localDateFormatted = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
-	@Wire
-	private Window winEventRegList;
 	@Wire
 	private Grid grid;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
-		try {
-			obj = (Tanggota) zkSession.getAttribute("anggota");
+		obj = (Tanggota) zkSession.getAttribute("anggota");
 
-			grid.setRowRenderer(new RowRenderer<Veventreg>() {
+		doReset();
+		grid.setRowRenderer(new RowRenderer<Teventreg>() {
 
-				@Override
-				public void render(Row row, Veventreg data, int index) throws Exception {
-					row.getChildren().add(new Label(String.valueOf(index + 1)));
-					row.getChildren().add(new Label(data.getEventname()));
-					row.getChildren().add(new Label(AppData.getEventType(data.getEventtype())));
-					row.getChildren().add(new Label(dateLocalFormatted.format(data.getEventdate())));
-					row.getChildren().add(new Label(localDateFormatted.format(data.getClosedate())));
-					row.getChildren().add(new Label(data.getEventprice() != null ? DecimalFormat.getInstance().format(data.getEventprice()) : "Gratis"));
-					if (data.getTeventregpk() != null) {
-						row.getChildren().add(new Label("Terdaftar Tanggal " + dateLocalFormatted.format(data.getVacreatedat())));
-					} else {
-						if (data.getClosedate().compareTo(new Date()) < 0 ) {
-							row.getChildren().add(new Label("Telah Berakhir"));
-						} else {
-							Button btReg = new Button("Daftar");
-							btReg.setSclass("btn btn-success btn-sm");
-							btReg.setAutodisable("self");
-							btReg.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-								@Override
-								public void onEvent(Event event) throws Exception {
-									try {
-										if (data.getPeriodekta() != null) {
-											boolean isValid = true;
-											if (obj.getPeriodeborang() == null)
-												obj.setPeriodeborang(obj.getPeriodekta());
-											if (data.getPeriodekta() != null && obj.getPeriodekta().compareTo(data.getPeriodekta()) >= 0) {
-												isValid = true;
-											} else if (data.getPeriodeborang() != null && obj.getPeriodeborang().compareTo(data.getPeriodeborang()) >= 0) {
-												isValid = true;
-											} else {
-												isValid = false;
-											}
-											
-											if (!isValid) {
-												Window win = (Window) Executions.createComponents("/view/infoperiodekta.zul", null, null);
-												win.setWidth("50%");
-												win.setClosable(true);
-												win.doModal();
-												win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-													@Override
-													public void onEvent(Event event) throws Exception {
-														winEventRegList.getChildren().clear();
-														winEventRegList.setBorder(false);
-														Executions.createComponents("/view/payment/payment.zul", winEventRegList,
-																null);
-													}
-
-												});
-											} else {
-												Tevent tevent = new TeventDAO().findByPk(data.getTeventpk());
-												Map<String, Object> map = new HashMap<String, Object>();
-												map.put("obj", tevent);
-												map.put("anggota", obj);
-												Window win = (Window) Executions
-														.createComponents("/view/event/eventreginfo.zul", null, map);
-												win.setClosable(true);
-												win.setWidth("95%");
-												win.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
-
-													@Override
-													public void onEvent(Event event) throws Exception {
-														doReset();
-													}
-												});
-												win.doModal();
-											}
-										}
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							row.getChildren().add(btReg);
-						}
-					}
+			@Override
+			public void render(Row row, Teventreg data, int index) throws Exception {
+				row.getChildren().add(new Label(String.valueOf(index + 1)));
+				row.getChildren().add(new Label(data.getTevent().getEventname()));
+				row.getChildren().add(new Label(AppData.getEventType(data.getTevent().getEventtype())));
+				row.getChildren().add(new Label(dateLocalFormatted.format(data.getTevent().getEventdate())));
+				row.getChildren().add(new Label(data.getTevent().getEventlocation()));
+				row.getChildren().add(new Label(data.getVaamount() != null ? DecimalFormat.getInstance().format(data.getVaamount()) : ""));
+				row.getChildren().add(new Label(data.getVano()));
+				row.getChildren().add(new Label(data.getVaexpdate() != null ? localDateFormatted.format(data.getVaexpdate()) : ""));
+				row.getChildren().add(new Label(data.getTevent().getIsfree() != null && data.getTevent().getIsfree().equals("Y") ? "Free" : data.getIspaid().equals("Y") ? "Sudah Dibayar" : "Belum Dibayar"));
+				row.getChildren().add(new Label(data.getPaidamount() != null ? DecimalFormat.getInstance().format(data.getPaidamount()) : ""));
+				row.getChildren().add(new Label(data.getPaidat() != null ? localDateFormatted.format(data.getPaidat()) : ""));
+				if (((data.getTevent().getIsfree() != null && data.getTevent().getIsfree().equals("Y")) || data.getIspaid().equals("Y")) && data.getTevent().getDocactivedate().compareTo(new Date()) <= 0) {
 					
-					if (data.getTeventregpk() != null) {
-						Button btView = new Button();
-						btView.setIconSclass("z-icon-eye");
-						btView.setSclass("btn btn-primary btn-sm");
-						btView.setAutodisable("self");
-						btView.setTooltiptext("Detail");
-						btView.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+					if (data.getTevent().getEventtype().equals(AppUtils.EVENTTYPE_SUMPAHPROFESI)) {
+						Button btNaskah = new Button("Sumpah Profesi");
+						btNaskah.setIconSclass("z-icon-download");
+						btNaskah.setSclass("btn btn-success btn-sm");
+						btNaskah.setAutodisable("self");
+						btNaskah.setTooltiptext("Download Naskah Sumpah Profesi");
+						btNaskah.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 							@Override
 							public void onEvent(Event event) throws Exception {
-								try {
-									Tevent tevent = new TeventDAO().findByPk(data.getTeventpk());
-									Map<String, Object> map = new HashMap<String, Object>();
-									map.put("obj", tevent);
-									map.put("anggota", obj);
-									map.put("dateregister", new SimpleDateFormat("dd MMMMM yyyy").format(data.getVacreatedat()));
-									Window win = (Window) Executions
-											.createComponents("/view/event/eventreginfo.zul", null, map);
-									win.setClosable(true);
-									win.setWidth("98%");
-									win.doModal();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+								new NaskahHandler().downloadNaskah(data, "sumpah");
 							}
 						});
-						row.getChildren().add(btView);
-					} else row.getChildren().add(new Label());
+
+						Button btEtika = new Button("Etika Profesi");
+						btEtika.setIconSclass("z-icon-download");
+						btEtika.setSclass("btn btn-success btn-sm");
+						btEtika.setAutodisable("self");
+						btEtika.setTooltiptext("Download Naskah Etika");
+						btEtika.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								new NaskahHandler().downloadNaskah(data, "etik");
+							}
+						});
+						
+						Hlayout hlayout = new Hlayout();
+						hlayout.appendChild(btNaskah);
+						hlayout.appendChild(new Separator("vertical"));
+						hlayout.appendChild(btEtika);
+						row.getChildren().add(hlayout);
+					} else if (data.getTevent().getIscert() != null && data.getTevent().getIscert().equals("Y")) {
+						Button btCert = new Button("Sertifikat");
+						btCert.setIconSclass("z-icon-download");
+						btCert.setSclass("btn btn-success btn-sm");
+						btCert.setAutodisable("self");
+						btCert.setTooltiptext("Download Sertifikat");
+						btCert.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+							@Override
+							public void onEvent(Event event) throws Exception {
+								new NaskahHandler().downloadSertifikat(data);
+							}
+						});
+						row.getChildren().add(btCert);
+					}
 					
+				} else {
+					row.getChildren().add(new Label());
 				}
-			});
-			
-			doReset();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+			}
+
+		});
 	}
 
 	public void downloadNaskah(Teventreg data, String arg) {
@@ -288,12 +237,13 @@ public class EventRegListVm {
 	@Command
 	public void doSearch() {
 		try {
-			filter = "0=0";
+			orderby = "teventregpk";
+			filter = "tanggotafk = " + obj.getTanggotapk();
 
 			if (eventname != null && eventname.trim().length() > 0)
 				filter += " and upper(tevent.eventname) like '%" + eventname.trim().toUpperCase() + "%'";
 
-			objList = new TeventregDAO().listEventReg(obj.getTanggotapk(), filter);
+			objList = new TeventregDAO().listByFilter(filter, orderby);
 			grid.setModel(new ListModelList<>(objList));
 
 			pageTotalSize = objList.size();

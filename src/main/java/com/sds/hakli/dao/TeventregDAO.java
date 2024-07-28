@@ -8,6 +8,7 @@ import org.hibernate.Session;
 
 import com.sds.hakli.domain.Teventreg;
 import com.sds.hakli.domain.Veventamount;
+import com.sds.hakli.domain.Veventreg;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class TeventregDAO {
@@ -99,6 +100,17 @@ public class TeventregDAO {
 				+ "from Tevent left join Teventreg on teventpk = teventfk where teventpk = " + pk + " group by teventpk, eventname").addEntity(Veventamount.class).uniqueResult();
 		session.close();
 		return oForm;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Veventreg> listEventReg(Integer tanggotafk, String filter) throws Exception {
+		session = StoreHibernateUtil.openSession();
+		List<Veventreg> oList = session.createSQLQuery("select teventpk, eventname, "
+				+ "eventdate, closedate, eventprice, eventtype, teventregpk, vacreatedat, tanggotafk, periodekta, periodeborang "
+				+ "from Tevent left join Teventreg on teventpk = teventfk "
+				+ "and tanggotafk = " + tanggotafk + " where " + filter + " order by eventdate desc").addEntity(Veventreg.class).list();
+		session.close();
+		return oList;
 	}
 
 }

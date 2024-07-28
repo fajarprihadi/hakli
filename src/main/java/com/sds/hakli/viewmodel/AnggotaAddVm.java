@@ -622,10 +622,10 @@ public class AnggotaAddVm {
 								if (inv != null) {
 									String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 											.getRealPath("/themes/mail/mailinv.html");
-									new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path)).start();
+									new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path, null)).start();
 								} else {
 									if (tevent != null && tevent.getIsfree().equals("Y")) {
-										new Thread(new MailHandler(eventreg, tevent.getEventname(), objForm.getPribadi().getEmail(), null)).start();
+										new Thread(new MailHandler(eventreg, tevent.getEventname(), objForm.getPribadi().getEmail(), null, null)).start();
 									}
 								}
 								

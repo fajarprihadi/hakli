@@ -27,12 +27,14 @@ public class MailHandler implements Runnable {
 	private Object obj;
 	private String subject;
 	private String recipient;
+	private String bodymailpath;
 	private String bodymail;
 	
-	public MailHandler(Object obj, String subject, String recipient, String bodymail) {
+	public MailHandler(Object obj, String subject, String recipient, String bodymailpath, String bodymail) {
 		this.obj = obj;
 		this.subject = subject;
 		this.recipient = recipient;
+		this.bodymailpath = bodymailpath;
 		this.bodymail = bodymail;
 	}
 	
@@ -45,8 +47,8 @@ public class MailHandler implements Runnable {
 			try {
 				if (obj != null) {
 					String bodymsg = "";
-					if (bodymail != null) {
-						File file = new File(bodymail);
+					if (bodymailpath != null) {
+						File file = new File(bodymailpath);
 
 						BufferedReader br = new BufferedReader(new FileReader(file));
 						StringBuilder template = new StringBuilder();
@@ -56,6 +58,8 @@ public class MailHandler implements Runnable {
 						}
 						br.close();
 						bodymsg = template.toString();
+					} else if (bodymail != null) {
+						bodymsg = bodymail;
 					}
 					
 					mailbean.setRecipient(recipient);

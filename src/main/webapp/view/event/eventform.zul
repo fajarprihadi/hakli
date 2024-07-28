@@ -105,6 +105,24 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Validasi Tanggal Periode Iuran" />
+						<vlayout>
+							<datebox value="@bind(e.periodekta)"
+								maxlength="10" cols="12" format="dd-MM-yyyy" />
+							<label style="color:gray"
+								value="@load(vmsgs['periodekta'])" />
+						</vlayout>
+					</row>
+					<row>
+						<label value="Validasi Tanggal Periode Preview SKP" />
+						<vlayout>
+							<datebox value="@bind(e.periodeborang)"
+								maxlength="10" cols="12" format="dd-MM-yyyy" />
+							<label style="color:gray"
+								value="@load(vmsgs['periodeborang'])" />
+						</vlayout>
+					</row>
+					<row>
 						<label />
 						<vlayout>
 							<checkbox id="chkSharefee"
