@@ -1,5 +1,6 @@
 package com.sds.hakli.viewmodel;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -122,11 +123,12 @@ public class EventRegInfoVm {
 								new TeventregDAO().save(session, eventreg);
 								trx.commit();
 								
-								String bodymail = obj.getBodymail();
-								new Thread(new MailHandler(eventreg, obj.getEventname(), anggota.getEmail(), null, bodymail)).start();
+								if (obj.getEventprice() == null || obj.getEventprice().compareTo(new BigDecimal(0))  == 0) {
+									String bodymail = obj.getBodymail();
+									new Thread(new MailHandler(eventreg, obj.getEventname(), anggota.getEmail(), null, bodymail)).start();
+								}
 								
 								Clients.showNotification("Submit data pendaftaran berhasil. Silakan cek e-mail Anda untuk mendapatkan informasi pendaftaran Anda.", "info", null, "middle_center", 3000);
-								
 								doClose();
 							} catch (Exception e) {
 								e.printStackTrace();
