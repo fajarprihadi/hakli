@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suratrekomendasi" language="groovy" pageWidth="595" pageHeight="842" columnWidth="453" leftMargin="71" rightMargin="71" topMargin="71" bottomMargin="71" uuid="100a43fe-4d12-436b-a606-fd2314220f9c">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="462"/>
+	<property name="ireport.y" value="938"/>
 	<parameter name="LOGO" class="java.lang.String"/>
 	<parameter name="TTD_KETUAUMUM" class="java.lang.String"/>
 	<parameter name="NOSURAT" class="java.lang.String"/>
@@ -220,7 +220,7 @@ Website : www.pphakli.org E-mail: kolegiumkesehatanlingkungan@gmail.com]]></text
 			</staticText>
 			<staticText>
 				<reportElement x="220" y="148" width="232" height="15" uuid="d5627ef3-7391-4ffe-87eb-84e9a50b88ad"/>
-				<text><![CDATA[No KTA. 617111334]]></text>
+				<text><![CDATA[NIP. 196403131986031002]]></text>
 			</staticText>
 			<image>
 				<reportElement x="276" y="80" width="136" height="49" uuid="59d9d93d-ecb2-4e48-8c53-cd75a5399016"/>

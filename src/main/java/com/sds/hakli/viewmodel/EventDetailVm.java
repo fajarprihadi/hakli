@@ -121,6 +121,7 @@ public class EventDetailVm {
 				public void render(Row row, Teventreg data, int index) throws Exception {
 					row.getChildren().add(new Label(String.valueOf((AppUtils.PAGESIZE * pageStartNumber) + index + 1)));
 					row.getChildren().add(new Label(data.getTanggota().getNama()));
+					row.getChildren().add(new Label(data.getTanggota().getNoktp()));
 					row.getChildren().add(new Label(data.getTanggota().getEmail()));
 					row.getChildren().add(new Label(data.getTanggota().getStatusreg() != null && data.getTanggota().getStatusreg().equals(AppUtils.STATUS_ANGGOTA_REG_ACTIVE) ? "Anggota" : "Non Anggota"));
 					row.getChildren().add(new Label(data.getTanggota().getInstansi()));
@@ -301,7 +302,7 @@ public class EventDetailVm {
 	@Command
 	public void doExport() {
 		try {
-			List<Teventreg> objList = eventregDao.listNative(filter, "nama");
+			List<Teventreg> objList = eventregDao.listNative(filter, "teventregpk desc");
 			if (objList.size() > 0) {
 				XSSFWorkbook workbook = new XSSFWorkbook();
 				XSSFSheet sheet = workbook.createSheet();
@@ -341,7 +342,7 @@ public class EventDetailVm {
 				cell.setCellValue(obj.getEventprice().doubleValue());
 				rownum++;
 				Map<Integer, Object[]> datamap = new TreeMap<Integer, Object[]>();
-				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "Instansi", "E-Mail", "No HP", "Agama", "Region", "Cabang",
+				datamap.put(1, new Object[] { "No", "No Anggota", "Nama", "No KTP", "Instansi", "E-Mail", "No HP", "Agama", "Region", "Cabang",
 						"Provinsi Domisili", "Kabupaten Domisili", "Alamat Domisili", 
 						"Tempat Kerja", "Provinsi", "Kabupaten", "Alamat", "Rumpun", "Kepegawaian", "Sub Kepegawian", 
 						"Perguruan Tinggi", "Jenjang", "Peminatan 1", "Peminatan 2", "Periode Awal", "Periode Akhir", "No Ijazah", 
@@ -358,7 +359,7 @@ public class EventDetailVm {
 						pendidikan = pendidikans.get(0);
 					
 					datamap.put(no,
-							new Object[] { no - 1, data.getTanggota().getNoanggota(), data.getTanggota().getNama(), data.getTanggota().getInstansi(), data.getTanggota().getEmail(), data.getTanggota().getHp(), data.getTanggota().getAgama(),
+							new Object[] { no - 1, data.getTanggota().getNoanggota(), data.getTanggota().getNama(), data.getTanggota().getNoktp(), data.getTanggota().getInstansi(), data.getTanggota().getEmail(), data.getTanggota().getHp(), data.getTanggota().getAgama(),
 									data.getTanggota().getMcabang() != null ? data.getTanggota().getMcabang().getMprov().getProvname() : "", data.getTanggota().getMcabang() != null ? data.getTanggota().getMcabang().getCabang() : "", data.getTanggota().getProvname(), data.getTanggota().getKabname(), data.getTanggota().getAlamat(), 
 									pekerjaan.getNamakantor(), pekerjaan.getProvname(), pekerjaan.getKabname(), pekerjaan.getAlamatkantor(), 
 									pekerjaan.getMrumpun() != null ? pekerjaan.getMrumpun().getRumpun() : "", 
@@ -366,7 +367,7 @@ public class EventDetailVm {
 									pekerjaan.getMkepegawaiansub() != null ? pekerjaan.getMkepegawaiansub().getKepegawaiansub() : "",
 									pendidikan.getMuniversitas() != null ? pendidikan.getMuniversitas().getUniversitas() : "", 
 									pendidikan.getMjenjang() != null ? pendidikan.getMjenjang().getJenjang() : "", pendidikan.getPeminatan1(), pendidikan.getPeminatan2(), 
-									pendidikan.getPeriodethawal(), pendidikan.getPeriodethakhir(), pendidikan.getNoijazah(), data.getVano(), data.getIspaid().equals("Y") ? "Sudah Bayar" : "Belum Bayar", data.getPaidamount() != null ? data.getPaidamount().doubleValue() : "", data.getPaidat() != null ? datetimeLocalFormatter.format(data.getPaidat()) : "" });
+									pendidikan.getPeriodethawal(), pendidikan.getPeriodethakhir(), pendidikan.getNoijazah(), data.getVano(), data.getTevent().getIsfree().equals("Y") ? "Free" : data.getIspaid() != null && data.getIspaid().equals("Y") ? "Sudah Bayar" : "Belum Bayar", data.getPaidamount() != null ? data.getPaidamount().doubleValue() : "", data.getPaidat() != null ? datetimeLocalFormatter.format(data.getPaidat()) : "" });
 					no++;
 				}
 				Set<Integer> keyset = datamap.keySet();

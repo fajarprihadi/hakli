@@ -135,18 +135,42 @@
 															value="@load(vm.anggota.email)" />
 													</div>
 												</div>
+
+												<div id="divRegcode"
+													class="form-group" align="left" visible="false">
+													<n:label
+														for="inputDob">
+														Registration
+														Code
+													</n:label>
+													<div>
+														<textbox
+															value="@bind(vm.regcode)" maxlength="10" cols="10" />
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 
 									<div id="divRegistered"
-										visible="false"
-										class="note note-success mb-3">
+										visible="false" class="note note-success mb-3">
 										<n:strong>
-											Telah Terdaftar Tanggal  :
+											Telah Terdaftar Tanggal :
 										</n:strong>
 										<label
 											value="@load(vm.dateregister)" style="font-size: 18px" />
+
+										<n:hr />
+										<hlayout>
+											<button id="btEtika" iconSclass="z-icon-download" visible="true"
+												label="Download Etika Profesi" onClick="@command('doEtika')"
+												autodisable="self" class="btn btn-success btn-block mb-4">
+											</button>
+											<button id="btCert" iconSclass="z-icon-download" visible="false"
+												label="Download Sertifikat" onClick="@command('doCert')"
+												autodisable="self" class="btn btn-success btn-block mb-4">
+											</button>
+										</hlayout>
 									</div>
 
 									<n:hr />

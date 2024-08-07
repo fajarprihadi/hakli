@@ -193,6 +193,7 @@
 			<columns sizable="true">
 				<column label="${labels.common.no}" align="right" />
 				<column label="${labels.anggota.nama}" />
+				<column label="${labels.anggota.noktp}" />
 				<column label="${labels.anggota.email}" />
 				<column label="Status Member" />
 				<column label="Instansi" />

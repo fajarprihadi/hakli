@@ -37,6 +37,7 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.MprovDAO;
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TcounterengineDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Mprov;
@@ -75,6 +76,7 @@ public class VerifikasiKomisiVm {
 		anggota = (Tanggota) zkSession.getAttribute("anggota");
 
 		try {
+			anggota = new TanggotaDAO().findByPk(anggota.getTanggotapk());
 			Map<String, Object> map = new HashMap<>();
 			Window win = new Window();
 			if (anggota.getPeriodekta() != null) {

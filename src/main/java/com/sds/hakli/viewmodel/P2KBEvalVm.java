@@ -104,7 +104,7 @@ public class P2KBEvalVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			anggota = (Tanggota) zkSession.getAttribute("anggota");
-			
+			anggota = new TanggotaDAO().findByPk(anggota.getTanggotapk());
 			try {
 				SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 				if (anggota.getPeriodekta() != null) {

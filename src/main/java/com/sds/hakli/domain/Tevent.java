@@ -68,6 +68,8 @@ public class Tevent {
 	
 	private Date periodeborang;
 	
+	private String regcode;
+	
 	@Id
 	@SequenceGenerator(name = "tevent_seq", sequenceName = "tevent_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tevent_seq")
@@ -288,6 +290,15 @@ public class Tevent {
 
 	public void setPeriodeborang(Date periodeborang) {
 		this.periodeborang = periodeborang;
+	}
+
+	@Type(type = "com.sds.utils.usertype.TrimUserType")
+	public String getRegcode() {
+		return regcode;
+	}
+
+	public void setRegcode(String regcode) {
+		this.regcode = regcode;
 	}
 	
 	

@@ -33,6 +33,7 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.TeventDAO;
 import com.sds.hakli.dao.TeventregDAO;
 import com.sds.hakli.domain.Tanggota;
@@ -68,6 +69,7 @@ public class EventRegListVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			obj = (Tanggota) zkSession.getAttribute("anggota");
+			obj = new TanggotaDAO().findByPk(obj.getTanggotapk());
 
 			grid.setRowRenderer(new RowRenderer<Veventreg>() {
 

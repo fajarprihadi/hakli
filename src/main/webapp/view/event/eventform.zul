@@ -123,6 +123,15 @@
 						</vlayout>
 					</row>
 					<row>
+						<label value="Registration Code" />
+						<vlayout>
+							<textbox value="@bind(e.regcode)"
+								maxlength="10" cols="10" />
+							<label style="color:gray"
+								value="@load(vmsgs['regcode'])" />
+						</vlayout>
+					</row>
+					<row>
 						<label />
 						<vlayout>
 							<checkbox id="chkSharefee"

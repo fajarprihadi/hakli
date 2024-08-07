@@ -1,14 +1,7 @@
 package com.sds.hakli.viewmodel;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -20,9 +13,6 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.zhtml.H2;
 import org.zkoss.zhtml.H4;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlNativeComponent;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -31,30 +21,22 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Div;
-import org.zkoss.zul.Html;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
-import com.sds.hakli.dao.TanggotaDAO;
-import com.sds.hakli.dao.TeventDAO;
 import com.sds.hakli.dao.TeventregDAO;
 import com.sds.hakli.domain.Tanggota;
 import com.sds.hakli.domain.Tevent;
 import com.sds.hakli.domain.Teventreg;
 import com.sds.hakli.extension.MailHandler;
+import com.sds.hakli.handler.NaskahHandler;
 import com.sds.utils.AppData;
 import com.sds.utils.AppUtils;
-import com.sds.utils.StringUtils;
 import com.sds.utils.db.StoreHibernateUtil;
 
 public class EventRegInfoVm {
 	
-	private TanggotaDAO oDao = new TanggotaDAO();
-	private TeventDAO eventDao = new TeventDAO();
 	private TeventregDAO eventregDao = new TeventregDAO();
 	
 	private Tevent obj;
@@ -64,9 +46,9 @@ public class EventRegInfoVm {
 	private String email;
 	private String nik;
 	private String ismember;
+	private String regcode;
 	private String dateregister;
-	
-	private DateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
+	private Teventreg eventreg;
 	
 	@Wire
 	private Window winEventRegInfo;
@@ -82,6 +64,12 @@ public class EventRegInfoVm {
 	private Div divRegistered;
 	@Wire
 	private Button btReg;
+	@Wire
+	private Div divRegcode;
+	@Wire
+	private Button btEtik;
+	@Wire
+	private Button btCert;
 
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("obj") Tevent obj, 
@@ -96,9 +84,25 @@ public class EventRegInfoVm {
 			if (dateregister != null) {
 				divRegistered.setVisible(true);
 				btReg.setVisible(false);
+				divRegcode.setVisible(false);
+				
+				eventreg = eventregDao.findByFilter("tevent.teventpk = " + obj.getTeventpk() + " and tanggota.tanggotapk = " + anggota.getTanggotapk());
+				
+				if (((eventreg.getTevent().getIsfree() != null && eventreg.getTevent().getIsfree().equals("Y")) || eventreg.getIspaid().equals("Y")) && eventreg.getTevent().getDocactivedate().compareTo(new Date()) <= 0) {
+					if (eventreg.getTevent().getEventtype().equals(AppUtils.EVENTTYPE_SUMPAHPROFESI)) {
+						btEtik.setVisible(true);
+					}
+					
+					if (eventreg.getTevent().getIscert() != null && eventreg.getTevent().getIscert().equals("Y")) {
+						btCert.setVisible(true);
+					}
+				} 
+				
 			} else {
 				divRegistered.setVisible(false);
 				btReg.setVisible(true);
+				if (obj.getRegcode() != null && !obj.getRegcode().equals(""))
+					divRegcode.setVisible(true);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,32 +117,65 @@ public class EventRegInfoVm {
 					@Override
 					public void onEvent(Event event) throws Exception {
 						if (event.getName().equals("onOK")) {
-							Session session = StoreHibernateUtil.openSession();
-							Transaction trx = session.beginTransaction();
-							try {
-								Teventreg eventreg = new Teventreg();
-								eventreg.setTevent(obj);
-								eventreg.setTanggota(anggota);
-								eventreg.setVacreatedat(new Date());
-								new TeventregDAO().save(session, eventreg);
-								trx.commit();
-								
-								if (obj.getEventprice() == null || obj.getEventprice().compareTo(new BigDecimal(0))  == 0) {
-									String bodymail = obj.getBodymail();
-									new Thread(new MailHandler(eventreg, obj.getEventname(), anggota.getEmail(), null, bodymail)).start();
+							boolean isVerified = true;
+							if (obj.getRegcode() != null && !obj.getRegcode().equals(""))
+								isVerified = false;
+							if (isVerified || (regcode != null && regcode.equals(obj.getRegcode()))) {
+								Session session = StoreHibernateUtil.openSession();
+								Transaction trx = session.beginTransaction();
+								try {
+									Teventreg eventreg = new Teventreg();
+									eventreg.setTevent(obj);
+									eventreg.setTanggota(anggota);
+									eventreg.setVacreatedat(new Date());
+									eventreg.setIspaid("N");
+									eventregDao.save(session, eventreg);
+									trx.commit();
+									
+									if (obj.getEventprice() == null || obj.getEventprice().compareTo(new BigDecimal(0))  == 0) {
+										String bodymail = obj.getBodymail();
+										new Thread(new MailHandler(eventreg, obj.getEventname(), anggota.getEmail(), null, bodymail)).start();
+									}
+									
+									Clients.showNotification("Submit data pendaftaran berhasil. Silakan cek e-mail Anda untuk mendapatkan informasi pendaftaran Anda.", "info", null, "middle_center", 3000);
+									doClose();
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									session.close();
 								}
-								
-								Clients.showNotification("Submit data pendaftaran berhasil. Silakan cek e-mail Anda untuk mendapatkan informasi pendaftaran Anda.", "info", null, "middle_center", 3000);
-								doClose();
-							} catch (Exception e) {
-								e.printStackTrace();
-							} finally {
-								session.close();
+							} else {
+								Messagebox.show("Invalid Registration Code", WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.EXCLAMATION);
 							}
+							
 						}
 					}
 		});
 		
+	}
+	
+	@Command
+	public void doEtika() {
+		try {
+			if (eventreg != null) {
+				new NaskahHandler().downloadNaskah(eventreg, "etik");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+		}		
+	}
+	
+	@Command
+	public void doCert() {
+		try {			
+			if (eventreg != null) {
+				new NaskahHandler().downloadSertifikat(eventreg);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Messagebox.show(e.getMessage(), WebApps.getCurrent().getAppName(), Messagebox.OK, Messagebox.ERROR);
+		}	
 	}
 	
 	public void doClose() {
@@ -208,5 +245,13 @@ public class EventRegInfoVm {
 
 	public void setDateregister(String dateregister) {
 		this.dateregister = dateregister;
+	}
+
+	public String getRegcode() {
+		return regcode;
+	}
+
+	public void setRegcode(String regcode) {
+		this.regcode = regcode;
 	}
 }

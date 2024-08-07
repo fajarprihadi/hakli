@@ -107,12 +107,16 @@ public class PaymentVm {
 		try {
 			anggota = (Tanggota) zkSession.getAttribute("anggota");
 			anggota = anggotaDao.findByPk(anggota.getTanggotapk());
+			
+			Date init = new SimpleDateFormat("yyyy-MM-dd").parse("2024-06-30");
 			if (anggota.getPeriodeborang() == null) {
-				Date init = new SimpleDateFormat("yyyy-MM-dd").parse("2024-06-30");
-				if (anggota.getPeriodekta().compareTo(init) < 0)
-					anggota.setPeriodeborang(init);
-				else anggota.setPeriodeborang(anggota.getPeriodekta());
+				anggota.setPeriodeborang(init);
 			}
+			
+			if (anggota.getPeriodekta().compareTo(init) < 0)
+				anggota.setPeriodeborang(init);
+			else anggota.setPeriodeborang(anggota.getPeriodekta());			
+			
 			gridCharge.setRowRenderer(new RowRenderer<Mcharge>() {
 
 				@Override
@@ -244,7 +248,8 @@ public class PaymentVm {
 						if (obj.getIsbase().equals("Y")) {
 							BigDecimal totalbase = amountbase.divide(new BigDecimal(6)).multiply(new BigDecimal(qty));
 							obj.setChargeamount(totalbase);
-							obj.setChargedesc("Pembayaran Akses Preview SKP Untuk " + qty + " Bulan (" + datelocalFormatter.format(anggota.getPeriodeborang()) + " s/d " + datelocalFormatter.format(periode) + ")");
+							//obj.setChargedesc("Akses Preview SKP Untuk " + qty + " Bulan (" + datelocalFormatter.format(anggota.getPeriodeborang()) + " s/d " + datelocalFormatter.format(periode) + ")");
+							obj.setChargedesc("Akses Preview SKP Untuk " + qty + " Bulan");
 							keteranganborang = obj.getChargedesc();
 						}
 						oList.add(obj);

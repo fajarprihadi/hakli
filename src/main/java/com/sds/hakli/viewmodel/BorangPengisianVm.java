@@ -32,6 +32,7 @@ import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.Mp2kbkegiatanDAO;
 import com.sds.hakli.dao.Mp2kbranahDAO;
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Mp2kbkegiatan;
 import com.sds.hakli.domain.Mp2kbranah;
@@ -64,7 +65,7 @@ public class BorangPengisianVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			obj = (Tanggota) session.getAttribute("anggota");
-			
+			obj = new TanggotaDAO().findByPk(obj.getTanggotapk());
 			try {
 				SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 				if (obj.getPeriodekta() != null) {

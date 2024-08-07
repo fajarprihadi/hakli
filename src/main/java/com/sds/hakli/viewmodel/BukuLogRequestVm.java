@@ -46,6 +46,7 @@ import org.zkoss.zul.event.PagingEvent;
 
 import com.sds.hakli.dao.McabangDAO;
 import com.sds.hakli.dao.MprovDAO;
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.Tp2kbbookDAO;
 import com.sds.hakli.domain.Mcabang;
 import com.sds.hakli.domain.Mprov;
@@ -95,10 +96,11 @@ public class BukuLogRequestVm {
 	@AfterCompose
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view, @ExecutionArgParam("arg") String arg) {
 		Selectors.wireComponents(view, this, false);
-		obj = (Tanggota) session.getAttribute("anggota");
+		obj = (Tanggota) session.getAttribute("anggota");		
 		this.arg = arg;
 		
 		try {
+			obj = new TanggotaDAO().findByPk(obj.getTanggotapk());
 			SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 			if (obj.getPeriodekta() != null) {
 				Date d1 = sdformat.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

@@ -32,6 +32,7 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Window;
 
 import com.sds.hakli.dao.MprovDAO;
+import com.sds.hakli.dao.TanggotaDAO;
 import com.sds.hakli.dao.Tp2kbDAO;
 import com.sds.hakli.domain.Mprov;
 import com.sds.hakli.domain.Tanggota;
@@ -66,6 +67,7 @@ public class VerifikasiP2kbVm {
 		obj = (Tanggota) session.getAttribute("anggota");
 
 		try {
+			obj = new TanggotaDAO().findByPk(obj.getTanggotapk());
 			Map<String, Object> map = new HashMap<>();
 			Window win = new Window();
 			if (obj.getPeriodekta() != null) {

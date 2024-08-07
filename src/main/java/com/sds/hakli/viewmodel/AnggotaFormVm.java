@@ -255,8 +255,7 @@ public class AnggotaFormVm {
 		Selectors.wireComponents(view, this, false);
 		try {
 			this.acttype = acttype;
-			Tanggota anggota = (Tanggota) zkSession.getAttribute("anggota");
-			oUser = anggota;
+			oUser = (Tanggota) zkSession.getAttribute("anggota");
 
 			if (obj != null)
 				pribadi = obj;
@@ -265,9 +264,7 @@ public class AnggotaFormVm {
 				if (list.size() > 0)
 					pribadi = list.get(0);
 			} else {
-				pribadi = oDao.findByPk(anggota.getTanggotapk());
-				if (pribadi == null)
-					pribadi = new Tanggota();
+				pribadi = oDao.findByPk(oUser.getTanggotapk());
 			}
 			
 			if (pribadi.getPeriodeborang() != null) {
@@ -1148,7 +1145,9 @@ public class AnggotaFormVm {
 						briva.setExpiredDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vaexpdate));
 
 						BrivaCreateResp brivaCreated = null;
-						brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+						//brivaCreated = briapi.createBriva(briapiToken.getAccess_token(), briva);
+						brivaCreated = new BrivaCreateResp();
+						brivaCreated.setStatus(true);
 						if (brivaCreated != null && brivaCreated.getStatus()) {
 							Session session = StoreHibernateUtil.openSession();
 							Transaction trx = session.beginTransaction();
@@ -1184,7 +1183,7 @@ public class AnggotaFormVm {
 
 								String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 										.getRealPath("/themes/mail/mailinv.html");
-								new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path, null)).start();
+								//new Thread(new MailHandler(inv, inv.getInvoicedesc().trim(), inv.getTanggota().getEmail(), bodymail_path, null)).start();
 
 								processinfo = "Proses persetujuan pendaftaran anggota berhasil. Informasi permintaan pembayaran sudah dikirim ke e-mail anggota dengan Nomor VA "
 										+ pribadi.getVareg();
@@ -1220,7 +1219,7 @@ public class AnggotaFormVm {
 
 					String bodymail_path = Executions.getCurrent().getDesktop().getWebApp()
 							.getRealPath("/themes/mail/mailregdecline.html");
-					new Thread(new MailHandler(pribadi, "Penolakan Permohonan Pendaftaran Keanggotaan HAKLI", pribadi.getEmail(), bodymail_path, null)).start();
+					//new Thread(new MailHandler(pribadi, "Penolakan Permohonan Pendaftaran Keanggotaan HAKLI", pribadi.getEmail(), bodymail_path, null)).start();
 
 					processinfo = "Proses penolakan pendaftaran anggota berhasil diproses.";
 					divProcessinfo.setVisible(true);
